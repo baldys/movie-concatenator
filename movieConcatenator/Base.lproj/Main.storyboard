@@ -51,7 +51,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1096" y="-330"/>
+            <point key="canvasLocation" x="768" y="-362"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="wUP-VW-YsA">
@@ -66,7 +66,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nZZ-MY-zav">
-                                <rect key="frame" x="314" y="220" width="151" height="30"/>
+                                <rect key="frame" x="128" y="195" width="151" height="30"/>
                                 <state key="normal" title="Record &amp; Save Video">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -84,7 +84,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DIj-9j-5hw">
-                                <rect key="frame" x="314" y="385" width="151" height="30"/>
+                                <rect key="frame" x="129" y="240" width="151" height="30"/>
                                 <state key="normal" title="Merge Video">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -99,7 +99,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ddt-1g-BJ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2401" y="-330"/>
+            <point key="canvasLocation" x="2189" y="-330"/>
         </scene>
         <!--Record Video View Controller-->
         <scene sceneID="Xbc-33-A3G">
@@ -141,6 +141,35 @@
                     <view key="view" contentMode="scaleToFill" id="VL5-wh-kGp">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rrP-Bi-seI">
+                                <rect key="frame" x="75" y="179" width="86" height="30"/>
+                                <state key="normal" title="Load Video1">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadVideo1:" destination="OEE-rA-aab" eventType="touchUpInside" id="f3r-r1-y0A"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yru-Jy-6y5">
+                                <rect key="frame" x="75" y="238" width="86" height="30"/>
+                                <state key="normal" title="Load Video2">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="loadVideo2:" destination="OEE-rA-aab" eventType="touchUpInside" id="KGP-6T-QHF"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tof-Jw-whC">
+                                <rect key="frame" x="75" y="296" width="96" height="30"/>
+                                <state key="normal" title="Merge &amp; Save">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="mergeAndSave:" destination="OEE-rA-aab" eventType="touchUpInside" id="0aL-Qh-aQC"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
@@ -252,7 +281,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pcI-54-4XO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1748" y="-330"/>
+            <point key="canvasLocation" x="1520" y="-330"/>
         </scene>
     </scenes>
     <resources>
