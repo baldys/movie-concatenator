@@ -10,11 +10,20 @@
 		9FAFA7421A98884A00F7396B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7411A98884A00F7396B /* main.m */; };
 		9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7441A98884A00F7396B /* AppDelegate.m */; };
 		9FAFA7481A98884A00F7396B /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7471A98884A00F7396B /* FirstViewController.m */; };
-		9FAFA74B1A98884A00F7396B /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA74A1A98884A00F7396B /* SecondViewController.m */; };
+		9FAFA74B1A98884A00F7396B /* SecondVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA74A1A98884A00F7396B /* SecondVideoViewController.m */; };
 		9FAFA74E1A98884A00F7396B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FAFA74C1A98884A00F7396B /* Main.storyboard */; };
 		9FAFA7501A98884A00F7396B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9FAFA74F1A98884A00F7396B /* Images.xcassets */; };
 		9FAFA7531A98884A00F7396B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FAFA7511A98884A00F7396B /* LaunchScreen.xib */; };
 		9FAFA75F1A98884A00F7396B /* movieConcatenatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA75E1A98884A00F7396B /* movieConcatenatorTests.m */; };
+		9FAFA76E1A997DEB00F7396B /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */; };
+		9FAFA76F1A997DEB00F7396B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA7691A997DEB00F7396B /* AVFoundation.framework */; };
+		9FAFA7701A997DEB00F7396B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */; };
+		9FAFA7711A997DEB00F7396B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76B1A997DEB00F7396B /* MediaPlayer.framework */; };
+		9FAFA7721A997DEB00F7396B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76C1A997DEB00F7396B /* MobileCoreServices.framework */; };
+		9FAFA7731A997DEB00F7396B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */; };
+		9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */; };
+		9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */; };
+		9FAFA77C1A99846400F7396B /* MergeVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,13 +45,25 @@
 		9FAFA7461A98884A00F7396B /* FirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstViewController.h; sourceTree = "<group>"; };
 		9FAFA7471A98884A00F7396B /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
 		9FAFA7491A98884A00F7396B /* SecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
-		9FAFA74A1A98884A00F7396B /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		9FAFA74A1A98884A00F7396B /* SecondVideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondVideoViewController.m; sourceTree = "<group>"; };
 		9FAFA74D1A98884A00F7396B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9FAFA74F1A98884A00F7396B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		9FAFA7521A98884A00F7396B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		9FAFA7581A98884A00F7396B /* movieConcatenatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = movieConcatenatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FAFA75D1A98884A00F7396B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FAFA75E1A98884A00F7396B /* movieConcatenatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = movieConcatenatorTests.m; sourceTree = "<group>"; };
+		9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		9FAFA7691A997DEB00F7396B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		9FAFA76B1A997DEB00F7396B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		9FAFA76C1A997DEB00F7396B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		9FAFA7741A99844C00F7396B /* PlayVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayVideoViewController.h; sourceTree = "<group>"; };
+		9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoViewController.m; sourceTree = "<group>"; };
+		9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoViewController.h; sourceTree = "<group>"; };
+		9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoViewController.m; sourceTree = "<group>"; };
+		9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoViewController.h; sourceTree = "<group>"; };
+		9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +71,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FAFA76E1A997DEB00F7396B /* AssetsLibrary.framework in Frameworks */,
+				9FAFA76F1A997DEB00F7396B /* AVFoundation.framework in Frameworks */,
+				9FAFA7701A997DEB00F7396B /* CoreMedia.framework in Frameworks */,
+				9FAFA7711A997DEB00F7396B /* MediaPlayer.framework in Frameworks */,
+				9FAFA7721A997DEB00F7396B /* MobileCoreServices.framework in Frameworks */,
+				9FAFA7731A997DEB00F7396B /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +93,12 @@
 		9FAFA7331A98884A00F7396B = {
 			isa = PBXGroup;
 			children = (
+				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
+				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
+				9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */,
+				9FAFA76B1A997DEB00F7396B /* MediaPlayer.framework */,
+				9FAFA76C1A997DEB00F7396B /* MobileCoreServices.framework */,
+				9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */,
 				9FAFA73E1A98884A00F7396B /* movieConcatenator */,
 				9FAFA75B1A98884A00F7396B /* movieConcatenatorTests */,
 				9FAFA73D1A98884A00F7396B /* Products */,
@@ -89,7 +122,13 @@
 				9FAFA7461A98884A00F7396B /* FirstViewController.h */,
 				9FAFA7471A98884A00F7396B /* FirstViewController.m */,
 				9FAFA7491A98884A00F7396B /* SecondViewController.h */,
-				9FAFA74A1A98884A00F7396B /* SecondViewController.m */,
+				9FAFA7741A99844C00F7396B /* PlayVideoViewController.h */,
+				9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */,
+				9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */,
+				9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */,
+				9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */,
+				9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */,
+				9FAFA74A1A98884A00F7396B /* SecondVideoViewController.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9FAFA74F1A98884A00F7396B /* Images.xcassets */,
 				9FAFA7511A98884A00F7396B /* LaunchScreen.xib */,
@@ -224,10 +263,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FAFA74B1A98884A00F7396B /* SecondViewController.m in Sources */,
+				9FAFA77C1A99846400F7396B /* MergeVideoViewController.m in Sources */,
+				9FAFA74B1A98884A00F7396B /* SecondVideoViewController.m in Sources */,
+				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */,
 				9FAFA7481A98884A00F7396B /* FirstViewController.m in Sources */,
 				9FAFA7421A98884A00F7396B /* main.m in Sources */,
+				9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
