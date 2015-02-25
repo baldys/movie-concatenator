@@ -12,6 +12,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 @interface RecordVideoViewController : UIViewController
+
 - (IBAction)recordAndPlay:(id)sender;
 
 - (BOOL) startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;

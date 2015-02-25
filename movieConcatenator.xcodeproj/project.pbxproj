@@ -24,6 +24,8 @@
 		9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */; };
 		9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */; };
 		9FAFA77C1A99846400F7396B /* MergeVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */; };
+		9FAFA77F1A9C170A00F7396B /* Video.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA77E1A9C170A00F7396B /* Video.m */; };
+		9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7811A9D2BC700F7396B /* VideoController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,10 @@
 		9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoViewController.m; sourceTree = "<group>"; };
 		9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoViewController.h; sourceTree = "<group>"; };
 		9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoViewController.m; sourceTree = "<group>"; };
+		9FAFA77D1A9C170A00F7396B /* Video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Video.h; sourceTree = "<group>"; };
+		9FAFA77E1A9C170A00F7396B /* Video.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Video.m; sourceTree = "<group>"; };
+		9FAFA7801A9D2BC700F7396B /* VideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoController.h; sourceTree = "<group>"; };
+		9FAFA7811A9D2BC700F7396B /* VideoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +134,10 @@
 				9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */,
 				9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */,
 				9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */,
+				9FAFA77D1A9C170A00F7396B /* Video.h */,
+				9FAFA7801A9D2BC700F7396B /* VideoController.h */,
+				9FAFA7811A9D2BC700F7396B /* VideoController.m */,
+				9FAFA77E1A9C170A00F7396B /* Video.m */,
 				9FAFA74A1A98884A00F7396B /* SecondVideoViewController.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9FAFA74F1A98884A00F7396B /* Images.xcassets */,
@@ -263,9 +273,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */,
 				9FAFA77C1A99846400F7396B /* MergeVideoViewController.m in Sources */,
 				9FAFA74B1A98884A00F7396B /* SecondVideoViewController.m in Sources */,
 				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
+				9FAFA77F1A9C170A00F7396B /* Video.m in Sources */,
 				9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */,
 				9FAFA7481A98884A00F7396B /* FirstViewController.m in Sources */,
 				9FAFA7421A98884A00F7396B /* main.m in Sources */,

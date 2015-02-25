@@ -39,7 +39,8 @@
     // 1 - Validations
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)
         || (delegate == nil)
-        || (controller == nil)) {
+        || (controller == nil))
+    {
         return NO;
     }
     // 2 - Get image picker

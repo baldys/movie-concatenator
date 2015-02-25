@@ -12,7 +12,7 @@
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MediaPlayer/MediaPlayer.h>
-
+#import "Video.h"
 
 
 @interface MergeVideoViewController : UIViewController
@@ -22,15 +22,27 @@
 
 @property(nonatomic, strong) AVAsset *firstAsset;
 @property(nonatomic, strong) AVAsset *secondAsset;
-@property(nonatomic, strong) AVAsset *firstAudioAsset;
-@property (nonatomic,strong) AVAsset *secondAudioAsset;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
+
+
+@property (nonatomic, strong) AVMutableVideoComposition *mainComposition;
+//@property (nonatomic, strong) AVMutableVideoCompositionInstruction *videoCompositionInstruction;
+// contains layer instructions for each video asset/composirtion
+//@property (nonatomic, strong) NSMutableArray *videoCompositionLayerInstructions;
+@property (nonatomic,strong) Video *video;
+
 - (IBAction)loadVideo1:(id)sender;
 
 - (IBAction)loadVideo2:(id)sender;
 
 - (IBAction)mergeAndSave:(id)sender;
 
+-(void) exportVideoComposition:(AVMutableComposition*)composition;
+
 -(BOOL)startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
+
 -(void)exportDidFinish:(AVAssetExportSession*)session;
+
+
+- (AVMutableComposition*) appendAsset:(AVAsset *)asset ToComposition:(AVMutableComposition*)composition;
+
 @end

@@ -39,14 +39,16 @@
     [self startCameraControllerFromViewController:self usingDelegate:self];
 }
 
--(BOOL)startCameraControllerFromViewController:(UIViewController*)controller
-                                 usingDelegate:(id )delegate {
+-(BOOL)startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id)delegate
+{
     // 1 - Validattions
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
         || (delegate == nil)
-        || (controller == nil)) {
+        || (controller == nil))
+    {
         return NO;
     }
+    
     // 2 - Get image picker
     UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
     cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
@@ -56,20 +58,28 @@
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
     cameraUI.delegate = delegate;
+    
     // 3 - Display image picker
+    // Use presentViewController:animated:completion: instead
     [controller presentModalViewController: cameraUI animated: YES];
+    
     return YES;
 }
 
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    
     [self dismissModalViewControllerAnimated:NO];
+    
     // Handle a movie capture
-    if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
+    if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo)
+    {
         NSString *moviePath = [[info objectForKey:UIImagePickerControllerMediaURL] path];
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath)) {
-            UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self,
-                                                @selector(video:didFinishSavingWithError:contextInfo:), nil);
+        
+        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath))
+        {
+            UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
         }
     }
 }
