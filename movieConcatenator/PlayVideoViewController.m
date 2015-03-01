@@ -57,19 +57,22 @@
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    
     // 1 - Get media type
     NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
+   
     // 2 - Dismiss image picker
     [self dismissModalViewControllerAnimated:NO];
+    
     // Handle a movie capture
-    if (CFStringCompare ((__bridge_retained CFStringRef)mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
+    if (CFStringCompare ((__bridge_retained CFStringRef)mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo)
+    {
         // 3 - Play the video
         MPMoviePlayerViewController *theMovie = [[MPMoviePlayerViewController alloc]
                                                  initWithContentURL:[info objectForKey:UIImagePickerControllerMediaURL]];
         [self presentMoviePlayerViewControllerAnimated:theMovie];
         // 4 - Register for the playback finished notification
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:)
-                                                     name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:) name:MPMoviePlayerPlaybackDidFinishNotification object:theMovie];
     }
 }
 
@@ -77,6 +80,8 @@
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissModalViewControllerAnimated: YES];
 }
+
+
 
 // When the movie is done, release the controller.
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification {

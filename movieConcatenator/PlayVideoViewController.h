@@ -13,6 +13,8 @@
 
 @interface PlayVideoViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+
+@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 - (IBAction)playVideo:(id)sender;
 
 

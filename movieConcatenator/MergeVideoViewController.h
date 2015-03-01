@@ -12,7 +12,7 @@
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "Video.h"
+#import "Take.h"
 
 
 @interface MergeVideoViewController : UIViewController
@@ -28,7 +28,7 @@
 //@property (nonatomic, strong) AVMutableVideoCompositionInstruction *videoCompositionInstruction;
 // contains layer instructions for each video asset/composirtion
 //@property (nonatomic, strong) NSMutableArray *videoCompositionLayerInstructions;
-@property (nonatomic,strong) Video *video;
+@property (nonatomic,strong) Take *video;
 
 - (IBAction)loadVideo1:(id)sender;
 

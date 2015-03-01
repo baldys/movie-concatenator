@@ -11,30 +11,12 @@
 @interface MergeVideoViewController ()
 
 
+
+
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityView;
 @end
 
 @implementation MergeVideoViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (IBAction)loadVideo1:(id)sender
 {
@@ -62,6 +44,38 @@
         isSelectingAssetOne = FALSE;
         [self startMediaBrowserFromViewController:self usingDelegate:self];
     }
+}
+
+- (BOOL)extracted_method:(AVAssetTrack *)assetTrack_video
+{
+    UIImageOrientation assetOrientation_  = UIImageOrientationUp;
+    BOOL isSecondAssetPortrait_  = NO;
+    
+    CGAffineTransform secondTransform = assetTrack_video.preferredTransform;
+    
+    if (secondTransform.a == 0 && secondTransform.b == 1.0 &&
+        secondTransform.c == -1.0 && secondTransform.d == 0)
+    {
+        assetOrientation_= UIImageOrientationRight;
+        isSecondAssetPortrait_ = YES;
+    }
+    if (secondTransform.a == 0 && secondTransform.b == -1.0 &&
+        secondTransform.c == 1.0 && secondTransform.d == 0)
+    {
+        assetOrientation_ =  UIImageOrientationLeft;
+        isSecondAssetPortrait_ = YES;
+    }
+    if (secondTransform.a == 1.0 && secondTransform.b == 0 &&
+        secondTransform.c == 0 && secondTransform.d == 1.0)
+    {
+        assetOrientation_ =  UIImageOrientationUp;
+    }
+    if (secondTransform.a == -1.0 && secondTransform.b == 0 &&
+        secondTransform.c == 0 && secondTransform.d == -1.0)
+    {
+        assetOrientation_ = UIImageOrientationDown;
+    }
+    return isSecondAssetPortrait_;
 }
 
 - (IBAction)mergeAndSave:(id)sender
@@ -111,11 +125,6 @@
     //
     // break them down into two composition tracks: one for audioand one for video and then add them to the mutable composition track.
     /*
-     
-     
-     
-     
-     
     */
     /// method tat takes array of assets and returns composition.
     ///
@@ -160,30 +169,8 @@
     
     UIImageOrientation firstAssetOrientation_  = UIImageOrientationUp;
     BOOL isFirstAssetPortrait_  = NO;
+    isFirstAssetPortrait_ = [self extracted_method:assetTrack1_video];
     
-    CGAffineTransform firstTransform = assetTrack1_video.preferredTransform;
-    if (firstTransform.a == 0 && firstTransform.b == 1.0 &&
-        firstTransform.c == -1.0 && firstTransform.d == 0)
-    {
-        firstAssetOrientation_ = UIImageOrientationRight;
-        isFirstAssetPortrait_ = YES;
-    }
-    if (firstTransform.a == 0 && firstTransform.b == -1.0 &&
-        firstTransform.c == 1.0 && firstTransform.d == 0)
-    {
-        firstAssetOrientation_ =  UIImageOrientationLeft;
-        isFirstAssetPortrait_ = YES;
-    }
-    if (firstTransform.a == 1.0 && firstTransform.b == 0 &&
-        firstTransform.c == 0 && firstTransform.d == 1.0)
-    {
-        firstAssetOrientation_ =  UIImageOrientationUp;
-    }
-    if (firstTransform.a == -1.0 && firstTransform.b == 0 &&
-        firstTransform.c == 0 && firstTransform.d == -1.0)
-    {
-        firstAssetOrientation_ = UIImageOrientationDown;
-    }
     [firstlayerInstruction setTransform:self.firstAsset.preferredTransform atTime:kCMTimeZero];
     
     [firstlayerInstruction setOpacity:0.0 atTime:self.firstAsset.duration];
@@ -192,33 +179,8 @@
     // VideoLayerInstruction for track 2
     AVMutableVideoCompositionLayerInstruction *secondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack2_video];
     
-    UIImageOrientation secondAssetOrientation_  = UIImageOrientationUp;
-    BOOL isSecondAssetPortrait_  = NO;
-    
-    CGAffineTransform secondTransform = assetTrack2_video.preferredTransform;
-    
-    if (secondTransform.a == 0 && secondTransform.b == 1.0 &&
-        secondTransform.c == -1.0 && secondTransform.d == 0)
-    {
-        secondAssetOrientation_= UIImageOrientationRight;
-        isSecondAssetPortrait_ = YES;
-    }
-    if (secondTransform.a == 0 && secondTransform.b == -1.0 &&
-        secondTransform.c == 1.0 && secondTransform.d == 0)
-    {
-        secondAssetOrientation_ =  UIImageOrientationLeft;
-        isSecondAssetPortrait_ = YES;
-    }
-    if (secondTransform.a == 1.0 && secondTransform.b == 0 &&
-        secondTransform.c == 0 && secondTransform.d == 1.0)
-    {
-        secondAssetOrientation_ =  UIImageOrientationUp;
-    }
-    if (secondTransform.a == -1.0 && secondTransform.b == 0 &&
-        secondTransform.c == 0 && secondTransform.d == -1.0)
-    {
-        secondAssetOrientation_ = UIImageOrientationDown;
-    }
+    BOOL isSecondAssetPortrait_;
+    isSecondAssetPortrait_ = [self extracted_method:assetTrack2_video];
     [secondlayerInstruction setTransform:self.secondAsset.preferredTransform atTime:self.firstAsset.duration];
     /////////////////////////////////////////
     
@@ -298,9 +260,6 @@
 }
 
 
-
-
-
 // return a new composition by adding an asset to a compositon
 - (AVMutableComposition*) appendAsset:(AVAsset *)asset ToComposition:(AVMutableComposition*)composition
 {
@@ -314,10 +273,7 @@
     AVMutableCompositionTrack *compositionTrack_audio =
     [composition addMutableTrackWithMediaType:AVMediaTypeAudio                                     preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    
     return composition;
-    
-    
 }
 
 
@@ -445,5 +401,30 @@
     self.firstAsset = nil;
     self.secondAsset = nil;
     //[activityView stopAnimating];
+
 }
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+/*
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
+
+
 @end
+

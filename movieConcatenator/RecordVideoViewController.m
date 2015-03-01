@@ -16,14 +16,63 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(@"hey im here");
     // Do any additional setup after loading the view.
+    
+    [self logViews:self.view];
+}
+
+-(void)logViews:(UIView*)view {
+    NSLog(@"view: %@", view.description);
+    NSLog(@"====");
+    for (UIView *subView in view.subviews) {
+        [self logViews:subView];
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    NSLog(@"viewDidAppear()");
+    [super viewDidAppear:animated];
+    [self startCameraControllerFromViewController:self usingDelegate:self];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    
+}
+
+
+// For responding to the user tapping Cancel.
+- (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker {
+    
+    NSLog(@"did cance;");
+    
+    [self.parentViewController dismissViewControllerAnimated: YES completion:nil];
+    if (picker.isMovingToParentViewController) NSLog(@"yup");
+    [picker dismissViewControllerAnimated:YES completion:nil];
+   /// [self popToRootViewControllerAnimated:YES animated:YES];
+    
+    
+}
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    // Return YES for supported orientations
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+/*
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)UIInterfacerientationLandscapeRight
+{
+    return YES;
+}
+*/
 /*
 #pragma mark - Navigation
 
@@ -34,13 +83,9 @@
 }
 */
 
-- (IBAction)recordAndPlay:(id)sender
+-(BOOL)startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>) delegate
 {
-    [self startCameraControllerFromViewController:self usingDelegate:self];
-}
-
--(BOOL)startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id)delegate
-{
+     NSLog(@"hey im here 222222");
     // 1 - Validattions
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
         || (delegate == nil)
@@ -61,7 +106,7 @@
     
     // 3 - Display image picker
     // Use presentViewController:animated:completion: instead
-    [controller presentModalViewController: cameraUI animated: YES];
+   [controller presentViewController:cameraUI animated:YES completion:nil];
     
     return YES;
 }
@@ -70,13 +115,13 @@
 {
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     
-    [self dismissModalViewControllerAnimated:NO];
+    
     
     // Handle a movie capture
     if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo)
     {
-        NSString *moviePath = [[info objectForKey:UIImagePickerControllerMediaURL] path];
-        
+        NSString *moviePath = [(NSURL *)[info objectForKey:UIImagePickerControllerMediaURL] path];
+        [self dismissViewControllerAnimated:NO completion:nil];
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath))
         {
             UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
@@ -84,11 +129,13 @@
     }
 }
 
--(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
+-(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
+{
     if (error) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"
                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
+        
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"
                                                        delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -96,4 +143,11 @@
     }
 }
 
+
+/*
+- (IBAction)recordAndPlay:(id)sender
+{
+    [self startCameraControllerFromViewController:self usingDelegate:self];
+}
+*/
 @end

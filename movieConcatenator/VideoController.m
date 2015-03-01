@@ -8,16 +8,36 @@
 
 #import "VideoController.h"
 
+@interface VideoController ()
+
+@property (nonatomic, strong) NSMutableArray *videoArray;
+
+@end
+
 @implementation VideoController
 
-+ (VideoController *)sharedInstance {
+- (instancetype) init
+{
+    self = [super init];
+    if (self)
+    {
+        self.videoArray = [[NSMutableArray alloc] init];
+    }
+    return self;
     
-    static VideoController *instance;
-    static dispatch_once_t once;
-    dispatch_once(&once, ^{
-        instance = [[VideoController alloc] init];
-    });
-    return instance;
+}
+
++ (VideoController*) sharedVideoManager
+{
+    static VideoController *videoManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken,
+    ^{
+        //sharedVideoController = [[self alloc] init];
+      });
+    return videoManager;
+
+
 }
 
 @end

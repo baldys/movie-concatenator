@@ -13,7 +13,9 @@
 
 @interface RecordVideoViewController : UIViewController
 
-- (IBAction)recordAndPlay:(id)sender;
+
+//@property (nonatomic,strong) UIImagePickerController *imagePicker;
+//- (IBAction)recordAndPlay:(id)sender;
 
 - (BOOL) startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
 
