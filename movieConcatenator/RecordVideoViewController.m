@@ -7,6 +7,7 @@
 //
 
 #import "RecordVideoViewController.h"
+#import "VideoController.h"
 
 @interface RecordVideoViewController ()
 
@@ -20,6 +21,7 @@
     // Do any additional setup after loading the view.
     
     [self logViews:self.view];
+    
 }
 
 -(void)logViews:(UIView*)view {
@@ -34,14 +36,13 @@
 {
     NSLog(@"viewDidAppear()");
     [super viewDidAppear:animated];
-    [self startCameraControllerFromViewController:self usingDelegate:self];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    
+   
 }
 
 
@@ -144,10 +145,15 @@
 }
 
 
-/*
+
 - (IBAction)recordAndPlay:(id)sender
 {
     [self startCameraControllerFromViewController:self usingDelegate:self];
 }
-*/
+- (IBAction)backToRootVC:(id)sender
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    
+}
 @end

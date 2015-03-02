@@ -52,7 +52,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ddt-1g-BJ0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2189" y="-330"/>
+            <point key="canvasLocation" x="3001" y="-330"/>
         </scene>
         <!--Merge Video View Controller-->
         <scene sceneID="4FU-UB-HEg">
@@ -140,7 +140,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3AB-04-gOZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="186" y="-1334"/>
+            <point key="canvasLocation" x="1170" y="890"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="d1c-3v-LLy">
@@ -158,10 +158,10 @@
             </objects>
             <point key="canvasLocation" x="-1199" y="-655"/>
         </scene>
-        <!--Scenes View Controller-->
+        <!--Root View Controller-->
         <scene sceneID="SYN-Zm-8Xp">
             <objects>
-                <collectionViewController id="Ka6-Tg-ChZ" customClass="ScenesViewController" sceneMemberID="viewController">
+                <collectionViewController id="Ka6-Tg-ChZ" customClass="RootViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="jvn-GP-9LJ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -198,10 +198,10 @@
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SceneHeader" id="1l1-s9-tcI">
-                            <rect key="frame" x="0.0" y="64" width="600" height="50"/>
+                            <rect key="frame" x="0.0" y="64" width="600" height="83"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Section Header Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mi8-cc-Yzh">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="New Scene" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mi8-cc-Yzh">
                                     <rect key="frame" x="8" y="8" width="156" height="67"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                     <constraints>
@@ -213,11 +213,11 @@
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zu-u3-vwK">
                                     <rect key="frame" x="478" y="27" width="93" height="30"/>
-                                    <state key="normal" title="Record Video">
+                                    <state key="normal" title="add take">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
-                                        <action selector="recordTake:" destination="Ka6-Tg-ChZ" eventType="touchUpInside" id="kCC-wU-y4d"/>
+                                        <segue destination="U8g-fB-d4T" kind="show" id="WSV-F0-jRU"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -248,10 +248,10 @@
             </objects>
             <point key="canvasLocation" x="-494" y="-655"/>
         </scene>
-        <!--View Controller-->
+        <!--Record Video View Controller-->
         <scene sceneID="PT9-2p-6nJ">
             <objects>
-                <viewController id="U8g-fB-d4T" sceneMemberID="viewController">
+                <viewController id="U8g-fB-d4T" customClass="RecordVideoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yac-oi-NH7"/>
                         <viewControllerLayoutGuide type="bottom" id="3VI-jT-oZ3"/>
@@ -259,15 +259,41 @@
                     <view key="view" contentMode="scaleToFill" id="2gY-cd-Z15">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nw7-cY-LfQ">
+                                <rect key="frame" x="76" y="127" width="86" height="30"/>
+                                <state key="normal" title="Record Take">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="recordAndPlay:" destination="U8g-fB-d4T" eventType="touchUpInside" id="RZU-1O-66K"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="nw7-cY-LfQ" firstAttribute="leading" secondItem="2gY-cd-Z15" secondAttribute="leadingMargin" constant="60" id="clK-0K-FG3"/>
+                            <constraint firstItem="nw7-cY-LfQ" firstAttribute="top" secondItem="yac-oi-NH7" secondAttribute="bottom" constant="63" id="o8C-si-fQe"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="UfT-Kk-fKz">
+                        <barButtonItem key="leftBarButtonItem" title="back" image="left37" id="sRD-IQ-2Um">
+                            <connections>
+                                <action selector="backToRootVC:" destination="U8g-fB-d4T" id="7mJ-uK-v5U"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" id="fZX-nD-AcG">
+                            <color key="tintColor" red="0.33705187644626766" green="1" blue="0.53255661359935824" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKY-EO-hbW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="276" y="-655"/>
+            <point key="canvasLocation" x="141" y="-655"/>
         </scene>
     </scenes>
     <resources>
+        <image name="left37" width="32" height="32"/>
         <image name="movie-1.png" width="512" height="512"/>
     </resources>
 </document>

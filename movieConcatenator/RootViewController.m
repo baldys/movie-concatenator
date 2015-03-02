@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
 
-#import "ScenesViewController.h"
+#import "RootViewController.h"
 #import "Scene.h"
 #import "Take.h"
 #import "RecordVideoViewController.h"
@@ -14,12 +14,12 @@
 #import "MergeVideoViewController.h"
 #import "TakeCell.h"
 
-@interface ScenesViewController ()
+@interface RootViewController ()
 
 
 @end
 
-@implementation ScenesViewController
+@implementation RootViewController
 
 static NSString * const reuseIdentifier = @"TakeCell";
 
@@ -166,6 +166,11 @@ static NSString * const reuseIdentifier = @"TakeCell";
  // Pass the selected object to the new view controller.
     NSLog(@"PREPARE");
     
+    
+}
+
+- (IBAction)unwindToRootViewController:(UIStoryboardSegue*)segue
+{
     
 }
 

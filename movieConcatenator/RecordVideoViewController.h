@@ -13,6 +13,7 @@
 
 @interface RecordVideoViewController : UIViewController
 
+- (IBAction)backToRootVC:(id)sender;
 
 //@property (nonatomic,strong) UIImagePickerController *imagePicker;
 //- (IBAction)recordAndPlay:(id)sender;

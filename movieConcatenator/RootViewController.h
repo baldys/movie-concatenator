@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "MediaLibrary.h"
 
-@interface ScenesViewController : UICollectionViewController
+@interface RootViewController : UICollectionViewController
 
 
 @property (nonatomic, strong) MediaLibrary *library;
 
 - (IBAction)addScene:(id)sender;
-
+- (IBAction)unwindToRootViewController:(id)sender;
 
 @end

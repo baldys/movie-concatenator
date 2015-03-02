@@ -11,7 +11,7 @@
 @interface VideoController : NSObject
 
 // TODO make singleton
-
+- (instancetype) init;
 + (VideoController*) sharedVideoManager;
 
 

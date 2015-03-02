@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class Take;
+
 @interface MediaLibrary : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSMutableArray *scenes;
@@ -16,5 +18,15 @@
 + (instancetype)libraryWithFilename:(NSString*)filename;
 
 -(void)saveToFilename:(NSString *)filename;
+
+
+@property(readonly, strong) NSMutableArray *assetItems;
+
+- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
+
+- (void)loadLibraryWithCompletionBlock:(void (^)(void))completionHandler;
+
++ (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler;
+
 
 @end
