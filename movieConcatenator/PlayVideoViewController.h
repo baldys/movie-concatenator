@@ -9,16 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "Take.h"
 
 
 @interface PlayVideoViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
+@property (nonatomic, strong) Take *take;
+
 
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
-- (IBAction)playVideo:(id)sender;
 
 
-// For opening UIImagePickerController
--(BOOL)startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id )delegate;
 
 @end

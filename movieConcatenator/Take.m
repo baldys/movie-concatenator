@@ -95,7 +95,11 @@
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
         self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
-        
+        self.assetFileURL = [aDecoder decodeObjectForKey:@"assetFileURL"];
+        NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
+        self.thumbailImg = [UIImage imageWithData:imageData];
+        NSLog(@"\n\n\n\n>>>>%@\n\n\n\n\n\n", [aDecoder decodeObjectForKey:@"assetFileURL"]
+              );
     }
     return self;
 }
@@ -106,6 +110,8 @@
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
     [aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     [aCoder encodeBool:self.selected forKey:@"selected"];
+    [aCoder encodeObject:self.assetFileURL forKey:@"assetFileURL"];
+    [aCoder encodeObject:UIImageJPEGRepresentation(self.thumbailImg, 1) forKey:@"thumbnailImgData"];
     
 }
 

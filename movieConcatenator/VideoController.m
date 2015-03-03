@@ -15,6 +15,7 @@
 // DocumentsDirectory/takeFilePath<RANDOM NUMBER>.mov
 
 #import "VideoController.h"
+#import "Scene.h"
 
 @interface VideoController ()
 
@@ -41,6 +42,8 @@
     NSMutableArray *array = [VideoController sharedInstance];
     // adds new take to the shared videos array
     [array insertObject:take atIndex:0];
+    // save take to the documents directory;
+    
     
 }
 

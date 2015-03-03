@@ -25,7 +25,7 @@
 
 @implementation RootViewController
 
-static NSString * const reuseIdentifier = @"TakeCell";
+//static NSString * const reuseIdentifier = @"TakeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,13 +34,11 @@ static NSString * const reuseIdentifier = @"TakeCell";
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Register cell classes
-    
-    
-    
+
     MediaLibrary *myScenes = [MediaLibrary libraryWithFilename:@"medialibrary.plist"];
     
-    
-    if (!myScenes) {
+    if (!myScenes)
+    {
         myScenes = [[MediaLibrary alloc] init];
         [myScenes saveToFilename:@"medialibrary.plist"];
     }
@@ -82,9 +80,10 @@ static NSString * const reuseIdentifier = @"TakeCell";
     Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
 
     Take *take = [scene.takes objectAtIndex:indexPath.item];
+    
     [cell cellWithTake:take];
     
-    NSLog(@"displaying cell for take %@", take);
+    NSLog(@"displaying cell for take %@", take.assetFileURL);
     
 //    
 //    AVAsset *myAasset = [take loadAsset];
@@ -100,19 +99,37 @@ static NSString * const reuseIdentifier = @"TakeCell";
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
 
-     SceneCollectionResuableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
+     SceneCollectionResuableView *sceneSection = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
     
-    headerView.scene = self.library.scenes[indexPath.item];
-    headerView.addTake.tag = indexPath.section;
+    sceneSection.scene = self.library.scenes[indexPath.item];
+    sceneSection.addTake.tag = indexPath.section;
     
-    return headerView;
+    return sceneSection;
 }
 
 #pragma mark <UICollectionViewDelegate>
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"did select item");
+    
+    Scene *scene = [[Scene alloc] init];
+    
+    scene = [self.library.scenes objectAtIndex:indexPath.section];
+    Take *take = [scene.takes objectAtIndex:indexPath.item];
 
-    //MPMoviePlayer
+    PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
+    videoPlayerVC.take = take;
+    
+    //MPMoviePlayer is nil, perhaps in the initializer, alloc init the player.
+    //TODO: present videoPlayerVC
+    
+    [self presentViewController:videoPlayerVC animated:YES completion:^{
+        //
+        NSLog(@"Presented videoPlayerVC!!!");
+        //TODO: videoPlayerVC should start playing some video...
+        
+    }];
     
 }
 
@@ -151,6 +168,7 @@ static NSString * const reuseIdentifier = @"TakeCell";
     Scene *newScene = [[Scene alloc] init];
     newScene.title = @"Scene!";
     [self.library.scenes addObject:newScene];
+    // ** c
     [self.library saveToFilename:@"medialibrary.plist"];
     
     [self.collectionView reloadData];
@@ -159,16 +177,12 @@ static NSString * const reuseIdentifier = @"TakeCell";
 - (IBAction)recordTake:(id)sender
 {
     RecordVideoViewController *recordVideoVC = [[RecordVideoViewController alloc] init];
-    
-    
-    
+
     //recordVideoVC.scene = currentScene;
     
     [self presentViewController:recordVideoVC animated:YES completion:nil];
 
 }
-
-
 
  #pragma mark - Navigation
  
@@ -185,11 +199,24 @@ static NSString * const reuseIdentifier = @"TakeCell";
     Scene *currentScene = self.library.scenes[button.tag];
     
     
-    if ([segue.identifier isEqualToString:@"showRecordVC"]) {
+    if ([segue.identifier isEqualToString:@"showRecordVC"])
+    {
         
         RecordVideoViewController *recordViewController = segue.destinationViewController;
         
         recordViewController.scene = currentScene;
+        __weak __typeof(self) weakSelf = self;
+        recordViewController.completionBlock = ^void (BOOL success)
+        {
+            NSLog(@"completion block called");
+            if (success)
+            {
+                NSLog(@"saving");
+                [weakSelf.library saveToFilename:@"medialibrary.plist"];
+            }
+        };
+        /// add completion
+        
     }
 }
 

@@ -87,7 +87,9 @@
     return documentsDirectory;
 }
 
-// // TODO: put into video model class so that for each video, you can retrieve the url path that 
+// // TODO: put into video model class so that for each video, you can retrieve the url path that
+
+/*
 - (NSURL*) getPathURL
 {
     // 4 - Get path
@@ -97,7 +99,7 @@
     NSURL *url = [NSURL fileURLWithPath:myPathDocs];
     return url;
 }
-
+*/
 
 
 + (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler

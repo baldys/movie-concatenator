@@ -22,9 +22,11 @@
 -(void)cellWithTake:(Take*)take
 {
     // sets a thumbnail image to the image of the first frame of that video
+    self.assetURL = take.assetFileURL;
     
     self.thumbnail.image = [take loadThumbnailWithCompletionHandler:^(UIImage *image)
     {
+        
         self.thumbnail.image = image;
     }];
    

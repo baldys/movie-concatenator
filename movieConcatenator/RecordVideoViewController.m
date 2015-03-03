@@ -110,8 +110,6 @@
         NSURL *movieUrl = [info objectForKey:UIImagePickerControllerMediaURL];
         NSString *moviePath = [(NSURL *)[info objectForKey:UIImagePickerControllerMediaURL] path];
         
-        
-        
         // create a new take instance. the url property of the take will be set to moviePath
         // get the index path of the current section (the section whose add button was pressed in within the collection vc. pass this from the collection vc. 
         // call method on video controller to insert a new take to the shared videos array.
@@ -127,13 +125,13 @@
         
         [self.scene.takes insertObject:newVideo atIndex:0];
         
+        if (self.completionBlock != nil) {
+            self.completionBlock(YES);
+        }
     
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath))
         {
             //UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
-            
-            
-            
         }
     }
 }
@@ -147,7 +145,6 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"
                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
-        
     }
     else
     {

@@ -16,6 +16,7 @@
 
 
 @property (nonatomic, strong) Scene *scene;
+@property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 - (IBAction)backToRootVC:(id)sender;
 
