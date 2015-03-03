@@ -15,6 +15,6 @@
 @property (nonatomic, strong) MediaLibrary *library;
 
 - (IBAction)addScene:(id)sender;
-- (IBAction)unwindToRootViewController:(id)sender;
+
 
 @end

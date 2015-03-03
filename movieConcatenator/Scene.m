@@ -15,8 +15,8 @@
     if (self = [super init]) {
         self.takes = [NSMutableArray array];
         
-        Take *newScene = [[Take alloc] init];
-        [self.takes addObject:newScene];
+        //Take *newScene = [[Take alloc] init];
+        //[self.takes addObject:newScene];
     }
     return self;
 }

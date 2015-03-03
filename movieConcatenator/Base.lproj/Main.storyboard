@@ -166,21 +166,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hA1-sp-4y4">
-                            <size key="itemSize" width="236" height="203"/>
+                            <size key="itemSize" width="150" height="125"/>
                             <size key="headerReferenceSize" width="50" height="83"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="TakeCell" id="oM7-hk-5te" customClass="TakeCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="reusableTakeCell" id="oM7-hk-5te" customClass="TakeCell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="236" height="203"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="150" height="125"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="eCX-V3-1lM">
-                                            <rect key="frame" x="4" y="4" width="228" height="195"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="eCX-V3-1lM">
+                                            <rect key="frame" x="4" y="4" width="150" height="125"/>
                                             <color key="backgroundColor" red="0.52048228529999996" green="0.15653464540000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
                                     </subviews>
@@ -197,10 +197,19 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SceneHeader" id="1l1-s9-tcI">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SceneHeader" id="1l1-s9-tcI" customClass="SceneCollectionResuableView">
                             <rect key="frame" x="0.0" y="64" width="600" height="83"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zu-u3-vwK">
+                                    <rect key="frame" x="478" y="27" width="93" height="30"/>
+                                    <state key="normal" title="add take">
+                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <segue destination="U8g-fB-d4T" kind="show" identifier="showRecordVC" id="WSV-F0-jRU"/>
+                                    </connections>
+                                </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="New Scene" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mi8-cc-Yzh">
                                     <rect key="frame" x="8" y="8" width="156" height="67"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -211,15 +220,6 @@
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zu-u3-vwK">
-                                    <rect key="frame" x="478" y="27" width="93" height="30"/>
-                                    <state key="normal" title="add take">
-                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    </state>
-                                    <connections>
-                                        <segue destination="U8g-fB-d4T" kind="show" id="WSV-F0-jRU"/>
-                                    </connections>
-                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <constraints>
@@ -229,6 +229,10 @@
                                 <constraint firstAttribute="centerY" secondItem="8Zu-u3-vwK" secondAttribute="centerY" id="gyd-0K-jz2"/>
                                 <constraint firstItem="8Zu-u3-vwK" firstAttribute="trailing" secondItem="1l1-s9-tcI" secondAttribute="trailingMargin" id="pQI-KZ-g8g"/>
                             </constraints>
+                            <connections>
+                                <outlet property="addTake" destination="8Zu-u3-vwK" id="8KU-Lt-sM8"/>
+                                <outlet property="sceneTitleLabel" destination="Mi8-cc-Yzh" id="unv-Pm-r52"/>
+                            </connections>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="Ka6-Tg-ChZ" id="GFx-kv-FV6"/>
@@ -289,11 +293,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKY-EO-hbW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="141" y="-655"/>
+            <point key="canvasLocation" x="218" y="-655"/>
         </scene>
     </scenes>
     <resources>
-        <image name="left37" width="32" height="32"/>
+        <image name="left37" width="10" height="10"/>
         <image name="movie-1.png" width="512" height="512"/>
     </resources>
 </document>

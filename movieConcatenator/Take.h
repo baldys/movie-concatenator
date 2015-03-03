@@ -14,7 +14,7 @@
 
 @interface Take : NSObject <NSCoding>
 
-@property (nonatomic, strong) NSURL *assetURL;
+@property (nonatomic, strong) NSURL *assetFileURL;
 
 @property (nonatomic) NSInteger takeNumber;
 
@@ -29,6 +29,9 @@
 @property (nonatomic, strong) AVAsset *asset;
 
 @property (nonatomic, strong) UIImage *thumbailImg;
+
+//@property (nonatomic,strong) CMTi
+
 // save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
 
 //- (void) saveToFile:
@@ -41,7 +44,7 @@
 @property AVMutableComposition *mutableComposition;
 @property AVMutableVideoComposition *mutableVideoComposition;
 @property AVMutableAudioMix *mutableAudioMix;
-//@property (nonatomic) CMTime *insertionPoint;
+@property (nonatomic) CMTime *insertionPoint;
 
 //@property (nonatomic, strong) AVMutableVideoComposition *videoComposition;
 //@property (nonatomic, strong) AVMutableAudioMix *audioMix;
@@ -61,7 +64,8 @@
 
 //@property (nonatomic, strong) AVAssetTrack *videoAsset
 
-
+- (NSURL*)getPathURL;
+- (NSString*) documentsDirectory;
 
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
 

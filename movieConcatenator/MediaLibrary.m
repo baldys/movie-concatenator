@@ -36,10 +36,7 @@
 -(instancetype)init {
     if (self = [super init]) {
         ///
-        self.scenes = [NSMutableArray array];
-        
-        Scene *newScene = [[Scene alloc] init];
-        [self.scenes addObject:newScene];
+        self.scenes = [[NSMutableArray alloc] init];
         ///
     }
     return self;
@@ -52,6 +49,9 @@
     if (self)
     {
         self.scenes = [[aDecoder decodeObjectForKey:@"scenes"] mutableCopy];
+        if (!self.scenes) {
+            self.scenes  = [[NSMutableArray alloc] init];
+        }
         
     }
     return self;
@@ -63,31 +63,42 @@
     [aCoder encodeObject:self.scenes forKey:@"scenes"];
 }
 
-+ (instancetype)libraryWithFilename:(NSString*)filename {
++ (instancetype)libraryWithFilename:(NSString*)filename
+{
+    // 4 - Get path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:filename];
+    NSString *myPathDocs = [documentsDirectory stringByAppendingPathComponent:filename];
     return [NSKeyedUnarchiver unarchiveObjectWithFile:myPathDocs];
 }
 
 
--(void)saveToFilename:(NSString *)filename {
+-(void)saveToFilename:(NSString *)filename
+{
+    NSString *myPathDocs =  [[self documentsDirectory] stringByAppendingPathComponent:filename];
+    [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+}
+
+
+- (NSString*) documentsDirectory
+{
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:filename];
-    [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+    return documentsDirectory;
 }
 
 // // TODO: put into video model class so that for each video, you can retrieve the url path that 
 - (NSURL*) getPathURL
 {
     // 4 - Get path
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
+    // generate a random filename for the movie
+    
+    NSString *myPathDocs =  [[self documentsDirectory ]stringByAppendingPathComponent:[NSString stringWithFormat:@"take-%d.mov",arc4random() % 1000]];
     NSURL *url = [NSURL fileURLWithPath:myPathDocs];
     return url;
 }
+
+
 
 + (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler
 {

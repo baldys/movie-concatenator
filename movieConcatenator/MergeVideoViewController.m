@@ -288,7 +288,7 @@
     // 5 - Create exporter
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPresetHighestQuality];
     
-    exporter.outputURL = [self getPathURL];
+    exporter.outputURL = [self createOutputURL];
     exporter.outputFileType = AVFileTypeQuickTimeMovie;
     exporter.shouldOptimizeForNetworkUse = YES;
     exporter.videoComposition = self.mainComposition;
@@ -305,7 +305,7 @@
 }
 
 // TODO: put into video model class so that for each video you can retrieve the url path that contains it?
-- (NSURL*) getPathURL
+- (NSURL*) createOutputURL
 {
     // 4 - Get path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);

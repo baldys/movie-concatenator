@@ -8,6 +8,7 @@
 
 #import "RecordVideoViewController.h"
 #import "VideoController.h"
+#import "MediaLibrary.h"
 
 @interface RecordVideoViewController ()
 
@@ -20,10 +21,10 @@
     NSLog(@"hey im here");
     // Do any additional setup after loading the view.
     
-    [self logViews:self.view];
+  //  [self logViews:self.view];
     
 }
-
+/*
 -(void)logViews:(UIView*)view {
     NSLog(@"view: %@", view.description);
     NSLog(@"====");
@@ -31,21 +32,7 @@
         [self logViews:subView];
     }
 }
-
--(void)viewDidAppear:(BOOL)animated
-{
-    NSLog(@"viewDidAppear()");
-    [super viewDidAppear:animated];
-    
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-   
-}
-
-
+*/
 // For responding to the user tapping Cancel.
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker {
     
@@ -116,30 +103,57 @@
 {
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     
-    
-    
     // Handle a movie capture
     if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo)
     {
+        
+        NSURL *movieUrl = [info objectForKey:UIImagePickerControllerMediaURL];
         NSString *moviePath = [(NSURL *)[info objectForKey:UIImagePickerControllerMediaURL] path];
+        
+        
+        
+        // create a new take instance. the url property of the take will be set to moviePath
+        // get the index path of the current section (the section whose add button was pressed in within the collection vc. pass this from the collection vc. 
+        // call method on video controller to insert a new take to the shared videos array.
+        
         [self dismissViewControllerAnimated:NO completion:nil];
+        NSLog(@"moviePath: %@", moviePath);
+        
+        MediaLibrary *ml = [[MediaLibrary alloc] init];
+        // add take to array passed from the collection view controller (via video controller)
+        
+        
+        Take *newVideo = [[Take alloc] initWithURL:movieUrl];
+        
+        [self.scene.takes insertObject:newVideo atIndex:0];
+        
+    
         if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath))
         {
-            UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+            //UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+            
+            
+            
         }
     }
 }
 
--(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
+-(void)                    video:(NSString*)videoPath
+        didFinishSavingWithError:(NSError*)error
+                     contextInfo:(void*)contextInfo
 {
-    if (error) {
+    if (error)
+    {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed"
                                                        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
         
-    } else {
+    }
+    else
+    {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album"
-                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                  delegate:self
+         cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     }
 }

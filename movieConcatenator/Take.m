@@ -19,9 +19,15 @@
 
 
 #import "Take.h"
+#import "MediaLibrary.h"
 
 
+@interface Take ()
 
+
+@property(readonly, unsafe_unretained) dispatch_once_t thumbnailToken;
+
+@end
 @implementation Take
 
 
@@ -31,11 +37,24 @@
     self = [super init];
     if(self)
     {
-        self.assetURL = url;
-        self.asset = [AVAsset assetWithURL:url];
-        self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
-        self.thumbailImg = [UIImage imageNamed: @"movie-1"];
+        self.assetID = [[NSUUID UUID] UUIDString];
+        NSLog(@"%@", self.assetID);
         
+
+        NSURL *toUrl = [self getPathURL];
+        NSLog(@"%@", toUrl);
+
+        self.assetFileURL = toUrl;
+        
+        NSError *error = nil;
+        if (![[NSFileManager defaultManager]copyItemAtURL:url toURL:toUrl error:&error])
+        {
+            NSLog(@"file copy error %@", error);
+        }
+       
+        self.asset = [AVAsset assetWithURL:toUrl];
+        self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
+        //self.thumbailImg = [UIImage imageNamed: @"movie-1"];
         
         //self.asset = nil;
         //self.assetURL = url;
@@ -45,6 +64,25 @@
     }
     return self;
 }
+
+
+- (NSURL*) getPathURL
+{
+    // 4 - Get path
+    // generate a random filename for the movie
+    
+    NSString *myPathDocs =  [[self documentsDirectory ]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",self.assetID]];
+    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+    return url;
+}
+
+- (NSString*) documentsDirectory
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    return documentsDirectory;
+}
+
 
 // LOAD
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -106,9 +144,9 @@
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler
 {
     __unsafe_unretained __block Take *weakSelf = (Take *)self;
-    dispatch_once_t _thumbnailToken;
+    
     dispatch_once(&_thumbnailToken, ^{
-        [weakSelf.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]] completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
+        [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]] completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
             if (result == AVAssetImageGeneratorSucceeded)
             {
                 weakSelf.thumbailImg = [UIImage imageWithCGImage:image];
@@ -124,7 +162,7 @@
         }];
     });
     
-    return self.thumbailImg;
+    return weakSelf.thumbailImg;
 
 }
 

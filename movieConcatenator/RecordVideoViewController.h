@@ -10,8 +10,12 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import "Scene.h"
 
-@interface RecordVideoViewController : UIViewController
+@interface RecordVideoViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+
+
+@property (nonatomic, strong) Scene *scene;
 
 - (IBAction)backToRootVC:(id)sender;
 

@@ -13,8 +13,12 @@
 #import "PlayVideoViewController.h"
 #import "MergeVideoViewController.h"
 #import "TakeCell.h"
+#import "MediaLibrary.h"
+#import "SceneCollectionResuableView.h"
 
 @interface RootViewController ()
+
+//@property (nonatomic,strong) NSMutableArray *scenesArray;
 
 
 @end
@@ -51,6 +55,10 @@ static NSString * const reuseIdentifier = @"TakeCell";
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillAppear:(BOOL)animated {
+    [self.collectionView reloadData];
+}
+
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -62,17 +70,20 @@ static NSString * const reuseIdentifier = @"TakeCell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
   
     Scene *scene = [self.library.scenes objectAtIndex:section];
+    NSLog(@"[scene.takes count] %d", [scene.takes count]);
     return [scene.takes count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    TakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    static NSString* cellIdentifier = @"reusableTakeCell";
+    TakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
 
     Take *take = [scene.takes objectAtIndex:indexPath.item];
+    [cell cellWithTake:take];
+    
     NSLog(@"displaying cell for take %@", take);
     
 //    
@@ -86,11 +97,15 @@ static NSString * const reuseIdentifier = @"TakeCell";
 }
 
 
--(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
 
-     UICollectionReusableView *cell = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
+     SceneCollectionResuableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
     
-    return cell;
+    headerView.scene = self.library.scenes[indexPath.item];
+    headerView.addTake.tag = indexPath.section;
+    
+    return headerView;
 }
 
 #pragma mark <UICollectionViewDelegate>
@@ -134,6 +149,7 @@ static NSString * const reuseIdentifier = @"TakeCell";
 - (IBAction)addScene:(id)sender {
     
     Scene *newScene = [[Scene alloc] init];
+    newScene.title = @"Scene!";
     [self.library.scenes addObject:newScene];
     [self.library saveToFilename:@"medialibrary.plist"];
     
@@ -143,16 +159,13 @@ static NSString * const reuseIdentifier = @"TakeCell";
 - (IBAction)recordTake:(id)sender
 {
     RecordVideoViewController *recordVideoVC = [[RecordVideoViewController alloc] init];
+    
+    
+    
+    //recordVideoVC.scene = currentScene;
+    
     [self presentViewController:recordVideoVC animated:YES completion:nil];
-//        //
-//        recordVideoVC.view.backgroundColor = [UIColor orangeColor];
-//    }];
-//    
 
-    
-
-
-    
 }
 
 
@@ -166,13 +179,18 @@ static NSString * const reuseIdentifier = @"TakeCell";
  // Pass the selected object to the new view controller.
     NSLog(@"PREPARE");
     
+    UIButton *button = (UIButton*)sender;
+    NSLog(@"buttontag = %li", (long)button.tag);
     
-}
-
-- (IBAction)unwindToRootViewController:(UIStoryboardSegue*)segue
-{
+    Scene *currentScene = self.library.scenes[button.tag];
     
+    
+    if ([segue.identifier isEqualToString:@"showRecordVC"]) {
+        
+        RecordVideoViewController *recordViewController = segue.destinationViewController;
+        
+        recordViewController.scene = currentScene;
+    }
 }
-
 
 @end

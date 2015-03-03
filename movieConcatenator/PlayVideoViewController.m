@@ -77,7 +77,8 @@
 }
 
 // For responding to the user tapping Cancel.
--(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
     [self dismissModalViewControllerAnimated: YES];
 }
 

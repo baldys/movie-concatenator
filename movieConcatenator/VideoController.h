@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "Take.h"
+#import "MediaLibrary.h"
+
 @interface VideoController : NSObject
 
-// TODO make singleton
-- (instancetype) init;
-+ (VideoController*) sharedVideoManager;
+//@property (nonatomic, strong) NSMutableArray *sharedArray;
 
++(NSMutableArray *)sharedInstance;
 
+- (void) addTake:(Take*)take;
 
 
 //make asset from a bunch of RON Videos (NSArray of RON Videos) -> (AVAsset)
@@ -23,10 +25,11 @@
 
 //  selected?
 
+
 //  in order of filming/takes/sections
 //append to list of RON Videos (RON Video) -> ()
 
-//// addMediaItemToList:(MediaItem*)mediaItem
+//// addTakeVideoToList:(MediaItem*)mediaItem
 
 //later maybe delete a RON Video (RON Video) -> ()
 

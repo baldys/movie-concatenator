@@ -14,6 +14,7 @@
 {
     [super prepareForReuse];
     self.thumbnail.image = nil;
+    NSLog(@"reuse");
     self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
 }
 
@@ -22,10 +23,10 @@
 {
     // sets a thumbnail image to the image of the first frame of that video
     
-    self.thumbnail.image = [take loadThumbnailWithCompletionHandler:^(UIImage *image){
+    self.thumbnail.image = [take loadThumbnailWithCompletionHandler:^(UIImage *image)
+    {
         self.thumbnail.image = image;
     }];
-    
-    // set the label as the movies' title
+   
 }
 @end
