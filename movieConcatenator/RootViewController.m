@@ -85,7 +85,7 @@
     
     [cell cellWithTake:take];
     
-    NSLog(@"displaying cell for take %@", take.assetFileURL);
+   // NSLog(@"displaying cell for take %@", take.assetFileURL);
     
 //    
 //    AVAsset *myAasset = [take loadAsset];
@@ -186,14 +186,10 @@
     
     Take *take1 = scene.takes[0];
     NSLog(@"TAKE 1: %@", take1);
-    NSLog(@" \n\n\n\n\n\n\n\n\n %@ \n\n\n\n\n\n\n\n", take1.assetFileURL);
-    if (take1.assetFileURL.isFileURL)
-    {
-        NSLog(@"yes \n\n\n\n");
-    }
+    NSLog(@" \n\n\n\n\n\n\n\n\n %@ \n\n\n\n\n\n\n\n", [take1 getPathURL] );
     Take *take2 = scene.takes[1];
-    take1.asset = [AVAsset assetWithURL:take1.assetFileURL];
-    take2.asset = [AVAsset assetWithURL:take2.assetFileURL];
+    take1.asset = [AVAsset assetWithURL:[take1 getPathURL]];
+    take2.asset = [AVAsset assetWithURL:[take2 getPathURL]];
     
     
     

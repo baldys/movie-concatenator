@@ -14,8 +14,6 @@
 
 @interface Take : NSObject <NSCoding>
 
-@property (nonatomic, strong) NSURL *assetFileURL;
-
 @property (nonatomic) NSInteger takeNumber;
 
 @property (nonatomic, strong) NSString* assetID;
