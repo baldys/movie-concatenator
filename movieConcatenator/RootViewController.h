@@ -16,5 +16,6 @@
 
 - (IBAction)addScene:(id)sender;
 
+- (IBAction)MergeAllVideos:(id)sender;
 
 @end

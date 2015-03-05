@@ -101,7 +101,7 @@
 }
 */
 
-
+/*
 + (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler
 {
     // Write a movie back to the asset library so it can be viewed by other apps
@@ -127,7 +127,7 @@
     
     return success;
 }
-
+*/
 
 
 @end

@@ -27,7 +27,9 @@
 -(void) configureMoviePlayer {
     self.view.backgroundColor = [UIColor blueColor];
     self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:self.take.assetFileURL];
-    self.moviePlayer.view.backgroundColor = [UIColor clearColor];
+    
+    NSLog(@"self.take.assetFIleURL:%@", self.take.assetFileURL);
+    self.moviePlayer.view.backgroundColor = [UIColor redColor];
     [self.moviePlayer prepareToPlay];
     
     [self.moviePlayer.view setFrame: self.view.bounds];

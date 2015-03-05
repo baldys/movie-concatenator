@@ -25,7 +25,7 @@
 
 //- (void)loadLibraryWithCompletionBlock:(void (^)(void))completionHandler;
 
-+ (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler;
+//+ (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler;
 
 - (NSURL*) getPathURL;
 

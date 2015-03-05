@@ -37,14 +37,17 @@
     self = [super init];
     if(self)
     {
+        NSLog(@"######################## \n\n\n");
         self.assetID = [[NSUUID UUID] UUIDString];
         NSLog(@"%@", self.assetID);
         
 
         NSURL *toUrl = [self getPathURL];
-        NSLog(@"%@", toUrl);
+        NSLog(@"path url for the take: %@", toUrl);
 
         self.assetFileURL = toUrl;
+        NSLog(@"path url for the take: %@", self.assetFileURL);
+        
         
         NSError *error = nil;
         if (![[NSFileManager defaultManager]copyItemAtURL:url toURL:toUrl error:&error])
@@ -53,6 +56,9 @@
         }
        
         self.asset = [AVAsset assetWithURL:toUrl];
+        
+        
+        
         self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
         //self.thumbailImg = [UIImage imageNamed: @"movie-1"];
         
@@ -71,7 +77,7 @@
     // 4 - Get path
     // generate a random filename for the movie
     
-    NSString *myPathDocs =  [[self documentsDirectory ]stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",self.assetID]];
+    NSString *myPathDocs =  [[self documentsDirectory] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mov",self.assetID]];
     NSURL *url = [NSURL fileURLWithPath:myPathDocs];
     return url;
 }

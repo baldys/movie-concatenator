@@ -130,7 +130,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="hA1-sp-4y4">
                             <size key="itemSize" width="150" height="125"/>
-                            <size key="headerReferenceSize" width="50" height="76"/>
+                            <size key="headerReferenceSize" width="50" height="62"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
@@ -142,18 +142,19 @@
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="125"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="eCX-V3-1lM">
-                                            <rect key="frame" x="4" y="4" width="150" height="125"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="eCX-V3-1lM">
+                                            <rect key="frame" x="8" y="8" width="134" height="109"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
+                                <color key="backgroundColor" red="1" green="0.15373596119999999" blue="0.88840716109999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="eCX-V3-1lM" secondAttribute="bottom" constant="4" id="MHr-hB-c6I"/>
-                                    <constraint firstItem="eCX-V3-1lM" firstAttribute="top" secondItem="oM7-hk-5te" secondAttribute="top" constant="4" id="YjL-WD-ho0"/>
-                                    <constraint firstItem="eCX-V3-1lM" firstAttribute="leading" secondItem="oM7-hk-5te" secondAttribute="leading" constant="4" id="ax7-iF-Gcd"/>
-                                    <constraint firstAttribute="trailing" secondItem="eCX-V3-1lM" secondAttribute="trailing" constant="4" id="nW2-7f-zqZ"/>
+                                    <constraint firstAttribute="bottom" secondItem="eCX-V3-1lM" secondAttribute="bottom" constant="8" id="D2A-vE-Nyu"/>
+                                    <constraint firstItem="eCX-V3-1lM" firstAttribute="top" secondItem="oM7-hk-5te" secondAttribute="top" constant="8" id="bXK-0m-jt2"/>
+                                    <constraint firstItem="eCX-V3-1lM" firstAttribute="leading" secondItem="oM7-hk-5te" secondAttribute="leading" constant="8" id="mKx-Oc-krd"/>
+                                    <constraint firstAttribute="trailing" secondItem="eCX-V3-1lM" secondAttribute="trailing" constant="8" id="qBw-CD-0V1"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="thumbnail" destination="eCX-V3-1lM" id="1ub-wd-M4B"/>
@@ -161,21 +162,18 @@
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" contentMode="center" reuseIdentifier="SceneHeader" id="1l1-s9-tcI" customClass="SceneCollectionResuableView">
-                            <rect key="frame" x="0.0" y="64" width="600" height="83"/>
+                            <rect key="frame" x="0.0" y="64" width="600" height="62"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Scene Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mi8-cc-Yzh">
-                                    <rect key="frame" x="8" y="8" width="113" height="39"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="67" id="aqS-1R-5Aa"/>
-                                    </constraints>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scene Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mi8-cc-Yzh">
+                                    <rect key="frame" x="8" y="20" width="87.5" height="21.5"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                     <color key="textColor" red="0.14963668729999999" green="0.855712001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                     <color key="shadowColor" red="0.67786447425651819" green="1" blue="0.20577002189006488" alpha="1" colorSpace="calibratedRGB"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zu-u3-vwK">
-                                    <rect key="frame" x="478" y="13" width="93" height="30"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Zu-u3-vwK">
+                                    <rect key="frame" x="532" y="16" width="60" height="30"/>
                                     <state key="normal" title="add take">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -187,8 +185,7 @@
                             <color key="backgroundColor" red="0.08620554831613314" green="0.10983353905422366" blue="1" alpha="0.52000000000000002" colorSpace="calibratedRGB"/>
                             <color key="tintColor" red="0.0" green="1" blue="0.94934334050000002" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
-                                <constraint firstAttribute="bottomMargin" secondItem="Mi8-cc-Yzh" secondAttribute="bottom" id="T9V-FP-7G4"/>
-                                <constraint firstItem="Mi8-cc-Yzh" firstAttribute="top" secondItem="1l1-s9-tcI" secondAttribute="topMargin" id="U2S-hy-BGt"/>
+                                <constraint firstAttribute="centerY" secondItem="Mi8-cc-Yzh" secondAttribute="centerY" id="N9E-II-SyZ"/>
                                 <constraint firstItem="Mi8-cc-Yzh" firstAttribute="leading" secondItem="1l1-s9-tcI" secondAttribute="leadingMargin" id="eZn-Pf-qWP"/>
                                 <constraint firstAttribute="centerY" secondItem="8Zu-u3-vwK" secondAttribute="centerY" id="gyd-0K-jz2"/>
                                 <constraint firstItem="8Zu-u3-vwK" firstAttribute="trailing" secondItem="1l1-s9-tcI" secondAttribute="trailingMargin" id="pQI-KZ-g8g"/>
@@ -203,8 +200,13 @@
                             <outlet property="delegate" destination="Ka6-Tg-ChZ" id="Mex-3n-Tt2"/>
                         </connections>
                     </collectionView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="My Scenes" id="p7n-cN-CHa">
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="xx9-hY-rne"/>
+                        <barButtonItem key="leftBarButtonItem" title="Merge" id="xx9-hY-rne" userLabel="Merge">
+                            <connections>
+                                <action selector="MergeAllVideos:" destination="Ka6-Tg-ChZ" id="5LT-gO-dW8"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Nws-nl-lL6">
                             <connections>
                                 <action selector="addScene:" destination="Ka6-Tg-ChZ" id="Xc2-Jw-FJc"/>

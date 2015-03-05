@@ -58,11 +58,7 @@
 - (instancetype) initWithURL:(NSURL *)url;
 
 - (NSArray*)assetTracks;
-//TODO: split into two.
-//- (AVAssetTrack*)videoAssetTrack;
-//- (AVAssetTrack*)audioAssetTrack;
 
-//@property (nonatomic, strong) AVAssetTrack *videoAsset
 
 - (NSURL*)getPathURL;
 - (NSString*) documentsDirectory;

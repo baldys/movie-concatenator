@@ -15,6 +15,7 @@
 #import "TakeCell.h"
 #import "MediaLibrary.h"
 #import "SceneCollectionResuableView.h"
+#import "VideoMerger.h"
 
 @interface RootViewController ()
 
@@ -75,6 +76,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* cellIdentifier = @"reusableTakeCell";
+    
     TakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
     
     Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
@@ -174,15 +176,40 @@
     [self.collectionView reloadData];
 }
 
-- (IBAction)recordTake:(id)sender
+- (IBAction)MergeAllVideos:(id)sender
 {
-    RecordVideoViewController *recordVideoVC = [[RecordVideoViewController alloc] init];
 
-    //recordVideoVC.scene = currentScene;
+    VideoMerger *merger = [[VideoMerger alloc] init];
     
-    [self presentViewController:recordVideoVC animated:YES completion:nil];
-
+    
+    Scene *scene = self.library.scenes[0];
+    
+    Take *take1 = scene.takes[0];
+    NSLog(@"TAKE 1: %@", take1);
+    NSLog(@" \n\n\n\n\n\n\n\n\n %@ \n\n\n\n\n\n\n\n", take1.assetFileURL);
+    if (take1.assetFileURL.isFileURL)
+    {
+        NSLog(@"yes \n\n\n\n");
+    }
+    Take *take2 = scene.takes[1];
+    take1.asset = [AVAsset assetWithURL:take1.assetFileURL];
+    take2.asset = [AVAsset assetWithURL:take2.assetFileURL];
+    
+    
+    
+//    for (Scene *scene in self.library.scenes)
+//    {
+//        for (Take *take in scene.takes)
+//        {
+//            
+//            
+//            
+//        }
+//    }
+    [merger appendAsset:take2.asset toPreviousAsset:take1.asset];
+    
 }
+
 
  #pragma mark - Navigation
  

@@ -125,14 +125,11 @@
         
         [self.scene.takes insertObject:newVideo atIndex:0];
         
-        if (self.completionBlock != nil) {
+        if (self.completionBlock != nil)
+        {
             self.completionBlock(YES);
         }
     
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath))
-        {
-            //UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
-        }
     }
 }
 

@@ -1,37 +1,33 @@
 //
-//  MergeVideoViewController.h
+//  VideoMerger.h
 //  movieConcatenator
 //
-//  Created by Veronica Baldys on 2015-02-21.
+//  Created by Veronica Baldys on 2015-03-03.
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#import "Scene.h"
+#import "Take.h"
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "Take.h"
 
+@interface VideoMerger : NSObject
 
-@interface MergeVideoViewController : UIViewController
-{
-    BOOL isSelectingAssetOne;
-}
-
-@property(nonatomic, strong) AVAsset *firstAsset;
-@property(nonatomic, strong) AVAsset *secondAsset;
 
 @property (nonatomic, strong) AVMutableComposition *mixComposition;
 @property (nonatomic, strong) AVMutableVideoComposition *mainComposition;
 //@property (nonatomic, strong) AVMutableVideoCompositionInstruction *videoCompositionInstruction;
 // contains layer instructions for each video asset/composirtion
 //@property (nonatomic, strong) NSMutableArray *videoCompositionLayerInstructions;
-@property (nonatomic,strong) Take *video;
+
 
 //- (IBAction)loadVideo1:(id)sender;
-
+//
 //- (IBAction)loadVideo2:(id)sender;
 
 - (void)concatenateAssets:(NSMutableArray*)assetArray;

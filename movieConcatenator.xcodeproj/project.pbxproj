@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0020B91AA6BFD60018592C /* VideoMerger.m */; };
 		9F46489B1AA5179900F305AA /* SceneCollectionResuableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */; };
 		9F8B657B1AA3CB780062A3F1 /* arrow506.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657A1AA3CB780062A3F1 /* arrow506.png */; };
 		9F8B657D1AA3CB820062A3F1 /* arrow191.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657C1AA3CB820062A3F1 /* arrow191.png */; };
@@ -52,6 +53,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9F0020B81AA6BFD60018592C /* VideoMerger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMerger.h; sourceTree = "<group>"; };
+		9F0020B91AA6BFD60018592C /* VideoMerger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMerger.m; sourceTree = "<group>"; };
 		9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneCollectionResuableView.h; sourceTree = "<group>"; };
 		9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneCollectionResuableView.m; sourceTree = "<group>"; };
 		9F8B657A1AA3CB780062A3F1 /* arrow506.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow506.png; sourceTree = "<group>"; };
@@ -162,8 +165,6 @@
 				9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */,
 				9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */,
 				9FAFA78D1A9EB71200F7396B /* Model */,
-				9FAFA7801A9D2BC700F7396B /* VideoController.h */,
-				9FAFA7811A9D2BC700F7396B /* VideoController.m */,
 				9FAFA7831A9EA5B200F7396B /* View Controllers */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */,
@@ -226,10 +227,14 @@
 		9FAFA78D1A9EB71200F7396B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				9FAFA78A1A9EB5FD00F7396B /* Scene.h */,
-				9FAFA78B1A9EB5FD00F7396B /* Scene.m */,
 				9FAFA77D1A9C170A00F7396B /* Take.h */,
 				9FAFA77E1A9C170A00F7396B /* Take.m */,
+				9FAFA78A1A9EB5FD00F7396B /* Scene.h */,
+				9FAFA78B1A9EB5FD00F7396B /* Scene.m */,
+				9FAFA7801A9D2BC700F7396B /* VideoController.h */,
+				9FAFA7811A9D2BC700F7396B /* VideoController.m */,
+				9F0020B81AA6BFD60018592C /* VideoMerger.h */,
+				9F0020B91AA6BFD60018592C /* VideoMerger.m */,
 				9FAFA78E1A9EBBB300F7396B /* MediaLibrary.h */,
 				9FAFA78F1A9EBBB300F7396B /* MediaLibrary.m */,
 			);
@@ -354,6 +359,7 @@
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
 				9FAFA77F1A9C170A00F7396B /* Take.m in Sources */,
 				9FAFA7901A9EBBB300F7396B /* MediaLibrary.m in Sources */,
+				9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */,
 				9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */,
 				9F46489B1AA5179900F305AA /* SceneCollectionResuableView.m in Sources */,
 				9FAFA7891A9EA60000F7396B /* RootViewController.m in Sources */,
