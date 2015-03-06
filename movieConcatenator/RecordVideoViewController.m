@@ -8,7 +8,7 @@
 
 #import "RecordVideoViewController.h"
 #import "VideoController.h"
-#import "MediaLibrary.h"
+#import "VideoLibrary.h"
 
 @interface RecordVideoViewController ()
 
@@ -117,7 +117,7 @@
         [self dismissViewControllerAnimated:NO completion:nil];
         NSLog(@"moviePath: %@", moviePath);
         
-        MediaLibrary *ml = [[MediaLibrary alloc] init];
+        VideoLibrary *ml = [[VideoLibrary alloc] init];
         // add take to array passed from the collection view controller (via video controller)
         
         

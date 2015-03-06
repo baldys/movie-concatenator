@@ -13,7 +13,7 @@
 #import "PlayVideoViewController.h"
 #import "MergeVideoViewController.h"
 #import "TakeCell.h"
-#import "MediaLibrary.h"
+#import "VideoLibrary.h"
 #import "SceneCollectionResuableView.h"
 #import "VideoMerger.h"
 
@@ -21,6 +21,8 @@
 
 //@property (nonatomic,strong) NSMutableArray *scenesArray;
 
+@property (weak, nonatomic) IBOutlet UIButton *selectedTake;
+- (IBAction)selectTake:(id)sender;
 
 @end
 
@@ -36,15 +38,20 @@
     
     // Register cell classes
 
-    MediaLibrary *myScenes = [MediaLibrary libraryWithFilename:@"medialibrary.plist"];
+    VideoLibrary *myScenes = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
     
     if (!myScenes)
     {
-        myScenes = [[MediaLibrary alloc] init];
-        [myScenes saveToFilename:@"medialibrary.plist"];
+        myScenes = [[VideoLibrary alloc] init];
+        [myScenes saveToFilename:@"videolibrary.plist"];
     }
     
     self.library = myScenes;
+    
+    if (!self.selectedItems)
+    {
+        self.selectedItems = [NSMutableArray array];
+    }
     
     // Do any additional setup after loading the view.
 }
@@ -58,6 +65,9 @@
     [self.collectionView reloadData];
 }
 
+-(void) didTapHappyButton:(TakeCell*) cell {
+    NSLog(@"didTapHappyButton:(TakeCell*)!!!!");
+}
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -78,12 +88,21 @@
     static NSString* cellIdentifier = @"reusableTakeCell";
     
     TakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    
+
     Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
 
     Take *take = [scene.takes objectAtIndex:indexPath.item];
     
     [cell cellWithTake:take];
+    cell.selectTakeButton.tag = indexPath.item;
+    
+    if(cell.take.selected == YES)
+    {
+        
+        [self.selectedItems addObject:[scene.takes objectAtIndex:cell.selectTakeButton.tag]];
+        
+    }
+    
     
    // NSLog(@"displaying cell for take %@", take.assetFileURL);
     
@@ -119,7 +138,11 @@
     
     scene = [self.library.scenes objectAtIndex:indexPath.section];
     Take *take = [scene.takes objectAtIndex:indexPath.item];
-
+    if (![self.selectedItems containsObject:take]) {
+        [self.selectedItems addObject:take];
+    }
+    [self.selectedItems addObject:take];
+    
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
     videoPlayerVC.take = take;
     
@@ -132,6 +155,15 @@
         //TODO: videoPlayerVC should start playing some video...
         
     }];
+    
+}
+- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    Scene *scene = [[Scene alloc] init];
+    scene = [self.library.scenes objectAtIndex:indexPath.section];
+    Take *take = [scene.takes objectAtIndex:indexPath.item];
+    //[self.selectedItems removeObject:take];
+    
     
 }
 
@@ -171,7 +203,7 @@
     newScene.title = @"Scene!";
     [self.library.scenes addObject:newScene];
     // ** c
-    [self.library saveToFilename:@"medialibrary.plist"];
+    [self.library saveToFilename:@"videolibrary.plist"];
     
     [self.collectionView reloadData];
 }
@@ -184,14 +216,15 @@
     
     Scene *scene = self.library.scenes[0];
     
-    Take *take1 = scene.takes[0];
+    Take *take1 = scene.takes[2];
     NSLog(@"TAKE 1: %@", take1);
     NSLog(@" \n\n\n\n\n\n\n\n\n %@ \n\n\n\n\n\n\n\n", [take1 getPathURL] );
     Take *take2 = scene.takes[1];
+    Take *take3 = scene.takes[0];
     take1.asset = [AVAsset assetWithURL:[take1 getPathURL]];
     take2.asset = [AVAsset assetWithURL:[take2 getPathURL]];
     
-    
+    take3.asset = [AVAsset assetWithURL:[take3 getPathURL]];
     
 //    for (Scene *scene in self.library.scenes)
 //    {
@@ -202,7 +235,13 @@
 //            
 //        }
 //    }
-    [merger appendAsset:take2.asset toPreviousAsset:take1.asset];
+    
+//    AVAsset* tak1take2 = [merger appendAsset:take2.asset toPreviousAsset:take1.asset];
+//    AVAsset* take1take2take3 = [merger appendAsset:take3.asset toPreviousAsset:tak1take2];
+    
+    //MixCompistion* myMix = [merger appendAsset:foo toPreviousAssst:bar];
+    
+    [merger exportVideoComposition:[merger spliceAssets:@[take1, take2, take3]]];
     
 }
 
@@ -235,7 +274,7 @@
             if (success)
             {
                 NSLog(@"saving");
-                [weakSelf.library saveToFilename:@"medialibrary.plist"];
+                [weakSelf.library saveToFilename:@"videolibrary.plist"];
             }
         };
         /// add completion

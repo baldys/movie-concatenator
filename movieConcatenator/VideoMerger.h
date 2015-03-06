@@ -30,11 +30,13 @@
 //
 //- (IBAction)loadVideo2:(id)sender;
 
+-(AVAsset*)spliceAssets: (NSArray*)takes;
+
 - (void)concatenateAssets:(NSMutableArray*)assetArray;
 
-- (void)appendAsset:(AVAsset*)asset2 toPreviousAsset:(AVAsset*)asset1;
+- (AVAsset*)appendAsset:(AVAsset*)asset2 toPreviousAsset:(AVAsset*)asset1;
 
--(void) exportVideoComposition:(AVMutableComposition*)composition;
+-(void) exportVideoComposition:(AVAsset*)composition;
 
 -(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
 

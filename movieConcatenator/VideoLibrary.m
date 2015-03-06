@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
 
-#import "MediaLibrary.h"
+#import "VideoLibrary.h"
 #import "Scene.h"
 
 #import <MediaPlayer/MediaPlayer.h>
@@ -14,7 +14,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 
 
-@interface MediaLibrary ()
+@interface VideoLibrary ()
 
 - (void) buildMediaLibrary;
 - (void) buildAssetLibrary;
@@ -31,7 +31,7 @@
 
 @end
 
-@implementation MediaLibrary
+@implementation VideoLibrary
 
 -(instancetype)init {
     if (self = [super init]) {

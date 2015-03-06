@@ -7,15 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MediaLibrary.h"
+#import "VideoLibrary.h"
 
 @interface RootViewController : UICollectionViewController
+{
+    NSUInteger starredIndex;
+    NSUInteger starredSection;
+}
+@property (nonatomic, strong) VideoLibrary *library;
 
-
-@property (nonatomic, strong) MediaLibrary *library;
+@property (nonatomic, strong) NSMutableArray *selectedItems;
 
 - (IBAction)addScene:(id)sender;
 
 - (IBAction)MergeAllVideos:(id)sender;
+
 
 @end

@@ -10,7 +10,7 @@
 
 @class Take;
 
-@interface MediaLibrary : NSObject <NSCoding>
+@interface VideoLibrary : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 

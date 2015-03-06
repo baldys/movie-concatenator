@@ -26,7 +26,7 @@
 
 @property (nonatomic, strong) AVAsset *asset;
 
-@property (nonatomic, strong) UIImage *thumbailImg;
+@property (nonatomic, strong) UIImage *thumbailImg; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
 
 //@property (nonatomic,strong) CMTi
 
@@ -46,12 +46,12 @@
 
 //@property (nonatomic, strong) AVMutableVideoComposition *videoComposition;
 //@property (nonatomic, strong) AVMutableAudioMix *audioMix;
+
 @property (nonatomic, strong) NSArray *assetTracks;
 
 //TODO: each RON video has a beginning cut in time (CMTime), cut out time (CMTime)
 //OR CMTimeRange
 //additional feature
-
 
 - (instancetype) initWithURL:(NSURL *)url;
 

@@ -19,7 +19,7 @@
 
 
 #import "Take.h"
-#import "MediaLibrary.h"
+#import "VideoLibrary.h"
 
 
 @interface Take ()
@@ -53,7 +53,7 @@
        
         self.asset = [AVAsset assetWithURL:toUrl];
         
-        
+        self.selected = NO;
         
         self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
         //self.thumbailImg = [UIImage imageNamed: @"movie-1"];

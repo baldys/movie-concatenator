@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Take.h"
-#import "MediaLibrary.h"
+#import "VideoLibrary.h"
 
 @interface VideoController : NSObject
 
