@@ -9,16 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-//#import <MediaLibrary/MediaLibrary.h>
 #import <UIKit/UIKit.h>
 
 @interface Take : NSObject <NSCoding>
 
 @property (nonatomic) NSInteger takeNumber;
-
+@property (nonatomic) NSInteger sceneNumber;
 @property (nonatomic, strong) NSString* assetID;
-
-@property (nonatomic, strong) NSDate *timeStamp;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
 
@@ -34,24 +31,12 @@
 
 //- (void) saveToFile:
 
-
-
-//- (void) loadMedia:AV
-
-
 @property AVMutableComposition *mutableComposition;
 @property AVMutableVideoComposition *mutableVideoComposition;
 @property AVMutableAudioMix *mutableAudioMix;
 @property (nonatomic) CMTime *insertionPoint;
 
-//@property (nonatomic, strong) AVMutableVideoComposition *videoComposition;
-//@property (nonatomic, strong) AVMutableAudioMix *audioMix;
-
 @property (nonatomic, strong) NSArray *assetTracks;
-
-//TODO: each RON video has a beginning cut in time (CMTime), cut out time (CMTime)
-//OR CMTimeRange
-//additional feature
 
 - (instancetype) initWithURL:(NSURL *)url;
 

@@ -149,14 +149,14 @@
                                             <rect key="frame" x="8" y="8" width="133" height="109"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RCP-3l-MM4">
-                                            <rect key="frame" x="97" y="75" width="44" height="42"/>
-                                            <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="42"/>
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RCP-3l-MM4">
+                                            <rect key="frame" x="98" y="75" width="44" height="42"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="38"/>
                                             <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <state key="normal" title="✩"/>
+                                            <state key="normal" title="☆"/>
                                             <state key="selected" title="★"/>
                                             <connections>
-                                                <action selector="happybutton:" destination="oM7-hk-5te" eventType="touchUpInside" id="9Xo-Nz-MV6"/>
+                                                <action selector="starButtonSelectedForCell:" destination="oM7-hk-5te" eventType="touchUpInside" id="ks2-0A-C5t"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -170,7 +170,7 @@
                                     <constraint firstAttribute="trailing" secondItem="eCX-V3-1lM" secondAttribute="trailing" constant="8" id="qBw-CD-0V1"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="selectTakeButton" destination="RCP-3l-MM4" id="uGx-Ni-R39"/>
+                                    <outlet property="starTake" destination="RCP-3l-MM4" id="xjc-We-er0"/>
                                     <outlet property="thumbnail" destination="eCX-V3-1lM" id="1ub-wd-M4B"/>
                                 </connections>
                             </collectionViewCell>
@@ -217,11 +217,13 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="My Scenes" id="p7n-cN-CHa">
                         <barButtonItem key="leftBarButtonItem" title="Merge" id="xx9-hY-rne" userLabel="Merge">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="MergeAllVideos:" destination="Ka6-Tg-ChZ" id="5LT-gO-dW8"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Nws-nl-lL6">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="addScene:" destination="Ka6-Tg-ChZ" id="Xc2-Jw-FJc"/>
                             </connections>

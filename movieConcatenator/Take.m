@@ -95,7 +95,7 @@
         ///self.assetURL = ppath name + assetid.file ext
         self.takeNumber = [aDecoder decodeIntegerForKey:@"takeNumber"];
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
-        self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
+        //self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
         NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
         self.thumbailImg = [UIImage imageWithData:imageData];
@@ -109,7 +109,7 @@
 {
     [aCoder encodeInteger:self.takeNumber forKey:@"takeNumber"];
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
-    [aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
+    //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     [aCoder encodeBool:self.selected forKey:@"selected"];
     [aCoder encodeObject:UIImageJPEGRepresentation(self.thumbailImg, 1) forKey:@"thumbnailImgData"];
     
@@ -140,11 +140,6 @@
     return assetTracks;
 }
 
-
-- (void) createCompositionWithAudioAndVideoTracks
-{
-    AVMutableComposition *composition = [AVMutableComposition composition];
-}
 
 // Load the first frame of the video for a thumbnail
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler

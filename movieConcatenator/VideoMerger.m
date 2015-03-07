@@ -23,7 +23,7 @@
 //log timer, log mutablecomposition.tracks
 
 //make avasset from avmutablecomposition (is an avasset)
-
+/*
 - (void)concatenateAssets:(NSArray *)assetArray
 {
     // dispatch start
@@ -38,7 +38,7 @@
     [self appendAsset:assetArray[0] toPreviousAsset:assetArray[1]];
 }
 
-
+*/
 
 - (BOOL)isAssetPortrait:(AVAssetTrack *)assetTrack_video
 {
@@ -74,7 +74,8 @@
     return isAssetPortrait_;
 }
 
--(AVAsset*)spliceAssets: (NSArray*)takes {
+-(AVAsset*)spliceAssets: (NSArray*)takes
+{
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
     AVMutableCompositionTrack *compositionTrack1_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
@@ -85,7 +86,8 @@
     
     NSMutableArray *assets = [NSMutableArray array];
     
-    for (Take* take in takes) {
+    for (Take* take in takes)
+    {
         [assets addObject:[AVAsset assetWithURL:[take getPathURL]]];
     }
  

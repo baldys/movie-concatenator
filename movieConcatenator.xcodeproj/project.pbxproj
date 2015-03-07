@@ -132,6 +132,7 @@
 		9FAFA7331A98884A00F7396B = {
 			isa = PBXGroup;
 			children = (
+				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
 				9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */,
@@ -166,9 +167,6 @@
 				9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */,
 				9FAFA78D1A9EB71200F7396B /* Model */,
 				9FAFA7831A9EA5B200F7396B /* View Controllers */,
-				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
-				9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */,
-				9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */,
 				9F8B657A1AA3CB780062A3F1 /* arrow506.png */,
 				9F8B657E1AA3CB950062A3F1 /* left37 copy.png */,
 				9F8B65881AA3CC180062A3F1 /* list31.png */,
@@ -216,6 +214,8 @@
 		9FAFA7831A9EA5B200F7396B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */,
+				9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */,
 				9FAFA7871A9EA60000F7396B /* RootViewController.h */,
 				9FAFA7881A9EA60000F7396B /* RootViewController.m */,
 				9FAFA7941A9FB45900F7396B /* TakeCell.h */,
@@ -393,6 +393,7 @@
 				9FAFA74D1A98884A00F7396B /* Base */,
 			);
 			name = Main.storyboard;
+			path = movieConcatenator;
 			sourceTree = "<group>";
 		};
 		9FAFA7511A98884A00F7396B /* LaunchScreen.xib */ = {

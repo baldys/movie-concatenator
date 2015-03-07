@@ -11,22 +11,26 @@
 #import "Take.h"
 #import "RecordVideoViewController.h"
 #import "PlayVideoViewController.h"
-#import "MergeVideoViewController.h"
+//#import "MergeVideoViewController.h"
 #import "TakeCell.h"
 #import "VideoLibrary.h"
 #import "SceneCollectionResuableView.h"
 #import "VideoMerger.h"
 
 @interface RootViewController ()
+//- (IBAction)starButtonClicked:(id)sender;
 
 //@property (nonatomic,strong) NSMutableArray *scenesArray;
-
-@property (weak, nonatomic) IBOutlet UIButton *selectedTake;
-- (IBAction)selectTake:(id)sender;
 
 @end
 
 @implementation RootViewController
+
+//- (IBAction)toggleStarButton:(UIButton*)sender
+//{
+//    
+//    
+//}
 
 //static NSString * const reuseIdentifier = @"TakeCell";
 
@@ -65,9 +69,6 @@
     [self.collectionView reloadData];
 }
 
--(void) didTapHappyButton:(TakeCell*) cell {
-    NSLog(@"didTapHappyButton:(TakeCell*)!!!!");
-}
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -86,23 +87,59 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* cellIdentifier = @"reusableTakeCell";
-    
     TakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-
-    Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
-
-    Take *take = [scene.takes objectAtIndex:indexPath.item];
-    
-    [cell cellWithTake:take];
-    cell.selectTakeButton.tag = indexPath.item;
-    
-    if(cell.take.selected == YES)
+    cell.starTake.tag = indexPath.item;
+    if (cell.starTake.selected)
     {
-        
-        [self.selectedItems addObject:[scene.takes objectAtIndex:cell.selectTakeButton.tag]];
+        NSLog(@"cell indexPath selected");
         
     }
     
+    Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
+    
+    Take *take = [scene.takes objectAtIndex:indexPath.row];
+    if (!take)
+    {
+        
+       NSLog(@"scene.takes count: %lu, %lu", (long)indexPath.item, (long)indexPath.row);
+    }
+    
+    
+    NSLog(@"IndexPath.item = %d", indexPath.item);
+    NSLog(@"IndexPath.section = %d", indexPath.section);
+    
+    [cell cellWithTake:take];
+    if (take.isSelected)
+    {
+        [self.selectedItems insertObject:take atIndex:indexPath.section];
+    }
+    
+    
+    //cell.takeCellTag = indexPath;
+    //[cell.starTake addTarget:self action:<#(SEL)#> forControlEvents:UIControlEventTouchUpInside]
+
+
+    //NSLog(@"self.take.selected %d", cell.starTake.tag);
+    //Take *take = scene.takes[cell.starTake.tag];
+  
+//    for (Scene *scene in self.library.scenes)
+//    {
+//        for (Take* take in scene.takes)
+//        {
+//            if (take.isSelected)
+//            {
+////                
+//            }
+//               
+//                
+//                
+//        }
+//    }
+//      
+//        
+    
+    
+    NSLog(@"self.take.selected %d", cell.takeCellTag);
     
    // NSLog(@"displaying cell for take %@", take.assetFileURL);
     
@@ -120,10 +157,14 @@
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
 
-     SceneCollectionResuableView *sceneSection = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
+    SceneCollectionResuableView *sceneSection = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];;
+    NSLog(@"index path %@", indexPath);
     
     sceneSection.scene = self.library.scenes[indexPath.item];
     sceneSection.addTake.tag = indexPath.section;
+    
+    //take.sceneNumber = indexPath.item;
+    NSLog(@"index path. item in the suppplementary view ::::: %ld", (long)indexPath.section);
     
     return sceneSection;
 }
@@ -132,16 +173,15 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    //TakeCell *cell =
     NSLog(@"did select item");
     
-    Scene *scene = [[Scene alloc] init];
-    
-    scene = [self.library.scenes objectAtIndex:indexPath.section];
+    Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
     Take *take = [scene.takes objectAtIndex:indexPath.item];
-    if (![self.selectedItems containsObject:take]) {
-        [self.selectedItems addObject:take];
-    }
-    [self.selectedItems addObject:take];
+    //if (![self.selectedItems containsObject:take]) {
+    //    [self.selectedItems addObject:take];
+    //}
+    //[self.selectedItems addObject:take];
     
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
     videoPlayerVC.take = take;
@@ -157,15 +197,7 @@
     }];
     
 }
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    Scene *scene = [[Scene alloc] init];
-    scene = [self.library.scenes objectAtIndex:indexPath.section];
-    Take *take = [scene.takes objectAtIndex:indexPath.item];
-    //[self.selectedItems removeObject:take];
-    
-    
-}
+
 
 /*
 // Uncomment this method to specify if the specified item should be highlighted during tracking
@@ -180,15 +212,16 @@
     return YES;
 }
 */
-
 /*
+
 // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
 	return NO;
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
+- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+	
 }
 
 - (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
@@ -214,34 +247,44 @@
     VideoMerger *merger = [[VideoMerger alloc] init];
     
     
-    Scene *scene = self.library.scenes[0];
+//    Scene *scene1 = self.library.scenes[0];
+//    Scene *scene2 = self.library.scenes[1];
+//    
+//    Take *take1 = scene1.takes[2];
+//    NSLog(@"TAKE 1: %@", take1);
+//    NSLog(@" \n\n\n\n\n\n\n\n\n %@ \n\n\n\n\n\n\n\n", [take1 getPathURL] );
+//    Take *take2 = scene1.takes[1];
+//    Take *take3 = scene1.takes[0];
+//    Take *take4 = scene2.takes[0];
+//    take1.asset = [AVAsset assetWithURL:[take1 getPathURL]];
+//    take2.asset = [AVAsset assetWithURL:[take2 getPathURL]];
+//    
+//    take3.asset = [AVAsset assetWithURL:[take3 getPathURL]];
+//    take4.asset = [AVAsset assetWithURL:[take4 getPathURL]];
     
-    Take *take1 = scene.takes[2];
-    NSLog(@"TAKE 1: %@", take1);
-    NSLog(@" \n\n\n\n\n\n\n\n\n %@ \n\n\n\n\n\n\n\n", [take1 getPathURL] );
-    Take *take2 = scene.takes[1];
-    Take *take3 = scene.takes[0];
-    take1.asset = [AVAsset assetWithURL:[take1 getPathURL]];
-    take2.asset = [AVAsset assetWithURL:[take2 getPathURL]];
-    
-    take3.asset = [AVAsset assetWithURL:[take3 getPathURL]];
-    
-//    for (Scene *scene in self.library.scenes)
-//    {
-//        for (Take *take in scene.takes)
-//        {
+    for (Scene *scene in self.library.scenes)
+    {
+        for (Take *take in scene.takes)
+        {
+            if (take.selected) {
+                
+                NSLog(@"ZOMGGGG");
+            
+                [self.selectedItems addObject:take];
+            
+            
+            }
+            
+
 //            
 //            
-//            
-//        }
-//    }
+        }
+    }
     
 //    AVAsset* tak1take2 = [merger appendAsset:take2.asset toPreviousAsset:take1.asset];
 //    AVAsset* take1take2take3 = [merger appendAsset:take3.asset toPreviousAsset:tak1take2];
     
-    //MixCompistion* myMix = [merger appendAsset:foo toPreviousAssst:bar];
-    
-    [merger exportVideoComposition:[merger spliceAssets:@[take1, take2, take3]]];
+    [merger exportVideoComposition:[merger spliceAssets:self.selectedItems]];
     
 }
 
@@ -281,5 +324,6 @@
         
     }
 }
+
 
 @end

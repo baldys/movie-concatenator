@@ -32,13 +32,13 @@
 
 -(AVAsset*)spliceAssets: (NSArray*)takes;
 
-- (void)concatenateAssets:(NSMutableArray*)assetArray;
+//- (void)concatenateAssets:(NSMutableArray*)assetArray;
 
 - (AVAsset*)appendAsset:(AVAsset*)asset2 toPreviousAsset:(AVAsset*)asset1;
 
 -(void) exportVideoComposition:(AVAsset*)composition;
 
--(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
+//-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
 
 -(void) exportDidFinish:(AVAssetExportSession*)session;
 

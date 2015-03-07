@@ -13,40 +13,60 @@
 
 
 @end
+
 @implementation TakeCell
 
-- (IBAction)happybutton:(UIButton*)sender
+- (IBAction)starButtonSelectedForCell:(UIButton*)sender
 {
-    self.selectTakeButton.selected = !self.selectTakeButton.selected;
-    NSLog(@"select take %ld", (long)sender.tag);
+    // the sender/button tag = index of the item in the array of takes to be added to the list of takes to merge (this will just be an array of int values (section, index) that correspond to their positions in that array. when the user presses merge, those items at those indexes will be concatenated/spliced
+
+
     
-    self.take.selected = YES;
-    
-    
+    self.starTake.selected = !self.starTake.selected;
+    if (self.starTake.selected)
+    {
+        self.take.selected = YES; // by default all cells are not selected.
+        
+
+        self.takeCellTag = sender.tag;
+        NSLog(@"SELECTED %ld ", (long)sender.tag);
+    }
+
 }
+
+
 - (void) configureCell
 {
-    self.selectTakeButton.enabled = YES;
+    self.starTake.enabled = YES;
+    self.starTake.selected = NO;
     if (self.take.selected)
     {
-        self.selectTakeButton.selected = YES;
+        self.starTake.selected = YES;
     }
     
     
 }
+
 - (void)prepareForReuse
 {
     [super prepareForReuse];
     //self.thumbnail.image = nil;
     NSLog(@"reuse");
     self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
+    
 }
 
 
 -(void)cellWithTake:(Take*)take
 {
-    // self.take = take;
+    if (!take)
+    {
+        
+    }
     
+    self.take = take;
+    self.sceneNumber = take.sceneNumber;
+    self.takeNumber = take.takeNumber;
     // sets a thumbnail image to the image of the first frame of that video
     self.assetURL = [take getPathURL];
     

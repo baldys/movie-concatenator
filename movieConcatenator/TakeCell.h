@@ -13,15 +13,19 @@
 //TODO: make a delegate for the cell's superview.
 
 @interface TakeCell : UICollectionViewCell
+@property (nonatomic) NSInteger takeCellTag;
+@property (nonatomic, strong) NSMutableArray *indexesOfStarredItems;
 
-@property (weak, nonatomic) IBOutlet UIButton *selectTakeButton;
+@property (nonatomic) NSInteger sceneNumber;
+@property (nonatomic) NSInteger takeNumber;
+@property (weak, nonatomic) IBOutlet UIButton *starTake;
 @property (strong, nonatomic) NSURL* assetURL;
 @property (strong, nonatomic) AVAsset *videoAsset;
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnail;
-@property (nonatomic) NSInteger *takeCellTag;
+
 @property (strong, nonatomic) Take* take;
 
 -(void)cellWithTake:(Take*)take;
 
-
+- (IBAction)starButtonSelectedForCell:(UIButton*)sender;
 @end
