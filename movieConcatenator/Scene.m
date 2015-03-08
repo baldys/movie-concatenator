@@ -13,7 +13,12 @@
 
 -(instancetype)init {
     if (self = [super init]) {
-        self.takes = [NSMutableArray array];
+        if (!self.takes)
+        {
+            self.takes = [NSMutableArray array];
+        }
+        self.title = @"scene";
+        
         
         //Take *newScene = [[Take alloc] init];
         //[self.takes addObject:newScene];

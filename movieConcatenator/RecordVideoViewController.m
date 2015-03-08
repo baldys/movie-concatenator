@@ -9,8 +9,11 @@
 #import "RecordVideoViewController.h"
 #import "VideoController.h"
 #import "VideoLibrary.h"
+#import "Scene.h"
+
 
 @interface RecordVideoViewController ()
+@property (weak, nonatomic) IBOutlet UITextField *sceneTitleField;
 
 @end
 
@@ -19,22 +22,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"hey im here");
-    // Do any additional setup after loading the view.
-    
-  //  [self logViews:self.view];
-    
 }
-/*
--(void)logViews:(UIView*)view {
-    NSLog(@"view: %@", view.description);
-    NSLog(@"====");
-    for (UIView *subView in view.subviews) {
-        [self logViews:subView];
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (!self.scene.title)
+    {
+        self.navigationItem.title = self.sceneTitleField.text;
+        //self.scene.title = self.sceneTitleField.text;
     }
+    
 }
-*/
 // For responding to the user tapping Cancel.
-- (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker {
+- (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker
+{
     
     NSLog(@"did cance;");
     
@@ -45,11 +47,8 @@
     
     
 }
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -73,6 +72,7 @@
 
 -(BOOL)startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>) delegate
 {
+    self.scene.title = self.sceneTitleField.text;
      NSLog(@"hey im here 222222");
     // 1 - Validattions
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
@@ -117,9 +117,9 @@
         [self dismissViewControllerAnimated:NO completion:nil];
         NSLog(@"moviePath: %@", moviePath);
         
-        VideoLibrary *ml = [[VideoLibrary alloc] init];
+        //VideoLibrary *ml = [[VideoLibrary alloc] init];
         // add take to array passed from the collection view controller (via video controller)
-        
+        NSLog(@"is thisevne being called?");
         
         Take *newVideo = [[Take alloc] initWithURL:movieUrl];
         
@@ -160,7 +160,9 @@
 }
 - (IBAction)backToRootVC:(id)sender
 {
+    
     [self.navigationController popViewControllerAnimated:YES];
+
     
     
 }

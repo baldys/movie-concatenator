@@ -156,7 +156,7 @@
                                             <state key="normal" title="☆"/>
                                             <state key="selected" title="★"/>
                                             <connections>
-                                                <action selector="starButtonSelectedForCell:" destination="oM7-hk-5te" eventType="touchUpInside" id="ks2-0A-C5t"/>
+                                                <action selector="starButtonPressed:" destination="oM7-hk-5te" eventType="touchUpInside" id="KAM-zj-hDn"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -206,7 +206,7 @@
                             </constraints>
                             <connections>
                                 <outlet property="addTake" destination="8Zu-u3-vwK" id="8KU-Lt-sM8"/>
-                                <outlet property="sceneTitleLabel" destination="Mi8-cc-Yzh" id="unv-Pm-r52"/>
+                                <outlet property="sceneTitleLabel" destination="Mi8-cc-Yzh" id="rcI-3j-Jjh"/>
                             </connections>
                         </collectionReusableView>
                         <connections>
@@ -214,7 +214,14 @@
                             <outlet property="delegate" destination="Ka6-Tg-ChZ" id="Mex-3n-Tt2"/>
                         </connections>
                     </collectionView>
-                    <toolbarItems/>
+                    <toolbarItems>
+                        <barButtonItem title="Item" width="116" id="Lig-QC-hhD">
+                            <color key="tintColor" red="0.56385820980092061" green="0.14720081017215403" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                        <barButtonItem image="selectedStar" id="PpD-X4-4Sp">
+                            <color key="tintColor" red="0.0088730370907198486" green="0.042041753725688968" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" title="My Scenes" id="p7n-cN-CHa">
                         <barButtonItem key="leftBarButtonItem" title="Merge" id="xx9-hY-rne" userLabel="Merge">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -246,8 +253,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nw7-cY-LfQ">
-                                <rect key="frame" x="76" y="127" width="86" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="I19-9k-v8l">
+                                <rect key="frame" x="120" y="89" width="349" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Scene title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UDC-kf-Ai4">
+                                <rect key="frame" x="23" y="93" width="81" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nw7-cY-LfQ">
+                                <rect key="frame" x="257" y="127" width="86" height="30"/>
                                 <state key="normal" title="Record Take">
                                     <color key="titleShadowColor" red="0.64673251423219225" green="0.093473299910721841" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
@@ -273,6 +291,9 @@
                             <color key="tintColor" red="0.018121438551993885" green="0.027638544326170744" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="sceneTitleField" destination="I19-9k-v8l" id="odV-h1-dP1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKY-EO-hbW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -282,5 +303,6 @@
     <resources>
         <image name="left37" width="32" height="32"/>
         <image name="movie-1.png" width="512" height="512"/>
+        <image name="selectedStar" width="32" height="32"/>
     </resources>
 </document>

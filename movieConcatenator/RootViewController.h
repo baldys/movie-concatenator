@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "VideoLibrary.h"
+#import "TakeCell.h"
 
-@interface RootViewController : UICollectionViewController
+@interface RootViewController : UICollectionViewController <UIViewControllerTransitioningDelegate, TakeCellDelegate>
 
 @property (nonatomic, strong) VideoLibrary *library;
 
@@ -20,4 +21,5 @@
 - (IBAction)MergeAllVideos:(id)sender;
 
 //- (IBAction)toggleStarButton:(id)sender
+
 @end

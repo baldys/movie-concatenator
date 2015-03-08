@@ -12,11 +12,14 @@
 
 @interface VideoController : NSObject
 
-//@property (nonatomic, strong) NSMutableArray *sharedArray;
 
-+(NSMutableArray *)sharedInstance;
+@property (nonatomic, retain) NSMutableArray *videos;
++(VideoController*)videoController;
 
 - (void) addTake:(Take*)take;
+
+
+@end
 
 
 //make asset from a bunch of RON Videos (NSArray of RON Videos) -> (AVAsset)
@@ -46,4 +49,4 @@
 
 // AVAsset -> (RON VideoPlayerView)
 
-@end
+

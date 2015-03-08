@@ -18,13 +18,8 @@
 
 @interface VideoMerger : NSObject
 
-
 @property (nonatomic, strong) AVMutableComposition *mixComposition;
 @property (nonatomic, strong) AVMutableVideoComposition *mainComposition;
-//@property (nonatomic, strong) AVMutableVideoCompositionInstruction *videoCompositionInstruction;
-// contains layer instructions for each video asset/composirtion
-//@property (nonatomic, strong) NSMutableArray *videoCompositionLayerInstructions;
-
 
 //- (IBAction)loadVideo1:(id)sender;
 //
@@ -34,8 +29,6 @@
 
 //- (void)concatenateAssets:(NSMutableArray*)assetArray;
 
-- (AVAsset*)appendAsset:(AVAsset*)asset2 toPreviousAsset:(AVAsset*)asset1;
-
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
@@ -43,6 +36,5 @@
 -(void) exportDidFinish:(AVAssetExportSession*)session;
 
 
-- (AVMutableComposition*) appendAsset:(AVAsset *)asset ToComposition:(AVMutableComposition*)composition;
 
 @end

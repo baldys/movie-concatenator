@@ -10,9 +10,14 @@
 #import "Take.h"
 #import "Scene.h"
 
+@class TakeCell;
 //TODO: make a delegate for the cell's superview.
+@protocol TakeCellDelegate <NSObject>
+-(void)didSelectStarButtonInCell:(TakeCell*)takeCell;
+@end
 
 @interface TakeCell : UICollectionViewCell
+
 @property (nonatomic) NSInteger takeCellTag;
 @property (nonatomic, strong) NSMutableArray *indexesOfStarredItems;
 
@@ -24,8 +29,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnail;
 
 @property (strong, nonatomic) Take* take;
-
+@property (nonatomic, weak) id <TakeCellDelegate> delegate;
 -(void)cellWithTake:(Take*)take;
 
-- (IBAction)starButtonSelectedForCell:(UIButton*)sender;
+- (IBAction)starButtonPressed:(UIButton*)sender;
 @end

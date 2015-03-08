@@ -16,21 +16,22 @@
 
 @implementation TakeCell
 
-- (IBAction)starButtonSelectedForCell:(UIButton*)sender
+- (IBAction)starButtonPressed:(UIButton *)sender
 {
-    // the sender/button tag = index of the item in the array of takes to be added to the list of takes to merge (this will just be an array of int values (section, index) that correspond to their positions in that array. when the user presses merge, those items at those indexes will be concatenated/spliced
-
-
     
     self.starTake.selected = !self.starTake.selected;
+    
     if (self.starTake.selected)
     {
-        self.take.selected = YES; // by default all cells are not selected.
-        
-
-        self.takeCellTag = sender.tag;
-        NSLog(@"SELECTED %ld ", (long)sender.tag);
+        self.take.selected = YES; // by default all cells are not selected
+      ///self.takeCellTag = sender.tag;
+       /// NSLog(@"SELECTED %ld ", (long)sender.tag);
     }
+    else
+    {
+        self.take.selected = NO;
+    }
+    [_delegate didSelectStarButtonInCell:self];
 
 }
 

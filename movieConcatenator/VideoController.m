@@ -19,33 +19,33 @@
 
 @interface VideoController ()
 
-
-
 @end
 
 @implementation VideoController
 
 
-+ (NSMutableArray *)sharedInstance
-{
-    static dispatch_once_t onceToken;
-    static NSMutableArray *sharedArray = nil;
-    dispatch_once(&onceToken,
-    ^{
-        sharedArray = [[NSMutableArray alloc] init];
+
++(VideoController *)videoController {
+    static dispatch_once_t pred;
+    static VideoController *shared = nil;
+    dispatch_once(&pred, ^{
+        shared = [[VideoController alloc] init];
+        shared.videos = [[NSMutableArray alloc]init];
     });
-    return sharedArray;
+    return shared;
 }
 
--(void) addTake:(Take *)take
+-(void)addVideo:(id)video
 {
-    NSMutableArray *array = [VideoController sharedInstance];
+    //VideoController *vc = [VideoController videoController];
     // adds new take to the shared videos array
-    [array insertObject:take atIndex:0];
+    [self.videos addObject:video];
     // save take to the documents directory;
     
-    
+   NSLog(@"%@",[VideoController videoController].videos);
 }
+
+//- (void) insertObject:(Take *)object inSharedVideoArrayAtIndex:(NSIndexPath)sectionIndex;
 
 
 
@@ -54,6 +54,4 @@
 
 
 
-
-//- (void) insertObject:(Take *)object inSharedVideoArrayAtIndex:(NSIndexPath)sectionIndex;
 
