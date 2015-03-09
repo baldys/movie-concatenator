@@ -14,14 +14,13 @@
 
 @interface RecordVideoViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-
 @property (nonatomic, strong) Scene *scene;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 - (IBAction)backToRootVC:(id)sender;
 
 //@property (nonatomic,strong) UIImagePickerController *imagePicker;
-//- (IBAction)recordAndPlay:(id)sender;
+- (IBAction)recordAndPlay:(id)sender;
 
 - (BOOL) startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
 

@@ -19,7 +19,6 @@
 @interface TakeCell : UICollectionViewCell
 
 @property (nonatomic) NSInteger takeCellTag;
-@property (nonatomic, strong) NSMutableArray *indexesOfStarredItems;
 
 @property (nonatomic) NSInteger sceneNumber;
 @property (nonatomic) NSInteger takeNumber;
@@ -30,6 +29,7 @@
 
 @property (strong, nonatomic) Take* take;
 @property (nonatomic, weak) id <TakeCellDelegate> delegate;
+
 -(void)cellWithTake:(Take*)take;
 
 - (IBAction)starButtonPressed:(UIButton*)sender;

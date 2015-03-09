@@ -13,6 +13,7 @@
 
 
 @interface RecordVideoViewController ()
+
 @property (weak, nonatomic) IBOutlet UITextField *sceneTitleField;
 
 @end
@@ -27,7 +28,7 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (!self.scene.title)
+    if (self.scene.title.length > 0)
     {
         self.navigationItem.title = self.sceneTitleField.text;
         //self.scene.title = self.sceneTitleField.text;
@@ -160,10 +161,6 @@
 }
 - (IBAction)backToRootVC:(id)sender
 {
-    
     [self.navigationController popViewControllerAnimated:YES];
-
-    
-    
 }
 @end

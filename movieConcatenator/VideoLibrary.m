@@ -73,10 +73,10 @@
 }
 
 
--(void)saveToFilename:(NSString *)filename
+-(BOOL)saveToFilename:(NSString *)filename
 {
     NSString *myPathDocs =  [[self documentsDirectory] stringByAppendingPathComponent:filename];
-    [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+   return [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
 }
 
 
@@ -84,9 +84,10 @@
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSLog(@"Documents Directory: %@", documentsDirectory);
     return documentsDirectory;
 }
-
+////////////////
 // // TODO: put into video model class so that for each video, you can retrieve the url path that
 
 /*

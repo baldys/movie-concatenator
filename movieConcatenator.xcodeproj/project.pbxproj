@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0020B91AA6BFD60018592C /* VideoMerger.m */; };
 		9F46489B1AA5179900F305AA /* SceneCollectionResuableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */; };
-		9F8B657B1AA3CB780062A3F1 /* arrow506.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657A1AA3CB780062A3F1 /* arrow506.png */; };
-		9F8B657D1AA3CB820062A3F1 /* arrow191.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657C1AA3CB820062A3F1 /* arrow191.png */; };
 		9F8B657F1AA3CB950062A3F1 /* left37 copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657E1AA3CB950062A3F1 /* left37 copy.png */; };
 		9F8B65811AA3CBAA0062A3F1 /* left37.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65801AA3CBAA0062A3F1 /* left37.png */; };
 		9F8B65831AA3CBF30062A3F1 /* play43.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65821AA3CBF30062A3F1 /* play43.png */; };
@@ -35,7 +33,6 @@
 		9FAFA7731A997DEB00F7396B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */; };
 		9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */; };
 		9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */; };
-		9FAFA77C1A99846400F7396B /* MergeVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */; };
 		9FAFA77F1A9C170A00F7396B /* Take.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA77E1A9C170A00F7396B /* Take.m */; };
 		9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7811A9D2BC700F7396B /* VideoController.m */; };
 		9FAFA7891A9EA60000F7396B /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7881A9EA60000F7396B /* RootViewController.m */; };
@@ -43,7 +40,6 @@
 		9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA78F1A9EBBB300F7396B /* VideoLibrary.m */; };
 		9FAFA7961A9FB45900F7396B /* TakeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7951A9FB45900F7396B /* TakeCell.m */; };
 		9FAFA7981A9FBF5F00F7396B /* movie-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FAFA7971A9FBF5F00F7396B /* movie-1.png */; };
-		9FD14DC81AA55D1000D09051 /* Browser-ErrorLoading.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FD14DC71AA55D1000D09051 /* Browser-ErrorLoading.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,8 +57,6 @@
 		9F0020B91AA6BFD60018592C /* VideoMerger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMerger.m; sourceTree = "<group>"; };
 		9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneCollectionResuableView.h; sourceTree = "<group>"; };
 		9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneCollectionResuableView.m; sourceTree = "<group>"; };
-		9F8B657A1AA3CB780062A3F1 /* arrow506.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow506.png; sourceTree = "<group>"; };
-		9F8B657C1AA3CB820062A3F1 /* arrow191.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow191.png; sourceTree = "<group>"; };
 		9F8B657E1AA3CB950062A3F1 /* left37 copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left37 copy.png"; sourceTree = "<group>"; };
 		9F8B65801AA3CBAA0062A3F1 /* left37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left37.png; sourceTree = "<group>"; };
 		9F8B65821AA3CBF30062A3F1 /* play43.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play43.png; sourceTree = "<group>"; };
@@ -95,8 +89,6 @@
 		9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoViewController.m; sourceTree = "<group>"; };
 		9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoViewController.h; sourceTree = "<group>"; };
 		9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoViewController.m; sourceTree = "<group>"; };
-		9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MergeVideoViewController.h; sourceTree = "<group>"; };
-		9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MergeVideoViewController.m; sourceTree = "<group>"; };
 		9FAFA77D1A9C170A00F7396B /* Take.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Take.h; sourceTree = "<group>"; };
 		9FAFA77E1A9C170A00F7396B /* Take.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Take.m; sourceTree = "<group>"; };
 		9FAFA7801A9D2BC700F7396B /* VideoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoController.h; sourceTree = "<group>"; };
@@ -110,7 +102,6 @@
 		9FAFA7941A9FB45900F7396B /* TakeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakeCell.h; sourceTree = "<group>"; };
 		9FAFA7951A9FB45900F7396B /* TakeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakeCell.m; sourceTree = "<group>"; };
 		9FAFA7971A9FBF5F00F7396B /* movie-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie-1.png"; sourceTree = "<group>"; };
-		9FD14DC71AA55D1000D09051 /* Browser-ErrorLoading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Browser-ErrorLoading.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +128,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9FA5D86F1AAC981400318DF8 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				9FAFA74F1A98884A00F7396B /* Images.xcassets */,
+				9FA5D86D1AABB95100318DF8 /* vid.png */,
+				9F8B657E1AA3CB950062A3F1 /* left37 copy.png */,
+				9F8B65881AA3CC180062A3F1 /* list31.png */,
+				9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */,
+				9FA5D8691AABB91800318DF8 /* icon_video.png */,
+				9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */,
+				9F8B658A1AA3F0E20062A3F1 /* Sydney-iPhone.m4v */,
+				9F8B65821AA3CBF30062A3F1 /* play43.png */,
+				9FA5D8671AABB90C00318DF8 /* icon_video@2x.png */,
+				9FAFA7971A9FBF5F00F7396B /* movie-1.png */,
+				9F8B65801AA3CBAA0062A3F1 /* left37.png */,
+				9F8B65861AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
 		9FAFA7331A98884A00F7396B = {
 			isa = PBXGroup;
 			children = (
@@ -171,26 +182,9 @@
 				9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */,
 				9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */,
 				9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */,
-				9FAFA77A1A99846400F7396B /* MergeVideoViewController.h */,
-				9FAFA77B1A99846400F7396B /* MergeVideoViewController.m */,
 				9FAFA78D1A9EB71200F7396B /* Model */,
 				9FAFA7831A9EA5B200F7396B /* View Controllers */,
-				9F8B657A1AA3CB780062A3F1 /* arrow506.png */,
-				9FA5D86D1AABB95100318DF8 /* vid.png */,
-				9F8B657E1AA3CB950062A3F1 /* left37 copy.png */,
-				9F8B65881AA3CC180062A3F1 /* list31.png */,
-				9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */,
-				9FD14DC71AA55D1000D09051 /* Browser-ErrorLoading.png */,
-				9FA5D8691AABB91800318DF8 /* icon_video.png */,
-				9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */,
-				9F8B658A1AA3F0E20062A3F1 /* Sydney-iPhone.m4v */,
-				9F8B65821AA3CBF30062A3F1 /* play43.png */,
-				9F8B657C1AA3CB820062A3F1 /* arrow191.png */,
-				9FA5D8671AABB90C00318DF8 /* icon_video@2x.png */,
-				9FAFA7971A9FBF5F00F7396B /* movie-1.png */,
-				9F8B65801AA3CBAA0062A3F1 /* left37.png */,
-				9F8B65861AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png */,
-				9FAFA74F1A98884A00F7396B /* Images.xcassets */,
+				9FA5D86F1AAC981400318DF8 /* images */,
 				9FAFA7511A98884A00F7396B /* LaunchScreen.xib */,
 				9FAFA73F1A98884A00F7396B /* Supporting Files */,
 			);
@@ -337,20 +331,17 @@
 				9F8B657F1AA3CB950062A3F1 /* left37 copy.png in Resources */,
 				9F8B65831AA3CBF30062A3F1 /* play43.png in Resources */,
 				9FA5D86E1AABB95100318DF8 /* vid.png in Resources */,
-				9FD14DC81AA55D1000D09051 /* Browser-ErrorLoading.png in Resources */,
 				9FAFA7981A9FBF5F00F7396B /* movie-1.png in Resources */,
 				9F8B65811AA3CBAA0062A3F1 /* left37.png in Resources */,
 				9FA5D8681AABB90C00318DF8 /* icon_video@2x.png in Resources */,
 				9FA5D86A1AABB91800318DF8 /* icon_video.png in Resources */,
 				9F8B65851AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png in Resources */,
 				9F8B65891AA3CC180062A3F1 /* list31.png in Resources */,
-				9F8B657B1AA3CB780062A3F1 /* arrow506.png in Resources */,
 				9FAFA74E1A98884A00F7396B /* Main.storyboard in Resources */,
 				9FAFA7531A98884A00F7396B /* LaunchScreen.xib in Resources */,
 				9F8B65871AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png in Resources */,
 				9FAFA7501A98884A00F7396B /* Images.xcassets in Resources */,
 				9FA5D86C1AABB94400318DF8 /* movie-noPlay-blank.png in Resources */,
-				9F8B657D1AA3CB820062A3F1 /* arrow191.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +360,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */,
-				9FAFA77C1A99846400F7396B /* MergeVideoViewController.m in Sources */,
 				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA7961A9FB45900F7396B /* TakeCell.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,

@@ -32,7 +32,7 @@
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.clearsSelectionOnViewWillAppear = NO;
     
     // Register cell classes
 
@@ -82,12 +82,12 @@
 {
     static NSString* cellIdentifier = @"reusableTakeCell";
     TakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    cell.starTake.tag = indexPath.item;
-    if (cell.starTake.selected)
-    {
-        NSLog(@"cell indexPath selected");
+    //cell.starTake.tag = indexPath.item;
+    //if (cell.starTake.selected)
+    //{
+        //NSLog(@"cell indexPath selected");
         
-    }
+    //}
 
     Scene *scene = self.library.scenes[indexPath.section];
     
@@ -95,37 +95,8 @@
     
     [cell cellWithTake:take];
     cell.delegate = self;
-//    if (take.isSelected)
-//    {
-//        [self.selectedItems insertObject:take atIndex:indexPath.section];
-//    }
-//    
-    
-    //cell.takeCellTag = indexPath;
-    //[cell addTarget:self action:<#(SEL)#> forControlEvents:UIControlEventTouchUpInside]
 
-
-    //NSLog(@"self.take.selected %d", cell.starTake.tag);
-    //Take *take = scene.takes[cell.starTake.tag];
-  
-//    for (Scene *scene in self.library.scenes)
-//    {
-//        for (Take* take in scene.takes)
-//        {
-//            if (take.isSelected)
-//            {
-////                
-//            }
-//               
-//                
-//                
-//        }
-//    }
-//      
-//        
-    
-    
-    NSLog(@"self.take.selected %ld", (long)cell.takeCellTag);
+    //NSLog(@"self.take.selected %ld", (long)cell.takeCellTag);
     
    // NSLog(@"displaying cell for take %@", take.assetFileURL);
     
@@ -142,33 +113,28 @@
 
 -(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-
     SceneCollectionResuableView *sceneSection = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
     NSLog(@"index path %@", indexPath);
     
     sceneSection.scene = self.library.scenes[indexPath.section];
     sceneSection.addTake.tag = indexPath.section;
-    
     sceneSection.sceneTitleLabel.text = sceneSection.scene.title;
-    
-    //take.sceneNumber = indexPath.item;
-    //NSLog(@"index path. item in the suppplementary view ::::: %ld", (long)indexPath.section);
-    
+
     return sceneSection;
 }
 
 - (void) didSelectStarButtonInCell:(TakeCell *)takeCell
 {
-    //NSIndexPath *indexPath = [self.collectionView indexPathForCell:takeCell];
-    // toggle selection:
     if (takeCell.take.isSelected && ![self.selectedItems containsObject:takeCell.take])
     {
         [self.selectedItems addObject:takeCell.take];
-        
+        NSLog(@"take is selected but does not contain object");
     }
+    //
     else if (!takeCell.take.isSelected && [self.selectedItems containsObject:takeCell.take])
     {
         [self.selectedItems removeObject:takeCell.take];
+        NSLog(@"take is DEselected but contains object");
     }
     
     //Scene *scene = self.library.scenes[indexPath.section];
