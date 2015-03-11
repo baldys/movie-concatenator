@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0020B91AA6BFD60018592C /* VideoMerger.m */; };
 		9F46489B1AA5179900F305AA /* SceneCollectionResuableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */; };
+		9F6D10171AAD303A00FA7C20 /* ScenesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */; };
+		9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */; };
+		9F6D10291AAD476300FA7C20 /* TakesCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D10281AAD476300FA7C20 /* TakesCollectionView.m */; };
+		9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */; };
 		9F8B657F1AA3CB950062A3F1 /* left37 copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657E1AA3CB950062A3F1 /* left37 copy.png */; };
 		9F8B65811AA3CBAA0062A3F1 /* left37.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65801AA3CBAA0062A3F1 /* left37.png */; };
 		9F8B65831AA3CBF30062A3F1 /* play43.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65821AA3CBF30062A3F1 /* play43.png */; };
@@ -57,6 +61,14 @@
 		9F0020B91AA6BFD60018592C /* VideoMerger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMerger.m; sourceTree = "<group>"; };
 		9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneCollectionResuableView.h; sourceTree = "<group>"; };
 		9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneCollectionResuableView.m; sourceTree = "<group>"; };
+		9F6D10151AAD303A00FA7C20 /* ScenesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScenesTableViewController.h; sourceTree = "<group>"; };
+		9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScenesTableViewController.m; sourceTree = "<group>"; };
+		9F6D10181AAD32DF00FA7C20 /* SceneTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneTableViewCell.h; sourceTree = "<group>"; };
+		9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneTableViewCell.m; sourceTree = "<group>"; };
+		9F6D10271AAD476300FA7C20 /* TakesCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakesCollectionView.h; sourceTree = "<group>"; };
+		9F6D10281AAD476300FA7C20 /* TakesCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakesCollectionView.m; sourceTree = "<group>"; };
+		9F6D102A1AAD487E00FA7C20 /* TakeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakeCollectionViewCell.h; sourceTree = "<group>"; };
+		9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakeCollectionViewCell.m; sourceTree = "<group>"; };
 		9F8B657E1AA3CB950062A3F1 /* left37 copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left37 copy.png"; sourceTree = "<group>"; };
 		9F8B65801AA3CBAA0062A3F1 /* left37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left37.png; sourceTree = "<group>"; };
 		9F8B65821AA3CBF30062A3F1 /* play43.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play43.png; sourceTree = "<group>"; };
@@ -128,6 +140,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9F6D10251AAD46FD00FA7C20 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				9F6D10261AAD471300FA7C20 /* Collection View */,
+				9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */,
+				9F6D10181AAD32DF00FA7C20 /* SceneTableViewCell.h */,
+				9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */,
+				9F6D10151AAD303A00FA7C20 /* ScenesTableViewController.h */,
+			);
+			name = TableView;
+			sourceTree = "<group>";
+		};
+		9F6D10261AAD471300FA7C20 /* Collection View */ = {
+			isa = PBXGroup;
+			children = (
+				9F6D10271AAD476300FA7C20 /* TakesCollectionView.h */,
+				9F6D10281AAD476300FA7C20 /* TakesCollectionView.m */,
+				9F6D102A1AAD487E00FA7C20 /* TakeCollectionViewCell.h */,
+				9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */,
+			);
+			name = "Collection View";
+			sourceTree = "<group>";
+		};
 		9FA5D86F1AAC981400318DF8 /* images */ = {
 			isa = PBXGroup;
 			children = (
@@ -220,6 +255,7 @@
 		9FAFA7831A9EA5B200F7396B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9F6D10251AAD46FD00FA7C20 /* TableView */,
 				9F46489A1AA5179900F305AA /* SceneCollectionResuableView.m */,
 				9F4648991AA5179900F305AA /* SceneCollectionResuableView.h */,
 				9FAFA7871A9EA60000F7396B /* RootViewController.h */,
@@ -363,6 +399,8 @@
 				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA7961A9FB45900F7396B /* TakeCell.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
+				9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */,
+				9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */,
 				9FAFA77F1A9C170A00F7396B /* Take.m in Sources */,
 				9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */,
 				9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */,
@@ -370,7 +408,9 @@
 				9F46489B1AA5179900F305AA /* SceneCollectionResuableView.m in Sources */,
 				9FAFA7891A9EA60000F7396B /* RootViewController.m in Sources */,
 				9FAFA7421A98884A00F7396B /* main.m in Sources */,
+				9F6D10171AAD303A00FA7C20 /* ScenesTableViewController.m in Sources */,
 				9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */,
+				9F6D10291AAD476300FA7C20 /* TakesCollectionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

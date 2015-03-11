@@ -73,12 +73,12 @@
 }
 
 
--(BOOL)saveToFilename:(NSString *)filename
+-(void)saveToFilename:(NSString *)filename
 {
     NSString *myPathDocs =  [[self documentsDirectory] stringByAppendingPathComponent:filename];
-   return [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+    [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+    
 }
-
 
 - (NSString*) documentsDirectory
 {
