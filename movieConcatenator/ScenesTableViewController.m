@@ -18,7 +18,7 @@
 
 @interface ScenesTableViewController ()
 @property (nonatomic, strong) NSMutableArray *scenes;
-//@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
+@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
 
 @end
 
@@ -51,8 +51,11 @@
 }
 
 
--(void)viewWillAppear:(BOOL)animated {
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self.tableView reloadData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,16 +75,6 @@
     return self.library.scenes.count;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    //Scene *scene = self.library.enes[section];
-    //return [scene.takes count];
-    Scene *scene = self.library.scenes[section];
-    return scene.takes.count;
-    
-}
-
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"SceneTableViewCell";
@@ -95,6 +88,21 @@
     
     return cell;
 }
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    //Scene *scene = self.library.enes[section];
+    //return [scene.takes count];
+    Scene *scene = self.library.scenes[section];
+    NSLog(@"scene.takes.count %lu", (unsigned long)scene.takes.count);
+    return scene.takes.count;
+    
+}
 //
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -103,6 +111,7 @@
     Scene *scene = self.library.scenes[indexPath.section];
     Take *take = scene.takes[indexPath.item];
     
+    NSLog(@"TakeCollectionViewCell");
     [cell cellWithTake:take];
     
     //cell.delegate = self;
@@ -130,15 +139,12 @@
     
     NSInteger index = cell.collectionView.tag;
     
-    //CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
-   // [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
+    CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
+   [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
 }
 
 // Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
+
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -162,41 +168,40 @@
     }];
     ////////////
 }
-
+/*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert)
+    {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
+*/
 
-- (IBAction)addScene:(id)sender {
-    
+- (IBAction)addScene:(id)sender
+{
     Scene *newScene = [[Scene alloc] init];
     newScene.title = @"Scene!";
     [self.library.scenes addObject:newScene];
-    // ** c
     [self.library saveToFilename:@"videolibrary.plist"];
-    
     [self.tableView reloadData];
 }
+
 - (IBAction)ConcatenateSelectedTakes:(id)sender
 {
-    
     VideoMerger *merger = [[VideoMerger alloc] init];
-    
-    NSLog(@"5################# %lu",(unsigned long)[self.selectedItems count]);
-    
+    NSLog(@"################# %lu",(unsigned long)[self.selectedItems count]);
     [merger exportVideoComposition:[merger spliceAssets:self.selectedItems]];
-    
 }
-
+/*
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    
+    NSLog(@"PREPARE");
     UIButton *addTakeButton = (UIButton*)sender;
     NSLog(@"buttontag = %li", (long)addTakeButton.tag);
     
@@ -223,7 +228,7 @@
         
     }
 }
-
+*/
 
 /*
  // Override to support rearranging the table view.

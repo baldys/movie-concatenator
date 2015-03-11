@@ -120,7 +120,6 @@
         
         //VideoLibrary *ml = [[VideoLibrary alloc] init];
         // add take to array passed from the collection view controller (via video controller)
-        NSLog(@"is thisevne being called?");
         
         Take *newVideo = [[Take alloc] initWithURL:movieUrl];
         
