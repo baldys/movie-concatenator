@@ -19,7 +19,7 @@
 -(void)saveToFilename:(NSString *)filename;
 
 
-@property(readonly, strong) NSMutableArray *assetItems;
+//@property(readonly, strong) NSMutableArray *assetItems;
 
 //- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
 
@@ -27,6 +27,6 @@
 
 //+ (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler;
 
-- (NSURL*) getPathURL;
+//- (NSURL*) getPathURL;
 
 @end

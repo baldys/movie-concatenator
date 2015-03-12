@@ -35,8 +35,9 @@
 
 -(instancetype)init {
     if (self = [super init]) {
-        ///
-        self.scenes = [[NSMutableArray alloc] init];
+        
+        self.scenes = [NSMutableArray array];
+        
         ///
     }
     return self;

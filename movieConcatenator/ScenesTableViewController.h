@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "VideoLibrary.h"
 #import "TakeCollectionViewCell.h"
+#import "SceneTableViewCell.h"
 
-@interface ScenesTableViewController : UITableViewController
+static NSString *CellIdentifier = @"SceneTableViewCell";
+
+@interface ScenesTableViewController : UITableViewController <UICollectionViewDataSource, UICollectionViewDelegate>
 
 
 @property (nonatomic, strong) VideoLibrary *library;

@@ -35,7 +35,7 @@
     return shared;
 }
 
--(void)addVideo:(id)video
+-(void)addTake:(Take*)video toSceneAtIndex:(NSInteger)sceneNumber
 {
     //VideoController *vc = [VideoController videoController];
     // adds new take to the shared videos array

@@ -20,8 +20,8 @@
         self.title = @"default title";
         
         //// testing purposes:
-        Take *newtake = [[Take alloc] init];
-        [self.takes addObject:newtake];
+        //Take *newtake = [[Take alloc] init];
+        //[self.takes addObject:newtake];
         ////
     }
     return self;
@@ -36,8 +36,8 @@
         {
             self.takes = [NSMutableArray array];
             //// testing purposes:
-            Take *newtake = [[Take alloc] init];
-            [self.takes addObject:newtake];
+           // Take *newtake = [[Take alloc] init];
+            //[self.takes addObject:newtake];
             
             ////
             

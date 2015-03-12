@@ -12,8 +12,10 @@
 
 @implementation TakeCollectionViewCell
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     // Initialization code
+    //[self configureCell];
 }
 
 - (IBAction)starButtonPressed:(UIButton *)sender
