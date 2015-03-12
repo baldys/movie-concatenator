@@ -276,6 +276,7 @@
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     </view>
+                                                    <color key="backgroundColor" red="0.04786412679913199" green="1" blue="0.14209825150125555" alpha="1" colorSpace="calibratedRGB"/>
                                                     <size key="customSize" width="100" height="97"/>
                                                 </collectionViewCell>
                                             </cells>

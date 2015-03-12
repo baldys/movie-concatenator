@@ -38,18 +38,18 @@
 {
     [super viewDidAppear:animated];
 }
+
+
+
+
 // For responding to the user tapping Cancel.
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker
 {
-    
-    NSLog(@"did cance;");
-    
+    NSLog(@"Cancelled image picker");
     [self.parentViewController dismissViewControllerAnimated: YES completion:nil];
     if (picker.isMovingToParentViewController) NSLog(@"yup");
     [picker dismissViewControllerAnimated:YES completion:nil];
-   /// [self popToRootViewControllerAnimated:YES animated:YES];
-    
-    
+    // [self popToRootViewControllerAnimated:YES animated:YES];
 }
 
 
@@ -58,6 +58,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
 /*
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)UIInterfacerientationLandscapeRight
 {
@@ -74,10 +77,11 @@
 }
 */
 
+
+
 -(BOOL)startCameraControllerFromViewController:(UIViewController*)controller usingDelegate:(id <UIImagePickerControllerDelegate, UINavigationControllerDelegate>) delegate
 {
-    self.scene.title = self.sceneTitleField.text;
-     NSLog(@"hey im here 222222");
+    NSLog(@"loading camera...");
     // 1 - Validattions
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
         || (delegate == nil)
@@ -102,6 +106,9 @@
     
     return YES;
 }
+
+
+
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -166,8 +173,14 @@
 {
     [self startCameraControllerFromViewController:self usingDelegate:self];
 }
+
+
 - (IBAction)backToRootVC:(id)sender
 {
+    NSLog(@"Back to root...");
+    self.scene.title = self.sceneTitleField.text;
+    
     [self.navigationController popViewControllerAnimated:YES];
+    
 }
 @end
