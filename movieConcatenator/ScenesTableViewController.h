@@ -10,7 +10,7 @@
 #import "VideoLibrary.h"
 #import "TakeCollectionViewCell.h"
 
-@interface ScenesTableViewController : UITableViewController <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ScenesTableViewController : UITableViewController
 
 
 @property (nonatomic, strong) VideoLibrary *library;
