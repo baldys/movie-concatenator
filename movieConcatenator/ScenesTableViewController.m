@@ -14,7 +14,6 @@
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
 #import "RecordVideoViewController.h"
-#import "SceneCollectionResuableView.h"
 
 @interface ScenesTableViewController ()
 @property (nonatomic, strong) NSMutableArray *scenes;
@@ -32,15 +31,15 @@
     
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
-    VideoLibrary *myScenes = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
+    VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
     
-    if (!myScenes)
+    if (!library)
     {
-        myScenes = [[VideoLibrary alloc] init];
-        [myScenes saveToFilename:@"videolibrary.plist"];
+        library = [[VideoLibrary alloc] init];
+        [library saveToFilename:@"videolibrary.plist"];
     }
     
-    self.library = myScenes;
+    self.library = library; // For reading and writing video
     
     if (!self.selectedItems)
     {
@@ -59,15 +58,16 @@
 }
 -(void) viewDidAppear:(BOOL)animated
 {
-    NSLog(@"viewDidAppear trying to recursively log some views!!!");
+//    NSLog(@"viewDidAppear trying to recursively log some views!!!");
     [self recursivelyLogViews:self.view];
 }
 
+// Debugging purposes only
 -(void) recursivelyLogViews:(UIView*) view{
-    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
-    for (UIView* subview in view.subviews) {
-        [self recursivelyLogViews:subview];
-    }
+//    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+//    for (UIView* subview in view.subviews) {
+//        [self recursivelyLogViews:subview];
+//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -87,6 +87,11 @@
     return self.library.scenes.count;
 }
 
+
+
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"SceneTableViewCell";
@@ -101,101 +106,58 @@
     cell.scene =  self.library.scenes[indexPath.row];
     cell.sceneTitleLabel.text = cell.scene.title;
     
-    NSLog(@"scene.title: %@", cell.scene.title);
+    
+//    
+//    NSLog(@"Before: %@ vs %@", cell.scene, self.library.scenes[indexPath.row]);
+//    cell.scene.title = @"10000000";
+//    NSLog(@"set cell.scene.title to 1000000");
+//    NSLog(@"Before: %@ vs %@", cell.scene, self.library.scenes[indexPath.row]);
+    
+    
+    
+    NSLog(@"showing scene in table view: %@", cell.scene.title);
     return cell;
 }
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    Scene *scene = self.library.scenes[section];
-    NSLog(@"scene.takes.count %lu", (unsigned long)scene.takes.count);
-    return scene.takes.count;
-    
-}
-//
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString* cellIdentifier = @"TakeCollectionViewCell";
-    TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
-    Scene *scene = self.library.scenes[indexPath.section];
-    Take *take = scene.takes[indexPath.item];
-    
-    NSLog(@"TakeCollectionViewCell");
-    [cell cellWithTake:take];
-    
-    //cell.delegate = self;
-    return cell;
-}
-/*
--(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    SceneCollectionResuableView *sceneSection = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"SceneHeader" forIndexPath:indexPath];
-    NSLog(@"index path %@", indexPath);
-    
-    sceneSection.scene = self.library.scenes[indexPath.section];
-    sceneSection.addTake.tag = indexPath.section;
-    sceneSection.sceneTitleLabel.text = sceneSection.scene.title;
-    
-    return sceneSection;
-    
-    
-}
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(SceneTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [cell setCollectionViewDataSourceDelegate:self index:indexPath.row];
+//    [cell setCollectionViewDataSourceDelegate:self index:indexPath.row];
     
-    NSInteger index = cell.collectionView.tag;
+//    NSInteger index = cell.collectionView.tag;
     
-    CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
-   [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
+//    NSLog(@"Displaying tableview cell #%d", index);
+//
+//    CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
+//   [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
 }
 
-// Override to support conditional editing of the table view.
 
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    Scene *scene = [self.library.scenes objectAtIndex:indexPath.section];
-    Take *take = [scene.takes objectAtIndex:indexPath.item];
-    //if (![self.selectedItems containsObject:take]) {
-    //    [self.selectedItems addObject:take];
-    //}
-    //[self.selectedItems addObject:take];
-    
-    PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
-    videoPlayerVC.take = take;
-    
-    //MPMoviePlayer is nil, perhaps in the initializer, alloc init the player.
-    //TODO: present videoPlayerVC
-    ////////////
-    [self presentViewController:videoPlayerVC animated:YES completion:^{
-        NSLog(@"Presented videoPlayerVC!!!");
-    //TODO: videoPlayerVC should start playing some video...
-    
-    }];
-    ////////////
-}
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else if (editingStyle == UITableViewCellEditingStyleInsert)
-    {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
+
+
+
+
+
 
 - (IBAction)addScene:(id)sender
 {
@@ -206,6 +168,8 @@
     [self.tableView reloadData];
 }
 
+
+
 - (IBAction)ConcatenateSelectedTakes:(id)sender
 {
     VideoMerger *merger = [[VideoMerger alloc] init];
@@ -213,49 +177,48 @@
     [merger exportVideoComposition:[merger spliceAssets:self.selectedItems]];
 }
 
+
+
+
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"PREPARE");
+    
+
+    NSLog(@"prepareForSegue");
     UIButton *addTakeButton = (UIButton*)sender;
     NSLog(@"buttontag = %li", (long)addTakeButton.tag);
     
     Scene *currentScene = self.library.scenes[addTakeButton.tag];
     
+    NSLog(@"currentScene is now '%@'", currentScene.title);
     
-    if ([segue.identifier isEqualToString:@"showRecordVC"])
+    
+
+        
+    RecordVideoViewController *recordViewController = segue.destinationViewController;
+        
+    recordViewController.scene = currentScene;
+    
+    
+    NSLog(@"recordViewController.scene has been set to %@", currentScene.title);
+    
+    
+    __weak __typeof(self) weakSelf = self;
+    recordViewController.completionBlock = ^void (BOOL success)
     {
-        
-        RecordVideoViewController *recordViewController = segue.destinationViewController;
-        
-        recordViewController.scene = currentScene;
-        __weak __typeof(self) weakSelf = self;
-        recordViewController.completionBlock = ^void (BOOL success)
+        NSLog(@"recordViewController.completionBlock()");
+        if (success)
         {
-            NSLog(@"completion block called");
-            if (success)
-            {
-                NSLog(@"saving");
-                [weakSelf.library saveToFilename:@"videolibrary.plist"];
-            }
-        };
-        /// add completion
+            NSLog(@"saving video");
+            [weakSelf.library saveToFilename:@"videolibrary.plist"];
+        }
+    };
+
         
-    }
+
 }
 
 
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 @end

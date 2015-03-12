@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "VideoLibrary.h"
-#import "TakesCollectionView.h"
 #import "TakeCollectionViewCell.h"
 
 @interface ScenesTableViewController : UITableViewController <UICollectionViewDataSource, UICollectionViewDelegate>

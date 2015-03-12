@@ -14,12 +14,15 @@
 static NSString *CollectionViewCellIdentifier = @"CollectionViewCellIdentifier";
 
 
-@interface SceneTableViewCell : UITableViewCell <TakeCellDelegate>
+@interface SceneTableViewCell : UITableViewCell 
 @property (weak, nonatomic) IBOutlet UILabel *sceneTitleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
-@property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) Scene *scene;
+@property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
 
--(void)setCollectionViewDataSourceDelegate:(id <UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index;
+
+@property (nonatomic, strong) UICollectionView *collectionView; // Takes
+
+//
+//-(void)setCollectionViewDataSourceDelegate:(id <UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index;
 
 @end

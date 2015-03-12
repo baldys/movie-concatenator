@@ -122,8 +122,13 @@
         // add take to array passed from the collection view controller (via video controller)
         
         Take *newVideo = [[Take alloc] initWithURL:movieUrl];
+
+        NSLog(@"New video created: %@", newVideo);
         
         [self.scene.takes insertObject:newVideo atIndex:0];
+        
+        NSLog(@"self.scene now has %d videos", self.scene.takes.count);
+        
         
         if (self.completionBlock != nil)
         {
