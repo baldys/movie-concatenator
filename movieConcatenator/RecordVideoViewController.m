@@ -22,18 +22,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"hey im here");
+    NSLog(@"recordVideoView loaded");
+    
+    NSLog(@"self.scene is %@", self.scene);
+    NSLog(@"self.scene.title is %@", self.scene.title);
+    
+    if (self.scene.title.length > 0)
+    {
+        self.navigationItem.title = self.scene.title;
+        self.sceneTitleField.text = self.scene.title;
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    if (self.scene.title.length > 0)
-    {
-        self.navigationItem.title = self.sceneTitleField.text;
-        //self.scene.title = self.sceneTitleField.text;
-    }
-    
 }
 // For responding to the user tapping Cancel.
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker

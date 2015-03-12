@@ -26,8 +26,6 @@
 
 
 
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -190,7 +188,8 @@
 {
     
 
-    NSLog(@"prepareForSegue");
+    NSLog(@"====== ScenesTableViewController.prepareForSegue()");
+    
     UIButton *addTakeButton = (UIButton*)sender;
     NSLog(@"buttontag = %li", (long)addTakeButton.tag);
     
