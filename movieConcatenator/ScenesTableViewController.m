@@ -57,6 +57,18 @@
     [self.tableView reloadData];
     
 }
+-(void) viewDidAppear:(BOOL)animated
+{
+    NSLog(@"viewDidAppear trying to recursively log some views!!!");
+    [self recursivelyLogViews:self.view];
+}
+
+-(void) recursivelyLogViews:(UIView*) view{
+    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+    for (UIView* subview in view.subviews) {
+        [self recursivelyLogViews:subview];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -80,12 +92,16 @@
     static NSString *CellIdentifier = @"SceneTableViewCell";
     
     SceneTableViewCell *cell = (SceneTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     if (!cell)
     {
         cell = [[SceneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    cell.addTakeButton.tag = indexPath.row;
+    cell.scene =  self.library.scenes[indexPath.row];
+    cell.sceneTitleLabel.text = cell.scene.title;
+    
+    NSLog(@"scene.title: %@", cell.scene.title);
     return cell;
 }
 
@@ -96,8 +112,6 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    //Scene *scene = self.library.enes[section];
-    //return [scene.takes count];
     Scene *scene = self.library.scenes[section];
     NSLog(@"scene.takes.count %lu", (unsigned long)scene.takes.count);
     return scene.takes.count;
@@ -198,7 +212,7 @@
     NSLog(@"################# %lu",(unsigned long)[self.selectedItems count]);
     [merger exportVideoComposition:[merger spliceAssets:self.selectedItems]];
 }
-/*
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     NSLog(@"PREPARE");
@@ -228,7 +242,7 @@
         
     }
 }
-*/
+
 
 /*
  // Override to support rearranging the table view.

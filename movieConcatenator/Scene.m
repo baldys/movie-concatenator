@@ -17,11 +17,31 @@
         {
             self.takes = [NSMutableArray array];
         }
-        self.title = @"scene";
+        self.title = @"default title";
         
-        
-        //Take *newScene = [[Take alloc] init];
-        //[self.takes addObject:newScene];
+        //// testing purposes:
+        Take *newtake = [[Take alloc] init];
+        [self.takes addObject:newtake];
+        ////
+    }
+    return self;
+}
+- (instancetype) initWithTitle:(NSString*)title
+{
+    self = [super init];
+    if (self)
+    {
+        self.title = title;
+        if (!self.takes)
+        {
+            self.takes = [NSMutableArray array];
+            //// testing purposes:
+            Take *newtake = [[Take alloc] init];
+            [self.takes addObject:newtake];
+            
+            ////
+            
+        }
     }
     return self;
 }

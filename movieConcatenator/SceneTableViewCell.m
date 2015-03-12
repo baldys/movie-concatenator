@@ -14,11 +14,12 @@
 
 
 @interface SceneTableViewCell ()
-@property (weak, nonatomic) IBOutlet UILabel *sceneTitleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
+
+
 @property (nonatomic, strong) VideoLibrary *library;
 @property NSMutableArray *selectedItems;
 @end
+
 @implementation SceneTableViewCell
 
 - (void)awakeFromNib {
@@ -46,12 +47,13 @@
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
 
-   [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
+   [self.collectionView registerClass:[TakeCollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
    self.collectionView.backgroundColor = [UIColor whiteColor];
-
+    TakeCollectionViewCell *cell = [[TakeCollectionViewCell alloc] init];
  
     self.collectionView.showsHorizontalScrollIndicator = YES;
     [self.contentView addSubview:self.collectionView];
+    [self.collectionView addSubview:cell];
 //    
     return self;
 }
@@ -60,6 +62,7 @@
 {
     [super layoutSubviews];
     self.collectionView.frame = self.contentView.bounds;
+    
 }
 
 - (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell

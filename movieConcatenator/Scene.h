@@ -15,8 +15,10 @@
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSMutableArray *takes;
+@property NSInteger takeNumber;
 
-
+- (instancetype) init;
+- (instancetype) initWithTitle:(NSString*)title;
 
 
 @end
