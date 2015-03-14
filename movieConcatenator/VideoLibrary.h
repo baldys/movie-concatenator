@@ -18,9 +18,6 @@
 
 -(void)saveToFilename:(NSString *)filename;
 
-
-//@property(readonly, strong) NSMutableArray *assetItems;
-
 //- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
 
 //- (void)loadLibraryWithCompletionBlock:(void (^)(void))completionHandler;

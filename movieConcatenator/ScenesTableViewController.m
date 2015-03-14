@@ -14,14 +14,15 @@
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
 #import "RecordVideoViewController.h"
-#import "TakesCollectionView.h"
 #import "TakeCollectionViewCell.h"
-
+//#import "RONcvLayout.h"
+#import "SceneTableViewCell.h"
+#import "ContainerCellView.h"
 
 @interface ScenesTableViewController ()
-
+@property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *scenes;
-@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
+//@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
 
 @end
 
@@ -34,6 +35,15 @@
     // Uncomment the following line to preserve selection between presentations.
     //self.clearsSelectionOnViewWillAppear = YES;
     
+   // [self.collectionView registerClass:[Cell class] forCellWithReuseIdentifier:@"MY_CELL"];
+    
+    // Register the table cell
+    [self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
+    // Register the table cell
+    
+    // Add observer that will allow the nested collection cell to trigger the view controller select row at index path
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSelectItemFromCollectionView:) name:@"didSelectItemFromCollectionView" object:nil];
+
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
@@ -45,6 +55,7 @@
     }
     
     self.library = library; // For reading and writing video
+    self.scenes = library.scenes;
     
     if (!self.selectedItems)
     {
@@ -52,41 +63,44 @@
     }
 }
 
-
+//- (void)dealloc
+//{
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectItemFromCollectionView" object:nil];
+//}
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:@"SceneTableViewCell"];
+    
     [self.tableView reloadData];
     
 }
-//-(void) viewDidAppear:(BOOL)animated
-//{
-//    NSLog(@"viewDidAppear trying to recursively log some views!!!");
-//    
-//    [self recursivelyLogViews:self.view];
-//}
+-(void) viewDidAppear:(BOOL)animated
+{
+    NSLog(@"viewDidAppear trying to recursively log some views!!!");
+    
+    [self recursivelyLogViews:self.view];
+}
 
-//// Debugging purposes only
-//-(void) recursivelyLogViews:(UIView*) view
-//{
-//    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
-//    for (UIView* subview in view.subviews)
-//    {
-//        if ([subview isKindOfClass:[TakeCollectionViewCell class]])
-//        {
-//            NSLog(@"HEY");
-//            if (subview.hidden)
-//            {
-//                NSLog(@"ishidden!");
-//                
-//            }
-//            
-//        }
-//        [self recursivelyLogViews:subview];
-//    
-//    }
-//}
+// Debugging purposes only
+-(void) recursivelyLogViews:(UIView*) view
+{
+    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+    for (UIView* subview in view.subviews)
+    {
+    
+            if (subview.hidden)
+            {
+                NSLog(@"ishidden!");
+                
+            }
+        
+        [self recursivelyLogViews:subview];
+            
+    }
+    
+    
+
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -96,29 +110,36 @@
 //////////////////////TABLE VIEW\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+ 
+    return [self.library.scenes count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.library.scenes.count;
+    
+   return 1;
 }
 
-#pragma mark - Table View DataSOurce
+#pragma mark - Table View delegate
 
 // each table view cell represents a scene in the video library's scenes array
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    
-    SceneTableViewCell *cell = (SceneTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SceneTableViewCell *cell = (SceneTableViewCell *)[tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
     if (!cell)
     {
-        cell = [[SceneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[SceneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableViewCellIdentifier];
     }
+    
+    NSLog(@"indexPath.row: %ld",(long)indexPath.section);
+    
+    Scene *scene = [self.library.scenes objectAtIndex:indexPath.row];
+    //NSArray *articleData = [cellData objectForKey:@"articles"];
+    
+    [cell setCollectionData:scene];
     
     return cell;
 //    cell.collectionView.tag = indexPath.row;
@@ -142,18 +163,18 @@
 //    NSLog(@"showing sceneat index: %d", indexPath.row);
 //    return cell;
 }
-
+/*
 -(void)tableView:(UITableView *)tableView willDisplayCell:(SceneTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    [cell setCollectionViewDataSourceDelegate:self index:indexPath.row];
+    //[cell setCollectionViewDataSourceDelegate:self index:indexPath.row];
     
     NSInteger index = cell.collectionView.tag;
     
     NSLog(@"Displaying tableview cell #%d", index);
     //
     CGFloat horizontalOffset = [self.contentOffsetDictionary[[@(index) stringValue]] floatValue];
-    [cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
+    //[cell.collectionView setContentOffset:CGPointMake(horizontalOffset, 0)];
 }
 
 //-(void)tableView:(UITableView *)tableView didEndDisplayingCell:(SceneTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -162,81 +183,77 @@
 //    NSInteger index = cell.collectionView.rowIndexInTableView;
 //    self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
 //}
+ 
 #pragma mark - UITableViewDelegate Methods
+*/
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+
+#pragma mark UITableViewDelegate methods
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return 250;
+    Scene *sectionData = self.scenes[section];
+    
+    return sectionData.title;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 50.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    self.view.contentScaleFactor = 0.5f;
+    return 200.0;
 }
 
 
 
-//////////////////////           \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-//////////////////////Collection View\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-#pragma mark - collection view data source
+//#pragma mark - collection view data source
+//
+//-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+//{
+//    Scene *scene = self.library.scenes[collectionView.tag];
+//    NSLog(@" number of items in section using collection view tag: %ld, %ld", (long)collectionView.tag, (long)section);
+//    return scene.takes.count;
+//}
 
--(NSInteger)collectionView:(TakesCollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    Scene *scene = self.library.scenes[collectionView.tag];
-    return scene.takes.count;
-}
 
-#pragma mark - collection view data source
--(UICollectionViewCell *)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
-    NSLog(@"index path: %@", indexPath);
-    Scene *scene = self.library.scenes[collectionView.tag];
 
-    Take *take = scene.takes[indexPath.item];
-    
-    
-    NSLog(@"collectionView.tag: %d", collectionView.tag);
-    NSLog(@"number of takes in scene.takes array = %d", scene.takes.count);
-    NSLog(@"number of scenes in self.library.scenes array = %d", self.library.scenes.count);
-    NSLog(@"Take : %@", take);
-    
-    
-    //Take *take = [self.library.scenes[collectionView.tag] takes][indexPath.item];
+//- (void) didSelectItemFromCollectionView:(NSNotification *)notification
+//{
+//    NSDictionary *cellData = [notification object];
+//    if (cellData)
+//    {
+//        if (!self.detailViewController)
+//        {
+//            self.detailViewController = [[ORGDetailViewController alloc] initWithNibName:@"ORGDetailViewController" bundle:nil];
+//        }
+//        self.detailViewController.detailItem = cellData;
+//        [self.navigationController pushViewController:self.detailViewController animated:YES];
+//    }
+//}
+//#pragma mark - UIScrollViewDelegate Methods
 
-    
-    if (take)
-    {
-        NSLog(@"YAY TAKE IS NOT NIL      ^__^      take = %@", take);
-        
-        NSLog(@"YAY TAKE IS NOT NIL  /\\__ __//\   take = %@", take);
-        NSLog(@"YAY TAKE IS NOT NIL  \ ''vVv'' /   take = %@", take);
-        NSLog(@"YAY TAKE IS NOT NI   { <0> <0> }   take = %@", take);
-        NSLog(@"YAY TAKE IS NOT NI   ={=> v <=}=   take = %@", take);
-        NSLog(@"YAY TAKE IS NOT NI     \[-A-]/     take = %@", take);
-        NSLog(@"YAY TAKE IS NOT NI                 take = %@", take);
-    }
-    
-    
-    [cell cellWithTake:take];
-    
-    return cell;
-}
-#pragma mark - UIScrollViewDelegate Methods
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (![scrollView isKindOfClass:[TakesCollectionView class]]) return;
-    
-    CGFloat horizontalOffset = scrollView.contentOffset.x;
-    
-    TakesCollectionView *collectionView = (TakesCollectionView *)scrollView;
-    NSInteger index = collectionView.tag;
-    self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
-}
-//////////////////////           \\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (![scrollView isKindOfClass:[UICollectionView class]]) return;
+//    
+//    CGFloat horizontalOffset = scrollView.contentOffset.x;
+//    
+//    UICollectionView *collectionView = (UICollectionView *)scrollView;
+//    NSInteger index = collectionView.tag;
+//    self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
+//}
+////////////////////////           \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 - (IBAction)addScene:(id)sender
 {
     Scene *newScene = [[Scene alloc] init];
     newScene.title = @"Scene!";
-    [self.library.scenes addObject:newScene];
+    [self.library.scenes insertObject:newScene atIndex:0];
     [self.library saveToFilename:@"videolibrary.plist"];
     [self.tableView reloadData];
 }
@@ -250,6 +267,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    ///its possible that this may not work since the sender (ie the add take button) is not in the view controller????????????
     NSLog(@"====== ScenesTableViewController.prepareForSegue()");
     
     UIButton *addTakeButton = (UIButton*)sender;
@@ -277,6 +295,8 @@
             /// dispatch to priority queue
             [weakSelf.library saveToFilename:@"videolibrary.plist"];
         }
+        [self.tableView reloadData];
+        
     };
 
         

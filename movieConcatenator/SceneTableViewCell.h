@@ -10,23 +10,21 @@
 
 #import <UIKit/UIKit.h>
 #import "TakeCollectionViewCell.h"
-#import "TakesCollectionView.h"
+#import "ContainerCellView.h"
 
 @class Scene;
 
-
-static NSString *CollectionViewCellIdentifier = @"CollectionViewCellIdentifier";
-
-
+static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
 @interface SceneTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *sceneTitleLabel;
 @property (nonatomic, strong) Scene *scene;
 @property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
 
-@property (strong, nonatomic) TakesCollectionView *collectionView;
+//@property (strong, nonatomic) UICollectionView *collectionView;
+@property (strong, nonatomic)ContainerCellView *containerCellView;
 
-
--(void)setCollectionViewDataSourceDelegate:(id <UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index;
+- (void)setCollectionData:(Scene *)collectionData;
+//-(void)setCollectionViewDataSourceDelegate:(id <UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index;
 
 @end

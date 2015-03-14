@@ -11,9 +11,8 @@
 #import "TakeCollectionViewCell.h"
 #import "SceneTableViewCell.h"
 
-static NSString *CellIdentifier = @"SceneTableViewCell";
 
-@interface ScenesTableViewController : UITableViewController <UICollectionViewDataSource, UICollectionViewDelegate>
+@interface ScenesTableViewController:UITableViewController
 
 
 @property (nonatomic, strong) VideoLibrary *library;
@@ -24,5 +23,4 @@ static NSString *CellIdentifier = @"SceneTableViewCell";
 
 - (IBAction)ConcatenateSelectedTakes:(id)sender;
 
-//- (IBAction)MergeAllVideos:(id)sender;
 @end

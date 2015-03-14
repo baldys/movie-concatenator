@@ -34,8 +34,9 @@
 @implementation VideoLibrary
 
 -(instancetype)init {
-    if (self = [super init]) {
-        
+    if (self = [super init])
+    {
+        //if (!self.scenes)
         self.scenes = [NSMutableArray array];
         
         ///

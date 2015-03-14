@@ -35,16 +35,29 @@
     return shared;
 }
 
--(void)addTake:(Take*)video toSceneAtIndex:(NSInteger)sceneNumber
+-(void)addTake:(Take*)take toSceneAtIndex:(NSInteger)sceneNumber
 {
     //VideoController *vc = [VideoController videoController];
     // adds new take to the shared videos array
-    [self.videos addObject:video];
+    if (self.videos[sceneNumber])
+    {
+        [self.videos[sceneNumber] addObject:take];
+    }
+    else {
+        NSLog(@"scene does not exist yet");
+    }
+    
+    
     // save take to the documents directory;
     
    NSLog(@"%@",[VideoController videoController].videos);
 }
 
+- (void) addScene:(Scene*)scene
+{
+    
+    
+}
 //- (void) insertObject:(Take *)object inSharedVideoArrayAtIndex:(NSIndexPath)sectionIndex;
 
 

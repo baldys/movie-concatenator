@@ -6,19 +6,20 @@
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
 
-#import "SceneTableViewCell.h"
 #import "Scene.h"
 #import "Take.h"
 #import "RecordVideoViewController.h"
 #import "VideoLibrary.h"
 #import "SceneTableViewCell.h"
-//#import "TakesCollectionView.h"
+//#import "TakeCollectionViewCell.h"
+
 
 @interface SceneTableViewCell ()
 
 
 @property (nonatomic, strong) VideoLibrary *library;
-@property NSMutableArray *selectedItems;
+//@property NSMutableArray *selectedItems;
+
 @end
 
 @implementation SceneTableViewCell
@@ -26,45 +27,41 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
+
+    // Initialization code
+    self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
     
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
-    layout.itemSize = CGSizeMake(150, 100);
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.collectionView = [[TakesCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    [self.collectionView registerClass:[TakeCollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
-    self.collectionView.backgroundColor = [UIColor whiteColor];
-    self.collectionView.showsHorizontalScrollIndicator = NO;
-    [self.contentView addSubview:self.collectionView];
+    
+    [self.contentView addSubview:self.containerCellView];
+    
+    CGFloat height = CGRectGetHeight(self.contentView.frame);
+    
     
     return self;
-}
-
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    self.collectionView.frame = self.contentView.bounds;
+    
     
 }
 
-
-
-- (void)awakeFromNib {
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
     
-    // Configure the view for the selected state
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [self.collectionView reloadData];
-}
-
+//    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+//    layout.sectionInset = UIEdgeInsetsMake(10, 10, 9, 10);
+//    layout.itemSize = CGSizeMake(44, 44);
+//    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+//    [self.collectionView registerClass:[TakeCollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
+//    self.collectionView.backgroundColor = [UIColor whiteColor];
+//    self.collectionView.showsHorizontalScrollIndicator = NO;
+//    [self.contentView addSubview:self.collectionView];
 //
+///
+//-(void)layoutSubviews
+//{
+//    [super layoutSubviews];
+//    self.collectionView.frame = self.contentView.bounds;
+//    
+//}
+///
+
 //
 //
 //
@@ -82,19 +79,30 @@
 //        NSLog(@"take is DEselected but contains object");
 //    }
 //}
+//
+///
+//-(void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index
+//{
+//    self.collectionView.dataSource = dataSourceDelegate;
+//    self.collectionView.delegate = dataSourceDelegate;
+//    self.collectionView.tag = index;
+//    self.addTakeButton.tag = index;
+//    NSLog(@"index: %ld", (long)index);
+//    //self.collectionView.rowIndexInTableView = index;
+//    
+//    [self.collectionView reloadData];
+//}
 
--(void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    self.collectionView.dataSource = dataSourceDelegate;
-    self.collectionView.delegate = dataSourceDelegate;
-    self.collectionView.tag = index;
-   
-    
-    //self.collectionView.rowIndexInTableView = index;
-    
-    [self.collectionView reloadData];
+    [super setSelected:selected animated:animated];
+    // Configure the view for the selected state
 }
 
+- (void)setCollectionData:(Scene*)collectionData
+{
+    [self.containerCellView setCollectionData:collectionData];
+}
 
 
 

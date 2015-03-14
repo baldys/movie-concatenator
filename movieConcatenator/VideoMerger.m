@@ -92,8 +92,6 @@
     return composition;
 }
 
-
-
 // existing asset -> audio+video asset tracks -> add to  MutableComposition
 // put in some controller class
 - (void) exportVideoComposition:(AVAsset*)composition
