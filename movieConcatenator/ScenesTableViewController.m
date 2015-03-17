@@ -9,18 +9,13 @@
 #import "ScenesTableViewController.h"
 #import "Scene.h"
 #import "Take.h"
-#import "VideoLibrary.h"
-#import "SceneTableViewCell.h"
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
 #import "RecordVideoViewController.h"
-#import "TakeCollectionViewCell.h"
-//#import "RONcvLayout.h"
-#import "SceneTableViewCell.h"
-#import "ContainerCellView.h"
+
 
 @interface ScenesTableViewController ()
-@property (nonatomic, weak) UITableView *tableView;
+
 @property (nonatomic, strong) NSMutableArray *scenes;
 //@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
 
@@ -35,26 +30,27 @@
     // Uncomment the following line to preserve selection between presentations.
     //self.clearsSelectionOnViewWillAppear = YES;
     
-   // [self.collectionView registerClass:[Cell class] forCellWithReuseIdentifier:@"MY_CELL"];
-    
-    // Register the table cell
-    [self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:TableViewCellIdentifier];
-    // Register the table cell
-    
-    // Add observer that will allow the nested collection cell to trigger the view controller select row at index path
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSelectItemFromCollectionView:) name:@"didSelectItemFromCollectionView" object:nil];
 
+    
+
+    // Register the table cell
+    //[self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:@"SceneTableViewCell"];
+    
+    
+    
+    
+    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
     
     if (!library)
     {
+        NSLog(@"no library");
         library = [[VideoLibrary alloc] init];
         [library saveToFilename:@"videolibrary.plist"];
     }
-    
-    self.library = library; // For reading and writing video
+    self.library = library;
     self.scenes = library.scenes;
     
     if (!self.selectedItems)
@@ -63,15 +59,11 @@
     }
 }
 
-//- (void)dealloc
-//{
-//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectItemFromCollectionView" object:nil];
-//}
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+   // [self.tableView reloadData];
     
 }
 -(void) viewDidAppear:(BOOL)animated
@@ -81,7 +73,7 @@
     [self recursivelyLogViews:self.view];
 }
 
-// Debugging purposes only
+
 -(void) recursivelyLogViews:(UIView*) view
 {
     NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
@@ -112,13 +104,11 @@
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
- 
     return [self.library.scenes count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    
    return 1;
 }
 
@@ -127,18 +117,19 @@
 // each table view cell represents a scene in the video library's scenes array
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    SceneTableViewCell *cell = (SceneTableViewCell *)[tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
+    static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
+    SceneTableViewCell *cell=
+    [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     if (!cell)
     {
-        cell = [[SceneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableViewCellIdentifier];
+        NSLog(@"no cell");
     }
     
     NSLog(@"indexPath.row: %ld",(long)indexPath.section);
     
-    Scene *scene = [self.library.scenes objectAtIndex:indexPath.row];
+    Scene *scene = self.scenes[indexPath.section];
     //NSArray *articleData = [cellData objectForKey:@"articles"];
-    
+    scene.title = [NSString stringWithFormat: @"Scene %ld", (long)indexPath.section];
     [cell setCollectionData:scene];
     
     return cell;
@@ -192,20 +183,24 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    Scene *sectionData = self.scenes[section];
-    
+    Scene *sectionData = self.library.scenes[section];
+    if ([sectionData.title isEqualToString:@"Scene!"])
+    {
+        sectionData.title = [NSString stringWithFormat:@"Scene # %ld",(long)section];
+    }
     return sectionData.title;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 50.0;
+    return 20.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.view.contentScaleFactor = 0.5f;
-    return 200.0;
+    ///self.view.contentScaleFactor = 0.5f;
+    
+    return 400.0;
 }
 
 

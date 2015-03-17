@@ -70,7 +70,7 @@
     
     self.take = take;
     self.sceneNumber = take.sceneNumber;
-    self.takeNumber = take.takeNumber;
+    //self.takeNumber = take.takeNumber;
     // sets a thumbnail image to the image of the first frame of that video
     self.assetURL = [take getPathURL];
     

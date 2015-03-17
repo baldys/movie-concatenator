@@ -16,18 +16,18 @@
 
 @interface VideoLibrary ()
 
-- (void) buildMediaLibrary;
-- (void) buildAssetLibrary;
-- (void) buildApplicationBundleLibrary;
-
-- (void)addURL:(NSURL *)url;
+//- (void) buildMediaLibrary;
+//- (void) buildAssetLibrary;
+//- (void) buildApplicationBundleLibrary;
+//
+//- (void)addURL:(NSURL *)url;
 
 
 //@property(nonatomic, strong) NSMutableArray *assetItems;
-@property(readonly, unsafe_unretained) dispatch_queue_t assetItemsQueue;
-
-@property(readonly, unsafe_unretained) dispatch_group_t libraryGroup;
-@property(readonly, unsafe_unretained) dispatch_queue_t libraryQueue;
+//@property(readonly, unsafe_unretained) dispatch_queue_t assetItemsQueue;
+//
+//@property(readonly, unsafe_unretained) dispatch_group_t libraryGroup;
+//@property(readonly, unsafe_unretained) dispatch_queue_t libraryQueue;
 
 @end
 
@@ -36,9 +36,12 @@
 -(instancetype)init {
     if (self = [super init])
     {
-        //if (!self.scenes)
-        self.scenes = [NSMutableArray array];
-        
+    
+        if (!self.scenes)
+        {
+             self.scenes = [NSMutableArray array];
+        }
+       
         ///
     }
     return self;

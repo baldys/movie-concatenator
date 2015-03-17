@@ -24,18 +24,35 @@
 
 @implementation SceneTableViewCell
 
+- (void) viewDidLoad
+{
+    self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
+    CGFloat tableCellHeight = CGRectGetHeight(self.contentView.bounds);
+    CGFloat tableCellWidth = CGRectGetWidth(self.contentView.bounds);
+    NSLog(@"TTABLLE CELL HEIGHT  %f \n TABLE CELL WIDTH%f", tableCellHeight, tableCellWidth);
+    _containerCellView.bounds = CGRectMake(0, tableCellHeight/4, tableCellWidth, tableCellHeight/2);
+    
+    self.frame = self.contentView.bounds;
+    
+    [self.contentView addSubview:_containerCellView];
+    
+    [self.contentView addSubview:[UIButton buttonWithType:UIButtonTypeCustom]];
+     //[self.containerCellView initWithFrame:<#(CGRect)#>;
+
+}
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
 
+    
     // Initialization code
-    self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
+   
+
     
     
-    [self.contentView addSubview:self.containerCellView];
     
-    CGFloat height = CGRectGetHeight(self.contentView.frame);
     
+
     
     return self;
     
@@ -43,7 +60,7 @@
 }
 
     
-//    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+
 //    layout.sectionInset = UIEdgeInsetsMake(10, 10, 9, 10);
 //    layout.itemSize = CGSizeMake(44, 44);
 //    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -56,8 +73,8 @@
 ///
 //-(void)layoutSubviews
 //{
-//    [super layoutSubviews];
-//    self.collectionView.frame = self.contentView.bounds;
+//   [super layoutSubviews];
+//    //self.containerCellView.frame.size.height = self.contentView.bounds.size.height;
 //    
 //}
 ///
@@ -101,7 +118,7 @@
 
 - (void)setCollectionData:(Scene*)collectionData
 {
-    [self.containerCellView setCollectionData:collectionData];
+    [_containerCellView setCollectionData:collectionData];
 }
 
 

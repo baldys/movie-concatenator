@@ -25,17 +25,21 @@
     {
         NSLog(@"scene is nil");
     }
-    //self.collectionView.backgroundColor = [UIColor magentaColor];
+  
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     flowLayout.itemSize = CGSizeMake(130, 120);
+    //flowLayout.collectionViewContentSize
+      NSLog(@"self.bounds.size.width = %f, .height = %f",self.bounds.size.width ,self.bounds.size.height);
+    
     [self.collectionView setCollectionViewLayout:flowLayout];
     
     // Register the colleciton cell
-    [self.collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
-    //[self.contentView]
-    
+    [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
+    //[self addSubview:self.collectionView];
+    //self.bounds = self.collectionView.frame;
+
 }
 
 
@@ -43,7 +47,7 @@
 - (void)setCollectionData:(Scene*)collectionData {
     NSLog(@"Hai! I'm ContainerCellView and I am attempting to set a scene :)");
     _collectionData = collectionData;
-    [_collectionView setContentOffset:CGPointZero animated:YES];
+    [_collectionView setContentOffset:CGPointZero animated:NO];
     [_collectionView reloadData];
 }
 
@@ -56,26 +60,16 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.collectionData.takes.count;
-    
-    //return [self.collectionData count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    TakeCollectionViewCell *cell = (TakeCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
-   
-    //Scene *scene = self.library.scenes[collectionView.tag];
-    
+    TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+
     collectionView.tag = indexPath.item;
 
-
-  //  NSLog(@"number of takes in scene.takes array = %d", scene.takes.count);
-    NSLog(@"number of scenes in self.library.scenes array = %d", self.library.scenes.count);
-    NSLog(@"number of scenes in scene = %d", self.collectionData.takes.count);
-    
-    Take *take = self.collectionData.takes[indexPath.item];
-  //  Take *take = [self.scene[collectionView.tag] takes][indexPath.item];
-   // NSLog(@"Take : %@", take);
+    Take *take = self.collectionData.takes[indexPath.row];
+  
     NSLog(@"assset id: %@", take.assetID );
     
     [cell cellWithTake:take];

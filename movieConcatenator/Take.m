@@ -28,9 +28,8 @@
 @property(readonly, unsafe_unretained) dispatch_once_t thumbnailToken;
 
 @end
+
 @implementation Take
-
-
 
 - (instancetype) initWithURL:(NSURL*)url
 {
@@ -93,9 +92,12 @@
     if (self)
     {
         ///self.assetURL = ppath name + assetid.file ext
-        self.takeNumber = [aDecoder decodeIntegerForKey:@"takeNumber"];
+        //self.takeNumber = [aDecoder decodeIntegerForKey:@"takeNumber"];
+        //NSLog(@"take number %@", self.takeNumber)
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
         //self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
+        NSLog(@"assetid %@", self.assetID);
+
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
         NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
         self.thumbailImg = [UIImage imageWithData:imageData];
@@ -107,7 +109,7 @@
 // SAVE
 - (void) encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeInteger:self.takeNumber forKey:@"takeNumber"];
+    //[aCoder encodeInteger:self.takeNumber forKey:@"takeNumber"];
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     [aCoder encodeBool:self.selected forKey:@"selected"];
@@ -129,7 +131,6 @@
     }
     
     
-    NSError *error = nil;
     
    
     //AVMutableCompositionTrack *firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];

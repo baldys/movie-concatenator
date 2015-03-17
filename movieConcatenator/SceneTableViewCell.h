@@ -14,7 +14,7 @@
 
 @class Scene;
 
-static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
+
 @interface SceneTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *sceneTitleLabel;
@@ -22,9 +22,9 @@ static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
 @property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
 
 //@property (strong, nonatomic) UICollectionView *collectionView;
-@property (strong, nonatomic)ContainerCellView *containerCellView;
+@property (strong, nonatomic) ContainerCellView *containerCellView;
 
 - (void)setCollectionData:(Scene *)collectionData;
-//-(void)setCollectionViewDataSourceDelegate:(id <UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index;
+
 
 @end

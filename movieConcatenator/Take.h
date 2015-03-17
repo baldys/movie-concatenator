@@ -13,7 +13,7 @@
 
 @interface Take : NSObject <NSCoding>
 
-@property (nonatomic) NSInteger takeNumber;
+//@property (nonatomic) NSInteger takeNumber;
 @property (nonatomic) NSInteger sceneNumber;
 @property (nonatomic, strong) NSString* assetID;
 
@@ -25,8 +25,6 @@
 
 @property (nonatomic, strong) UIImage *thumbailImg; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
 
-//@property (nonatomic,strong) CMTi
-
 // save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
 
 //- (void) saveToFile:
@@ -36,11 +34,11 @@
 @property AVMutableAudioMix *mutableAudioMix;
 @property (nonatomic) CMTime *insertionPoint;
 
-@property (nonatomic, strong) NSArray *assetTracks;
+//@property (nonatomic, strong) NSArray *assetTracks;
 
 - (instancetype) initWithURL:(NSURL *)url;
 
-- (NSArray*)assetTracks;
+//- (NSArray*)assetTracks;
 
 
 - (NSURL*)getPathURL;

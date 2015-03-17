@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "VideoLibrary.h"
 #import "TakeCollectionViewCell.h"
+#import "ContainerCellView.h"
 #import "SceneTableViewCell.h"
 
-
 @interface ScenesTableViewController:UITableViewController
-
 
 @property (nonatomic, strong) VideoLibrary *library;
 
