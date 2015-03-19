@@ -176,9 +176,9 @@
 		9F6D10261AAD471300FA7C20 /* Collection View */ = {
 			isa = PBXGroup;
 			children = (
+				9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */,
 				9F6D102A1AAD487E00FA7C20 /* TakeCollectionViewCell.h */,
 				9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */,
-				9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */,
 			);
 			name = "Collection View";
 			sourceTree = "<group>";
@@ -490,7 +490,9 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Veronica Baldys (AS75EJBJ49)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Veronica Baldys (AS75EJBJ49)";
+				"CODE_SIGN_RESOURCE_RULES_PATH[sdk=*]" = "";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -510,7 +512,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos8.1;
+				PROVISIONING_PROFILE = "19a7ab6b-40b3-42e3-a957-4e59ca4bcbd3";
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -531,7 +534,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Veronica Baldys (AS75EJBJ49)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Veronica Baldys (AS75EJBJ49)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -544,7 +548,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos8.1;
+				PROVISIONING_PROFILE = "19a7ab6b-40b3-42e3-a957-4e59ca4bcbd3";
+				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

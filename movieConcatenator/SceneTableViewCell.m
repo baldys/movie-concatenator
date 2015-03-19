@@ -24,8 +24,11 @@
 
 @implementation SceneTableViewCell
 
-- (void) viewDidLoad
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
+
     self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
     CGFloat tableCellHeight = CGRectGetHeight(self.contentView.bounds);
     CGFloat tableCellWidth = CGRectGetWidth(self.contentView.bounds);
@@ -37,14 +40,6 @@
     [self.contentView addSubview:_containerCellView];
     
     [self.contentView addSubview:[UIButton buttonWithType:UIButtonTypeCustom]];
-     //[self.containerCellView initWithFrame:<#(CGRect)#>;
-
-}
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
-
-    
     // Initialization code
    
 
@@ -96,19 +91,7 @@
 //        NSLog(@"take is DEselected but contains object");
 //    }
 //}
-//
-///
-//-(void)setCollectionViewDataSourceDelegate:(id<UICollectionViewDataSource, UICollectionViewDelegate>)dataSourceDelegate index:(NSInteger)index
-//{
-//    self.collectionView.dataSource = dataSourceDelegate;
-//    self.collectionView.delegate = dataSourceDelegate;
-//    self.collectionView.tag = index;
-//    self.addTakeButton.tag = index;
-//    NSLog(@"index: %ld", (long)index);
-//    //self.collectionView.rowIndexInTableView = index;
-//    
-//    [self.collectionView reloadData];
-//}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {

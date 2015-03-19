@@ -13,11 +13,7 @@
 
 @implementation TakeCollectionViewCell
 
-- (void)awakeFromNib
-{
-    
-   
-}
+
 
 - (IBAction)starButtonPressed:(UIButton *)sender
 {
@@ -54,7 +50,7 @@
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    //self.thumbnail.image = nil;
+    self.thumbnail.image = nil;
     NSLog(@"reuse");
     self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
     

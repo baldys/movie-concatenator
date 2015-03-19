@@ -14,7 +14,9 @@
 @interface Take : NSObject <NSCoding>
 
 //@property (nonatomic) NSInteger takeNumber;
+
 @property (nonatomic) NSInteger sceneNumber;
+
 @property (nonatomic, strong) NSString* assetID;
 
 @property (nonatomic, getter=isSelected) BOOL selected;

@@ -12,13 +12,13 @@
 
 @class TakeCollectionViewCell;
 
-@protocol TakeCellDelegate <NSObject>
+@protocol TakeCellDelegate
 
 -(void)didSelectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
 
 @end
 
-static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
+
 
 @interface TakeCollectionViewCell : UICollectionViewCell
 

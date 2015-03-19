@@ -12,7 +12,7 @@
 #import "ContainerCellView.h"
 #import "SceneTableViewCell.h"
 
-@interface ScenesTableViewController:UITableViewController
+@interface ScenesTableViewController:UITableViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) VideoLibrary *library;
 

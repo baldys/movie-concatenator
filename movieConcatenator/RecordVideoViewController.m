@@ -125,7 +125,6 @@
         // get the index path of the current section (the section whose add button was pressed in within the collection vc. pass this from the collection vc. 
         // call method on video controller to insert a new take to the shared videos array.
         
-        [self dismissViewControllerAnimated:NO completion:nil];
         NSLog(@"moviePath: %@", moviePath);
         
         //VideoLibrary *ml = [[VideoLibrary alloc] init];
@@ -144,6 +143,9 @@
         {
             self.completionBlock(YES);
         }
+        
+        [self dismissViewControllerAnimated:NO completion:nil];
+
     
     }
 }

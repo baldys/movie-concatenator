@@ -25,7 +25,7 @@
     {
         NSLog(@"scene is nil");
     }
-  
+  ///////
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -34,20 +34,21 @@
       NSLog(@"self.bounds.size.width = %f, .height = %f",self.bounds.size.width ,self.bounds.size.height);
     
     [self.collectionView setCollectionViewLayout:flowLayout];
-    
-    // Register the colleciton cell
-    [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
-    //[self addSubview:self.collectionView];
-    //self.bounds = self.collectionView.frame;
 
+    //static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
+    // Register the colleciton cell
+    [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
+  
 }
 
-
 #pragma mark - Getter/Setter overrides
-- (void)setCollectionData:(Scene*)collectionData {
-    NSLog(@"Hai! I'm ContainerCellView and I am attempting to set a scene :)");
+- (void)setCollectionData:(Scene*)collectionData
+{
+   
+    
     _collectionData = collectionData;
     [_collectionView setContentOffset:CGPointZero animated:NO];
+
     [_collectionView reloadData];
 }
 
@@ -59,14 +60,21 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    
+    NSLog(@"self.collectionData.takes.count:%lu",(unsigned long)self.collectionData.takes.count);
     return self.collectionData.takes.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+    if (!cell)
+    {
+        NSLog(@"no cell");
+    }
 
-    collectionView.tag = indexPath.item;
+    //collectionView.tag = indexPath.item;
 
     Take *take = self.collectionData.takes[indexPath.row];
   

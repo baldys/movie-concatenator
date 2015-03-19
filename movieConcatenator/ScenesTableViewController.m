@@ -17,7 +17,7 @@
 @interface ScenesTableViewController ()
 
 @property (nonatomic, strong) NSMutableArray *scenes;
-//@property (nonatomic, strong) NSMutableDictionary *contentOffsetDictionary;
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
@@ -26,21 +26,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    //self.clearsSelectionOnViewWillAppear = YES;
-    
 
-    
-
-    // Register the table cell
-    //[self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:@"SceneTableViewCell"];
-    
-    
-    
-    
-    
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
     
@@ -57,42 +44,47 @@
     {
         self.selectedItems = [NSMutableArray array];
     }
+    
+    // Register the table cell
+    /// only use if you did not put an identifier in the storyboard.
+    [self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:@"SceneTableViewCell"];
+    
+
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-   // [self.tableView reloadData];
+    
+    [self.tableView reloadData];
     
 }
--(void) viewDidAppear:(BOOL)animated
-{
-    NSLog(@"viewDidAppear trying to recursively log some views!!!");
-    
-    [self recursivelyLogViews:self.view];
-}
+//-(void) viewDidAppear:(BOOL)animated
+//{
+//    NSLog(@"viewDidAppear trying to recursively log some views!!!");
+//    
+//    [self recursivelyLogViews:self.view];
+//}
 
 
--(void) recursivelyLogViews:(UIView*) view
-{
-    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
-    for (UIView* subview in view.subviews)
-    {
-    
-            if (subview.hidden)
-            {
-                NSLog(@"ishidden!");
-                
-            }
-        
-        [self recursivelyLogViews:subview];
-            
-    }
-    
-    
-
-}
+//-(void) recursivelyLogViews:(UIView*) view
+//{
+//    NSLog(@"%@ frame: (%f, %f, %f, %f)", view.class, view.frame.origin.x, view.frame.origin.y, view.frame.size.width, view.frame.size.height);
+//    for (UIView* subview in view.subviews)
+//    {
+//    
+//            if (subview.hidden)
+//            {
+//                NSLog(@"ishidden!");
+//                
+//            }
+//        
+//        [self recursivelyLogViews:subview];
+//            
+//    }
+//    
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -119,17 +111,14 @@
 {
     static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
     SceneTableViewCell *cell=
-    [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
+    [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
     if (!cell)
     {
         NSLog(@"no cell");
     }
-    
-    NSLog(@"indexPath.row: %ld",(long)indexPath.section);
-    
-    Scene *scene = self.scenes[indexPath.section];
+
+    Scene *scene = self.library.scenes[indexPath.section];
     //NSArray *articleData = [cellData objectForKey:@"articles"];
-    scene.title = [NSString stringWithFormat: @"Scene %ld", (long)indexPath.section];
     [cell setCollectionData:scene];
     
     return cell;
@@ -179,28 +168,43 @@
 */
 
 
-#pragma mark UITableViewDelegate methods
+#pragma mark - UITableViewDelegate methods
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+#pragma mark UITableViewDelegate methods
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    //Headerview
+    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 40.0)];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [button setFrame:CGRectMake(275.0, 5.0, 30.0, 30.0)];
+    button.tag = section;
+    button.hidden = NO;
+    [button setBackgroundColor:[UIColor clearColor]];
     Scene *sectionData = self.library.scenes[section];
-    if ([sectionData.title isEqualToString:@"Scene!"])
-    {
-        sectionData.title = [NSString stringWithFormat:@"Scene # %ld",(long)section];
-    }
-    return sectionData.title;
+
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
+    [headerLabel setText:sectionData.title];
+    
+    //[button addTarget:self action:@selector(insertParameter:) forControlEvents:UIControlEventTouchDown];
+    
+    [myView addSubview:button];
+    return myView;
 }
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+//{
+//    Scene *sectionData = self.library.scenes[section];
+//    return sectionData.title;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 20.0;
+    return 40.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ///self.view.contentScaleFactor = 0.5f;
-    
-    return 400.0;
+    return 200.0;
 }
 
 
@@ -247,7 +251,7 @@
 - (IBAction)addScene:(id)sender
 {
     Scene *newScene = [[Scene alloc] init];
-    newScene.title = @"Scene!";
+    newScene.title = @"New Scene";
     [self.library.scenes insertObject:newScene atIndex:0];
     [self.library saveToFilename:@"videolibrary.plist"];
     [self.tableView reloadData];
@@ -262,7 +266,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    ///its possible that this may not work since the sender (ie the add take button) is not in the view controller????????????
+   
     NSLog(@"====== ScenesTableViewController.prepareForSegue()");
     
     UIButton *addTakeButton = (UIButton*)sender;
