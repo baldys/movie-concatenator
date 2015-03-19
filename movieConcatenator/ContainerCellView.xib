@@ -12,8 +12,8 @@
             <subviews>
                 <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="3">
                     <rect key="frame" x="0.0" y="0.0" width="391" height="135"/>
-                    <color key="backgroundColor" red="0.18853733270442363" green="0.27643616706964613" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="20" minimumInteritemSpacing="10" id="Ndq-6B-wcC">
+                    <color key="backgroundColor" red="0.101785169978601" green="0.012148211458521744" blue="0.34568339646464652" alpha="1" colorSpace="calibratedRGB"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="Ndq-6B-wcC">
                         <size key="itemSize" width="130" height="120"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                         <size key="footerReferenceSize" width="0.0" height="0.0"/>

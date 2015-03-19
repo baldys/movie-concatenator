@@ -30,23 +30,17 @@
     if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
 
     self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
-    CGFloat tableCellHeight = CGRectGetHeight(self.contentView.bounds);
-    CGFloat tableCellWidth = CGRectGetWidth(self.contentView.bounds);
-    NSLog(@"TTABLLE CELL HEIGHT  %f \n TABLE CELL WIDTH%f", tableCellHeight, tableCellWidth);
-    _containerCellView.bounds = CGRectMake(0, tableCellHeight/4, tableCellWidth, tableCellHeight/2);
-    
-    self.frame = self.contentView.bounds;
+   // CGFloat tableCellHeight = CGRectGetHeight(self.contentView.bounds);
+   // CGFloat tableCellWidth = CGRectGetWidth(self.contentView.bounds);
+//    NSLog(@"TTABLLE CELL HEIGHT  %f \n TABLE CELL WIDTH%f", tableCellHeight, tableCellWidth);
+//    _containerCellView.bounds = CGRectMake(0, tableCellHeight/4, tableCellWidth, tableCellHeight/2);
+//    
+   _containerCellView.frame = self.bounds;
     
     [self.contentView addSubview:_containerCellView];
-    
-    [self.contentView addSubview:[UIButton buttonWithType:UIButtonTypeCustom]];
+  
     // Initialization code
    
-
-    
-    
-    
-    
 
     
     return self;
@@ -56,7 +50,7 @@
 
     
 
-//    layout.sectionInset = UIEdgeInsetsMake(10, 10, 9, 10);
+//
 //    layout.itemSize = CGSizeMake(44, 44);
 //    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
 //    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];

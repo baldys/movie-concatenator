@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property UIButton *addTakeButton;
 
 @end
 
@@ -174,37 +175,37 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     //Headerview
-    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 40.0)];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [button setFrame:CGRectMake(275.0, 5.0, 30.0, 30.0)];
-    button.tag = section;
-    button.hidden = NO;
-    [button setBackgroundColor:[UIColor clearColor]];
+    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 30.0)];
+    self.addTakeButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [self.addTakeButton setFrame:CGRectMake(275.0, 5.0, 30.0, 30.0)];
+    self.addTakeButton.tag = section;
+    self.addTakeButton.hidden = NO;
+    [self.addTakeButton setBackgroundColor:[UIColor clearColor]];
     Scene *sectionData = self.library.scenes[section];
 
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
     [headerLabel setText:sectionData.title];
     
-    //[button addTarget:self action:@selector(insertParameter:) forControlEvents:UIControlEventTouchDown];
+    //[self.addTakeButton addTarget:self action:@selector(addTake:) forControlEvents:UIControlEventTouchDown];
     
-    [myView addSubview:button];
+    [myView addSubview:self.addTakeButton];
+    [myView addSubview:headerLabel];
     return myView;
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    Scene *sectionData = self.library.scenes[section];
-//    return sectionData.title;
-//}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 40.0;
+    return 30.0;
 }
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 30.0;
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 200.0;
+    return 190.0;
 }
 
 

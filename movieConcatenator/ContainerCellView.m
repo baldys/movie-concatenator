@@ -29,26 +29,17 @@
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    flowLayout.sectionInset = UIEdgeInsetsMake(8,8,8,8);
     flowLayout.itemSize = CGSizeMake(130, 120);
-    //flowLayout.collectionViewContentSize
-      NSLog(@"self.bounds.size.width = %f, .height = %f",self.bounds.size.width ,self.bounds.size.height);
-    
     [self.collectionView setCollectionViewLayout:flowLayout];
-
-    //static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
-    // Register the colleciton cell
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
-  
 }
 
 #pragma mark - Getter/Setter overrides
 - (void)setCollectionData:(Scene*)collectionData
 {
-   
-    
     _collectionData = collectionData;
     [_collectionView setContentOffset:CGPointZero animated:NO];
-
     [_collectionView reloadData];
 }
 
