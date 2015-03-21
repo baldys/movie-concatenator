@@ -20,7 +20,8 @@
 
 @implementation RecordVideoViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     NSLog(@"recordVideoView loaded");
     
@@ -32,22 +33,14 @@
         self.navigationItem.title = self.scene.title;
         self.sceneTitleField.text = self.scene.title;
     }
+    [self startCameraControllerFromViewController:self usingDelegate:self];
 }
-
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-}
-
-
-
 
 // For responding to the user tapping Cancel.
 - (void) imagePickerControllerDidCancel: (UIImagePickerController *) picker
 {
     NSLog(@"Cancelled image picker");
     [self.parentViewController dismissViewControllerAnimated: YES completion:nil];
-    if (picker.isMovingToParentViewController) NSLog(@"yup");
     [picker dismissViewControllerAnimated:YES completion:nil];
     // [self popToRootViewControllerAnimated:YES animated:YES];
 }

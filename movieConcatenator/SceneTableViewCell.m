@@ -30,47 +30,14 @@
     if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
 
     self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
-   // CGFloat tableCellHeight = CGRectGetHeight(self.contentView.bounds);
-   // CGFloat tableCellWidth = CGRectGetWidth(self.contentView.bounds);
-//    NSLog(@"TTABLLE CELL HEIGHT  %f \n TABLE CELL WIDTH%f", tableCellHeight, tableCellWidth);
-//    _containerCellView.bounds = CGRectMake(0, tableCellHeight/4, tableCellWidth, tableCellHeight/2);
-//    
    _containerCellView.frame = self.bounds;
-    
     [self.contentView addSubview:_containerCellView];
-  
-    // Initialization code
-   
 
-    
     return self;
-    
-    
+
 }
 
-    
 
-//
-//    layout.itemSize = CGSizeMake(44, 44);
-//    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-//    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-//    [self.collectionView registerClass:[TakeCollectionViewCell class] forCellWithReuseIdentifier:CollectionViewCellIdentifier];
-//    self.collectionView.backgroundColor = [UIColor whiteColor];
-//    self.collectionView.showsHorizontalScrollIndicator = NO;
-//    [self.contentView addSubview:self.collectionView];
-//
-///
-//-(void)layoutSubviews
-//{
-//   [super layoutSubviews];
-//    //self.containerCellView.frame.size.height = self.contentView.bounds.size.height;
-//    
-//}
-///
-
-//
-//
-//
 //- (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
 //{
 //    if (takeCell.take.isSelected && ![self.selectedItems containsObject:takeCell.take])

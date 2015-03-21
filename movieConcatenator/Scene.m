@@ -18,14 +18,10 @@
             self.takes = [NSMutableArray array];
         }
         self.title = @"default title";
-        
-        //// testing purposes:
-        //Take *newtake = [[Take alloc] init];
-        //[self.takes addObject:newtake];
-        ////
     }
     return self;
 }
+
 - (instancetype) initWithTitle:(NSString*)title
 {
     self = [super init];

@@ -27,6 +27,8 @@
 
 @property (nonatomic, strong) UIImage *thumbailImg; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
 
+@property (nonatomic, strong) NSData *imageData;
+
 // save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
 
 //- (void) saveToFile:

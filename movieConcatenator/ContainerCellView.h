@@ -10,6 +10,7 @@
 #import "Scene.h"
 #import "Take.h"
 #import "TakeCollectionViewCell.h"
+
 @interface ContainerCellView : UIView
 
 - (void)setCollectionData:(Scene*)collectionData;

@@ -17,11 +17,9 @@
 
 @interface SceneTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *sceneTitleLabel;
 @property (nonatomic, strong) Scene *scene;
 @property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
 
-//@property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) ContainerCellView *containerCellView;
 
 - (void)setCollectionData:(Scene *)collectionData;

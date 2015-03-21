@@ -11,8 +11,13 @@
 #import "TakeCollectionViewCell.h"
 #import "ContainerCellView.h"
 #import "SceneTableViewCell.h"
+#import "RecordVideoViewController.h"
+
+@class RecordVideoViewController;
 
 @interface ScenesTableViewController:UITableViewController<UITableViewDataSource, UITableViewDelegate>
+
+@property RecordVideoViewController *recordViewController;
 
 @property (nonatomic, strong) VideoLibrary *library;
 

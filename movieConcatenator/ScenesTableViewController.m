@@ -11,14 +11,14 @@
 #import "Take.h"
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
-#import "RecordVideoViewController.h"
+
 
 
 @interface ScenesTableViewController ()
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property UIButton *addTakeButton;
+@property (weak, nonatomic) UIButton *addTakeButton;
 
 @end
 
@@ -56,7 +56,6 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     
     [self.tableView reloadData];
     
@@ -111,15 +110,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
+    
     SceneTableViewCell *cell=
     [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
-    if (!cell)
-    {
-        NSLog(@"no cell");
-    }
 
     Scene *scene = self.library.scenes[indexPath.section];
-    //NSArray *articleData = [cellData objectForKey:@"articles"];
+    
     [cell setCollectionData:scene];
     
     return cell;
@@ -165,61 +161,91 @@
 //    self.contentOffsetDictionary[[@(index) stringValue]] = @(horizontalOffset);
 //}
  
-#pragma mark - UITableViewDelegate Methods
 */
 
-
 #pragma mark - UITableViewDelegate methods
-
-#pragma mark UITableViewDelegate methods
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     //Headerview
-    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 30.0)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 30.0)];
+    headerView.backgroundColor = [UIColor blackColor];
+    //headerView.layer.borderColor = [UIColor colorWithWhite:0.5 alpha:1.0].CGColor;
+    //headerView.layer.borderWidth = 1.0;
+    
+    // button
     self.addTakeButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [self.addTakeButton setFrame:CGRectMake(275.0, 5.0, 30.0, 30.0)];
+    [self.addTakeButton setFrame:CGRectMake(275.0, 0, 30.0, 30.0)];
     self.addTakeButton.tag = section;
     self.addTakeButton.hidden = NO;
     [self.addTakeButton setBackgroundColor:[UIColor clearColor]];
+    [self.addTakeButton addTarget:self action:@selector(addTake:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    [headerView addSubview:self.addTakeButton];
+    
+    // title
+    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 5, 200, 30)];
     Scene *sectionData = self.library.scenes[section];
+    headerLabel.text=sectionData.title;
+    headerLabel.textColor = [UIColor whiteColor];
+    [headerView addSubview:headerLabel];
+    
+    return headerView;
+}
 
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 30)];
-    [headerLabel setText:sectionData.title];
-    
-    //[self.addTakeButton addTarget:self action:@selector(addTake:) forControlEvents:UIControlEventTouchDown];
-    
-    [myView addSubview:self.addTakeButton];
-    [myView addSubview:headerLabel];
-    return myView;
+- (UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 30.0)];
+    footerView.backgroundColor = [UIColor blackColor];
+    return footerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 30.0;
+    return 40.0;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 30.0;
 }
 
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 190.0;
+    return 130.0;
 }
 
+- (IBAction)addTake:(UIButton*)sender
+{
+    [self performSegueWithIdentifier:@"ModallyRecordVideoSegue" sender:sender];
+}
+   
+    //RecordVideoViewController *recordVideoVC = [[RecordVideoViewController alloc] init];
+   // recordVideoVC.scene = currentScene;
+    
+   // NSLog(@"recordViewController.scene has been set to %@", currentScene.title);
 
+    
+    
+    //[self.navigationController presentViewController:self.recordViewController animated:YES completion:^{
+        
+    //}];
+    //[self.navigationController pushViewController:recordVideoVC animated:YES];
+    
+//    __weak __typeof(self) weakSelf = self;
+//    self.recordViewController.completionBlock = ^void (BOOL success)
+//    {
+//        NSLog(@"recordViewController.completionBlock()");
+//        if (success)
+//        {
+//            NSLog(@"saving video");
+//            /// dispatch to priority queue
+//            [weakSelf.library saveToFilename:@"videolibrary.plist"];
+//        }
+//        [weakSelf.tableView reloadData];
+//        
+//    };
 
-
-//#pragma mark - collection view data source
-//
-//-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-//{
-//    Scene *scene = self.library.scenes[collectionView.tag];
-//    NSLog(@" number of items in section using collection view tag: %ld, %ld", (long)collectionView.tag, (long)section);
-//    return scene.takes.count;
 //}
-
 
 
 //- (void) didSelectItemFromCollectionView:(NSNotification *)notification
@@ -251,6 +277,7 @@
 
 - (IBAction)addScene:(id)sender
 {
+    // present a new view controller
     Scene *newScene = [[Scene alloc] init];
     newScene.title = @"New Scene";
     [self.library.scenes insertObject:newScene atIndex:0];
@@ -267,7 +294,6 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-   
     NSLog(@"====== ScenesTableViewController.prepareForSegue()");
     
     UIButton *addTakeButton = (UIButton*)sender;
@@ -279,7 +305,7 @@
     
     RecordVideoViewController *recordViewController = segue.destinationViewController;
         
-    recordViewController.scene = currentScene;
+    [recordViewController setScene:currentScene];
     
     
     NSLog(@"recordViewController.scene has been set to %@", currentScene.title);
@@ -299,10 +325,6 @@
         
     };
 
-        
-
 }
-
-
 
 @end

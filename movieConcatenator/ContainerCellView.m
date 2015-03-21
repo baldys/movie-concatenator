@@ -29,7 +29,7 @@
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    flowLayout.sectionInset = UIEdgeInsetsMake(8,8,8,8);
+    flowLayout.sectionInset = UIEdgeInsetsMake(8,10,8,10);
     flowLayout.itemSize = CGSizeMake(130, 120);
     [self.collectionView setCollectionViewLayout:flowLayout];
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
@@ -39,7 +39,7 @@
 - (void)setCollectionData:(Scene*)collectionData
 {
     _collectionData = collectionData;
-    [_collectionView setContentOffset:CGPointZero animated:NO];
+    [_collectionView setContentOffset:CGPointZero animated:YES];
     [_collectionView reloadData];
 }
 
@@ -51,7 +51,6 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    
     NSLog(@"self.collectionData.takes.count:%lu",(unsigned long)self.collectionData.takes.count);
     return self.collectionData.takes.count;
 }
@@ -60,11 +59,7 @@
 {
     static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
-    if (!cell)
-    {
-        NSLog(@"no cell");
-    }
-
+    
     //collectionView.tag = indexPath.item;
 
     Take *take = self.collectionData.takes[indexPath.row];
@@ -84,6 +79,23 @@
     //NSDictionary *cellData = [self.collectionData objectAtIndex:[indexPath row]];
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:cellData];
 }
+
+//- (UICollectionReusableView*)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (kind == UICollectionElementKindSectionHeader)
+//    {
+//
+//        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"CollectionViewHeader" forIndexPath:indexPath];
+//        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+//        [header addSubview:addButton];
+//        
+//        NSLog(@"button !!!!!!!!!!!!!!!");
+//        
+//        return header;
+//    }
+//    return nil;
+//
+//}
 
 
 @end
