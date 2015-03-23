@@ -13,27 +13,31 @@
                 <rect key="frame" x="0.0" y="0.0" width="130" height="120"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
-                        <rect key="frame" x="10" y="12" width="110" height="100"/>
+                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
+                        <rect key="frame" x="7" y="7" width="115" height="105"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstAttribute="width" constant="110" id="bD5-0s-Tfl"/>
-                            <constraint firstAttribute="height" constant="100" id="iv9-av-yY6"/>
+                            <constraint firstAttribute="width" constant="115" id="bD5-0s-Tfl"/>
+                            <constraint firstAttribute="height" constant="105" id="iv9-av-yY6"/>
                         </constraints>
                     </imageView>
-                    <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rDL-AX-Xbx">
-                        <rect key="frame" x="10" y="78" width="32" height="32"/>
+                    <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" highlighted="YES" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rDL-AX-Xbx">
+                        <rect key="frame" x="7" y="80" width="32" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="32" id="6LJ-Tc-6pi"/>
+                            <constraint firstAttribute="width" constant="32" id="tbl-Xe-48Q"/>
+                        </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                        <state key="normal" image="white-outline-star-32">
-                            <color key="titleColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <state key="normal" backgroundImage="white-outline-star-64">
+                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
-                        <state key="selected" image="white-rating-star-32">
+                        <state key="selected" image="white-rating-star-64" backgroundImage="white-rating-star-64">
                             <color key="titleShadowColor" red="0.92294696295949896" green="1" blue="0.93345719341765643" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
-                        <state key="highlighted" image="white-outline-star-32"/>
+                        <state key="highlighted" backgroundImage="white-outline-star-64"/>
                         <connections>
                             <action selector="starButtonPressed:" destination="U9f-CN-IhA" eventType="touchUpInside" id="c2N-iW-ThS"/>
                         </connections>
@@ -41,7 +45,7 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" red="0.74028131409761899" green="0.55759095016002558" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="rDL-AX-Xbx" firstAttribute="leading" secondItem="a6L-dG-lwc" secondAttribute="leading" id="EKb-Dt-jZb"/>
                 <constraint firstItem="a6L-dG-lwc" firstAttribute="bottom" secondItem="rDL-AX-Xbx" secondAttribute="bottom" id="e3k-4R-j2u"/>
@@ -58,7 +62,7 @@
     </objects>
     <resources>
         <image name="movie-1.png" width="512" height="512"/>
-        <image name="white-outline-star-32" width="32" height="32"/>
-        <image name="white-rating-star-32" width="32" height="32"/>
+        <image name="white-outline-star-64" width="64" height="64"/>
+        <image name="white-rating-star-64" width="64" height="64"/>
     </resources>
 </document>

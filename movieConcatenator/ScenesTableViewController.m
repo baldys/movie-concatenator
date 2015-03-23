@@ -112,33 +112,14 @@
     static NSString *TableViewCellIdentifier = @"SceneTableViewCell";
     
     SceneTableViewCell *cell=
-    [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier];
+    [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
 
     Scene *scene = self.library.scenes[indexPath.section];
     
     [cell setCollectionData:scene];
     
     return cell;
-//    cell.collectionView.tag = indexPath.row;
-//    cell.addTakeButton.tag = indexPath.row;
-//    Scene *scene =  self.library.scenes[indexPath.row];
-//    cell.scene = self.library.scenes[indexPath.row];
-//    cell.sceneTitleLabel.text = cell.scene.title;
-////    if (!cell.collectionView)
-////    {
-////        cell.collectionView = [[TakesCollectionView alloc] init];
-////    }
-//
-//    cell.collectionView.takes = [NSMutableArray arrayWithArray:scene.takes];
-//    for (Take *take in cell.collectionView.takes)
-//    {
-//        
-//       // TakeCollectionViewCell *cell = (TakeCollectionViewCell*)[cell.collectionView re]
-//    }
-//    NSLog(@"showing scene in table view: %@", cell.scene.title);
-//    NSLog(@"showing scene %@", cell.scene);
-//    NSLog(@"showing sceneat index: %d", indexPath.row);
-//    return cell;
+
 }
 /*
 -(void)tableView:(UITableView *)tableView willDisplayCell:(SceneTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -195,7 +176,7 @@
 
 - (UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 30.0)];
+    UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 5.0)];
     footerView.backgroundColor = [UIColor blackColor];
     return footerView;
 }
@@ -211,12 +192,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 130.0;
+    return 150.0;
 }
 
 - (IBAction)addTake:(UIButton*)sender
 {
     [self performSegueWithIdentifier:@"ModallyRecordVideoSegue" sender:sender];
+    
 }
    
     //RecordVideoViewController *recordVideoVC = [[RecordVideoViewController alloc] init];
@@ -247,20 +229,22 @@
 
 //}
 
-
-//- (void) didSelectItemFromCollectionView:(NSNotification *)notification
-//{
-//    NSDictionary *cellData = [notification object];
-//    if (cellData)
-//    {
-//        if (!self.detailViewController)
-//        {
-//            self.detailViewController = [[ORGDetailViewController alloc] initWithNibName:@"ORGDetailViewController" bundle:nil];
-//        }
-//        self.detailViewController.detailItem = cellData;
-//        [self.navigationController pushViewController:self.detailViewController animated:YES];
-//    }
-//}
+- (void) didSelectItemFromCollectionView:(NSNotification *)notification
+{
+    PlayVideoViewController *playVideoVC = [[PlayVideoViewController alloc] init];
+    
+    NSDictionary *cellData = [notification object];
+    if (cellData)
+    {
+        if (!playVideoVC)
+        {
+           playVideoVC = [[PlayVideoViewController alloc] init];
+        }
+        //playVideoVC.detailItem = cellData;
+        
+        [self.navigationController pushViewController:playVideoVC animated:YES];
+    }
+}
 //#pragma mark - UIScrollViewDelegate Methods
 
 //-(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -280,7 +264,7 @@
     // present a new view controller
     Scene *newScene = [[Scene alloc] init];
     newScene.title = @"New Scene";
-    [self.library.scenes insertObject:newScene atIndex:0];
+    [self.library.scenes addObject:newScene];
     [self.library saveToFilename:@"videolibrary.plist"];
     [self.tableView reloadData];
 }
@@ -288,7 +272,9 @@
 - (IBAction)ConcatenateSelectedTakes:(id)sender
 {
     VideoMerger *merger = [[VideoMerger alloc] init];
+    
     NSLog(@"################# %lu",(unsigned long)[self.selectedItems count]);
+    
     [merger exportVideoComposition:[merger spliceAssets:self.selectedItems]];
 }
 
@@ -320,11 +306,22 @@
             NSLog(@"saving video");
             /// dispatch to priority queue
             [weakSelf.library saveToFilename:@"videolibrary.plist"];
+            
+            
         }
         [self.tableView reloadData];
         
     };
 
 }
+- (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue
+{
+    [self.tableView reloadData];
+    //segue.sourceViewController.scene =
+    
+}
+
+
+
 
 @end

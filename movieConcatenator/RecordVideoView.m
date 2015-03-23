@@ -7,15 +7,25 @@
 //
 
 #import "RecordVideoView.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation RecordVideoView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+
++ (Class)layerClass
+{
+    return [AVCaptureVideoPreviewLayer class];
 }
-*/
+
+- (AVCaptureSession *)session
+{
+    return [(AVCaptureVideoPreviewLayer *)[self layer] session];
+}
+
+- (void)setSession:(AVCaptureSession *)session
+{
+    [(AVCaptureVideoPreviewLayer *)[self layer] setSession:session];
+}
+
 
 @end

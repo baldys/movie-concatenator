@@ -36,13 +36,15 @@
     self = [super init];
     if(self)
     {
-        NSLog(@"######################## \n\n\n");
+        NSLog(@"Instantiate a new take object \n\n\n");
+        // create a unique identifier for the take so it can be stored and retreived
         self.assetID = [[NSUUID UUID] UUIDString];
+        
         NSLog(@"%@", self.assetID);
         
-
         NSURL *toUrl = [self getPathURL];
         NSLog(@"path url for the take: %@", toUrl);
+        NSLog(@"url to copy from for the take: %@", url);
         
         NSError *error = nil;
         if (![[NSFileManager defaultManager]copyItemAtURL:url toURL:toUrl error:&error])
@@ -55,6 +57,7 @@
         self.selected = NO;
         
         self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
+    
         //self.thumbailImg = [UIImage imageNamed: @"movie-1"];
         
         //self.asset = nil;
@@ -66,7 +69,7 @@
     return self;
 }
 
-
+// get the file url of the take or create one if it doesn't exist in the documents directory named by its randomly generated uuid.
 - (NSURL*) getPathURL
 {
     // 4 - Get path
@@ -84,6 +87,10 @@
     return documentsDirectory;
 }
 
+- (NSURL*) thumbnailURL
+{
+    return [NSURL URLWithString:self.thumbnail];
+}
 
 // LOAD
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -99,8 +106,12 @@
         NSLog(@"assetid %@", self.assetID);
 
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
-        NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
-        self.thumbailImg = [UIImage imageWithData:imageData];
+    
+        NSData *imageData = [NSData dataWithContentsOfURL:[self thumbnailURL]];
+        
+        imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
+        //self.thumbailImg = [UIImage imageWithData:imageData];
+        self.thumbailImg = [aDecoder decodeDataObject];
         NSLog(@"\n\n\n\n>>>>%@\n\n\n\n\n\n", [aDecoder decodeObjectForKey:@"assetFileURL"]
               );
     }
@@ -116,31 +127,28 @@
     [aCoder encodeObject:UIImageJPEGRepresentation(self.thumbailImg, 1) forKey:@"thumbnailImgData"];
     
 }
-
-- (NSArray*) videoaAssetTracks
-{
-    
-    AVAssetTrack *assetVideoTrack = nil;
-    AVAssetTrack *assetAudioTrack = nil;
-    // Check if the asset contains video and audio tracks
-    if ([[self.asset tracksWithMediaType:AVMediaTypeVideo] count] != 0) {
-        assetVideoTrack = [self.asset tracksWithMediaType:AVMediaTypeVideo][0];
-    }
-    if ([[self.asset tracksWithMediaType:AVMediaTypeAudio] count] != 0) {
-        assetAudioTrack = [self.asset tracksWithMediaType:AVMediaTypeAudio][0];
-    }
-    
-    
-    
-   
-    //AVMutableCompositionTrack *firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    AVAssetTrack *audioAssetTrack = [[self.asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-    //[audioAssetTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, self.firstAsset.duration) ofTrack:firstAssetTrack atTime:kCMTimeZero error:nil];
-    AVAssetTrack *videoAssetTrack = [[self.asset tracksWithMediaType:AVMediaTypeVideo]firstObject];
-    NSArray *assetTracks = [NSArray arrayWithObjects:audioAssetTrack, videoAssetTrack, nil];
-    return assetTracks;
-}
-
+//
+//- (NSArray*) videoaAssetTracks
+//{
+//    
+//    AVAssetTrack *assetVideoTrack = nil;
+//    AVAssetTrack *assetAudioTrack = nil;
+//    // Check if the asset contains video and audio tracks
+//    if ([[self.asset tracksWithMediaType:AVMediaTypeVideo] count] != 0) {
+//        assetVideoTrack = [self.asset tracksWithMediaType:AVMediaTypeVideo][0];
+//    }
+//    if ([[self.asset tracksWithMediaType:AVMediaTypeAudio] count] != 0) {
+//        assetAudioTrack = [self.asset tracksWithMediaType:AVMediaTypeAudio][0];
+//    }
+//    
+//    //AVMutableCompositionTrack *firstTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+//    AVAssetTrack *audioAssetTrack = [[self.asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+//    //[audioAssetTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, self.firstAsset.duration) ofTrack:firstAssetTrack atTime:kCMTimeZero error:nil];
+//    AVAssetTrack *videoAssetTrack = [[self.asset tracksWithMediaType:AVMediaTypeVideo]firstObject];
+//    NSArray *assetTracks = [NSArray arrayWithObjects:audioAssetTrack, videoAssetTrack, nil];
+//    return assetTracks;
+//}
+//
 
 // Load the first frame of the video for a thumbnail
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler
@@ -148,7 +156,8 @@
     __unsafe_unretained __block Take *weakSelf = (Take *)self;
     
     dispatch_once(&_thumbnailToken, ^{
-        [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]] completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error) {
+        [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]] completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error)
+        {
             if (result == AVAssetImageGeneratorSucceeded)
             {
                 weakSelf.thumbailImg = [UIImage imageWithCGImage:image];

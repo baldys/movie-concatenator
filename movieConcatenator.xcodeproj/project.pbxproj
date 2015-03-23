@@ -150,8 +150,6 @@
 			children = (
 				9F6D10181AAD32DF00FA7C20 /* SceneTableViewCell.h */,
 				9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */,
-				9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */,
-				9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */,
 				9F48158D1AB40FE40027F1A0 /* Container/content */,
 			);
 			name = "Table View Cell";
@@ -244,6 +242,8 @@
 				9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */,
 				9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */,
 				9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */,
+				9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */,
+				9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */,
 				9FAFA78D1A9EB71200F7396B /* Model */,
 				9FAFA7831A9EA5B200F7396B /* View Controllers */,
 				9FA5D86F1AAC981400318DF8 /* images */,

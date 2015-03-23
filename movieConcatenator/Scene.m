@@ -32,8 +32,8 @@
         {
             self.takes = [NSMutableArray array];
             //// testing purposes:
-            Take *newtake = [[Take alloc] init];
-            [self.takes addObject:newtake];
+            //Take *newtake = [[Take alloc] init];
+            //[self.takes addObject:newtake];
             
             ////
             

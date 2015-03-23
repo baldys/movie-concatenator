@@ -67,6 +67,8 @@
     NSLog(@"assset id: %@", take.assetID );
     
     [cell cellWithTake:take];
+    //UIImageView *image = [[[UIImage alloc] init ];
+    //[take.imageGenerator initWithAsset:[AVAsset assetWithURL:[take.thumbailImg getPathURL]]];
 
    // NSDictionary *cellData = self.collectionData[indexPath.row];
     //cell.articleTitle.text = [cellData objectForKey:@"title"];
@@ -79,23 +81,5 @@
     //NSDictionary *cellData = [self.collectionData objectAtIndex:[indexPath row]];
     //[[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:cellData];
 }
-
-//- (UICollectionReusableView*)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (kind == UICollectionElementKindSectionHeader)
-//    {
-//
-//        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"CollectionViewHeader" forIndexPath:indexPath];
-//        UIButton *addButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-//        [header addSubview:addButton];
-//        
-//        NSLog(@"button !!!!!!!!!!!!!!!");
-//        
-//        return header;
-//    }
-//    return nil;
-//
-//}
-
 
 @end

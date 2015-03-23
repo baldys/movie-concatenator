@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RecordVideoView : UIView
 
+@class AVCaptureSession;
+@interface RecordVideoView : UIView
+@property (nonatomic) AVCaptureSession *session;
 @end

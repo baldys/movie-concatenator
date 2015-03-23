@@ -18,8 +18,6 @@
 
 @end
 
-
-
 @interface TakeCollectionViewCell : UICollectionViewCell
 
 @property (nonatomic) NSInteger sceneNumber;
