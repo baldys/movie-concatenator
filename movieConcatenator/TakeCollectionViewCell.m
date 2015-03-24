@@ -19,6 +19,7 @@
 {
     
     self.starTake.selected = !self.starTake.selected;
+    self.starTake.tag = sender.tag;
     
     if (self.starTake.selected)
     {
@@ -34,25 +35,12 @@
     
 }
 
-
-- (void) configureCell
-{
-    self.starTake.enabled = YES;
-    self.starTake.selected = NO;
-    if (self.take.selected)
-    {
-        self.starTake.selected = YES;
-    }
-    
-    
-}
-
 - (void)prepareForReuse
 {
     [super prepareForReuse];
     self.thumbnail.image = nil;
     NSLog(@"reuse");
-    self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
+    //self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
     
 }
 
@@ -61,21 +49,25 @@
 {
     if (!take)
     {
-        
+        NSLog(@"take is nil");
     }
     
-    self.take = take;
+    //self.take = take;
     self.sceneNumber = take.sceneNumber;
     //self.takeNumber = take.takeNumber;
+    
     // sets a thumbnail image to the image of the first frame of that video
-    self.assetURL = [take getPathURL];
-    
-    self.thumbnail.image = [take loadThumbnailWithCompletionHandler:^(UIImage *image)
-                            {
-                                
-                                self.thumbnail.image = image;
-                            }];
-    
+    //self.assetURL = [take getPathURL];
+    //[self.take getThumbnailImage];
+    //self.thumbnail.image = take.takeImage;
+   
+   // self.thumbnail.image = [take loadThumbnailWithCompletionHandler:^(UIImage *image){
+        //TakeCollectionViewCell *thumbnailCell = (TakeCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+        //self.thumbnail.image = image;
+        //[thumbnailCell setNeedsLayout];
+     //}];
+    self.thumbnail.image = take.thumbnail;
+
 }
 
 

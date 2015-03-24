@@ -14,7 +14,7 @@
 
 
 
-@interface ScenesTableViewController ()
+@interface ScenesTableViewController () 
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -41,17 +41,25 @@
     self.library = library;
     self.scenes = library.scenes;
     
-    if (!self.selectedItems)
+    if (!self.library.selectedVideos)
     {
-        self.selectedItems = [NSMutableArray array];
+        self.library.selectedVideos = [NSMutableArray array];
     }
     
     // Register the table cell
     /// only use if you did not put an identifier in the storyboard.
     [self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:@"SceneTableViewCell"];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSelectItemFromCollectionView:) name:@"didSelectItemFromCollectionView" object:nil];
+    
 
 }
+//- (void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectItemFromCollectionView" object:nil];
+//}
 
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -90,8 +98,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-///////////////////////          \\\\\\\\\\\\\\\\\\\\\\\\\\
-//////////////////////TABLE VIEW\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -118,6 +124,7 @@
     
     [cell setCollectionData:scene];
     
+
     return cell;
 
 }
@@ -154,12 +161,14 @@
     //headerView.layer.borderWidth = 1.0;
     
     // button
-    self.addTakeButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    [self.addTakeButton setFrame:CGRectMake(275.0, 0, 30.0, 30.0)];
+    self.addTakeButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.addTakeButton setImage:[UIImage imageNamed:@"tape-64.png" ] forState:UIControlStateNormal];
+    //self.addTakeButton.titleLabel.text = @"add Take";
+    [self.addTakeButton setFrame:CGRectMake(275.0, 5, 50.0, 30.0)];
     self.addTakeButton.tag = section;
     self.addTakeButton.hidden = NO;
     [self.addTakeButton setBackgroundColor:[UIColor clearColor]];
-    [self.addTakeButton addTarget:self action:@selector(addTake:) forControlEvents:UIControlEventTouchUpInside];
+    [self.addTakeButton addTarget:self action:@selector(addTakeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     
     [headerView addSubview:self.addTakeButton];
@@ -176,18 +185,18 @@
 
 - (UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 5.0)];
+    UIView *footerView =  [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 0.0, 0.0)];
     footerView.backgroundColor = [UIColor blackColor];
     return footerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 40.0;
+    return 30.0;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 30.0;
+    return 0.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -195,12 +204,13 @@
     return 150.0;
 }
 
-- (IBAction)addTake:(UIButton*)sender
+- (IBAction)addTakeButtonPressed:(UIButton*)sender
 {
     [self performSegueWithIdentifier:@"ModallyRecordVideoSegue" sender:sender];
     
 }
-   
+
+
     //RecordVideoViewController *recordVideoVC = [[RecordVideoViewController alloc] init];
    // recordVideoVC.scene = currentScene;
     
@@ -231,19 +241,19 @@
 
 - (void) didSelectItemFromCollectionView:(NSNotification *)notification
 {
-    PlayVideoViewController *playVideoVC = [[PlayVideoViewController alloc] init];
-    
-    NSDictionary *cellData = [notification object];
-    if (cellData)
+//    MPMoviePlayerViewController *mpvc = [[MPMoviePlayerViewController alloc] initWithContentURL:[notification object]];
+//    [self presentMoviePlayerViewControllerAnimated:mpvc];
+    PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
+    videoPlayerVC.take = [notification object];
+    if (videoPlayerVC.take)
     {
-        if (!playVideoVC)
-        {
-           playVideoVC = [[PlayVideoViewController alloc] init];
-        }
-        //playVideoVC.detailItem = cellData;
-        
-        [self.navigationController pushViewController:playVideoVC animated:YES];
+        [self presentViewController:videoPlayerVC animated:YES completion:^{
+            NSLog(@"Presented videoPlayerVC!!!");
+        }];
     }
+    
+    
+
 }
 //#pragma mark - UIScrollViewDelegate Methods
 
@@ -273,9 +283,9 @@
 {
     VideoMerger *merger = [[VideoMerger alloc] init];
     
-    NSLog(@"################# %lu",(unsigned long)[self.selectedItems count]);
+    NSLog(@"################# %lu",(unsigned long)[self.library.selectedVideos count]);
     
-    [merger exportVideoComposition:[merger spliceAssets:self.selectedItems]];
+    [merger exportVideoComposition:[merger spliceAssets:self.library.selectedVideos]];
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -290,7 +300,8 @@
     NSLog(@"currentScene is now '%@'", currentScene.title);
     
     RecordVideoViewController *recordViewController = segue.destinationViewController;
-        
+    [recordViewController setSceneIndex:addTakeButton.tag];
+    [recordViewController setLibrary:self.library];
     [recordViewController setScene:currentScene];
     
     
@@ -304,11 +315,12 @@
         if (success)
         {
             NSLog(@"saving video");
-            /// dispatch to priority queue
+            
             [weakSelf.library saveToFilename:@"videolibrary.plist"];
             
             
         }
+        
         [self.tableView reloadData];
         
     };
@@ -317,7 +329,7 @@
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue
 {
     [self.tableView reloadData];
-    //segue.sourceViewController.scene =
+    //segue.sourceViewController.take =
     
 }
 

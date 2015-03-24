@@ -24,8 +24,8 @@
 @property (nonatomic) NSInteger takeNumber;
 @property (weak, nonatomic) IBOutlet UIButton *starTake;
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnail;
-@property (strong, nonatomic) NSURL* assetURL;
-@property (strong, nonatomic) AVAsset *videoAsset;
+//@property (strong, nonatomic) NSURL* assetURL;
+//@property (strong, nonatomic) AVAsset *videoAsset;
 @property (strong, nonatomic) Take* take;
 @property (nonatomic, weak) id <TakeCellDelegate> delegate;
 

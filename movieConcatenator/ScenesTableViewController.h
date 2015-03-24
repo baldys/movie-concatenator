@@ -14,18 +14,16 @@
 #import "RecordVideoViewController.h"
 
 @class RecordVideoViewController;
-
+@class TakeCollectionViewCell;
 @interface ScenesTableViewController:UITableViewController<UITableViewDataSource, UITableViewDelegate>
 
 //@property RecordVideoViewController *recordViewController;
 
 @property (nonatomic, strong) VideoLibrary *library;
 
-@property (nonatomic, strong) NSMutableArray *selectedItems;
-
 - (IBAction)addScene:(id)sender;
 
 - (IBAction)ConcatenateSelectedTakes:(id)sender;
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue;
-
+- (IBAction)addTakeButtonPressed:(id)sender;
 @end

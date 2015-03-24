@@ -33,6 +33,23 @@
     flowLayout.itemSize = CGSizeMake(130, 120);
     [self.collectionView setCollectionViewLayout:flowLayout];
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
+    
+}
+
+- (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
+{
+    if (takeCell.take.isSelected && ![self.library.selectedVideos containsObject:takeCell.take])
+    {
+        [self.library.selectedVideos addObject:self.library.scenes[takeCell.starTake.tag]];
+        [self.library.selectedVideos addObject:takeCell.take];
+        NSLog(@"take is selected but does not contain object");
+    }
+    //
+    else if (!takeCell.take.isSelected && [self.library.selectedVideos containsObject:takeCell.take])
+    {
+        [self.library.selectedVideos removeObject:takeCell.take];
+        NSLog(@"take is DEselected but contains object");
+    }
 }
 
 #pragma mark - Getter/Setter overrides
@@ -45,13 +62,13 @@
 
 
 #pragma mark - UICollectionViewDataSource methods
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    NSLog(@"self.collectionData.takes.count:%lu",(unsigned long)self.collectionData.takes.count);
     return self.collectionData.takes.count;
 }
 
@@ -66,20 +83,31 @@
   
     NSLog(@"assset id: %@", take.assetID );
     
+    
+    [take getThumbnailImage];
+    
     [cell cellWithTake:take];
-    //UIImageView *image = [[[UIImage alloc] init ];
-    //[take.imageGenerator initWithAsset:[AVAsset assetWithURL:[take.thumbailImg getPathURL]]];
+    
+    
 
-   // NSDictionary *cellData = self.collectionData[indexPath.row];
-    //cell.articleTitle.text = [cellData objectForKey:@"title"];
+    //cell.delegate = self;
+    
+   
+    //cell.thumbnail.image = take.thumbnail;
+//    {
+//        // to do: make this return a UIImage
+//        [take getThumbnailImage];
+//    }
+    
+  //  cell.thumbnail.image = take.takeImage;
+    
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    /// instantiate the video player view controller here.
-    //NSDictionary *cellData = [self.collectionData objectAtIndex:[indexPath row]];
-    //[[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:cellData];
+    Take *cellData = self.collectionData.takes[indexPath.item];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:cellData];
 }
 
 @end

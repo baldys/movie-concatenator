@@ -18,7 +18,7 @@
 @interface SceneTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) Scene *scene;
-@property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
+//@property (weak, nonatomic) IBOutlet UIButton *addTakeButton;
 
 @property (strong, nonatomic) ContainerCellView *containerCellView;
 

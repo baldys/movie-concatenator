@@ -268,30 +268,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             
             // Start recording to a temporary file.
             NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
+            
             [[self movieFileOutput] startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-            //Take *newVideo = [[Take alloc] initWithURL:[NSURL fileURLWithPath:outputFilePath]];
-            //[self.scene.takes insertObject:newVideo atIndex:0];
-
-            // ****put code for creating take from the url here****
-            /////////////////////////////////
-            //////////////////////////////////
-            /////////////////////////////////
-            /////////////////////////////
-            
-            /////////////////////////////////
-            //////////////////////////////////
-            /////////////////////////////////
-            /////////////////////////////
-            
-            /////////////////////////////////
-            //////////////////////////////////
-            /////////////////////////////////
-            /////////////////////////////
+            self.outputFileURL = [NSURL fileURLWithPath:outputFilePath];
             
         }
         else
         {
             [[self movieFileOutput] stopRecording];
+            
         }
     });
 }
@@ -392,41 +377,36 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     if (error)
         NSLog(@"%@", error);
 
-        
-    
-
-    
     [self setLockInterfaceRotation:NO];
     
     // Note the backgroundRecordingID for use in the ALAssetsLibrary completion handler to end the background task associated with this recording. This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's -isRecording is back to NO — which happens sometime after this method returns.
     UIBackgroundTaskIdentifier backgroundRecordingID = [self backgroundRecordingID];
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
-    /////////////////////////////////
-    //////////////////////////////////
-    /////////////////////////////////
-    /////////////////////////////
-    /////////////////////////////////
-    //////////////////////////////////
-    /////////////////////////////////
-    /////////////////////////////
-    /////////////////////////////////
-    //////////////////////////////////
-    /////////////////////////////////
-    /////////////////////////////
+    
+    //self.take = [[Take alloc] initWithURL:self.outputFileURL];
     // write video at path to the disk. alloc and init a take and set its asset file url property to it.
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
         if (error)
             NSLog(@"%@", error);
-        NSLog(@"OUTPUT FILE URL: %@", outputFileURL);
-        Take *newVideo = [[Take alloc] initWithURL:outputFileURL];
-        [self.scene.takes addObject:newVideo];
-        [self.library saveToFilename:@"videolibrary.plist"];
-     
+        
+//        Scene *currentScene = self.library.scenes[self.sceneIndex];
+//        Take *newTake = [[Take alloc] initWithURL:outputFileURL];
+//        [currentScene.takes insertObject:newTake atIndex:0];
+//        [self.library saveToFilename:@"videolibrary.plist"];
         //[[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
         
         if (backgroundRecordingID != UIBackgroundTaskInvalid)
-            [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
+        {
+             [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
+        }
+         
     }];
+    
+    Scene *currentScene = self.library.scenes[self.sceneIndex];
+    Take *newTake = [[Take alloc] initWithURL:outputFileURL];
+    [currentScene.takes insertObject:newTake atIndex:0];
+    [self.library saveToFilename:@"videolibrary.plist"];
+    //NSLog(@"ASSET FILE URL: %@", assetURL);
 }
 
 #pragma mark Device Configuration

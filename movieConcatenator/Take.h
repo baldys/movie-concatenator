@@ -18,20 +18,21 @@
 @property (nonatomic) NSInteger sceneNumber;
 
 @property (nonatomic, strong) NSString* assetID;
+@property (nonatomic, strong) NSURL *assetURL;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
 
-@property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;
+
 
 @property (nonatomic, strong) AVAsset *asset;
 
-@property (nonatomic, strong) UIImage *thumbailImg; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
-@property (nonatomic, strong) NSString *thumbnail;
+@property (nonatomic, strong) UIImage *thumbnail; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
+//@property (nonatomic, strong) NSString *thumbnail;
 
 
 // save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
 
-- (NSURL*) thumbnailURL;
+//- (NSURL*) thumbnailURL;
 
 //- (void) saveToFile:
 
@@ -49,7 +50,9 @@
 
 - (NSURL*)getPathURL;
 - (NSString*) documentsDirectory;
+- (void)getThumbnailImage;
 
-- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
+- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler;
+//- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
 
 @end

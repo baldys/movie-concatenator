@@ -19,8 +19,10 @@
 
 @property (nonatomic, strong) VideoLibrary* library;
 @property (nonatomic, strong) Scene *scene;
+@property (nonatomic) NSInteger sceneIndex;
+@property (nonatomic, strong) Take *take;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
-
+@property (nonatomic, strong) NSURL *outputFileURL;
 //- (IBAction)backToRootVC:(id)sender;
 
 

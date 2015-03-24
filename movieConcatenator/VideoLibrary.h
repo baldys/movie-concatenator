@@ -18,6 +18,8 @@
 
 -(void)saveToFilename:(NSString *)filename;
 
+@property (nonatomic, strong) NSMutableArray *selectedVideos;
+
 //- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
 
 //- (void)loadLibraryWithCompletionBlock:(void (^)(void))completionHandler;

@@ -24,7 +24,8 @@
 
 @interface Take ()
 
-
+@property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;
+@property (nonatomic, strong) AVAsset *videoAsset;
 @property(readonly, unsafe_unretained) dispatch_once_t thumbnailToken;
 
 @end
@@ -38,32 +39,36 @@
     {
         NSLog(@"Instantiate a new take object \n\n\n");
         // create a unique identifier for the take so it can be stored and retreived
+
         self.assetID = [[NSUUID UUID] UUIDString];
+        
+        _assetURL = [self getPathURL];
         
         NSLog(@"%@", self.assetID);
         
-        NSURL *toUrl = [self getPathURL];
-        NSLog(@"path url for the take: %@", toUrl);
+       // NSURL *toUrl = [self getPathURL];
+       // NSLog(@"path url for the take: %@", toUrl);
+        
         NSLog(@"url to copy from for the take: %@", url);
+        NSLog(@"path url for the take _assetURL %@", _assetURL);
         
         NSError *error = nil;
-        if (![[NSFileManager defaultManager]copyItemAtURL:url toURL:toUrl error:&error])
+        if (![[NSFileManager defaultManager]copyItemAtURL:url toURL:self.assetURL error:&error])
         {
             NSLog(@"file copy error %@", error);
         }
        
-        self.asset = [AVAsset assetWithURL:toUrl];
+        _videoAsset = [[AVURLAsset alloc] initWithURL:self.assetURL options:nil];
         
-        self.selected = NO;
+        _selected = NO;
         
-        self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:self.asset];
+        _imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
-        //self.thumbailImg = [UIImage imageNamed: @"movie-1"];
+        _thumbnail = [UIImage imageNamed:@"vid.png"];
         
-        //self.asset = nil;
-        //self.assetURL = url;
         
-        //thumbnailImageAtTime
+        //self.takeImage = [UIImage imageNamed: @"movie-1.png"];
+        [self getThumbnailImage];
         
     }
     return self;
@@ -87,11 +92,26 @@
     return documentsDirectory;
 }
 
-- (NSURL*) thumbnailURL
-{
-    return [NSURL URLWithString:self.thumbnail];
-}
+//- (NSURL*) thumbnailURL
+//{
+//    return [NSURL URLWithString:self.thumbnail];
+//}
 
+- (void) createGeneratorFromItemInFilePathURL
+{
+    if (!_videoAsset)
+    {
+        
+        _videoAsset = [[AVURLAsset alloc] initWithURL:[self getPathURL] options:nil];
+        NSLog(@"no video asset. %@  so i created one: %@ ", [self getPathURL], _videoAsset);
+        
+    }
+    if (!_imageGenerator)
+    {
+        self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
+         NSLog(@"no image Generator to generate thumbnail from an asset. so i created one: %@ ", _videoAsset);
+    }
+}
 // LOAD
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
@@ -104,14 +124,16 @@
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
         //self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
         NSLog(@"assetid %@", self.assetID);
+        
+        
+        [self createGeneratorFromItemInFilePathURL];
 
+        
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
     
-        NSData *imageData = [NSData dataWithContentsOfURL:[self thumbnailURL]];
-        
-        imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
-        //self.thumbailImg = [UIImage imageWithData:imageData];
-        self.thumbailImg = [aDecoder decodeDataObject];
+        //NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
+        NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnail"];
+        self.thumbnail = [UIImage imageWithData:imageData];
         NSLog(@"\n\n\n\n>>>>%@\n\n\n\n\n\n", [aDecoder decodeObjectForKey:@"assetFileURL"]
               );
     }
@@ -120,11 +142,11 @@
 // SAVE
 - (void) encodeWithCoder:(NSCoder *)aCoder
 {
-    //[aCoder encodeInteger:self.takeNumber forKey:@"takeNumber"];
+    //x[aCoder encodeInteger:self.takeNumber forKey:@"takeNumber"];
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     [aCoder encodeBool:self.selected forKey:@"selected"];
-    [aCoder encodeObject:UIImageJPEGRepresentation(self.thumbailImg, 1) forKey:@"thumbnailImgData"];
+    [aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];
     
 }
 //
@@ -151,8 +173,10 @@
 //
 
 // Load the first frame of the video for a thumbnail
+/*
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler
 {
+    
     __unsafe_unretained __block Take *weakSelf = (Take *)self;
     
     dispatch_once(&_thumbnailToken, ^{
@@ -160,10 +184,10 @@
         {
             if (result == AVAssetImageGeneratorSucceeded)
             {
-                weakSelf.thumbailImg = [UIImage imageWithCGImage:image];
+                weakSelf.takeImage = [UIImage imageWithCGImage:image];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSLog(@"Loaded thumbnail for %@", weakSelf.assetID);
-                    completionHandler(weakSelf.thumbailImg);
+                    self.takeImage = completionHandler(weakSelf.thumbailImg);
                 });
             }
             else if (result == AVAssetImageGeneratorFailed)
@@ -173,8 +197,73 @@
         }];
     });
     
-    return weakSelf.thumbailImg;
+    return weakSelf.takeImage;
 
+} */
+
+
+// Load the first frame of the video for a thumbnail
+- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler
+{
+    __unsafe_unretained __block Take *weakSelf = (Take *)self;
+    dispatch_once(&_thumbnailToken,
+    ^{
+        /////???
+        //weakSelf.imageGenerator.appliesPreferredTrackTransform = YES;
+        
+        [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]
+         
+        completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error)
+        {
+              if (result == AVAssetImageGeneratorSucceeded)
+              {
+                  weakSelf.thumbnail = [UIImage imageWithCGImage:image];
+                  
+                  dispatch_async(dispatch_get_main_queue(),
+                  ^{
+                      NSLog(@"Loaded thumbnail for %@", weakSelf.assetURL);
+                      
+                      completionHandler(weakSelf.thumbnail);
+                  });
+              }
+              else if (result == AVAssetImageGeneratorFailed)
+              {
+                  NSLog(@"couldn't generate thumbnail, error:%@", error);
+              }
+        }];
+    });
+    
+    return self.thumbnail;
+}
+    
+- (void) getThumbnailImage
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[self getPathURL] options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    generator.appliesPreferredTrackTransform = YES;
+   
+    AVAssetImageGeneratorCompletionHandler handler =
+    ^(CMTime requestedTime,
+      CGImageRef image, CMTime actualTime,AVAssetImageGeneratorResult result,NSError *error)
+    {
+        if (result != AVAssetImageGeneratorSucceeded)
+        {
+            NSLog(@"couldn't generate thumbnail, error:%@", error);
+        }
+        
+        self.thumbnail = [UIImage imageWithCGImage:image];
+        
+        
+        
+        // Show the image in a UIImageView
+        
+        //self.thumbImageView.image = self.videoThumb;
+    
+    };
+    
+    [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]  completionHandler:handler];
 }
 
+
+     
 @end
