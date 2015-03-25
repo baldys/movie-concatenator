@@ -14,40 +14,54 @@
 
 @implementation PlayVideoViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
     [self configureMoviePlayer];
 }
 
--(void) configureMoviePlayer {
+-(void) configureMoviePlayer
+{
     self.view.backgroundColor = [UIColor blueColor];
     //[self initWithContentURL:[self.take getPathURL]];
+    
     //self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:[self.take getPathURL]];
     self.moviePlayer.view.backgroundColor = [UIColor redColor];
+    
     [self.moviePlayer prepareToPlay];
+    
     [self.moviePlayer.view setFrame:self.view.bounds];
     [self.view addSubview:self.moviePlayer.view];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
--(void)viewDidAppear:(BOOL)animated{
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [self.moviePlayer play];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
 
 /// When the movie is done, release the controller.
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification {
-    [self dismissMoviePlayerViewControllerAnimated];
+    
+    //[self dismissMoviePlayerViewControllerAnimated];
     MPMoviePlayerController* moviePlayer = [aNotification object];
+    
     [[NSNotificationCenter defaultCenter]
      removeObserver:self
                name:MPMoviePlayerPlaybackDidFinishNotification
              object:moviePlayer];
+    
     [self dismissMoviePlayerViewControllerAnimated];
+    
     [self dismissViewControllerAnimated:YES completion:^{
         //
         

@@ -20,24 +20,23 @@
 
 @implementation ContainerCellView
 
-- (void)awakeFromNib {
-    if (!self.collectionData)
-    {
-        NSLog(@"scene is nil");
-    }
-  ///////
-    
+- (void)awakeFromNib
+{
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
     flowLayout.sectionInset = UIEdgeInsetsMake(8,10,8,10);
     flowLayout.itemSize = CGSizeMake(130, 120);
     [self.collectionView setCollectionViewLayout:flowLayout];
+    
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
     
 }
 
 - (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
 {
+    
+    
     if (takeCell.take.isSelected && ![self.library.selectedVideos containsObject:takeCell.take])
     {
         [self.library.selectedVideos addObject:self.library.scenes[takeCell.starTake.tag]];
@@ -56,8 +55,10 @@
 - (void)setCollectionData:(Scene*)collectionData
 {
     _collectionData = collectionData;
-    [_collectionView setContentOffset:CGPointZero animated:YES];
+    [_collectionView setContentOffset:CGPointZero animated:NO];
+  
     [_collectionView reloadData];
+    
 }
 
 
@@ -76,30 +77,25 @@
 {
     static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+    cell.starTake.tag = indexPath.item;
     
     //collectionView.tag = indexPath.item;
 
     Take *take = self.collectionData.takes[indexPath.row];
   
     NSLog(@"assset id: %@", take.assetID );
+    //cell.delegate = self;
     
     
     [take getThumbnailImage];
+
     
     [cell cellWithTake:take];
-    
+
+   
+    //[collectionView reloadData];
     
 
-    //cell.delegate = self;
-    
-   
-    //cell.thumbnail.image = take.thumbnail;
-//    {
-//        // to do: make this return a UIImage
-//        [take getThumbnailImage];
-//    }
-    
-  //  cell.thumbnail.image = take.takeImage;
     
     return cell;
 }
@@ -107,7 +103,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     Take *cellData = self.collectionData.takes[indexPath.item];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:cellData];
+    
+    // When collection view item is selected it plays the video for the selected take cell
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:[cellData getPathURL]];
 }
 
 @end

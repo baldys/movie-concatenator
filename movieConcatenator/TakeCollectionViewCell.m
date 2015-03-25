@@ -17,15 +17,14 @@
 
 - (IBAction)starButtonPressed:(UIButton *)sender
 {
-    
     self.starTake.selected = !self.starTake.selected;
     self.starTake.tag = sender.tag;
     
     if (self.starTake.selected)
     {
         self.take.selected = YES; // by default all cells are not selected
-        ///self.takeCellTag = sender.tag;
-        /// NSLog(@"SELECTED %ld ", (long)sender.tag);
+        
+        NSLog(@"SELECTED %ld ", (long)self.starTake.tag);
     }
     else
     {
@@ -51,22 +50,19 @@
     {
         NSLog(@"take is nil");
     }
+    [self setTake:take];
     
-    //self.take = take;
     self.sceneNumber = take.sceneNumber;
     //self.takeNumber = take.takeNumber;
     
-    // sets a thumbnail image to the image of the first frame of that video
+    // set a thumbnail image to the image of the first frame of that video
     //self.assetURL = [take getPathURL];
     //[self.take getThumbnailImage];
-    //self.thumbnail.image = take.takeImage;
-   
-   // self.thumbnail.image = [take loadThumbnailWithCompletionHandler:^(UIImage *image){
-        //TakeCollectionViewCell *thumbnailCell = (TakeCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-        //self.thumbnail.image = image;
-        //[thumbnailCell setNeedsLayout];
-     //}];
+
+
+
     self.thumbnail.image = take.thumbnail;
+  
 
 }
 

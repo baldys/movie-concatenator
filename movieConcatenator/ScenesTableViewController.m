@@ -241,20 +241,36 @@
 
 - (void) didSelectItemFromCollectionView:(NSNotification *)notification
 {
-//    MPMoviePlayerViewController *mpvc = [[MPMoviePlayerViewController alloc] initWithContentURL:[notification object]];
-//    [self presentMoviePlayerViewControllerAnimated:mpvc];
+
+   // MPMoviePlayerViewController *mpvc = [[MPMoviePlayerViewController alloc] initWithContentURL:[notification object]];
+    //[self presentMoviePlayerViewControllerAnimated:mpvc];
+//    
+    
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
-    videoPlayerVC.take = [notification object];
+   videoPlayerVC.take = [notification object];
     if (videoPlayerVC.take)
     {
         [self presentViewController:videoPlayerVC animated:YES completion:^{
             NSLog(@"Presented videoPlayerVC!!!");
         }];
     }
-    
-    
+
 
 }
+//-(void)myMovieFinishedCallback:(NSNotification*)aNotification
+//{
+//    [self dismissMoviePlayerViewControllerAnimated];
+//    MPMoviePlayerController* moviePlayer = [aNotification object];
+//    [[NSNotificationCenter defaultCenter]
+//     removeObserver:self
+//     name:MPMoviePlayerPlaybackDidFinishNotification
+//     object:moviePlayer];
+//    [self dismissMoviePlayerViewControllerAnimated];
+//    [self dismissViewControllerAnimated:YES completion:^{
+//        //
+//        
+//    }];
+//}
 //#pragma mark - UIScrollViewDelegate Methods
 
 //-(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -269,13 +285,20 @@
 //}
 ////////////////////////           \\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+//release the controller.
+
+
 - (IBAction)addScene:(id)sender
 {
-    // present a new view controller
+    // TO DO
+    //present new view controller "ADD SCENE VIEW CONTROLLER:"
     Scene *newScene = [[Scene alloc] init];
     newScene.title = @"New Scene";
-    [self.library.scenes addObject:newScene];
+    [self.library.scenes insertObject:newScene atIndex:0];
+    // do this on background thread while scene details are being added.
     [self.library saveToFilename:@"videolibrary.plist"];
+    
+    
     [self.tableView reloadData];
 }
 
@@ -296,8 +319,7 @@
     NSLog(@"buttontag = %li", (long)addTakeButton.tag);
     
     Scene *currentScene = self.library.scenes[addTakeButton.tag];
-    
-    NSLog(@"currentScene is now '%@'", currentScene.title);
+ 
     
     RecordVideoViewController *recordViewController = segue.destinationViewController;
     [recordViewController setSceneIndex:addTakeButton.tag];
@@ -328,6 +350,8 @@
 }
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue
 {
+    // add take stuff goes HERE!> get the file output url from the source view controller
+   
     [self.tableView reloadData];
     //segue.sourceViewController.take =
     
@@ -336,4 +360,6 @@
 
 
 
+
 @end
+

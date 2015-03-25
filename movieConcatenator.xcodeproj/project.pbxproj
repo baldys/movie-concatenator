@@ -238,12 +238,8 @@
 			children = (
 				9FAFA7431A98884A00F7396B /* AppDelegate.h */,
 				9FAFA7441A98884A00F7396B /* AppDelegate.m */,
-				9FAFA7741A99844C00F7396B /* PlayVideoViewController.h */,
-				9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */,
-				9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */,
-				9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */,
-				9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */,
-				9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */,
+				9FB9C3C81AC2741E00952250 /* Video Player */,
+				9FB9C3C71AC273F300952250 /* Video Camera */,
 				9FAFA78D1A9EB71200F7396B /* Model */,
 				9FAFA7831A9EA5B200F7396B /* View Controllers */,
 				9FA5D86F1AAC981400318DF8 /* images */,
@@ -304,6 +300,26 @@
 				9F0020B91AA6BFD60018592C /* VideoMerger.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		9FB9C3C71AC273F300952250 /* Video Camera */ = {
+			isa = PBXGroup;
+			children = (
+				9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */,
+				9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */,
+				9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */,
+				9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */,
+			);
+			name = "Video Camera";
+			sourceTree = "<group>";
+		};
+		9FB9C3C81AC2741E00952250 /* Video Player */ = {
+			isa = PBXGroup;
+			children = (
+				9FAFA7741A99844C00F7396B /* PlayVideoViewController.h */,
+				9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */,
+			);
+			name = "Video Player";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

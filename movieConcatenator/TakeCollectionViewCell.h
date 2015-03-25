@@ -30,6 +30,7 @@
 @property (nonatomic, weak) id <TakeCellDelegate> delegate;
 
 -(void)cellWithTake:(Take*)take;
+
 - (IBAction)starButtonPressed:(UIButton*)sender;
 
 @end

@@ -12,9 +12,9 @@
 #import "Take.h"
 
 
-@interface PlayVideoViewController : MPMoviePlayerViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface PlayVideoViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong) Take *take;
-//@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
+@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 
 @end

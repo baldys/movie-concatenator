@@ -64,10 +64,15 @@
         
         _imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
-        _thumbnail = [UIImage imageNamed:@"vid.png"];
-        
-        
-        //self.takeImage = [UIImage imageNamed: @"movie-1.png"];
+    _thumbnail = [UIImage imageNamed:@"vid.png"];
+
+//
+//        }];
+        //[self getThumbnailImage];
+
+        _thumbnail = [self loadThumbnailWithCompletionHandler:^ (UIImage *image){
+            
+        }];
         [self getThumbnailImage];
         
     }
@@ -126,7 +131,7 @@
         NSLog(@"assetid %@", self.assetID);
         
         
-        [self createGeneratorFromItemInFilePathURL];
+        //[self createGeneratorFromItemInFilePathURL];
 
         
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
@@ -203,7 +208,7 @@
 
 
 // Load the first frame of the video for a thumbnail
-- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler
+- (UIImage*)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler
 {
     __unsafe_unretained __block Take *weakSelf = (Take *)self;
     dispatch_once(&_thumbnailToken,
@@ -233,6 +238,7 @@
         }];
     });
     
+
     return self.thumbnail;
 }
     
