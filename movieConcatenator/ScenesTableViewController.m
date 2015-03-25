@@ -230,7 +230,6 @@
 //        if (success)
 //        {
 //            NSLog(@"saving video");
-//            /// dispatch to priority queue
 //            [weakSelf.library saveToFilename:@"videolibrary.plist"];
 //        }
 //        [weakSelf.tableView reloadData];
@@ -247,8 +246,8 @@
 //    
     
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc] init];
-   videoPlayerVC.take = [notification object];
-    if (videoPlayerVC.take)
+   videoPlayerVC.takeURL = [notification object];
+    if (videoPlayerVC.takeURL)
     {
         [self presentViewController:videoPlayerVC animated:YES completion:^{
             NSLog(@"Presented videoPlayerVC!!!");
@@ -257,20 +256,7 @@
 
 
 }
-//-(void)myMovieFinishedCallback:(NSNotification*)aNotification
-//{
-//    [self dismissMoviePlayerViewControllerAnimated];
-//    MPMoviePlayerController* moviePlayer = [aNotification object];
-//    [[NSNotificationCenter defaultCenter]
-//     removeObserver:self
-//     name:MPMoviePlayerPlaybackDidFinishNotification
-//     object:moviePlayer];
-//    [self dismissMoviePlayerViewControllerAnimated];
-//    [self dismissViewControllerAnimated:YES completion:^{
-//        //
-//        
-//    }];
-//}
+
 //#pragma mark - UIScrollViewDelegate Methods
 
 //-(void)scrollViewDidScroll:(UIScrollView *)scrollView

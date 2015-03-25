@@ -26,7 +26,7 @@
     self.view.backgroundColor = [UIColor blueColor];
     //[self initWithContentURL:[self.take getPathURL]];
     
-    //self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:[self.take getPathURL]];
+    self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:self.takeURL];
     self.moviePlayer.view.backgroundColor = [UIColor redColor];
     
     [self.moviePlayer prepareToPlay];
@@ -39,7 +39,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    //[super viewDidAppear:animated];
     [self.moviePlayer play];
 }
 

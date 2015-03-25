@@ -20,9 +20,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 @property (nonatomic, weak) IBOutlet RecordVideoView *recordVideoView;
 @property (nonatomic, weak) IBOutlet UIButton *recordButton;
+//@property (nonatomic, weak) IBOutlet UIButton *cameraPosition;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraPosition;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *flashButton;
+//@property (nonatomic, weak) IBOutlet UIButton *flashButton;
 
 - (IBAction)toggleRecording:(id)sender;
-//- (IBAction)changeCamera:(id)sender;
+- (IBAction)toggleCameraPosition:(id)sender;
+- (IBAction)toggleFlash:(id)sender;
 
 @property (nonatomic) dispatch_queue_t sessionQueue;
 @property (nonatomic) AVCaptureSession *session;
@@ -180,7 +185,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskAll;
+    return UIInterfaceOrientationMaskLandscape;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -212,7 +217,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             }
             else
             {
-                //[[self cameraButton] setEnabled:YES];
+                [[self cameraPosition] setEnabled:YES];
                 [[self recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
                 [[self recordButton] setEnabled:YES];
             }
@@ -225,15 +230,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         dispatch_async(dispatch_get_main_queue(), ^{
             if (isRunning)
             {
-                //[[self cameraButton] setEnabled:YES];
+                [[self cameraPosition] setEnabled:YES];
                 [[self recordButton] setEnabled:YES];
-                //[[self stillButton] setEnabled:YES];
+                [[self flashButton] setEnabled:YES];
             }
             else
             {
-                //[[self cameraButton] setEnabled:NO];
+                [[self cameraPosition] setEnabled:NO];
                 [[self recordButton] setEnabled:NO];
-                //[[self stillButton] setEnabled:NO];
+                [[self flashButton] setEnabled:NO];
             }
         });
     }
@@ -281,11 +286,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
 }
 
-- (IBAction)changeCamera:(id)sender
+- (IBAction)toggleCameraPosition:(id)sender
 {
-    //[[self cameraButton] setEnabled:NO];
-    [[self recordButton] setEnabled:NO];
-    //[[self stillButton] setEnabled:NO];
+    [[self cameraPosition] setEnabled:NO];
+    [[self recordButton] setEnabled:YES];
+    [[self flashButton] setEnabled:YES];
     
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *currentVideoDevice = [[self videoDeviceInput] device];
@@ -329,19 +334,22 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [[self session] commitConfiguration];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            //[[self cameraButton] setEnabled:YES];
+            [[self cameraPosition] setEnabled:YES];
             [[self recordButton] setEnabled:YES];
-            //[[self stillButton] setEnabled:YES];
+            [[self flashButton] setEnabled:YES];
         });
     });
 }
 
-- (IBAction)snapStillImage:(id)sender
+- (IBAction)toggleFlash:(id)sender
 {
     dispatch_async([self sessionQueue], ^{
         // Update the orientation on the still image output video connection before capturing.
         //[[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self recordVideoView] layer] connection] videoOrientation]];
-        
+        // check if flash is on. if it is on turn off
+        // if it is off :
+            // check the current position of the camera, if it is front facing change to back facing then flash mode can be enabled.
+            // if the camera position is changed to front facing and flash is on turn flash off before changing position of the camera to front facing.
         // Flash set to Auto for Still Capture
         [RecordVideoViewController setFlashMode:AVCaptureFlashModeAuto forDevice:[[self videoDeviceInput] device]];
         

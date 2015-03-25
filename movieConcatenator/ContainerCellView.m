@@ -36,7 +36,6 @@
 - (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
 {
     
-    
     if (takeCell.take.isSelected && ![self.library.selectedVideos containsObject:takeCell.take])
     {
         [self.library.selectedVideos addObject:self.library.scenes[takeCell.starTake.tag]];

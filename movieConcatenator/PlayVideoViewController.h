@@ -14,7 +14,7 @@
 
 @interface PlayVideoViewController : UIViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-@property (nonatomic, strong) Take *take;
+@property (nonatomic, strong) NSURL *takeURL;
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 
 @end
