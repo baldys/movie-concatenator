@@ -144,7 +144,7 @@
             <objects>
                 <tableViewController title="Scenes" clearsSelectionOnViewWillAppear="NO" id="J0d-P8-PPs" customClass="ScenesTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="150" sectionHeaderHeight="30" sectionFooterHeight="30" id="iLZ-Xg-fI4">
-                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.14901960780000001" green="0.14901960780000001" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -157,7 +157,7 @@
                             <outlet property="delegate" destination="J0d-P8-PPs" id="ecg-l5-J79"/>
                         </connections>
                     </tableView>
-                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems>
                         <barButtonItem title="MERGE" id="d9L-tu-Fep">
                             <connections>
@@ -173,6 +173,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="hQG-pr-Eam">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </refreshControl>
                     <connections>
                         <outlet property="tableView" destination="iLZ-Xg-fI4" id="oKD-b7-5rh"/>
                         <segue destination="U8g-fB-d4T" kind="show" identifier="ModallyRecordVideoSegue" id="LZE-ZD-h1p"/>
@@ -233,59 +236,71 @@
                         <viewControllerLayoutGuide type="bottom" id="3VI-jT-oZ3"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2gY-cd-Z15">
-                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="94" width="600" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IUw-RP-VCu" customClass="RecordVideoView">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="486"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HbT-De-sub">
+                                <rect key="frame" x="269" y="562" width="63" height="32"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="RGO-h6-pIF" appends="YES" id="eTH-kt-IZo"/>
-                                </connections>
-                            </view>
+                                <state key="normal" image="camera-toggle" backgroundImage="camera-toggle">
+                                    <color key="titleShadowColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <state key="selected" image="camera-toggle-pressed" backgroundImage="camera-toggle-pressed"/>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V6A-Qe-f3N">
-                                <rect key="frame" x="31" y="513" width="63" height="32"/>
+                                <rect key="frame" x="364" y="559" width="63" height="35"/>
                                 <state key="normal" image="flash-off">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="selected" image="flash-on" backgroundImage="flash-on"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HbT-De-sub">
-                                <rect key="frame" x="102" y="513" width="63" height="32"/>
+                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="IUw-RP-VCu" customClass="RecordVideoView">
+                                <rect key="frame" x="16" y="0.0" width="568" height="472"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-RV-2L4">
+                                        <rect key="frame" x="50" y="364" width="468" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="QXQ-If-B97"/>
+                                        </constraints>
+                                        <state key="normal" title="Record" image="1425881480_Record">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="toggleRecording:" destination="U8g-fB-d4T" eventType="touchUpInside" id="hOv-4P-sLE"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" image="camera-toggle" backgroundImage="camera-toggle">
-                                    <color key="titleShadowColor" red="0.4864885549767739" green="0.43662771909404174" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <state key="selected" image="camera-toggle-pressed" backgroundImage="camera-toggle-pressed"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-RV-2L4">
-                                <rect key="frame" x="185" y="513" width="97" height="35"/>
-                                <state key="normal" title="Record" image="1425881480_Record">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="jkd-RV-2L4" secondAttribute="centerX" id="8qP-Yg-ZuG"/>
+                                    <constraint firstItem="jkd-RV-2L4" firstAttribute="leading" secondItem="IUw-RP-VCu" secondAttribute="leading" constant="50" id="PZA-Eq-39q"/>
+                                    <constraint firstAttribute="trailing" secondItem="jkd-RV-2L4" secondAttribute="trailing" constant="50" id="TEc-be-cSg"/>
+                                    <constraint firstAttribute="bottom" secondItem="jkd-RV-2L4" secondAttribute="bottom" constant="8" id="qDd-Ua-ebu"/>
+                                </constraints>
                                 <connections>
-                                    <action selector="toggleRecording:" destination="U8g-fB-d4T" eventType="touchUpInside" id="hOv-4P-sLE"/>
+                                    <outletCollection property="gestureRecognizers" destination="RGO-h6-pIF" appends="YES" id="eTH-kt-IZo"/>
                                 </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="3VI-jT-oZ3" firstAttribute="top" secondItem="IUw-RP-VCu" secondAttribute="bottom" id="Jqb-yn-aGq"/>
-                            <constraint firstAttribute="width" secondItem="IUw-RP-VCu" secondAttribute="width" id="OeK-4T-Dc6"/>
-                            <constraint firstItem="IUw-RP-VCu" firstAttribute="top" secondItem="yac-oi-NH7" secondAttribute="bottom" id="Yoi-l3-m1L"/>
-                            <constraint firstItem="IUw-RP-VCu" firstAttribute="leading" secondItem="2gY-cd-Z15" secondAttribute="leading" id="vOF-vB-PwI"/>
+                            <constraint firstItem="3VI-jT-oZ3" firstAttribute="top" secondItem="IUw-RP-VCu" secondAttribute="bottom" constant="20" id="Jqb-yn-aGq"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="IUw-RP-VCu" secondAttribute="trailing" id="LtO-hI-aMq"/>
+                            <constraint firstItem="yac-oi-NH7" firstAttribute="bottom" secondItem="IUw-RP-VCu" secondAttribute="top" id="Yoi-l3-m1L"/>
+                            <constraint firstItem="IUw-RP-VCu" firstAttribute="leading" secondItem="2gY-cd-Z15" secondAttribute="leadingMargin" id="vOF-vB-PwI"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
-                        <barButtonItem image="camera-toggle" width="200" id="ddr-7f-uh6">
-                            <inset key="imageInsets" minX="0.0" minY="3" maxX="0.0" maxY="3"/>
+                        <barButtonItem image="camera-toggle" width="102" id="ddr-7f-uh6">
+                            <inset key="imageInsets" minX="0.0" minY="4" maxX="0.0" maxY="2"/>
                             <color key="tintColor" red="0.36078431370000003" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="toggleCameraPosition:" destination="U8g-fB-d4T" id="v59-9g-MKP"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem image="flash-off" width="200" id="a5a-Uh-fiD">
+                        <barButtonItem image="flash-off" width="100" id="a5a-Uh-fiD">
                             <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="toggleFlash:" destination="U8g-fB-d4T" id="KlB-Xl-KDs"/>
@@ -306,6 +321,8 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" translucent="NO" prompted="NO"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <outlet property="cameraPosition" destination="ddr-7f-uh6" id="qsS-oe-us7"/>
                         <outlet property="flashButton" destination="a5a-Uh-fiD" id="jaL-n9-0xG"/>

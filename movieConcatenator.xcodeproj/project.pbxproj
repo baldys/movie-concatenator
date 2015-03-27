@@ -13,20 +13,13 @@
 		9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815811AB306780027F1A0 /* white-outline-star-64.png */; };
 		9F4815841AB308F10027F1A0 /* ContainerCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815831AB308F10027F1A0 /* ContainerCellView.xib */; };
 		9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F4815861AB3093F0027F1A0 /* ContainerCellView.m */; };
-		9F48158A1AB3F8DB0027F1A0 /* RONcvLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F4815891AB3F8DB0027F1A0 /* RONcvLayout.m */; };
 		9F6D10171AAD303A00FA7C20 /* ScenesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */; };
 		9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */; };
 		9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */; };
-		9F8B657F1AA3CB950062A3F1 /* left37 copy.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B657E1AA3CB950062A3F1 /* left37 copy.png */; };
 		9F8B65811AA3CBAA0062A3F1 /* left37.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65801AA3CBAA0062A3F1 /* left37.png */; };
-		9F8B65831AA3CBF30062A3F1 /* play43.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65821AA3CBF30062A3F1 /* play43.png */; };
 		9F8B65851AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */; };
 		9F8B65871AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65861AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png */; };
-		9F8B65891AA3CC180062A3F1 /* list31.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B65881AA3CC180062A3F1 /* list31.png */; };
-		9FA5D8681AABB90C00318DF8 /* icon_video@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FA5D8671AABB90C00318DF8 /* icon_video@2x.png */; };
-		9FA5D86A1AABB91800318DF8 /* icon_video.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FA5D8691AABB91800318DF8 /* icon_video.png */; };
 		9FA5D86C1AABB94400318DF8 /* movie-noPlay-blank.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */; };
-		9FA5D86E1AABB95100318DF8 /* vid.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FA5D86D1AABB95100318DF8 /* vid.png */; };
 		9FAFA7421A98884A00F7396B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7411A98884A00F7396B /* main.m */; };
 		9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7441A98884A00F7396B /* AppDelegate.m */; };
 		9FAFA74E1A98884A00F7396B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9FAFA74C1A98884A00F7396B /* Main.storyboard */; };
@@ -45,7 +38,6 @@
 		9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7811A9D2BC700F7396B /* VideoController.m */; };
 		9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA78B1A9EB5FD00F7396B /* Scene.m */; };
 		9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA78F1A9EBBB300F7396B /* VideoLibrary.m */; };
-		9FAFA7981A9FBF5F00F7396B /* movie-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FAFA7971A9FBF5F00F7396B /* movie-1.png */; };
 		9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */; };
 /* End PBXBuildFile section */
 
@@ -68,25 +60,17 @@
 		9F4815831AB308F10027F1A0 /* ContainerCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContainerCellView.xib; sourceTree = "<group>"; };
 		9F4815851AB3093F0027F1A0 /* ContainerCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerCellView.h; sourceTree = "<group>"; };
 		9F4815861AB3093F0027F1A0 /* ContainerCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContainerCellView.m; sourceTree = "<group>"; };
-		9F4815881AB3F8D40027F1A0 /* RONcvLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RONcvLayout.h; sourceTree = "<group>"; };
-		9F4815891AB3F8DB0027F1A0 /* RONcvLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RONcvLayout.m; sourceTree = "<group>"; };
 		9F6D10151AAD303A00FA7C20 /* ScenesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScenesTableViewController.h; sourceTree = "<group>"; };
 		9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScenesTableViewController.m; sourceTree = "<group>"; };
 		9F6D10181AAD32DF00FA7C20 /* SceneTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneTableViewCell.h; sourceTree = "<group>"; };
 		9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneTableViewCell.m; sourceTree = "<group>"; };
 		9F6D102A1AAD487E00FA7C20 /* TakeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakeCollectionViewCell.h; sourceTree = "<group>"; };
 		9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakeCollectionViewCell.m; sourceTree = "<group>"; };
-		9F8B657E1AA3CB950062A3F1 /* left37 copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left37 copy.png"; sourceTree = "<group>"; };
 		9F8B65801AA3CBAA0062A3F1 /* left37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left37.png; sourceTree = "<group>"; };
-		9F8B65821AA3CBF30062A3F1 /* play43.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play43.png; sourceTree = "<group>"; };
 		9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1420512718_audio-video-outline-stop-128.png"; sourceTree = "<group>"; };
 		9F8B65861AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1420512706_audio-video-outline-play-128.png"; sourceTree = "<group>"; };
-		9F8B65881AA3CC180062A3F1 /* list31.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = list31.png; sourceTree = "<group>"; };
 		9F8B658A1AA3F0E20062A3F1 /* Sydney-iPhone.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Sydney-iPhone.m4v"; sourceTree = "<group>"; };
-		9FA5D8671AABB90C00318DF8 /* icon_video@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_video@2x.png"; sourceTree = "<group>"; };
-		9FA5D8691AABB91800318DF8 /* icon_video.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_video.png; sourceTree = "<group>"; };
 		9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie-noPlay-blank.png"; sourceTree = "<group>"; };
-		9FA5D86D1AABB95100318DF8 /* vid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vid.png; sourceTree = "<group>"; };
 		9FAFA73C1A98884A00F7396B /* movieConcatenator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movieConcatenator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FAFA7401A98884A00F7396B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FAFA7411A98884A00F7396B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -116,7 +100,6 @@
 		9FAFA78B1A9EB5FD00F7396B /* Scene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Scene.m; sourceTree = "<group>"; };
 		9FAFA78E1A9EBBB300F7396B /* VideoLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoLibrary.h; sourceTree = "<group>"; };
 		9FAFA78F1A9EBBB300F7396B /* VideoLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLibrary.m; sourceTree = "<group>"; };
-		9FAFA7971A9FBF5F00F7396B /* movie-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie-1.png"; sourceTree = "<group>"; };
 		9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoView.h; sourceTree = "<group>"; };
 		9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,8 +152,6 @@
 			isa = PBXGroup;
 			children = (
 				9F48158B1AB40F950027F1A0 /* Table View Cell */,
-				9F4815881AB3F8D40027F1A0 /* RONcvLayout.h */,
-				9F4815891AB3F8DB0027F1A0 /* RONcvLayout.m */,
 				9F6D10261AAD471300FA7C20 /* Collection View */,
 			);
 			name = TableView;
@@ -189,19 +170,13 @@
 		9FA5D86F1AAC981400318DF8 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				9FB81E2D1AC5461100127C71 /* Video Camera Icons */,
 				9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */,
 				9FAFA74F1A98884A00F7396B /* Images.xcassets */,
 				9F4815811AB306780027F1A0 /* white-outline-star-64.png */,
-				9FA5D86D1AABB95100318DF8 /* vid.png */,
-				9F8B657E1AA3CB950062A3F1 /* left37 copy.png */,
-				9F8B65881AA3CC180062A3F1 /* list31.png */,
 				9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */,
-				9FA5D8691AABB91800318DF8 /* icon_video.png */,
 				9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */,
 				9F8B658A1AA3F0E20062A3F1 /* Sydney-iPhone.m4v */,
-				9F8B65821AA3CBF30062A3F1 /* play43.png */,
-				9FA5D8671AABB90C00318DF8 /* icon_video@2x.png */,
-				9FAFA7971A9FBF5F00F7396B /* movie-1.png */,
 				9F8B65801AA3CBAA0062A3F1 /* left37.png */,
 				9F8B65861AA3CC060062A3F1 /* 1420512706_audio-video-outline-play-128.png */,
 			);
@@ -300,6 +275,13 @@
 				9F0020B91AA6BFD60018592C /* VideoMerger.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		9FB81E2D1AC5461100127C71 /* Video Camera Icons */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Video Camera Icons";
 			sourceTree = "<group>";
 		};
 		9FB9C3C71AC273F300952250 /* Video Camera */ = {
@@ -404,17 +386,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */,
-				9F8B657F1AA3CB950062A3F1 /* left37 copy.png in Resources */,
-				9F8B65831AA3CBF30062A3F1 /* play43.png in Resources */,
-				9FA5D86E1AABB95100318DF8 /* vid.png in Resources */,
-				9FAFA7981A9FBF5F00F7396B /* movie-1.png in Resources */,
 				9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */,
 				9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */,
 				9F8B65811AA3CBAA0062A3F1 /* left37.png in Resources */,
-				9FA5D8681AABB90C00318DF8 /* icon_video@2x.png in Resources */,
-				9FA5D86A1AABB91800318DF8 /* icon_video.png in Resources */,
 				9F8B65851AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png in Resources */,
-				9F8B65891AA3CC180062A3F1 /* list31.png in Resources */,
 				9FAFA74E1A98884A00F7396B /* Main.storyboard in Resources */,
 				9F4815841AB308F10027F1A0 /* ContainerCellView.xib in Resources */,
 				9FAFA7531A98884A00F7396B /* LaunchScreen.xib in Resources */,
@@ -442,7 +417,6 @@
 				9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */,
 				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
-				9F48158A1AB3F8DB0027F1A0 /* RONcvLayout.m in Sources */,
 				9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */,
 				9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */,
 				9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */,

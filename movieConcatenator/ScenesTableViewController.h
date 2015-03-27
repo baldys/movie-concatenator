@@ -20,6 +20,7 @@
 //@property RecordVideoViewController *recordViewController;
 
 @property (nonatomic, strong) VideoLibrary *library;
+@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 
 - (IBAction)addScene:(id)sender;
 

@@ -31,7 +31,7 @@
         self.take.selected = NO;
     }
     [_delegate didSelectStarButtonInCell:self];
-    
+    // [[_delegate didSelectStarButtonInCell:self.take]
 }
 
 - (void)prepareForReuse

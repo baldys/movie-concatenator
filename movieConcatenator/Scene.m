@@ -17,7 +17,7 @@
         {
             self.takes = [NSMutableArray array];
         }
-        self.title = @"default title";
+        self.title = nil;
     }
     return self;
 }
@@ -31,12 +31,6 @@
         if (!self.takes)
         {
             self.takes = [NSMutableArray array];
-            //// testing purposes:
-            //Take *newtake = [[Take alloc] init];
-            //[self.takes addObject:newtake];
-            
-            ////
-            
         }
     }
     return self;

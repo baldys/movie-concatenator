@@ -351,7 +351,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             // check the current position of the camera, if it is front facing change to back facing then flash mode can be enabled.
             // if the camera position is changed to front facing and flash is on turn flash off before changing position of the camera to front facing.
         // Flash set to Auto for Still Capture
-        [RecordVideoViewController setFlashMode:AVCaptureFlashModeAuto forDevice:[[self videoDeviceInput] device]];
+    
+        [RecordVideoViewController setFlashMode:AVCaptureFlashModeOn forDevice:[[self videoDeviceInput] device]];
         
         // Capture a still image.
 //        [[self stillImageOutput] captureStillImageAsynchronouslyFromConnection:[[self stillImageOutput] connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
@@ -392,15 +393,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
     
     //self.take = [[Take alloc] initWithURL:self.outputFileURL];
-    // write video at path to the disk. alloc and init a take and set its asset file url property to it.
     [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
         if (error)
             NSLog(@"%@", error);
         
-//        Scene *currentScene = self.library.scenes[self.sceneIndex];
-//        Take *newTake = [[Take alloc] initWithURL:outputFileURL];
-//        [currentScene.takes insertObject:newTake atIndex:0];
-//        [self.library saveToFilename:@"videolibrary.plist"];
+        Scene *currentScene = self.library.scenes[self.sceneIndex];
+        Take *newTake = [[Take alloc] initWithURL:outputFileURL];
+        [currentScene.takes addObject:newTake];
+        [self.library saveToFilename:@"videolibrary.plist"];
+        
         //[[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
         
         if (backgroundRecordingID != UIBackgroundTaskInvalid)
@@ -410,11 +411,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
          
     }];
     
-    Scene *currentScene = self.library.scenes[self.sceneIndex];
-    Take *newTake = [[Take alloc] initWithURL:outputFileURL];
-    [currentScene.takes insertObject:newTake atIndex:0];
-    [self.library saveToFilename:@"videolibrary.plist"];
-    //NSLog(@"ASSET FILE URL: %@", assetURL);
 }
 
 #pragma mark Device Configuration

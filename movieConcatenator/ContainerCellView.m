@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) Scene *collectionData;
 @property (strong, nonatomic) VideoLibrary *library;
-
+@property (strong, nonatomic) NSMutableArray *selectedItems;
 @end
 
 @implementation ContainerCellView
@@ -30,24 +30,16 @@
     [self.collectionView setCollectionViewLayout:flowLayout];
     
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
+   
     
 }
 
 - (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
 {
+    //Take *cellData = self.collectionData.takes[takeCell.starTake.tag];
     
-    if (takeCell.take.isSelected && ![self.library.selectedVideos containsObject:takeCell.take])
-    {
-        [self.library.selectedVideos addObject:self.library.scenes[takeCell.starTake.tag]];
-        [self.library.selectedVideos addObject:takeCell.take];
-        NSLog(@"take is selected but does not contain object");
-    }
-    //
-    else if (!takeCell.take.isSelected && [self.library.selectedVideos containsObject:takeCell.take])
-    {
-        [self.library.selectedVideos removeObject:takeCell.take];
-        NSLog(@"take is DEselected but contains object");
-    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:takeCell.take];
+
 }
 
 #pragma mark - Getter/Setter overrides
@@ -59,7 +51,6 @@
     [_collectionView reloadData];
     
 }
-
 
 #pragma mark - UICollectionViewDataSource methods
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -76,28 +67,30 @@
 {
     static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
-    cell.starTake.tag = indexPath.item;
+    //cell.starTake.tag = indexPath.item;
     
     //collectionView.tag = indexPath.item;
 
     Take *take = self.collectionData.takes[indexPath.row];
   
     NSLog(@"assset id: %@", take.assetID );
-    //cell.delegate = self;
-    
+        
     
     [take getThumbnailImage];
 
     
     [cell cellWithTake:take];
+    cell.delegate = self;
 
    
     //[collectionView reloadData];
     
 
-    
+
     return cell;
 }
+
+
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {

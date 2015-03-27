@@ -11,7 +11,7 @@
 #import "Take.h"
 #import "TakeCollectionViewCell.h"
 
-@interface ContainerCellView : UIView  <TakeCellDelegate>
+@interface ContainerCellView : UIView <TakeCellDelegate>
 
 - (void)setCollectionData:(Scene*)collectionData;
 

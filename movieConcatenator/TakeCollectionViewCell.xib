@@ -13,7 +13,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="126" height="116"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-1.png" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
+                    <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-noPlay-blank" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
                         <rect key="frame" x="5" y="5" width="115" height="105"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <accessibility key="accessibilityConfiguration">
@@ -62,7 +62,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="movie-1.png" width="512" height="512"/>
+        <image name="movie-noPlay-blank" width="64" height="64"/>
         <image name="white-outline-star-64" width="64" height="64"/>
         <image name="white-rating-star-64" width="64" height="64"/>
     </resources>

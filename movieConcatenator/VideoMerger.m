@@ -26,12 +26,16 @@
 
 -(AVAsset*)spliceAssets: (NSArray*)takes
 {
+    // creating the composition
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
     AVMutableCompositionTrack *compositionTrack1_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     AVMutableCompositionTrack *compositionTrack1_audio = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
 
     //keep track of CMTime *timer;
+    // timer = duration of the previous asset/assetTrack
+    // = initial point in time to insert the next asset
+    
     CMTime timer = kCMTimeZero;
     
     NSMutableArray *assets = [NSMutableArray array];
@@ -40,7 +44,7 @@
     {
         [assets addObject:[AVAsset assetWithURL:[take getPathURL]]];
     }
- 
+    // adding the assets
     for (AVAsset* asset in assets) {
         //add video from asset to track
         //NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
@@ -63,7 +67,7 @@
     
     self.mainComposition.instructions = [NSArray arrayWithObject:mainInstruction];
     self.mainComposition.frameDuration = CMTimeMake(1, 30);
-    self.mainComposition.renderSize = CGSizeMake(320.0, 480.0);
+    self.mainComposition.renderSize = CGSizeMake(640.0, 480.0);
     
     //NSLog(@"timer scale, value: %d %lld", timer.timescale, timer.value);
     //expecting positive values

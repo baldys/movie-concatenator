@@ -55,8 +55,7 @@
         
         NSError *error = nil;
         if (![[NSFileManager defaultManager]copyItemAtURL:url
-                                                    toURL:self.assetURL
-                                                    error:&error])
+                toURL:self.assetURL error:&error])
         {
             NSLog(@"file copy error %@", error);
         }

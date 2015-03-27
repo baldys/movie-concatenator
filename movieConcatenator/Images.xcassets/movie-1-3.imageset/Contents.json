@@ -2,7 +2,8 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "first.pdf"
+      "scale" : "1x",
+      "filename" : "movie-1.png"
     }
   ],
   "info" : {
