@@ -12,12 +12,11 @@
 #import "VideoLibrary.h"
 @class TakeCollectionViewCell;
 
-//@protocol TakeCellDelegate
+@protocol TakeCellDelegate
+
+-(void)didSelectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
 //
-//-(void)didSelectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
-//-(void)didDeselectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
-//
-//@end
+@end
 
 @interface TakeCollectionViewCell : UICollectionViewCell
 
@@ -29,7 +28,7 @@
 //@property (strong, nonatomicv) AVAsset *videoAsset;
 @property (strong, nonatomic) VideoLibrary *library;
 @property (strong, nonatomic) Take* take;
-//@property (nonatomic, weak) id <TakeCellDelegate> delegate;
+@property (nonatomic, weak) id <TakeCellDelegate> delegate;
 
 -(void)cellWithTake:(Take*)take;
 

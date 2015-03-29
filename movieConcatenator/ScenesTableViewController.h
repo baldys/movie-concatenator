@@ -15,6 +15,8 @@
 
 @class RecordVideoViewController;
 @class TakeCollectionViewCell;
+@class Take;
+
 @interface ScenesTableViewController:UITableViewController<UITableViewDataSource, UITableViewDelegate>
 
 //@property RecordVideoViewController *recordViewController;

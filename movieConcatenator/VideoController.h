@@ -15,6 +15,7 @@
 
 
 @property (nonatomic, retain) NSMutableArray *videos;
+
 +(VideoController*)videoController;
 
 - (void) addTake:(Take*)take toSceneAtIndex:(NSInteger)sceneNumber;

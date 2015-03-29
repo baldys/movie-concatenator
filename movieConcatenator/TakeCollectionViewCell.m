@@ -20,23 +20,28 @@
     self.starTake.selected = !self.starTake.selected;
     self.starTake.tag = sender.tag;
     
-    if (self.starTake.isSelected)
+    if (self.starTake.selected)
     {
         self.take.selected = YES; // by default all cells are not selected
         NSLog(@" asset id of selected take: %@" , self.take.assetID);
         NSLog(@"SELECTED %ld ", (long)self.starTake.tag);
 
-        //[_delegate didSelectStarButtonInCell:self];
-    }
-    else if (!self.starTake.isSelected)
-    {
-        self.take.selected = NO;
-        //[_delegate didDeselectStarButtonInCell:self];
         
     }
-    //[_delegate didSelectStarButtonInCell:self];
+    else
+    {
+        self.take.selected = NO;
+        
+        
+    }
+    // set delegate to cell in  collection view...
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:self];
+    //
+    // try sending a scene index instead
+    
+    [_delegate didSelectStarButtonInCell:self];
+    
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:self];
 
 }
 
@@ -65,6 +70,14 @@
     //self.assetURL = [take getPathURL];
     //[self.take getThumbnailImage];
 
+    if (take.isSelected)
+    {
+        self.starTake.selected = YES;
+    }
+    else if (!take.isSelected)
+    {
+        self.starTake.selected = NO;
+    }
 
 
     self.thumbnail.image = take.thumbnail;
@@ -77,6 +90,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
         // Initialization code
     }
     return self;

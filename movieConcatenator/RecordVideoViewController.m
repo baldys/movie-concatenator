@@ -393,10 +393,10 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
     
     //self.take = [[Take alloc] initWithURL:self.outputFileURL];
-    [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
-        if (error)
-            NSLog(@"%@", error);
-        
+//    [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
+//        if (error)
+//            NSLog(@"%@", error);
+    
         Scene *currentScene = self.library.scenes[self.sceneIndex];
         Take *newTake = [[Take alloc] initWithURL:outputFileURL];
         [currentScene.takes addObject:newTake];
@@ -409,7 +409,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
              [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
         }
          
-    }];
+    //}];
     
 }
 

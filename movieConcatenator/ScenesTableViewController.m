@@ -12,7 +12,7 @@
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
 
-@interface ScenesTableViewController ()
+@interface ScenesTableViewController () <TakeCellDelegate>
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
@@ -53,6 +53,11 @@
         selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didDeselectStarButtonInCell:) name:@"didDeselectStarButtonInCell" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishJoiningVideos:) name:@"didFinishJoiningVideos" object:nil];
+    
+    if (!self.takesToConcatenate)
+    {
+        self.takesToConcatenate = [NSMutableArray array];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -253,39 +258,56 @@
     });
 
 }
-
+//
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
 {
-    if (!self.takesToConcatenate)
-    {
-        self.takesToConcatenate = [NSMutableArray array];
-    }
+    Take *take = [notification object];
 
-    Take *take = [[notification object] take];
-    NSInteger index = [[[notification object] starTake ]tag];
-    
-    NSLog(@"take selection : %hhd asset id: %@", [take isSelected], take.assetID);
     if (take.isSelected && ![self.takesToConcatenate containsObject:take])
     {
         /// 1
-       //self.library.scenes.takes[index];
+        // index = notification.object.startake.tag
+        // self. lib.scnes...
+        // take = scenes.takes[index] chck if selected if not set bool toyes. 
+        //self.library.scenes.takes[index];
         /// 2
         [self.takesToConcatenate addObject:take];
         NSLog(@"take is selected but does not contain object %@", take.assetID);
-        
+                
     }
-    
     else if (!take.isSelected && [self.takesToConcatenate containsObject:take])
     {
         [self.takesToConcatenate removeObject:take];
-        NSLog(@"take is DEselected but contains object");
     }
-    else
-    {
-        NSLog(@"Neither?");
-    }
-    
+
+
 }
+//
+//
+////    Take *take = [[notification object] take];
+////    NSInteger index = [[[notification object] starTake ]tag];
+////    
+////    NSLog(@"take selection : %hhd asset id: %@", [take isSelected], take.assetID);
+////
+////    
+//
+//if (takeCell.take.isSelected && ![self.takesToConcatenate containsObject:takeCell.take])
+//{
+//    [self.takesToConcatenate addObject:takeCell.take];
+//    NSLog(@"take is selected but does not contain object");
+//}
+////
+//else if (!takeCell.take.isSelected && [self.takesToConcatenate containsObject:takeCell.take])
+//{
+//    [self.takesToConcatenate removeObject:takeCell.take];
+//    NSLog(@"take is DEselected but contains object");
+//}
+////    else
+////    {
+////        NSLog(@"Neither?");
+////    }
+//    
+//}
 
 //- (void) didDeselectStarButtonInCell:(NSNotification*)notification
 //{
