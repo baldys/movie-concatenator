@@ -30,7 +30,7 @@
     if (!(self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) return nil;
 
     self.containerCellView = [[NSBundle mainBundle] loadNibNamed:@"ContainerCellView" owner:self options:nil][0];
-   _containerCellView.frame = self.bounds;
+    _containerCellView.frame = self.bounds;
     [self.contentView addSubview:_containerCellView];
 
     return self;

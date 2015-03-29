@@ -13,7 +13,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="126" height="116"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-noPlay-blank" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
+                    <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-noPlay-blank" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
                         <rect key="frame" x="5" y="5" width="115" height="105"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <accessibility key="accessibilityConfiguration">
@@ -24,7 +24,7 @@
                             <constraint firstAttribute="height" constant="105" id="iv9-av-yY6"/>
                         </constraints>
                     </imageView>
-                    <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rDL-AX-Xbx">
+                    <button opaque="NO" multipleTouchEnabled="YES" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rDL-AX-Xbx">
                         <rect key="frame" x="7" y="80" width="32" height="32"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="32" id="6LJ-Tc-6pi"/>

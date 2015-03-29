@@ -34,14 +34,25 @@
     
 }
 
-- (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
-{
-    //Take *cellData = self.collectionData.takes[takeCell.starTake.tag];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:takeCell.take];
+//- (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
+//{
+//    NSLog(@"Take cell is selected? %hhd", takeCell.take.selected);
+//    
+//    NSLog(@"DIDSELECTSTARBUTTONINCELL DELEGATE ###$$$####$$#### takeCell.starTake.tag: %ld", (long)takeCell.starTake.tag);
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:takeCell.take];
+//
+//}
 
-}
-
+//- (void) didDeselectStarButtonInCell:(TakeCollectionViewCell *)takeCell
+//{
+//    //Take *cellData = self.collectionData.takes[takeCell.starTake.tag];
+//    
+//    
+//    
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"didDeselectStarButtonInCell" object:takeCell.take];
+//    
+//}
 #pragma mark - Getter/Setter overrides
 - (void)setCollectionData:(Scene*)collectionData
 {
@@ -67,11 +78,11 @@
 {
     static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
-    //cell.starTake.tag = indexPath.item;
+    cell.starTake.tag = indexPath.item;
     
     //collectionView.tag = indexPath.item;
 
-    Take *take = self.collectionData.takes[indexPath.row];
+    Take *take = _collectionData.takes[indexPath.row];
   
     NSLog(@"assset id: %@", take.assetID );
         
@@ -80,7 +91,7 @@
 
     
     [cell cellWithTake:take];
-    cell.delegate = self;
+    //cell.delegate = self;
 
    
     //[collectionView reloadData];

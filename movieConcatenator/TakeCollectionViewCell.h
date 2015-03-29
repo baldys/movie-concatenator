@@ -9,14 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "Take.h"
 #import "Scene.h"
-
+#import "VideoLibrary.h"
 @class TakeCollectionViewCell;
 
-@protocol TakeCellDelegate
-
--(void)didSelectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
-
-@end
+//@protocol TakeCellDelegate
+//
+//-(void)didSelectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
+//-(void)didDeselectStarButtonInCell:(TakeCollectionViewCell*)takeCell;
+//
+//@end
 
 @interface TakeCollectionViewCell : UICollectionViewCell
 
@@ -25,9 +26,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *starTake;
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnail;
 //@property (strong, nonatomic) NSURL* assetURL;
-//@property (strong, nonatomic) AVAsset *videoAsset;
+//@property (strong, nonatomicv) AVAsset *videoAsset;
+@property (strong, nonatomic) VideoLibrary *library;
 @property (strong, nonatomic) Take* take;
-@property (nonatomic, weak) id <TakeCellDelegate> delegate;
+//@property (nonatomic, weak) id <TakeCellDelegate> delegate;
 
 -(void)cellWithTake:(Take*)take;
 

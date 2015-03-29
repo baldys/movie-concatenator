@@ -51,6 +51,8 @@
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didDeselectStarButtonInCell:) name:@"didDeselectStarButtonInCell" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishJoiningVideos:) name:@"didFinishJoiningVideos" object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -244,10 +246,12 @@
         
         // do this on background thread while scene details are being added.
         //[self.library saveToFilename:@"videolibrary.plist"];
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            
+        });
     });
-    // do this on main queue in block above
-    [self.tableView reloadData];
+
 }
 
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
@@ -257,24 +261,43 @@
         self.takesToConcatenate = [NSMutableArray array];
     }
 
-    Take *take = [notification object];
+    Take *take = [[notification object] take];
+    NSInteger index = [[[notification object] starTake ]tag];
     
+    NSLog(@"take selection : %hhd asset id: %@", [take isSelected], take.assetID);
     if (take.isSelected && ![self.takesToConcatenate containsObject:take])
     {
         /// 1
-       // [self.takesToConcatenate addObject:self.collectionData.takes[takeCell.starTake.tag]];
+       //self.library.scenes.takes[index];
         /// 2
         [self.takesToConcatenate addObject:take];
-        NSLog(@"take is selected but does not contain object");
+        NSLog(@"take is selected but does not contain object %@", take.assetID);
+        
     }
-    //
+    
     else if (!take.isSelected && [self.takesToConcatenate containsObject:take])
     {
         [self.takesToConcatenate removeObject:take];
         NSLog(@"take is DEselected but contains object");
     }
+    else
+    {
+        NSLog(@"Neither?");
+    }
     
 }
+
+//- (void) didDeselectStarButtonInCell:(NSNotification*)notification
+//{
+//    Take *take = [notification object];
+//    
+//    if (!take.isSelected && [self.takesToConcatenate containsObject:take])
+//    {
+//        [self.takesToConcatenate removeObject:take];
+//        NSLog(@"take is DEselected but contains object");
+//    }
+//    
+//}
 
 
 - (IBAction)ConcatenateSelectedTakes:(id)sender
@@ -284,6 +307,7 @@
     NSLog(@"################# number of items in  %lu",(unsigned long)[self.takesToConcatenate count]);
     if (self.takesToConcatenate.count > 1)
     {
+        
         [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
     }
     else
@@ -322,7 +346,16 @@
 //    [currentScene.takes insertObject:newTake atIndex:0];
 //    [self.library saveToFilename:@"videolibrary.plist"];
     //[self.tableView reloadData];
+    
+    
     RecordVideoViewController *recordViewController = segue.sourceViewController;
+    if (recordViewController.outputFileURL == nil)
+    {
+        return;
+    }
+//    Scene *scene = []
+//    Take *newTake = [[Take alloc] initWithURL:recordViewController.outputFileURL];
+//    [currentScene.takes]
     __weak __typeof(self) weakSelf = self;
 
     recordViewController.completionBlock = ^void (BOOL success)
@@ -332,13 +365,19 @@
         {
             NSLog(@"saving video");
             [weakSelf.library saveToFilename:@"videolibrary.plist"];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
         }
-        
-        [self.tableView reloadData];
     };
-    
 }
 
+- (void) didFinishJoiningVideos
+{
+    self.takesToConcatenate = nil;
+    
+}
 
 
 

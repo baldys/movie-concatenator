@@ -20,18 +20,24 @@
     self.starTake.selected = !self.starTake.selected;
     self.starTake.tag = sender.tag;
     
-    if (self.starTake.selected)
+    if (self.starTake.isSelected)
     {
         self.take.selected = YES; // by default all cells are not selected
-        
+        NSLog(@" asset id of selected take: %@" , self.take.assetID);
         NSLog(@"SELECTED %ld ", (long)self.starTake.tag);
+
+        //[_delegate didSelectStarButtonInCell:self];
     }
-    else
+    else if (!self.starTake.isSelected)
     {
         self.take.selected = NO;
+        //[_delegate didDeselectStarButtonInCell:self];
+        
     }
-    [_delegate didSelectStarButtonInCell:self];
-    // [[_delegate didSelectStarButtonInCell:self.take]
+    //[_delegate didSelectStarButtonInCell:self];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:self];
+
 }
 
 - (void)prepareForReuse

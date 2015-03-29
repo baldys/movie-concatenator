@@ -29,8 +29,8 @@
     // creating the composition
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
-    AVMutableCompositionTrack *compositionTrack1_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    AVMutableCompositionTrack *compositionTrack1_audio = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_audio = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
 
     //keep track of CMTime *timer;
     // timer = duration of the previous asset/assetTrack
@@ -38,8 +38,10 @@
     
     CMTime timer = kCMTimeZero;
     
-    NSMutableArray *assets = [NSMutableArray array];
+    self.mainComposition = [AVMutableVideoComposition videoComposition];
     
+    NSMutableArray *assets = [NSMutableArray array];
+    NSMutableArray *compositionInstructions = [NSMutableArray array];
     for (Take* take in takes)
     {
         [assets addObject:[AVAsset assetWithURL:[take getPathURL]]];
@@ -47,53 +49,56 @@
     // adding the assets
     for (AVAsset* asset in assets) {
         //add video from asset to track
-        //NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
-        AVAssetTrack *assetTrack1_video = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
-        AVAssetTrack *assetTrack1_audio = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-        [compositionTrack1_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack1_video atTime:timer error:nil];
-        // audio audio from asset to track
-        [compositionTrack1_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack1_audio atTime:timer error:nil];
+        
+        NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
+        
+        AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
+        AVAssetTrack *assetTrack_audio = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        
+        [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_video atTime:timer error:nil];
+        
+        [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_audio atTime:timer error:nil];
         timer = CMTimeAdd(timer, asset.duration);
+        
+//        AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//        
+//        // set the time range to span the duration of the current video track.
+//        mainInstruction.timeRange = CMTimeRangeMake(timer, CMTimeAdd(timer, assetTrack_video.timeRange.duration));
+//        
+//        AVMutableVideoCompositionLayerInstruction *firstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+//        
+//        [firstlayerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+//        
+//        mainInstruction.layerInstructions = [NSArray arrayWithObjects:firstlayerInstruction, nil];
+       // compositionTrack_video.preferredTransform = CGAffineTransformMakeRotation(<#CGFloat angle#>)
+        
+        
     }
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
     
-    AVMutableVideoCompositionLayerInstruction *firstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack1_video];
-    [firstlayerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+    [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+    
+    [layerInstruction setTransform:compositionTrack_video.preferredTransform atTime:kCMTimeZero];
+    
     AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     
     mainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
-    mainInstruction.layerInstructions = [NSArray arrayWithObjects:firstlayerInstruction, nil];
+    
+    mainInstruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
     
     self.mainComposition = [AVMutableVideoComposition videoComposition];
     
     self.mainComposition.instructions = [NSArray arrayWithObject:mainInstruction];
     self.mainComposition.frameDuration = CMTimeMake(1, 30);
-    self.mainComposition.renderSize = CGSizeMake(640.0, 480.0);
+    
+    self.mainComposition.renderSize = compositionTrack_video.naturalSize;
     
     //NSLog(@"timer scale, value: %d %lld", timer.timescale, timer.value);
     //expecting positive values
-    //NSLog(@"mixComposition properties: %@", mixComposition.debugDescription);
+    NSLog(@"mixComposition properties: %@", mixComposition.debugDescription);
     
     
     return mixComposition;
-}
-
-
-// return a new composition by adding an asset to a compositon
-- (AVMutableComposition*) mixCompositionFromAsset
-{
-    AVMutableComposition *composition = [[AVMutableComposition alloc] init];
-    
-    // video composition track
-    //add a video track to the composition.
-    AVMutableCompositionTrack *compositionTrack_video =
-    [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    
-    // audio composition track
-    //add anaudio track to a composition.
-    AVMutableCompositionTrack *compositionTrack_audio =
-    [composition addMutableTrackWithMediaType:AVMediaTypeAudio                                     preferredTrackID:kCMPersistentTrackID_Invalid];
-    
-    return composition;
 }
 
 // existing asset -> audio+video asset tracks -> add to  MutableComposition
@@ -183,6 +188,8 @@
                                     }
                                     else
                                     {
+                                        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidFinishJoiningVideos" object:nil];
+                                        
                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                                         [alert show];
                                     }
