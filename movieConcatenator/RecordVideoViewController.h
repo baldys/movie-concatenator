@@ -17,13 +17,15 @@
 
 @interface RecordVideoViewController : UIViewController
 
-@property (nonatomic, strong) VideoLibrary* library;
-@property (nonatomic, strong) Scene *scene;
+//@property (nonatomic, strong) VideoLibrary* library;
+//@property (nonatomic, strong) Scene *scene;
 @property (nonatomic) NSInteger sceneIndex;
-@property (nonatomic, strong) Take *take;
+//@property (nonatomic, strong) Take *take;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 @property (nonatomic, strong) NSURL *outputFileURL;
 //- (IBAction)backToRootVC:(id)sender;
 
+- (IBAction)cancel:(UIBarButtonItem *)sender;
+- (IBAction)save:(id)sender;
 
 @end

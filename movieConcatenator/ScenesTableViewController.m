@@ -11,12 +11,14 @@
 #import "Take.h"
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
-
+#import "NewSceneDetailsViewController.h"
 @interface ScenesTableViewController () <TakeCellDelegate>
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIButton *addTakeButton;
+@property (nonatomic) NSInteger sceneIndexForNewTake;
+
 
 @end
 
@@ -26,16 +28,19 @@
 {
     [super viewDidLoad];
 
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-    
-    VideoLibrary *library = [VideoLibrary
-                             libraryWithFilename:@"videolibrary.plist"];
+    // self.navigationItem.leftBarButtonItem = self.editButtonItem;
+    /// self.library =
+    /// self.library = [VideoLibrary libraryWithFilename:@:videolibrary.plist];
+    /// if (!self.library)
+    ///{
+    VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
     if (!library)
     {
         NSLog(@"no library");
         library = [[VideoLibrary alloc] init];
         [library saveToFilename:@"videolibrary.plist"];
     }
+    
     self.library = library;
     self.scenes = library.scenes;
 
@@ -50,9 +55,9 @@
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-        selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didDeselectStarButtonInCell:) name:@"didDeselectStarButtonInCell" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishJoiningVideos:) name:@"didFinishJoiningVideos" object:nil];
+     selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishJoiningVideos:) name:@"didFinishJoiningVideos" object:nil];
     
     if (!self.takesToConcatenate)
     {
@@ -124,10 +129,8 @@
     [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier
                                     forIndexPath:indexPath];
 
-    /// try cahangeing this
-    Scene *scene = self.library.scenes[indexPath.section];
-    // to this
-    // Scene *scene = self.scenes[indexPath.section];
+    ///////>>>>>>>>>>>>>>>>>>>>>
+    Scene *scene = self.scenes[indexPath.section];
     [cell setCollectionData:scene];
     
     return cell;
@@ -204,13 +207,17 @@
 
 - (IBAction)addTakeButtonPressed:(UIButton*)sender
 {
-    [self performSegueWithIdentifier:@"ModallyRecordVideoSegue" sender:sender];
+    
+    self.sceneIndexForNewTake =sender.tag;
+    NSLog(@"sender.tag = %ld", (long)sender.tag);
+    [self performSegueWithIdentifier:@"recordATake" sender:sender];
     
 }
 
     //[self.navigationController presentViewController:self.recordViewController animated:YES completion:^{
         
     //}];
+
     //[self.navigationController pushViewController:recordVideoVC animated:YES];
     
 //    __weak __typeof(self) weakSelf = self;
@@ -240,24 +247,23 @@
     }
 }
 
-- (IBAction)addScene:(id)sender
-{
-    // TO DO
-    //present new view controller "ADD SCENE VIEW CONTROLLER:"
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        Scene *newScene = [[Scene alloc]init];
-        newScene.title = @"New Scene";
-        [self.library.scenes addObject:newScene];
-        
-        // do this on background thread while scene details are being added.
-        //[self.library saveToFilename:@"videolibrary.plist"];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            
-        });
-    });
-
-}
+//- (IBAction)addScene:(id)sender
+//{
+//    // TO DO
+//    //present new view controller "ADD SCENE VIEW CONTROLLER:"
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        Scene *newScene = [[Scene alloc]init];
+//        //newScene.title = @"New Scene";
+//        newScene.libraryIndex = self.library.scenes.count;
+//        [self.library.scenes addObject:newScene];
+//        [self.library saveToFilename:@"videolibrary.plist"];
+////        dispatch_async(dispatch_get_main_queue(), ^{
+////            [self.tableView reloadData];
+//        
+//       // });
+//    });
+//
+//}
 //
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
 {
@@ -282,45 +288,6 @@
 
 
 }
-//
-//
-////    Take *take = [[notification object] take];
-////    NSInteger index = [[[notification object] starTake ]tag];
-////    
-////    NSLog(@"take selection : %hhd asset id: %@", [take isSelected], take.assetID);
-////
-////    
-//
-//if (takeCell.take.isSelected && ![self.takesToConcatenate containsObject:takeCell.take])
-//{
-//    [self.takesToConcatenate addObject:takeCell.take];
-//    NSLog(@"take is selected but does not contain object");
-//}
-////
-//else if (!takeCell.take.isSelected && [self.takesToConcatenate containsObject:takeCell.take])
-//{
-//    [self.takesToConcatenate removeObject:takeCell.take];
-//    NSLog(@"take is DEselected but contains object");
-//}
-////    else
-////    {
-////        NSLog(@"Neither?");
-////    }
-//    
-//}
-
-//- (void) didDeselectStarButtonInCell:(NSNotification*)notification
-//{
-//    Take *take = [notification object];
-//    
-//    if (!take.isSelected && [self.takesToConcatenate containsObject:take])
-//    {
-//        [self.takesToConcatenate removeObject:take];
-//        NSLog(@"take is DEselected but contains object");
-//    }
-//    
-//}
-
 
 - (IBAction)ConcatenateSelectedTakes:(id)sender
 {
@@ -343,19 +310,49 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
 {
-    NSLog(@"====== ScenesTableViewController.prepareForSegue()");
-    
-    UIButton *addTakeButton = (UIButton*)sender;
-    NSLog(@"buttontag = %li", (long)addTakeButton.tag);
-    
-    Scene *currentScene = self.library.scenes[addTakeButton.tag];
+    if ([segue.identifier isEqualToString:@"createNewScene"])
+    {
+        // create the scene so that it gets created in the background while the other view controller is showing..?
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            Scene *newScene = [[Scene alloc]init];
+            //newScene.title = @"New Scene";
+            [self.library.scenes addObject:newScene];
+            
+            
+            // do this on background thread while scene details are being added.
+            //[self.library saveToFilename:@"videolibrary.plist"];
+            
+           
+                
+           
+        });
+        ///AddSceneViewController *asvc = segue.destinationViewController;
+                //Scene *sceneToAdd = [[Scene alloc] init];
+        //asvc.sceneData = sceneToAdd;
+        //asvc.sceneNumberField.text: self.scenes.count;
 
-    RecordVideoViewController *recordViewController = segue.destinationViewController;
-    [recordViewController setSceneIndex:addTakeButton.tag];
-    [recordViewController setLibrary:self.library];
-    [recordViewController setScene:currentScene];
+//        else if ([segue.identifier isEqualToString:@"recordATake"])
+//        {
+//        }
+    }
+    
+        UIButton *addTakeButton = (UIButton*)sender;
+        NSLog(@"buttontag = %li", (long)addTakeButton.tag);
+        self.sceneIndexForNewTake = addTakeButton.tag;
+    
+    
+    
+    
 
-    NSLog(@"recordViewController.scene has been set to %@", currentScene.title);
+    //Scene *currentScene = self.library.scenes[addTakeButton.tag];
+
+    //RecordVideoViewController *recordViewController = segue.destinationViewController;
+    //[recordViewController setSceneIndex:addTakeButton.tag];
+    //[recordViewController setLibrary:self.library];
+    //[recordViewController setScene:currentScene];
+
+    //NSLog(@"recordViewController.scene has been set to %@", currentScene.title);
 
 }
 
@@ -364,35 +361,73 @@
     NSLog(@"unwind segue callled");
     // add take stuff goes HERE!> get the file output url from the source view controller
 //    Scene *currentScene = self.library.scenes[self.segue.destinationViewController.sceneIndex];
+    
 //    Take *newTake = [[Take alloc] initWithURL:segue.destinatiooutputFileURL];
 //    [currentScene.takes insertObject:newTake atIndex:0];
 //    [self.library saveToFilename:@"videolibrary.plist"];
     //[self.tableView reloadData];
     
-    
-    RecordVideoViewController *recordViewController = segue.sourceViewController;
-    if (recordViewController.outputFileURL == nil)
-    {
-        return;
-    }
-//    Scene *scene = []
-//    Take *newTake = [[Take alloc] initWithURL:recordViewController.outputFileURL];
-//    [currentScene.takes]
-    __weak __typeof(self) weakSelf = self;
 
-    recordViewController.completionBlock = ^void (BOOL success)
-    {
-        NSLog(@"recordViewController.completionBlock()");
-        if (success)
-        {
-            NSLog(@"saving video");
-            [weakSelf.library saveToFilename:@"videolibrary.plist"];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
-        }
-    };
+//        RecordVideoViewController *recordViewController = segue.sourceViewController;
+//        if (segue.sourceViewController.outputFileURL == nil)
+//        {
+//            return;
+//        }
+    
+//       __weak __typeof(self) weakSelf = self;
+//        recordViewController.completionBlock = ^void (BOOL success)
+//        {
+//            NSLog(@"recordViewController.completionBlock()");
+//            if (success)
+//            {
+//                NSLog(@"saving video");
+//                [weakSelf.library saveToFilename:@"videolibrary.plist"];
+//                
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.tableView reloadData];
+//                });
+//            }
+//        };
+    
+    
+    
+    // cancel was pressed/ no take should be created. delete item at the url it recorded the video to if it exists.
+   
+    
+
+//    Take *newTake = [[Take alloc] initWithURL:recordViewController.outputFileURL];
+//    [[self.scenes[recordViewController.sceneIndex] takes] addObject:newTake];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self.library saveToFilename:@"videolibrary.plist"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    });
+//
+    
+//    };
+    
+}
+
+- (void) didFinishRecordingVideoToURL:(NSNotification*)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{
+                       Take *newTake = [[Take alloc] initWithURL:notification.object];
+                       newTake.sceneNumber = _sceneIndexForNewTake;
+                    
+                       [[weakSelf.library.scenes[_sceneIndexForNewTake] takes] addObject:newTake];
+                       ///[[weakSelf.scenes[recordViewController.sceneIndex] takes] addObject:newTake];
+                       [weakSelf.library saveToFilename:@"videolibrary.plist"];
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           [weakSelf.tableView reloadData];
+                       });
+                   });
+    // after presenting the record view controller with a modal segue instead of storyboard, dismiss the view controller here.
+
 }
 
 - (void) didFinishJoiningVideos

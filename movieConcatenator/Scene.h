@@ -13,9 +13,11 @@
 @interface Scene : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSString *title;
-@property (nonatomic, strong) NSMutableArray *takes;
-@property NSInteger takeNumber;
 
+//@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSMutableArray *takes;
+
+@property NSInteger libraryIndex;
 - (instancetype) init;
 - (instancetype) initWithTitle:(NSString*)title;
 

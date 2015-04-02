@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F0020B91AA6BFD60018592C /* VideoMerger.m */; };
+		9F18027A1ACB0C1E00CFBCB4 /* UIImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1802791ACB0C1E00CFBCB4 /* UIImage+Extras.m */; };
+		9F18027D1ACB154100CFBCB4 /* AddSceneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F18027C1ACB154100CFBCB4 /* AddSceneViewController.m */; };
+		9F1802831ACD130D00CFBCB4 /* NewSceneDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1802821ACD130D00CFBCB4 /* NewSceneDetailsViewController.m */; };
 		9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */; };
 		9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */; };
 		9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815811AB306780027F1A0 /* white-outline-star-64.png */; };
@@ -54,6 +57,12 @@
 /* Begin PBXFileReference section */
 		9F0020B81AA6BFD60018592C /* VideoMerger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoMerger.h; sourceTree = "<group>"; };
 		9F0020B91AA6BFD60018592C /* VideoMerger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoMerger.m; sourceTree = "<group>"; };
+		9F1802781ACB0C1E00CFBCB4 /* UIImage+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Extras.h"; sourceTree = "<group>"; };
+		9F1802791ACB0C1E00CFBCB4 /* UIImage+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extras.m"; sourceTree = "<group>"; };
+		9F18027B1ACB154100CFBCB4 /* AddSceneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddSceneViewController.h; sourceTree = "<group>"; };
+		9F18027C1ACB154100CFBCB4 /* AddSceneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddSceneViewController.m; sourceTree = "<group>"; };
+		9F1802811ACD130D00CFBCB4 /* NewSceneDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewSceneDetailsViewController.h; path = movieConcatenator/NewSceneDetailsViewController.h; sourceTree = "<group>"; };
+		9F1802821ACD130D00CFBCB4 /* NewSceneDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewSceneDetailsViewController.m; path = movieConcatenator/NewSceneDetailsViewController.m; sourceTree = "<group>"; };
 		9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TakeCollectionViewCell.xib; sourceTree = "<group>"; };
 		9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "00cdea-outline-star-64.png"; sourceTree = "<group>"; };
 		9F4815811AB306780027F1A0 /* white-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-outline-star-64.png"; sourceTree = "<group>"; };
@@ -63,7 +72,7 @@
 		9F6D10151AAD303A00FA7C20 /* ScenesTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScenesTableViewController.h; sourceTree = "<group>"; };
 		9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScenesTableViewController.m; sourceTree = "<group>"; };
 		9F6D10181AAD32DF00FA7C20 /* SceneTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneTableViewCell.h; sourceTree = "<group>"; };
-		9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneTableViewCell.m; sourceTree = "<group>"; };
+		9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 1; path = SceneTableViewCell.m; sourceTree = "<group>"; };
 		9F6D102A1AAD487E00FA7C20 /* TakeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakeCollectionViewCell.h; sourceTree = "<group>"; };
 		9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakeCollectionViewCell.m; sourceTree = "<group>"; };
 		9F8B65801AA3CBAA0062A3F1 /* left37.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left37.png; sourceTree = "<group>"; };
@@ -187,6 +196,8 @@
 			isa = PBXGroup;
 			children = (
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
+				9F1802811ACD130D00CFBCB4 /* NewSceneDetailsViewController.h */,
+				9F1802821ACD130D00CFBCB4 /* NewSceneDetailsViewController.m */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
 				9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */,
@@ -255,6 +266,8 @@
 			children = (
 				9F6D10151AAD303A00FA7C20 /* ScenesTableViewController.h */,
 				9F6D10161AAD303A00FA7C20 /* ScenesTableViewController.m */,
+				9F18027B1ACB154100CFBCB4 /* AddSceneViewController.h */,
+				9F18027C1ACB154100CFBCB4 /* AddSceneViewController.m */,
 				9F6D10251AAD46FD00FA7C20 /* TableView */,
 			);
 			name = "View Controllers";
@@ -265,6 +278,8 @@
 			children = (
 				9FAFA77D1A9C170A00F7396B /* Take.h */,
 				9FAFA77E1A9C170A00F7396B /* Take.m */,
+				9F1802781ACB0C1E00CFBCB4 /* UIImage+Extras.h */,
+				9F1802791ACB0C1E00CFBCB4 /* UIImage+Extras.m */,
 				9FAFA78A1A9EB5FD00F7396B /* Scene.h */,
 				9FAFA78B1A9EB5FD00F7396B /* Scene.m */,
 				9FAFA78E1A9EBBB300F7396B /* VideoLibrary.h */,
@@ -413,14 +428,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F1802831ACD130D00CFBCB4 /* NewSceneDetailsViewController.m in Sources */,
 				9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */,
 				9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */,
 				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
+				9F18027A1ACB0C1E00CFBCB4 /* UIImage+Extras.m in Sources */,
 				9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */,
 				9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */,
 				9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */,
 				9FAFA77F1A9C170A00F7396B /* Take.m in Sources */,
+				9F18027D1ACB154100CFBCB4 /* AddSceneViewController.m in Sources */,
 				9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */,
 				9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */,
 				9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */,

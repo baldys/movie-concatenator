@@ -26,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *thumbnail;
 //@property (strong, nonatomic) NSURL* assetURL;
 //@property (strong, nonatomicv) AVAsset *videoAsset;
-@property (strong, nonatomic) VideoLibrary *library;
+//@property (strong, nonatomic) VideoLibrary *library;
 @property (strong, nonatomic) Take* take;
 @property (nonatomic, weak) id <TakeCellDelegate> delegate;
 

@@ -20,7 +20,7 @@
 
 #import "Take.h"
 #import "VideoLibrary.h"
-
+#import "UIImage+Extras.h"
 
 @interface Take ()
 
@@ -54,7 +54,7 @@
         NSLog(@"path url for the take _assetURL %@", _assetURL);
         
         NSError *error = nil;
-        if (![[NSFileManager defaultManager]copyItemAtURL:url
+        if (![[NSFileManager defaultManager]moveItemAtURL:url
                 toURL:self.assetURL error:&error])
         {
             NSLog(@"file copy error %@", error);
@@ -66,12 +66,20 @@
         
         _imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
-        _thumbnail = [UIImage imageNamed:@"vid.png"];
+        //;
 
         _thumbnail = [self loadThumbnailWithCompletionHandler:^ (UIImage *image){
+            self.thumbnail = image;
+            
             
         }];
-        [self getThumbnailImage];
+        if (_thumbnail == nil)
+        {
+            _thumbnail = [UIImage imageNamed:@"vid.png"];
+        }
+        
+        
+        //[self getThumbnailImage];
         
     }
     return self;
@@ -231,9 +239,8 @@
 - (void) getThumbnailImage
 {
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[self getPathURL]
-                                                options:nil];
-    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc]
-                                        initWithAsset:asset];
+        options:nil];
+    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
     generator.appliesPreferredTrackTransform = YES;
    
     AVAssetImageGeneratorCompletionHandler handler =
@@ -256,6 +263,8 @@
     
     [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]  completionHandler:handler];
 }
+
+
 
 
      

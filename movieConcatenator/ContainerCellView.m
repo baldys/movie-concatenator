@@ -14,8 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) Scene *collectionData;
-@property (strong, nonatomic) VideoLibrary *library;
-//@property (strong, nonatomic) NSMutableArray *selectedItems;
+//@property (strong, nonatomic) VideoLibrary *library;
+
 @end
 
 @implementation ContainerCellView
@@ -40,28 +40,10 @@
 
 - (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
 {
-    NSLog(@"Take cell is selected? %hhd", takeCell.take.selected);
-    
-    NSLog(@"DIDSELECTSTARBUTTONINCELL DELEGATE ###$$$####$$#### takeCell.starTake.tag: %ld", (long)takeCell.starTake.tag);
-    
-    
-    NSInteger index = takeCell.starTake.tag;
-    Take *take = self.collectionData.takes[index];
 
-    
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:takeCell.take];
 }
 
-//- (void) didDeselectStarButtonInCell:(TakeCollectionViewCell *)takeCell
-//{
-//    //Take *cellData = self.collectionData.takes[takeCell.starTake.tag];
-//    
-//    
-//    
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"didDeselectStarButtonInCell" object:takeCell.take];
-//    
-//}
 #pragma mark - Getter/Setter overrides
 - (void)setCollectionData:(Scene*)collectionData
 {
@@ -91,15 +73,21 @@
     
     //collectionView.tag = indexPath.item;
 
-    Take *take = _collectionData.takes[indexPath.row];
+    Take *take = self.collectionData.takes[indexPath.item];
   
     NSLog(@"assset id: %@", take.assetID );
     cell.delegate = self;
     
-    [take getThumbnailImage];
-
     
+//    if (take.thumbnail==nil)
+//    {
+//        [take getThumbnailImage];
+//    }
+    
+   
     [cell cellWithTake:take];
+    
+    
     
 
    

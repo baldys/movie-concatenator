@@ -23,7 +23,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 //@property (nonatomic, weak) IBOutlet UIButton *cameraPosition;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraPosition;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *flashButton;
-//@property (nonatomic, weak) IBOutlet UIButton *flashButton;
 
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)toggleCameraPosition:(id)sender;
@@ -33,7 +32,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) AVCaptureSession *session;
 @property (nonatomic) AVCaptureDeviceInput *videoDeviceInput;
 @property (nonatomic) AVCaptureMovieFileOutput *movieFileOutput;
-
+@property (nonatomic) AVCaptureDevice *videoDevice;
 // Utilities.
 @property (nonatomic) UIBackgroundTaskIdentifier backgroundRecordingID;
 @property (nonatomic, getter = isDeviceAuthorized) BOOL deviceAuthorized;
@@ -41,6 +40,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
 @end
+
+
+//CONTROL_HIGHLIGHT_COLOR = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]; // A nice blue
 
 @implementation RecordVideoViewController
 
@@ -58,14 +60,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
+    //self.recordButton.layer.cornerRadius = self.flashButton.layer.cornerRadius = self.cameraPosition.layer.cornerRadius = 4;
+    
+    //self.recordButton.clipsToBounds = self.flashButton.clipsToBounds = self.cameraPosition.clipsToBounds = YES;
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
 
     [self setSession:session];
     
     // Setup the preview view
-   [self.recordVideoView setSession:session];
+   [[self recordVideoView] setSession:session];
     
     // Check for device authorization
     [self checkDeviceAuthorizationStatus];
@@ -89,17 +95,16 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         {
             NSLog(@"%@", error);
         }
-        
+        [[self session] beginConfiguration];
         if ([session canAddInput:videoDeviceInput])
         {
             [session addInput:videoDeviceInput];
             [self setVideoDeviceInput:videoDeviceInput];
-            
+            [self setVideoDevice:videoDeviceInput.device];
             dispatch_async(dispatch_get_main_queue(), ^{
                 // Why are we dispatching this to the main queue?
                 // Because AVCaptureVideoPreviewLayer is the backing layer for AVCamPreviewView and UIView can only be manipulated on main thread.
                 // Note: As an exception to the above rule, it is not necessary to serialize video orientation changes on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
-                
                 [[(AVCaptureVideoPreviewLayer *)[[self recordVideoView] layer] connection] setVideoOrientation:(AVCaptureVideoOrientation)[self interfaceOrientation]];
             });
         }
@@ -134,12 +139,25 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 //            [session addOutput:stillImageOutput];
             //[self setStillImageOutput:stillImageOutput];
        // }
+        [[self session] commitConfiguration];
     });
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     dispatch_async([self sessionQueue], ^{
+        [self addObservers];
+        
+        [[self session] startRunning];
+    });
+  
+}
+
+-(void) addObservers
+{
+   
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
         //[self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
         [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
@@ -154,8 +172,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
                 [[strongSelf recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
             });
         }]];
-        [[self session] startRunning];
-    });
+       
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -168,8 +186,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         [self removeObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" context:SessionRunningAndDeviceAuthorizedContext];
         //[self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
-       [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
+        [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
+        
+        //[[NSNotificationCenter defaultCenter] postNotificationName:@"didStopRunning" object:[self outputFileURL]];
     });
+
+  
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -177,6 +199,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return YES;
 }
 
+
+//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+//{
+//    return UIInterfaceOrientationLandscapeLeft;
+//}
 - (BOOL)shouldAutorotate
 {
     // Disable autorotation of the interface when recording is in progress.
@@ -185,7 +212,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    return UIInterfaceOrientationMaskLandscapeLeft;
+    return //UIInterfaceOrientationMaskLandscapeLeft;
+    UIInterfaceOrientationMaskAll;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -212,12 +240,17 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             if (isRecording)
             {
                 //[[self cameraButton] setEnabled:NO];
+                
+                [[self cameraPosition] setEnabled:NO];
+                [[self flashButton] setEnabled:NO];
                 [[self recordButton] setTitle:NSLocalizedString(@"Stop", @"Recording button stop title") forState:UIControlStateNormal];
                 [[self recordButton] setEnabled:YES];
             }
             else
             {
                 [[self cameraPosition] setEnabled:YES];
+                [[self flashButton] setEnabled:YES];
+                
                 [[self recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
                 [[self recordButton] setEnabled:YES];
             }
@@ -248,7 +281,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }
 }
 
-#pragma mark Actions
+
 
 - (IBAction)toggleRecording:(id)sender
 {
@@ -257,11 +290,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     dispatch_async([self sessionQueue], ^{
         if (![[self movieFileOutput] isRecording])
         {
+        
             [self setLockInterfaceRotation:YES];
             
             if ([[UIDevice currentDevice] isMultitaskingSupported])
             {
                 // Setup background task. This is needed because the captureOutput:didFinishRecordingToOutputFileAtURL: callback is not received until AVCam returns to the foreground unless you request background execution time. This also ensures that there will be time to write the file to the assets library when AVCam is backgrounded. To conclude this background execution, -endBackgroundTask is called in -recorder:recordingDidFinishToOutputFileURL:error: after the recorded file has been saved.
+                /////
                 [self setBackgroundRecordingID:[[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil]];
             }
             
@@ -272,10 +307,13 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [RecordVideoViewController setFlashMode:AVCaptureFlashModeOff forDevice:[[self videoDeviceInput] device]];
             
             // Start recording to a temporary file.
-            NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"movie" stringByAppendingPathExtension:@"mov"]];
+            NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"take" stringByAppendingPathExtension:@"mov"]];
             
             [[self movieFileOutput] startRecordingToOutputFileURL:[NSURL fileURLWithPath:outputFilePath] recordingDelegate:self];
-            self.outputFileURL = [NSURL fileURLWithPath:outputFilePath];
+            ///////////
+            ///////////
+            ///////////
+            //self.outputFileURL = [NSURL fileURLWithPath:outputFilePath];
             
         }
         else
@@ -369,8 +407,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)focusAndExposeTap:(UIGestureRecognizer *)gestureRecognizer
 {
-    CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self recordVideoView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
-    [self focusWithMode:AVCaptureFocusModeAutoFocus exposeWithMode:AVCaptureExposureModeAutoExpose atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+    if (self.videoDevice.focusMode != AVCaptureFocusModeLocked && self.videoDevice.exposureMode != AVCaptureExposureModeCustom)
+    {
+        CGPoint devicePoint = [(AVCaptureVideoPreviewLayer *)[[self recordVideoView] layer] captureDevicePointOfInterestForPoint:[gestureRecognizer locationInView:[gestureRecognizer view]]];
+        [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:YES];
+    }
 }
 
 - (void)subjectAreaDidChange:(NSNotification *)notification
@@ -378,7 +419,47 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     CGPoint devicePoint = CGPointMake(.5, .5);
     [self focusWithMode:AVCaptureFocusModeContinuousAutoFocus exposeWithMode:AVCaptureExposureModeContinuousAutoExposure atDevicePoint:devicePoint monitorSubjectAreaChange:NO];
 }
+#pragma mark Actions
 
+- (IBAction)cancel:(id)sender
+{
+    //[self stopRunning];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputFileURL.path])
+    {
+        NSLog(@"FILE AT PATH SHOULD BE TEMP DIRECTORY: %@", [self.outputFileURL path]);
+        [[NSFileManager defaultManager] removeItemAtPath:[self.outputFileURL path] error:nil];
+        
+    }
+    self.outputFileURL = nil;
+    [self.navigationController popViewControllerAnimated:YES];
+    //
+    
+    
+}
+
+- (IBAction)save:(id)sender
+{
+    
+    //[self stopRunning];
+    
+    //if ([[NSFileManager defaultManager] fileExistsAtPath:self.outputFileURL.path])
+    //{
+        //Take *newTake = [[Take alloc] initWithURL:self.outputFileURL];
+        // should have compleion block after take is done being created so we know if we can remove item from the temp folder.
+       // [[NSNotificationCenter defaultCenter] postNotificationName:@"didCreateVideoForTake" object:newTake];
+//        NSLog(@"FILE AT PATH SHOULD BE TEMP DIRECTORY: %@", [self.outputFileURL path]);
+        //[[NSFileManager defaultManager] removeItemAtPath:[self.outputFileURL path] error:nil];
+   // }
+//    else{
+//        NSLog(@"file dne");
+//    }
+//    
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
+    
+    
+    
+}
 #pragma mark File Output Delegate
 
 - (void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error
@@ -389,26 +470,31 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setLockInterfaceRotation:NO];
     
     // Note the backgroundRecordingID for use in the ALAssetsLibrary completion handler to end the background task associated with this recording. This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's -isRecording is back to NO — which happens sometime after this method returns.
+    
+    //_reserved	void *	@"file:///private/var/mobile/Containers/Data/Application/25532DA4-56CC-45E7-9CF3-1392B659D0C2/tmp/take.mov"	0x155ea720
+    
     UIBackgroundTaskIdentifier backgroundRecordingID = [self backgroundRecordingID];
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
+    
+    self.outputFileURL = outputFileURL;
+    
+    
+    
     
     //self.take = [[Take alloc] initWithURL:self.outputFileURL];
 //    [[[ALAssetsLibrary alloc] init] writeVideoAtPathToSavedPhotosAlbum:outputFileURL completionBlock:^(NSURL *assetURL, NSError *error) {
 //        if (error)
 //            NSLog(@"%@", error);
     
-        Scene *currentScene = self.library.scenes[self.sceneIndex];
-        Take *newTake = [[Take alloc] initWithURL:outputFileURL];
-        [currentScene.takes addObject:newTake];
-        [self.library saveToFilename:@"videolibrary.plist"];
         
         //[[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
-        
-        if (backgroundRecordingID != UIBackgroundTaskInvalid)
-        {
-             [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
-        }
-         
+        ////////////////
+     if (backgroundRecordingID != UIBackgroundTaskInvalid)
+     {             [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
+
+     }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didFinishRecordingVideoToURL" object:outputFileURL];
     //}];
     
 }

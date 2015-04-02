@@ -57,15 +57,9 @@
 
 -(void)cellWithTake:(Take*)take
 {
-    if (!take)
-    {
-        NSLog(@"take is nil");
-    }
+
     [self setTake:take];
-    
-    self.sceneNumber = take.sceneNumber;
-    //self.takeNumber = take.takeNumber;
-    
+
     // set a thumbnail image to the image of the first frame of that video
     //self.assetURL = [take getPathURL];
     //[self.take getThumbnailImage];
@@ -79,10 +73,7 @@
         self.starTake.selected = NO;
     }
 
-
     self.thumbnail.image = take.thumbnail;
-  
-
 }
 
 
