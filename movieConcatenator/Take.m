@@ -69,6 +69,7 @@
         //;
 
         _thumbnail = [self loadThumbnailWithCompletionHandler:^ (UIImage *image){
+            //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
             self.thumbnail = image;
             
             
@@ -208,7 +209,7 @@
     dispatch_once(&_thumbnailToken,
     ^{
         /////???
-        //weakSelf.imageGenerator.appliesPreferredTrackTransform = YES;
+        weakSelf.imageGenerator.appliesPreferredTrackTransform = YES;
         
         [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]
          

@@ -5,7 +5,10 @@
 //  Created by Veronica Baldys on 2015-02-21.
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
-
+//
+// to do:
+/// navigation bar with a cancel button to be able to cancel when the movie is playing.
+///
 #import "PlayVideoViewController.h"
 
 @interface PlayVideoViewController ()
@@ -17,17 +20,27 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.toolbarHidden = NO;
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(myMovieFinishedCallback:)];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+     //UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@""
+                                  // style:UIBarButtonItemStylePlain
+                                   //target:self
+                                   //action:@selector(myMovieFinishedCallback:)];
+    //self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
+    
+  
     [self configureMoviePlayer];
 }
 
 -(void) configureMoviePlayer
 {
-    self.view.backgroundColor = [UIColor blueColor];
+    self.view.backgroundColor = [UIColor blackColor];
     //[self initWithContentURL:[self.take getPathURL]];
     
     self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:self.takeURL];
-    self.moviePlayer.view.backgroundColor = [UIColor redColor];
+    self.moviePlayer.view.backgroundColor = [UIColor blackColor];
     
     [self.moviePlayer prepareToPlay];
     
@@ -39,7 +52,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    //[super viewDidAppear:animated];
+    [super viewDidAppear:animated];
     [self.moviePlayer play];
 }
 

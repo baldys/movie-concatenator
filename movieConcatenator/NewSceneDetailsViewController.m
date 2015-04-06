@@ -9,7 +9,9 @@
 #import "NewSceneDetailsViewController.h"
 
 @interface NewSceneDetailsViewController () <UITextFieldDelegate>
-
+{
+    
+}
 @property (weak, nonatomic) IBOutlet UITextField *titleField;
 @property (weak, nonatomic) IBOutlet UITextField *numberField;
 @property (weak, nonatomic) IBOutlet UITextField *roleField;
@@ -24,10 +26,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
     // Do any additional setup after loading the view.
+    //self.delegate = self;
     self.scene = [[Scene alloc] init];
+}
+
+//- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+//{
+//    return YES;
+//}
+
+// It is important for you to hide the keyboard
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+- (IBAction)keyboardDismiss:(id)sender {
     
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -42,6 +62,9 @@
 //    
 //}
 
+-(void)dismissKeyboard {
+    [self.view endEditing:YES];
+}
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -55,10 +78,7 @@
         //self.scene.description = self.descriptionField.text;
         self.scene.libraryIndex = [self.numberField.text integerValue];
         
-        
-        
-        
-        
+    
     }
     
     

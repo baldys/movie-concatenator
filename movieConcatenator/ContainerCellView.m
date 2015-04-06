@@ -25,8 +25,8 @@
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
-    flowLayout.sectionInset = UIEdgeInsetsMake(8,0,8,0);
-    flowLayout.itemSize = CGSizeMake(125, 80);
+    flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
+    flowLayout.itemSize = CGSizeMake(125, 75);
     [self.collectionView setCollectionViewLayout:flowLayout];
     
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
@@ -49,7 +49,6 @@
 {
     _collectionData = collectionData;
     [_collectionView setContentOffset:CGPointZero animated:NO];
-  
     [_collectionView reloadData];
     
 }
@@ -77,7 +76,6 @@
   
     NSLog(@"assset id: %@", take.assetID );
     cell.delegate = self;
-    
     
 //    if (take.thumbnail==nil)
 //    {

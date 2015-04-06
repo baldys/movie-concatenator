@@ -18,6 +18,8 @@
             self.takes = [NSMutableArray array];
         }
         self.title = nil;
+       // self.description = nil;
+        //self.libraryIndex = 0;
     }
     return self;
 }

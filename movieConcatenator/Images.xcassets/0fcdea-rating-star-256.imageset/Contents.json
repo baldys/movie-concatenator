@@ -3,14 +3,30 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "0fcdea-rating-star-256.png"
+      "filename" : "0fcdea-rating-star-64.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "0fcdea-rating-star-128.png"
     },
     {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "fill",
+          "width" : 1,
+          "height" : 1
+        },
+        "capInsets" : {
+          "bottom" : 85,
+          "top" : 0,
+          "right" : 178,
+          "left" : 0
+        }
+      },
       "idiom" : "universal",
+      "filename" : "0fcdea-rating-star-256.png",
       "scale" : "3x"
     }
   ],

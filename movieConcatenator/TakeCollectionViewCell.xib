@@ -13,14 +13,14 @@
                 <rect key="frame" x="0.0" y="0.0" width="125" height="80"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-noPlay-blank" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
-                        <rect key="frame" x="5" y="5" width="115" height="70"/>
+                    <imageView multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="movie-noPlay-blank" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
+                        <rect key="frame" x="5" y="5" width="110" height="70"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstAttribute="width" constant="115" id="bD5-0s-Tfl"/>
+                            <constraint firstAttribute="width" constant="110" id="bD5-0s-Tfl"/>
                             <constraint firstAttribute="height" constant="70" id="iv9-av-yY6"/>
                         </constraints>
                     </imageView>
@@ -46,7 +46,7 @@
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" red="0.018121438550000001" green="0.027638544330000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.90757804490000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="rDL-AX-Xbx" secondAttribute="bottom" constant="8" id="6bP-7d-SSS"/>
                 <constraint firstItem="rDL-AX-Xbx" firstAttribute="leading" secondItem="U9f-CN-IhA" secondAttribute="leading" constant="8" id="Ytd-s8-fCK"/>

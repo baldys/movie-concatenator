@@ -19,13 +19,8 @@
 
 @interface ScenesTableViewController:UITableViewController<UITableViewDataSource, UITableViewDelegate>
 
-//@property RecordVideoViewController *recordViewController;
-
 @property (nonatomic, strong) VideoLibrary *library;
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
-
-- (IBAction)addScene:(id)sender;
-
 - (IBAction)ConcatenateSelectedTakes:(id)sender;
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue;
 - (IBAction)addTakeButtonPressed:(id)sender;

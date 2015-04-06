@@ -2,13 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "00cdea-outline-star-64.png"
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "white-outline-star-64.png"
+      "filename" : "00cdea-outline-star-64.png"
     },
     {
       "idiom" : "universal",

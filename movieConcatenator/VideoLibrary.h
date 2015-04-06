@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class Take;
+#import "Scene.h"
+#import "Take.h"
 
 @interface VideoLibrary : NSObject <NSCoding>
 
@@ -17,8 +17,8 @@
 + (instancetype)libraryWithFilename:(NSString*)filename;
 
 -(void)saveToFilename:(NSString *)filename;
-
-//@property (nonatomic, strong) NSMutableArray *selectedVideos;
+-(void) addScene:(Scene*)newScene;
+@property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 //- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
 

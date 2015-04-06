@@ -16,13 +16,18 @@
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
+
+
 @interface RecordVideoViewController () <AVCaptureFileOutputRecordingDelegate>
+
+
+
 
 @property (nonatomic, weak) IBOutlet RecordVideoView *recordVideoView;
 @property (nonatomic, weak) IBOutlet UIButton *recordButton;
 //@property (nonatomic, weak) IBOutlet UIButton *cameraPosition;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *cameraPosition;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *flashButton;
+@property (weak, nonatomic) IBOutlet UIButton *cameraPosition;
+@property (weak, nonatomic) IBOutlet UIButton *flashButton;
 
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)toggleCameraPosition:(id)sender;
@@ -42,7 +47,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @end
 
 
-//CONTROL_HIGHLIGHT_COLOR = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]; // A nice blue
 
 @implementation RecordVideoViewController
 
@@ -62,9 +66,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [super viewDidLoad];
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-    //self.recordButton.layer.cornerRadius = self.flashButton.layer.cornerRadius = self.cameraPosition.layer.cornerRadius = 4;
+    self.recordButton.layer.cornerRadius = self.flashButton.layer.cornerRadius = self.cameraPosition.layer.cornerRadius = 4;
     
-    //self.recordButton.clipsToBounds = self.flashButton.clipsToBounds = self.cameraPosition.clipsToBounds = YES;
+    self.recordButton.clipsToBounds = self.flashButton.clipsToBounds = self.cameraPosition.clipsToBounds = YES;
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
 
@@ -178,6 +182,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     dispatch_async([self sessionQueue], ^{
         [[self session] stopRunning];
         
@@ -213,7 +218,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (NSUInteger)supportedInterfaceOrientations
 {
     return //UIInterfaceOrientationMaskLandscapeLeft;
-    UIInterfaceOrientationMaskAll;
+    UIInterfaceOrientationMaskLandscapeLeft;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -286,6 +291,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (IBAction)toggleRecording:(id)sender
 {
     [[self recordButton] setEnabled:NO];
+    if (self.navigationController.navigationBarHidden)
+    {
+        [self.navigationController setNavigationBarHidden:NO];
+    }
+    else{
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+        
+    }
     
     dispatch_async([self sessionQueue], ^{
         if (![[self movieFileOutput] isRecording])
@@ -318,6 +331,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         }
         else
         {
+            //[self.navigationController setNavigationBarHidden:NO];
             [[self movieFileOutput] stopRecording];
             
         }
@@ -454,7 +468,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 //        NSLog(@"file dne");
 //    }
 //    
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
     
     
     
@@ -493,6 +507,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
      {             [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
 
      }
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didFinishRecordingVideoToURL" object:outputFileURL];
     //}];

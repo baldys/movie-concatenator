@@ -7,12 +7,6 @@
 //
 
 #import "VideoLibrary.h"
-#import "Scene.h"
-
-#import <MediaPlayer/MediaPlayer.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <MobileCoreServices/MobileCoreServices.h>
-
 
 @interface VideoLibrary ()
 
@@ -33,6 +27,8 @@
 
 @implementation VideoLibrary
 
+
+// use a shared scenes array instead (make it a singleton)
 -(instancetype)init {
     if (self = [super init])
     {
@@ -93,6 +89,27 @@
     NSLog(@"Documents Directory: %@", documentsDirectory);
     return documentsDirectory;
 }
+
+- (void) addScene:(Scene*)newScene
+{
+    NSLog(@" adding a scene with title: %@", newScene.title);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+        [self.scenes addObject:newScene];
+        newScene.libraryIndex = self.scenes.count;
+        [self saveToFilename:@"videolibrary.plist"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.completionBlock(YES);
+        });
+        
+        
+    });
+}
+
+- (void) addTake:(Take*)newTake toSceneWithIndex:(NSInteger)sceneIndex
+{
+    
+}
+
 ////////////////
 // // TODO: put into video model class so that for each video, you can retrieve the url path that
 
