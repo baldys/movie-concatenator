@@ -12,7 +12,7 @@
 #import "VideoMerger.h"
 #import "PlayVideoViewController.h"
 #import "NewSceneDetailsViewController.h"
-
+#import "TakesViewController.h"
 #define kHeaderSectionHeight 40
 #define kTableCellHeight     90
 
@@ -131,13 +131,18 @@
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kHeaderSectionHeight)];
+   
+    
+    
 
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
     headerView.backgroundColor = [UIColor blackColor];
     ///[UIColor colorWithRed:0.0980 green:0 blue:0.4902 alpha:1.0];
-    
+     UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kHeaderSectionHeight)];
+    [sceneHeaderButton addTarget:self action:@selector(showTakesInScene:) forControlEvents:UIControlEventTouchDown];
+    sceneHeaderButton.tag = section;
+    [headerView addSubview:sceneHeaderButton];
     //UIColor *bg2 = [UIColor colorWithRed:0 green:greenLevel2 blue:1.0 alpha:1.0];
    // headerView.layer.borderColor = [UIColor colorWithRed:0.2510 green:0 blue:1.0 alpha:1.0].CGColor;
     //headerView.layer.borderWidth = 0.7;
@@ -148,10 +153,10 @@
     //video-camera-1.png  vid camera with more deatils
     //noun_101983.png 
     // button
-    self.addTakeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.addTakeButton setImage:[UIImage imageNamed:@"video-camera2d.png"] forState:UIControlStateNormal];
+    self.addTakeButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    //[self.addTakeButton setImage:[UIImage imageNamed:@"video-camera2d.png"] forState:UIControlStateNormal];
     //[self.addTakeButton setTintColor:[UIColor whiteColor]];
-    [self.addTakeButton setTitle:@"Add Take" forState:UIControlStateNormal];
+    //[self.addTakeButton setTitle:@"Add Take" forState:UIControlStateNormal];
     //[self.addTakeButton setTintColor:[UIColor yellowColor]];
     //[self.addTakeButton title:[UIColor colorWithRed:0.0 green:0.7176 blue:1.0]];
     [self.addTakeButton setFrame:CGRectMake(self.tableView.frame.size.width-40,0,40,kHeaderSectionHeight)];
@@ -171,6 +176,17 @@
     [headerView addSubview:headerLabel];
     
     return headerView;
+}
+
+- (IBAction)showTakesInScene:(id)sender
+{
+    UIButton* headerButton = (UIButton*)sender;
+    Scene *scene = self.library.scenes[headerButton.tag];
+    
+    [self performSegueWithIdentifier:@"ShowTakesViewController" sender:sender];
+    
+    
+    
 }
 /////
 - (UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section

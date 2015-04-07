@@ -20,7 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.toolbarHidden = NO;
+    self.navigationController.navigationBarHidden = NO;
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(myMovieFinishedCallback:)];
     self.navigationItem.leftBarButtonItem = cancelButton;
      //UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@""
