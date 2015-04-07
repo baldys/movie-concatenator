@@ -133,9 +133,13 @@
         //[self createGeneratorFromItemInFilePathURL];
         self.selected = [aDecoder decodeBoolForKey:@"selected"];
         //NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnailImgData"];
-        NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnail"];
-        self.thumbnail = [UIImage imageWithData:imageData];
-        NSLog(@"\n\n\n\n>>>>%@\n\n\n\n\n\n", [aDecoder decodeObjectForKey:@"assetFileURL"]);
+//        NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnail"];
+//        self.thumbnail = [UIImage imageWithData:imageData];
+//        NSLog(@"\n\n\n\n>>>>%@\n\n\n\n\n\n", [aDecoder decodeObjectForKey:@"assetFileURL"]);
+//        
+
+            
+        
     }
     return self;
 }
@@ -146,7 +150,7 @@
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     [aCoder encodeBool:self.selected forKey:@"selected"];
-    [aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];
+    //[aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];
     
 }
 //
@@ -205,9 +209,9 @@
 // Load the first frame of the video for a thumbnail
 - (UIImage*)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler
 {
+    [self createGeneratorFromItemInFilePathURL];
     __unsafe_unretained __block Take *weakSelf = (Take *)self;
-    dispatch_once(&_thumbnailToken,
-    ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         /////???
         weakSelf.imageGenerator.appliesPreferredTrackTransform = YES;
         

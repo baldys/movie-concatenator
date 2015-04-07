@@ -77,13 +77,25 @@
     NSLog(@"assset id: %@", take.assetID );
     cell.delegate = self;
     
-//    if (take.thumbnail==nil)
+
+//    if (take.thumbnail == nil)
 //    {
-//        [take getThumbnailImage];
+        [take loadThumbnailWithCompletionHandler:^ (UIImage *image){
+            //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
+            take.thumbnail = image;
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [cell cellWithTake:take];
+                
+            });
+            
+            
+        }];
 //    }
     
    
-    [cell cellWithTake:take];
+
     
     
     
