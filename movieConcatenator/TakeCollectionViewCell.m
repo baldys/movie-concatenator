@@ -15,6 +15,7 @@
 
 
 
+
 - (IBAction)starButtonPressed:(UIButton *)sender
 {
     self.starTake.selected = !self.starTake.selected;
@@ -48,7 +49,7 @@
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    self.thumbnail.image = nil;
+    self.thumbnailImageView.image = nil;
     NSLog(@"reuse");
     //self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
     
@@ -57,7 +58,7 @@
 
 -(void)cellWithTake:(Take*)take
 {
-
+    
     [self setTake:take];
 
     // set a thumbnail image to the image of the first frame of that video
@@ -73,7 +74,19 @@
         self.starTake.selected = NO;
     }
 
-    self.thumbnail.image = take.thumbnail;
+
+    self.thumbnailImageView.image = take.thumbnail;
+
+  
+    ////
+//    
+//        if (self.imageArray == nil)
+//        {
+//                self.imageArray = [NSMutableDictionary dictionaryWithContentsOfFile:];
+//        }
+//            [self.imageArray addObject:take.thumbnail];
+//        }
+
 }
 
 
@@ -81,7 +94,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-       
+        
         // Initialization code
     }
     return self;
@@ -89,8 +102,11 @@
 
 - (UIColor*)darkBlueWithPurp
 {
-    return [UIColor colorWithRed:(34/255) green:0 blue:(168/255) alpha:1.0];
+    return [UIColor colorWithRed:0.1333 green:0 blue:0.6588 alpha:1.0];
 }
+/// red 0.1333
+/// green 0
+/// blue 0.6588
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -100,6 +116,7 @@
    
     self.layer.borderColor = [[self darkBlueWithPurp] CGColor];
     self.layer.borderWidth = 2.0;
+    //self.layer.cornerRadius = 2.0;
 }
 
 @end

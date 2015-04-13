@@ -70,6 +70,7 @@
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    
     if (sender != self.saveButton) return;
     
     if (self.titleField.text.length > 0)
@@ -77,8 +78,11 @@
         self.scene.title = self.titleField.text;
         //self.scene.description = self.descriptionField.text;
         self.scene.libraryIndex = [self.numberField.text integerValue];
-        
-    
+    }
+    else if (self.titleField.text.length == 0)
+    {
+        self.scene.title = [NSString stringWithFormat:@"Scene %i", self.scene.libraryIndex];
+        self.scene.libraryIndex = [self.numberField.text integerValue];
     }
     
     

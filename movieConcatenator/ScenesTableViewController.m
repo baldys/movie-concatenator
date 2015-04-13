@@ -13,15 +13,18 @@
 #import "PlayVideoViewController.h"
 #import "NewSceneDetailsViewController.h"
 #import "TakesViewController.h"
-#define kHeaderSectionHeight 40
+
+#define kHeaderSectionHeight 32
 #define kTableCellHeight     90
 
 @interface ScenesTableViewController () <TakeCellDelegate>
-
+{
+    UIActivityIndicatorView *activityIndicator;
+}
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) UIButton *addTakeButton;
-@property (nonatomic) NSInteger sceneIndexForNewTake;
+@property (nonatomic) NSInteger currentSceneIndex;
 
 
 
@@ -71,6 +74,7 @@
     {
         self.takesToConcatenate = [NSMutableArray array];
     }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -127,25 +131,61 @@
     return cell;
 }
 
+//// Dark blue RGB % 12.9, 12.9, 51
+///
+///
+
+
 #pragma mark - UITableView Delegate methods
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
-   
+   // UIEdgeInsets buttonPadding = UIEdgeInsetsMake(2,8,2,8);
     
+    UIImage *buttonImage = [UIImage imageNamed:@"disclosure"];
     
-
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
-    headerView.backgroundColor = [UIColor blackColor];
-    ///[UIColor colorWithRed:0.0980 green:0 blue:0.4902 alpha:1.0];
-     UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kHeaderSectionHeight)];
-    [sceneHeaderButton addTarget:self action:@selector(showTakesInScene:) forControlEvents:UIControlEventTouchDown];
+    headerView.backgroundColor = [UIColor colorWithRed:0.129 green:0.129 blue:0.51 alpha:1.0];
+    
+     UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 0, 40, kHeaderSectionHeight)];
+    // img 25 width 40 height. make buttons 40x40 clickable portion).
+    [sceneHeaderButton setImage:buttonImage forState:UIControlStateNormal];
+    
     sceneHeaderButton.tag = section;
+    
+    [sceneHeaderButton addTarget:self action:@selector(showTakesInScene:) forControlEvents:UIControlEventTouchUpInside];
+    
+    sceneHeaderButton.showsTouchWhenHighlighted = YES;
+    // these compress and stretch the button accordingly:
+    [sceneHeaderButton setImageEdgeInsets:UIEdgeInsetsMake(5,12,5,12)];
+    
+    //UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"white-disclosure-indicator-64.png"] highlightedImage:[UIImage imageNamed:@"highlighted-white-disclosure-indicator-64"]];
+    //[sceneHeaderButton addSubview:imageView];
+    
+    
+                                                                              
+    
+    //[sceneHeaderButton setImage:[UIImage imageNamed:@"highlighted-white-disclosure-indicator-64"] forState:UIControlStateSelected];
+    //[sceneHeaderButton.imageView setFrame:CGRectMake(self.tableView.frame.size.width-32, 0, 32, 32)];
+    //sceneHeaderButton.adjustsImageWhenHighlighted = YES;
+    
+    
+    
+    
+    
+    //sceneHeaderButton.backgroundColor = [UIColor colorWithRed:0 green:0.7583 blue:1.0 alpha:1.0];
+
     [headerView addSubview:sceneHeaderButton];
+    
     //UIColor *bg2 = [UIColor colorWithRed:0 green:greenLevel2 blue:1.0 alpha:1.0];
-   // headerView.layer.borderColor = [UIColor colorWithRed:0.2510 green:0 blue:1.0 alpha:1.0].CGColor;
-    //headerView.layer.borderWidth = 0.7;
+   //headerView.layer.borderColor = [UIColor colorWithRed:0.2510 green:0 blue:1.0 alpha:1.0].CGColor;
+    
+    //// borders for section header.
+    //headerView.layer.borderColor = [UIColor blackColor].CGColor;
+    //headerView.layer.cornerRadius = 2.0;
+    //headerView.layer.borderWidth = 5.0;
+   
     
     //camera2-4.png    simple vid camera icon
     // camera2.png
@@ -153,45 +193,49 @@
     //video-camera-1.png  vid camera with more deatils
     //noun_101983.png 
     // button
-    self.addTakeButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+    //self.addTakeButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     //[self.addTakeButton setImage:[UIImage imageNamed:@"video-camera2d.png"] forState:UIControlStateNormal];
     //[self.addTakeButton setTintColor:[UIColor whiteColor]];
     //[self.addTakeButton setTitle:@"Add Take" forState:UIControlStateNormal];
     //[self.addTakeButton setTintColor:[UIColor yellowColor]];
     //[self.addTakeButton title:[UIColor colorWithRed:0.0 green:0.7176 blue:1.0]];
-    [self.addTakeButton setFrame:CGRectMake(self.tableView.frame.size.width-40,0,40,kHeaderSectionHeight)];
-    [self.addTakeButton setImageEdgeInsets:UIEdgeInsetsMake(2,5,2,5)];
-    self.addTakeButton.tag = section;
-    self.addTakeButton.hidden = NO;
-    [self.addTakeButton setBackgroundColor:[UIColor grayColor]];
-    [self.addTakeButton addTarget:self action:@selector(addTakeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [headerView addSubview:self.addTakeButton];
+    //[self.addTakeButton setFrame:CGRectMake(self.tableView.frame.size.width-40,0,40,kHeaderSectionHeight)];
+    //[self.addTakeButton setImageEdgeInsets:UIEdgeInsetsMake(2,5,2,5)];
+    //self.addTakeButton.tag = section;
+    //self.addTakeButton.hidden = NO;
+    //[self.addTakeButton setBackgroundColor:[UIColor purpleColor]];
+    //[self.addTakeButton addTarget:self action:@selector(addTakeButtonPressed:) //forControlEvents:UIControlEventTouchUpInside];
+    //[headerView addSubview:self.addTakeButton];
     
     // title
-    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width-40,kHeaderSectionHeight)];
+    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(12,0,self.tableView.frame.size.width-40,kHeaderSectionHeight)];
     Scene *sectionData = self.library.scenes[section];
     headerLabel.text = sectionData.title;
-    headerLabel.textColor = [UIColor whiteColor];
+    //headerLabel.minimumScaleFactor = 1.2;
+    [headerLabel.font fontWithSize:22];
+    headerLabel.textColor = [UIColor blackColor];
     
     [headerView addSubview:headerLabel];
     
     return headerView;
 }
 
-- (IBAction)showTakesInScene:(id)sender
+- (IBAction)showTakesInScene:(UIButton*)sender
 {
-    UIButton* headerButton = (UIButton*)sender;
-    Scene *scene = self.library.scenes[headerButton.tag];
-    
+   // [sender setSelected:YES];
+    [sender setHighlighted:YES];
+ 
+    self.currentSceneIndex = sender.tag;
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectHeaderButtonInScene" object:scene];
+    //[self.navigationController pushViewController:takesVC animated:YES];
     [self performSegueWithIdentifier:@"ShowTakesViewController" sender:sender];
     
-    
-    
+
 }
 /////
 - (UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0.0, 0.0, 0.0, 0.0)];
+    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0.0, 0.0, 0, 0)];
     footerView.backgroundColor = [UIColor blackColor];
     return footerView;
 }
@@ -203,7 +247,7 @@
 /////
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 10;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -211,14 +255,14 @@
     return kTableCellHeight;
 }
 
-- (IBAction)addTakeButtonPressed:(UIButton*)sender
-{
-    
-    self.sceneIndexForNewTake =sender.tag;
-    NSLog(@"sender.tag = %ld", (long)sender.tag);
-    [self performSegueWithIdentifier:@"recordATake" sender:sender];
-    
-}
+//- (IBAction)addTakeButtonPressed:(UIButton*)sender
+//{
+//    
+//    self.sceneIndexForNewTake =sender.tag;
+//    NSLog(@"sender.tag = %ld", (long)sender.tag);
+//    [self performSegueWithIdentifier:@"recordATake" sender:sender];
+//    
+//}
 
     //[self.navigationController presentViewController:self.recordViewController animated:YES completion:^{
         
@@ -244,7 +288,6 @@
 - (void) didSelectItemFromCollectionView:(NSNotification*)notification
 {
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
-    
 
    videoPlayerVC.takeURL = [notification object];
     if (videoPlayerVC.takeURL)
@@ -276,6 +319,7 @@
 
 - (IBAction)ConcatenateSelectedTakes:(id)sender
 {
+    
     VideoMerger *merger = [[VideoMerger alloc]init];
     
     NSLog(@"################# number of items in  %lu",(unsigned long)[self.takesToConcatenate count]);
@@ -283,6 +327,8 @@
     {
         
         [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
+        self.takesToConcatenate = nil;
+        [self showActivityIndicator];
         
     }
     else
@@ -295,17 +341,38 @@
     
 }
 
+- (void) showActivityIndicator
+{
+    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [activityIndicator startAnimating];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    NSArray *items = [[NSArray alloc] initWithObjects:item, nil];
+    [self.navigationController.toolbar setItems:items];
+}
+
 # pragma mark - Segues
 
 - (void)prepareForSegue:(UIStoryboardSegue*)segue sender:(id)sender
 {
-    if ([segue.identifier isEqualToString:@"createNewScene"])
+    
+    if ([segue.identifier isEqualToString:@"ShowTakesViewController"])
     {
-        // create the scene so that it gets created in the background while the other view controller is showing..?
+        UINavigationController *navController = (UINavigationController *)segue.destinationViewController;
+        TakesViewController *takesVC = (TakesViewController *)navController.topViewController;
+        // set the scene from the index of the header button that was clicked
+        Scene *scene = self.library.scenes[self.currentSceneIndex];
+        
+        NSLog(@"scene title: %@", [self.library.scenes[self.currentSceneIndex] title]);
+        
+        scene.libraryIndex = self.currentSceneIndex;
+        takesVC.scene = [[Scene alloc] init];
+        [takesVC setScene:scene];
         
         
-        ///AddSceneViewController *asvc = segue.destinationViewController;
-                //Scene *sceneToAdd = [[Scene alloc] init];
+        
+        //[takesVC configureTableViewWithScene:scene];
+
+        
         //asvc.sceneData = sceneToAdd;
         //asvc.sceneNumberField.text: self.scenes.count;
 
@@ -314,9 +381,9 @@
 //        }
     }
     
-        UIButton *addTakeButton = (UIButton*)sender;
-        NSLog(@"buttontag = %li", (long)addTakeButton.tag);
-        self.sceneIndexForNewTake = addTakeButton.tag;
+       // UIButton *addTakeButton = (UIButton*)sender;
+        //NSLog(@"buttontag = %li", (long)addTakeButton.tag);
+        //self.sceneIndexForNewTake = addTakeButton.tag;
     
     
     
@@ -340,7 +407,7 @@
 
     NewSceneDetailsViewController *nsdvc = (NewSceneDetailsViewController*)[segue sourceViewController];
     
-    if (nsdvc.scene == nil) return;
+    if (nsdvc.scene.title == nil) return;
     
     [self.library addScene:nsdvc.scene];
     __weak __typeof(self) weakSelf = self;
@@ -412,51 +479,20 @@
     __weak __typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-                   ^{
-                       Take *newTake = [[Take alloc] initWithURL:notification.object];
-                       newTake.sceneNumber = _sceneIndexForNewTake;
-                       
-                    
-                       [[weakSelf.library.scenes[_sceneIndexForNewTake] takes] addObject:newTake];
-                       ///[[weakSelf.scenes[recordViewController.sceneIndex] takes] addObject:newTake];
-                       [weakSelf.library saveToFilename:@"videolibrary.plist"];
-                      
-                       dispatch_async(dispatch_get_main_queue(), ^{
-                           [weakSelf.tableView reloadData];
-                       });
-                   });
+       ^{
+           Take *newTake = [[Take alloc] initWithURL:notification.object];
+           newTake.sceneNumber = _currentSceneIndex;
+           
+        
+           [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
+           [weakSelf.library saveToFilename:@"videolibrary.plist"];
+          
+           dispatch_async(dispatch_get_main_queue(), ^{
+               [weakSelf.tableView reloadData];
+           });
+       });
     // after presenting the record view controller with a modal segue instead of storyboard, dismiss the view controller here.
 
 }
-
-- (void) didFinishJoiningVideos
-{
-    self.takesToConcatenate = nil;
-    
-}
-//
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    
-//    if (editingStyle == UITableViewCellEditingStyleDelete)
-//    {
-//        //add code here for when you hit delete
-//        [self.library.scenes removeObjectAtIndex:indexPath.row];
-//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-//        // NSFileMAnager... delete all of the videos in that section......
-//    }
-//   
-//    
-//  
-//    //UITableViewCellEditingStyleDelete
-//    
-//}
-
-
-//- (IBAction)editScene:(id)sender
-//{
-//    [self.tableView setEditing:YES animated:YES];
-//    
-//}
 @end
 

@@ -10,10 +10,11 @@
 #import "Scene.h"
 #import "Take.h"
 #import "TakeCollectionViewCell.h"
-
+#import "UIImage+Extras.h"
 
 @class TakeCollectionViewCell;
 @class Take;
+@class UIImage;
 
 @interface ContainerCellView : UIView <TakeCellDelegate>
 

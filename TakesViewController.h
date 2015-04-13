@@ -10,5 +10,7 @@
 #import "Scene.h"
 
 @interface TakesViewController : UIViewController
+
 @property (strong, nonatomic) Scene *scene;
+//- (void) configureTableViewWithScene:(Scene*)scene;
 @end

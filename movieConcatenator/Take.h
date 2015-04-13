@@ -52,7 +52,7 @@
 - (NSString*) documentsDirectory;
 - (void)getThumbnailImage;
 
-- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler;
-//- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
+//- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(void))completionHandler;
+- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
 
 @end

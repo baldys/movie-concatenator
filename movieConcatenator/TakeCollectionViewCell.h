@@ -23,13 +23,13 @@
 @property (nonatomic) NSInteger sceneNumber;
 @property (nonatomic) NSInteger takeNumber;
 @property (weak, nonatomic) IBOutlet UIButton *starTake;
-@property (weak, nonatomic) IBOutlet UIImageView *thumbnail;
+@property (weak, nonatomic) IBOutlet UIImageView *thumbnailImageView;
 //@property (strong, nonatomic) NSURL* assetURL;
 //@property (strong, nonatomicv) AVAsset *videoAsset;
 //@property (strong, nonatomic) VideoLibrary *library;
 @property (strong, nonatomic) Take* take;
 @property (nonatomic, weak) id <TakeCellDelegate> delegate;
-
+//@property (nonatomic, strong) NSMutableDictionary *imageArray;
 -(void)cellWithTake:(Take*)take;
 
 - (IBAction)starButtonPressed:(UIButton*)sender;

@@ -20,23 +20,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.navigationController.navigationBarHidden = NO;
-    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(myMovieFinishedCallback:)];
-    self.navigationItem.leftBarButtonItem = cancelButton;
-     //UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@""
-                                  // style:UIBarButtonItemStylePlain
-                                   //target:self
-                                   //action:@selector(myMovieFinishedCallback:)];
-    //self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
-    
-  
     [self configureMoviePlayer];
+    self.navigationController.navigationBarHidden = NO;
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneAction:)];
+    [doneButton setEnabled:YES];
+    self.navigationItem.leftBarButtonItem = doneButton;
+    
+    
+    
 }
-
 -(void) configureMoviePlayer
 {
-    self.view.backgroundColor = [UIColor blackColor];
+    //self.view.backgroundColor = [UIColor blackColor];
     //[self initWithContentURL:[self.take getPathURL]];
     
     self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:self.takeURL];
@@ -47,7 +43,10 @@
     [self.moviePlayer.view setFrame:self.view.bounds];
     [self.view addSubview:self.moviePlayer.view];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(myMovieFinishedCallback:) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(myMovieFinishedCallback:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -61,11 +60,22 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)doneAction:(UIBarButtonItem*)sender
+{
+    NSLog(@"Done was pressed.");
+    
+    [self dismissMoviePlayerViewControllerAnimated];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        //
+         NSLog(@"Dismissed View Controller.");
+    }];
+}
 
 /// When the movie is done, release the controller.
 -(void)myMovieFinishedCallback:(NSNotification*)aNotification {
     
-    //[self dismissMoviePlayerViewControllerAnimated];
+    
     MPMoviePlayerController* moviePlayer = [aNotification object];
     
     [[NSNotificationCenter defaultCenter]
