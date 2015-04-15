@@ -23,5 +23,7 @@
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 - (IBAction)ConcatenateSelectedTakes:(id)sender;
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue;
-- (IBAction)addTakeButtonPressed:(id)sender;
+
+
+
 @end

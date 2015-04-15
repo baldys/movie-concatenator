@@ -20,12 +20,5 @@
 -(void) addScene:(Scene*)newScene;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 
-//- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
-
-//- (void)loadLibraryWithCompletionBlock:(void (^)(void))completionHandler;
-
-//+ (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler;
-
-//- (NSURL*) getPathURL;
 
 @end

@@ -75,6 +75,11 @@
     }
 
 
+    if (take.thumbnail==nil)
+    {
+        
+        
+    }
     self.thumbnailImageView.image = take.thumbnail;
 
   

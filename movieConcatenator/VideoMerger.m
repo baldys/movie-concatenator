@@ -26,6 +26,8 @@
 
 -(AVAsset*)spliceAssets: (NSArray*)takes
 {
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
     // creating the composition
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
@@ -41,7 +43,7 @@
     self.mainComposition = [AVMutableVideoComposition videoComposition];
     
     NSMutableArray *assets = [NSMutableArray array];
-    NSMutableArray *compositionInstructions = [NSMutableArray array];
+    //NSMutableArray *compositionInstructions = [NSMutableArray array];
     for (Take* take in takes)
     {
         [assets addObject:[AVAsset assetWithURL:[take getPathURL]]];
@@ -70,7 +72,7 @@
 //        [firstlayerInstruction setOpacity:1.0 atTime:kCMTimeZero];
 //        
 //        mainInstruction.layerInstructions = [NSArray arrayWithObjects:firstlayerInstruction, nil];
-       // compositionTrack_video.preferredTransform = CGAffineTransformMakeRotation(<#CGFloat angle#>)
+   // compositionTrack_video.preferredTransform = CGAffineTransformMakeRotation(<#CGFloat angle#>)
         
         
     }
@@ -121,51 +123,31 @@
                             [self exportDidFinish:exporter];
                             NSLog(@"exported video");
                             
+                            
                         });
      }];
 }
 
-// TODO: put into video model class so that for each video you can retrieve the url path that contains it?
+- (void) addURLToMergedVideosArray:(NSURL*)url
+{
+    if (!self.mergedMovies)
+    {
+        self.mergedMovies = [NSMutableArray array];
+    }
+    [self.mergedMovies addObject:url];
+    
+}
+
 - (NSURL*) createOutputURL
 {
-    // 4 - Get path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"auditionVideo-%d.mov",arc4random() % 1000]];
     NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+  
+    [self addURLToMergedVideosArray:url];
     return url;
 }
-
-/*
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    // 1 - Get media type
-    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
-    
-    // 2 - Dismiss image picker
-    //[self dismissModalViewControllerAnimated:NO];
-    
-    // 3 - Handle video selection
-    if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo)
-    {
-        //if (isSelectingAssetOne)
-        //{
-            NSLog(@"Video One  Loaded");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Video One Loaded"
-                                                           delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            self.firstAsset = [AVAsset assetWithURL:[info objectForKey:UIImagePickerControllerMediaURL]];
-        }
-        else
-        {
-            NSLog(@"Video two Loaded");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Video Two Loaded" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            self.secondAsset = [AVAsset assetWithURL:[info objectForKey:UIImagePickerControllerMediaURL]];
-        }
-    }
-}
-*/
 
 -(void)exportDidFinish:(AVAssetExportSession*)session
 {
@@ -180,21 +162,25 @@
             [library writeVideoAtPathToSavedPhotosAlbum:outputURL completionBlock:^(NSURL *assetURL, NSError *error)
              {
                  dispatch_async(dispatch_get_main_queue(),
-                                ^{
-                                    if (error)
-                                    {
-                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                        [alert show];
-                                    }
-                                    else
-                                    {
-                                        [[NSNotificationCenter defaultCenter] postNotificationName:@"DidFinishJoiningVideos" object:nil];
-                                        
-                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                        [alert show];
-                                        
-                                    }
-                                });
+                ^{
+                     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingCompletedNotification" object:nil];
+                    if (error)
+                    {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    else
+                    {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        
+                        [alert show];
+                       
+                        
+                        
+                    }
+                    
+                    
+                });
              }];
         }
     }

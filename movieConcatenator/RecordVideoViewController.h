@@ -24,6 +24,8 @@
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 @property (nonatomic, strong) NSURL *outputFileURL;
 //- (IBAction)backToRootVC:(id)sender;
+@property (nonatomic) UIDeviceOrientation currentOrientation;
+
 
 - (IBAction)cancel:(UIBarButtonItem *)sender;
 - (IBAction)save:(id)sender;

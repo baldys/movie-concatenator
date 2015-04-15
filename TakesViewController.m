@@ -11,10 +11,21 @@
 #import "Take.h"
 //#import "TakeTableViewCell.h"
 @interface TakesViewController ()
+
+@property (strong, nonatomic) NSMutableArray *selectedItems;
+
+@property (strong, nonatomic) Take *currentSelection;
+
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *actionButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *playTakeButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteTakeButton;
+
+- (IBAction)delete:(id)sender;
+- (IBAction)playMovie:(id)sender;
+- (IBAction)addAsFavourite:(id)sender;
 
 @property (nonatomic, strong) NSMutableArray *takes;
 
@@ -30,9 +41,20 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self configureTableView];
     
+    [self.navigationController setToolbarHidden:YES animated:NO];
     
+    [self.navigationItem setTitle:[NSString stringWithFormat:@"Scene # %i", self.scene.libraryIndex]];
+    
+    [self.playTakeButton setEnabled:YES];
+    [self.deleteTakeButton setEnabled:YES];
+    //[self.favouriteTakeButton setEnabled:NO];
+    //[self.actionButton setEnabled:YES];
+    
+    [self.deleteTakeButton setAction:@selector(delete:)];
+    [self.deleteTakeButton setAction:@selector(delete:)];
     // Do any additional setup after loading the view.
 }
 - (void) viewWillAppear:(BOOL)animated
@@ -40,15 +62,6 @@
     [super viewWillAppear:animated];
     //[[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didSelectHeaderButtonInScene:)name:@"didSelectHeaderButtonInScene" object:nil];
 
-}
-
-- (void) didSelectHeaderButtonInScene:(NSNotification*)notification
-{
-    self.scene = [notification object];
-    self.sceneTitleLabel = [notification object];
-    self.sceneNumberLabel.text = [NSString stringWithFormat:@"SCENE #%li", (long)self.scene.libraryIndex];
-    self.sceneDescriptionLabel.text = @"scene description goes here!!";
-    
 }
 
 - (void)didReceiveMemoryWarning
@@ -75,7 +88,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *TableViewCellIdentifier = @"TakeTableViewCell";
-    
+    //NSInteger takeNumber = indexPath.row;
     UITableViewCell *cell=
     [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     if (!cell)
@@ -83,11 +96,31 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableViewCellIdentifier];
     }
     Take *take = self.scene.takes[indexPath.row];
-    cell.imageView.image = take.thumbnail;
     
-    cell.textLabel.text = [NSString stringWithFormat:@"Take # %lu", (unsigned long)self.scene.takes.count];
-    //[cell setImage: [UIImage imageNamed:@"vid-1.png"]];
-    //cell.imageView.image = self.takes[indexPath.row].thumbnail;
+    
+    cell.textLabel.text = [NSString stringWithFormat:@"Take # %lu", (unsigned long)indexPath.row];
+    
+    if (take.thumbnail == nil)
+    {
+        NSLog(@"thumbnail image is nil");
+        
+        [take loadThumbnailWithCompletionHandler:^(UIImage* image)
+        {
+            dispatch_async(dispatch_get_main_queue(),
+            ^{
+                cell.imageView.image = image;
+                NSLog(@"loaded thumbnail for table view cell");
+                
+            });
+            
+        }];
+    }
+    else{
+        cell.imageView.image = take.thumbnail;
+        
+    }
+    
+    
     return cell;
 }
 
@@ -105,36 +138,69 @@
     self.sceneNumberLabel.text = [NSString stringWithFormat:@"Scene # %li",(long)self.scene.libraryIndex];
 }
 
+
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    [self.navigationController setToolbarHidden:NO animated:YES];
+    [self.deleteTakeButton setEnabled:YES];
+    [self.playTakeButton setEnabled:YES];
+    self.currentSelection = self.scene.takes[indexPath.row];
+    
+    
+    
     
 }
 
 
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//
-//    if (editingStyle == UITableViewCellEditingStyleDelete)
-//    {
-//        //add code here for when you hit delete
-//        [self.library.scenes removeObjectAtIndex:indexPath.row];
-//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.navigationController setToolbarHidden:YES animated:YES];
+    
+    [self.deleteTakeButton setEnabled:NO];
+    [self.playTakeButton setEnabled:NO];
+    //Take *take = self.scene.takes[indexPath.row];
+    
+    self.currentSelection = nil;
+    
+    
+}
+
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Take *take = self.scene.takes[indexPath.row];
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+       // add code here for when you hit delete
+        //[self.library.scenes removeObjectAtIndex:indexPathFor];
+        NSError *error = nil;
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[take getPathURL].path])
+        {
+            
+            [[NSFileManager defaultManager] removeItemAtURL:[take getPathURL] error:&error];
+        
+        }
+        if (!error)
+        {
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        }
+        
+        
+        
 //        // NSFileMAnager... delete all of the videos in that section......
-//    }
-//
-//
-//
-//    //UITableViewCellEditingStyleDelete
-//
-//}
+    }
+    
 
 
-//- (IBAction)editScene:(id)sender
-//{
-//    [self.tableView setEditing:YES animated:YES];
-//
-//}
+
+    //UITableViewCellEditingStyleDelete
+
+}
+
+
+
 /*
 #pragma mark - Navigation
 
@@ -144,5 +210,54 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+// Selects and deselects rows. These methods will not call the delegate methods (-tableView:willSelectRowAtIndexPath: or tableView:didSelectRowAtIndexPath:), nor will it send out a notification.
+//- (void)selectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated scrollPosition:(UITableViewScrollPosition)scrollPosition;
+//- (void)deselectRowAtIndexPath:(NSIndexPath *)indexPath animated:(BOOL)animated;
+//- (NSIndexPath *)indexPathForSelectedRow;
+// returns nil or index path representing section and row of selection.
+/*
+ @property (nonatomic, retain) UIView *tableHeaderView;                           // accessory view for above row content. default is nil. not to be confused with section header
+ @property (nonatomic, retain) UIView *tableFooterView;                           // accessory view below content. default is nil. not to be confused with section footer
+*/
+- (IBAction)delete:(id)sender
+{
+    //[self.tableView setEditing:YES animated:YES];
+    
+    NSIndexPath *index = self.tableView.indexPathForSelectedRow;
+    if (index == nil)
+    {
+        return;
+    }
+    Take *selectedTake = self.scene.takes[index.row];
+    // add code here for when you hit delete
+    NSError *error = nil;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[selectedTake getPathURL].path])
+    {
+        NSLog(@"%@",selectedTake.assetID);
+        NSLog(@"%@",[selectedTake getPathURL]);
+        
+        [[NSFileManager defaultManager] removeItemAtURL:[selectedTake getPathURL] error:&error];
+        
+    }
+    if (!error)
+    {
+        [self.scene.takes removeObject:selectedTake];
+
+        [self.tableView deleteRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationRight];
+    }
+    
+    //NSNotificationCenter defaultCenter
+    
+}
+
+- (IBAction)playMovie:(id)sender
+{
+}
+
+- (IBAction)addAsFavourite:(id)sender
+{
+    
+}
 
 @end

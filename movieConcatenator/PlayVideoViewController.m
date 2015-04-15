@@ -21,11 +21,11 @@
 {
     [super viewDidLoad];
     [self configureMoviePlayer];
-    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController setNavigationBarHidden:NO];
     
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneAction:)];
-    [doneButton setEnabled:YES];
-    self.navigationItem.leftBarButtonItem = doneButton;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneAction:)];
+    //[doneButton setEnabled:YES];
+    //self.navigationItem.leftBarButtonItem = doneButton;
     
     
     

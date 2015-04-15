@@ -72,12 +72,13 @@
         
         ////// to make this work must add ::
         
-      //_thumbnail = [self loadThumbnailWithCompletionHandler:^(UIImage *image){
-    
-          //  self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
-        
-           // self.thumbnail = image;
-       // }];
+      //_thumbnail = [[UIImage alloc] init];
+//      [self loadThumbnailWithCompletionHandler:^(UIImage *image){
+//    
+//            //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
+//        
+//            self.thumbnail = image;
+//      }];
         
         
         if (_thumbnail == nil)
@@ -214,16 +215,31 @@
 //Load the first frame of the video for a thumbnail
 - (UIImage*)loadThumbnailWithCompletionHandler:(void (^)(UIImage*))completionHandler
 {
-    [self createGeneratorFromItemInFilePathURL];
+    
+//    if (!_videoAsset)
+//    {
+//        
+//        _videoAsset = [[AVURLAsset alloc] initWithURL:[self getPathURL] options:nil];
+//        
+//        
+//    }
+//    if (!_imageGenerator)
+//    {
+//        self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
+//    }
+
+   [self createGeneratorFromItemInFilePathURL];
     // before:::__weak __block
-    __unsafe_unretained __block Take *weakSelf = (Take *)self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    __weak __block Take *weakSelf = (Take *)self;
+//
+
+   
+ dispatch_once(&_thumbnailToken,
+     ^{
         /////???
         weakSelf.imageGenerator.appliesPreferredTrackTransform = YES;
         
-        [self.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]
-         
-        completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error)
+        [weakSelf.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error)
         {
               if (result == AVAssetImageGeneratorSucceeded)
               {
@@ -247,35 +263,35 @@
     return self.thumbnail;
 }
 
-- (void) getThumbnailImage
-{
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[self getPathURL]
-        options:nil];
-    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    generator.appliesPreferredTrackTransform = YES;
-   
-    //NSError *error = nil;
-    //[generator copyCGImageAtTime:kCMTimeZero actualTime:nil error:&error];
-    AVAssetImageGeneratorCompletionHandler handler =
-    ^(CMTime requestedTime, CGImageRef image, CMTime actualTime,
-          AVAssetImageGeneratorResult result, NSError *error)
-    {
-        if (result != AVAssetImageGeneratorSucceeded)
-        {
-            NSLog(@"couldn't generate thumbnail, error:%@", error);
-        }
-        
-        self.thumbnail = [UIImage imageWithCGImage:image];
-        
-        
-        // Show the image in a UIImageView
-        
-        //self.thumbImageView.image = self.videoThumb;
-    
-    };
-    
-    [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]  completionHandler:handler];
-}
+//- (void) getThumbnailImage
+//{
+//    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[self getPathURL]
+//        options:nil];
+//    AVAssetImageGenerator *generator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+//    generator.appliesPreferredTrackTransform = YES;
+//   
+//    //NSError *error = nil;
+//    //[generator copyCGImageAtTime:kCMTimeZero actualTime:nil error:&error];
+//    AVAssetImageGeneratorCompletionHandler handler =
+//    ^(CMTime requestedTime, CGImageRef image, CMTime actualTime,
+//          AVAssetImageGeneratorResult result, NSError *error)
+//    {
+//        if (result != AVAssetImageGeneratorSucceeded)
+//        {
+//            NSLog(@"couldn't generate thumbnail, error:%@", error);
+//        }
+//        
+//        self.thumbnail = [UIImage imageWithCGImage:image];
+//        
+//        
+//        // Show the image in a UIImageView
+//        
+//        //self.thumbImageView.image = self.videoThumb;
+//    
+//    };
+//    
+//    [generator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]  completionHandler:handler];
+//}
 
 
 // Load the first frame of the video for a thumbnail

@@ -51,6 +51,20 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @implementation RecordVideoViewController
 
 
+- (void)deviceOrientationDidChange:(NSNotification *)notification
+
+{
+    
+    //Obtaining the current device orientation
+    
+    /* Where self.m_CurrentOrientation is member variable in my class of type UIDeviceOrientation */
+    
+    self.currentOrientation = [[UIDevice currentDevice] orientation];
+    
+    // Do your Code using the current Orienation
+    
+}
+
 - (BOOL)isSessionRunningAndDeviceAuthorized
 {
     return [[self session] isRunning] && [self isDeviceAuthorized];
@@ -64,6 +78,18 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(deviceOrientationDidChange)
+//                                                 name:UIDeviceOrientationDidChangeNotification
+//                                               object:[UIDevice currentDevice]];
+    
+    // Keep track of changes to the device orientation so we can update the capture pipeline
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector (deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
+    
+    
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
     self.recordButton.layer.cornerRadius = self.flashButton.layer.cornerRadius = self.cameraPosition.layer.cornerRadius = 4;
@@ -73,8 +99,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
 
     [self setSession:session];
-    
     // Setup the preview view
+    
    [[self recordVideoView] setSession:session];
     
     // Check for device authorization
@@ -192,8 +218,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self removeObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" context:SessionRunningAndDeviceAuthorizedContext];
         //[self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
         [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
-        
-        //[[NSNotificationCenter defaultCenter] postNotificationName:@"didStopRunning" object:[self outputFileURL]];
     });
 
   
@@ -317,7 +341,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [[[self movieFileOutput] connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:[[(AVCaptureVideoPreviewLayer *)[[self recordVideoView] layer] connection] videoOrientation]];
             
             // Turning OFF flash for video recording
-            [RecordVideoViewController setFlashMode:AVCaptureFlashModeOff forDevice:[[self videoDeviceInput] device]];
+            [RecordVideoViewController setFlashMode:AVCaptureFlashModeOn forDevice:[[self videoDeviceInput] device]];
             
             // Start recording to a temporary file.
             NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[@"take" stringByAppendingPathExtension:@"mov"]];
@@ -614,6 +638,28 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     }];
 }
 
+
+- (void)configureCameraForHighestFrameRate:(AVCaptureDevice *)device
+{
+    AVCaptureDeviceFormat *bestFormat = nil;
+    AVFrameRateRange *bestFrameRateRange = nil;
+    for ( AVCaptureDeviceFormat *format in [device formats] ) {
+        for ( AVFrameRateRange *range in format.videoSupportedFrameRateRanges ) {
+            if ( range.maxFrameRate > bestFrameRateRange.maxFrameRate ) {
+                bestFormat = format;
+                bestFrameRateRange = range;
+            }
+        }
+    }
+    if ( bestFormat ) {
+        if ( [device lockForConfiguration:NULL] == YES ) {
+            device.activeFormat = bestFormat;
+            device.activeVideoMinFrameDuration = bestFrameRateRange.minFrameDuration;
+            device.activeVideoMaxFrameDuration = bestFrameRateRange.minFrameDuration;
+            [device unlockForConfiguration];
+        }
+    }
+}
 //-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 //{
 //    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];

@@ -73,6 +73,7 @@
     static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
     
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+    
  
       //  CGRect screenRect = [[UIScreen mainScreen] bounds];
        // screenRect.size.width

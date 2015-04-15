@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="pgs-lo-jPl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="pgs-lo-jPl">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -101,6 +101,14 @@
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="pjO-gf-9VH">
                                     <rect key="frame" x="150" y="21" width="20" height="20"/>
                                 </activityIndicatorView>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="kkF-6i-UZc">
+                                    <rect key="frame" x="161" y="34" width="312" height="29"/>
+                                    <segments>
+                                        <segment title="First"/>
+                                        <segment title="Second"/>
+                                    </segments>
+                                    <color key="tintColor" red="0.0" green="0.074411772727022374" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </segmentedControl>
                             </subviews>
                             <color key="backgroundColor" red="0.08620554831613314" green="0.10983353905422366" blue="1" alpha="0.52000000000000002" colorSpace="calibratedRGB"/>
                             <color key="tintColor" red="0.0" green="1" blue="0.94934334050000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -136,15 +144,6 @@
                                 <action selector="MergeAllVideos:" destination="Ka6-Tg-ChZ" id="5LT-gO-dW8"/>
                             </connections>
                         </barButtonItem>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="kkF-6i-UZc">
-                            <rect key="frame" x="144" y="7.5" width="312" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="First"/>
-                                <segment title="Second"/>
-                            </segments>
-                            <color key="tintColor" red="0.0" green="0.074411772727022374" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Nws-nl-lL6">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
@@ -161,14 +160,14 @@
         <scene sceneID="fMK-9Z-Ae0">
             <objects>
                 <tableViewController title="Scenes" id="J0d-P8-PPs" customClass="ScenesTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="110" sectionHeaderHeight="30" sectionFooterHeight="30" id="iLZ-Xg-fI4">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="120" sectionHeaderHeight="32" sectionFooterHeight="1" id="iLZ-Xg-fI4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="separatorColor" red="0.14901960780000001" green="0.14901960780000001" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="sectionIndexColor" red="0.070588235289999995" green="0.5450980392" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexColor" red="0.053207354447605902" green="0.74383851133975709" blue="0.90062736742424243" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="sectionIndexTrackingBackgroundColor" red="0.070588235289999995" green="0.5450980392" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="sectionIndexTrackingBackgroundColor" red="0.13928110684837025" green="0.80846590234185745" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <sections/>
                         <connections>
                             <outlet property="dataSource" destination="J0d-P8-PPs" id="esR-Sg-493"/>
@@ -177,15 +176,14 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems>
-                        <barButtonItem title="Join Videos" width="571" id="xOy-Bm-qw3">
+                        <barButtonItem systemItem="flexibleSpace" id="nuU-2g-Bz4"/>
+                        <barButtonItem title="Join Selected Videos" width="288" id="Z2j-fG-02q">
                             <connections>
-                                <action selector="ConcatenateSelectedTakes:" destination="J0d-P8-PPs" id="Itu-cd-ye3"/>
+                                <action selector="ConcatenateSelectedTakes:" destination="J0d-P8-PPs" id="Mdc-it-azO"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem id="Lud-aY-c9K"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="nvH-Zh-J1x">
-                        <nil key="title"/>
+                    <navigationItem key="navigationItem" title="Scenes" id="nvH-Zh-J1x">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Rt2-49-wUS">
                             <color key="tintColor" red="0.070588235289999995" green="0.5450980392" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -193,9 +191,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
-                        <outlet property="tableView" destination="iLZ-Xg-fI4" id="oKD-b7-5rh"/>
+                        <outlet property="_tableView" destination="iLZ-Xg-fI4" id="6a9-qZ-BVY"/>
+                        <outlet property="concatenateButton" destination="nuU-2g-Bz4" id="EKI-Fg-d0i"/>
                         <segue destination="xm6-hf-0Po" kind="show" identifier="ShowTakesViewController" id="QGb-Jn-TGM"/>
                     </connections>
                 </tableViewController>
@@ -357,7 +355,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IUw-RP-VCu" customClass="RecordVideoView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-RV-2L4">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-RV-2L4">
                                         <rect key="frame" x="237" y="404" width="115" height="115"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="115" id="9de-0y-Hh6"/>
@@ -367,13 +365,12 @@
                                         <color key="tintColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <inset key="contentEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
                                         <inset key="imageEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
-                                        <size key="titleShadowOffset" width="5" height="0.0"/>
+                                        <size key="titleShadowOffset" width="5" height="5"/>
                                         <state key="normal" title="Record" backgroundImage="noun_webcam_58296">
                                             <color key="titleColor" red="0.086274509799999996" green="0.70196078429999997" blue="0.99607843139999996" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <state key="disabled" image="noun_record-music_72322"/>
-                                        <state key="selected" image="1420512718_audio-video-outline-stop-128.png"/>
-                                        <state key="highlighted" image="noun_record-music_72322.png"/>
+                                        <state key="selected" backgroundImage="1420512718_audio-video-outline-stop-128.png"/>
                                         <connections>
                                             <action selector="toggleRecording:" destination="U8g-fB-d4T" eventType="touchUpInside" id="hOv-4P-sLE"/>
                                         </connections>
@@ -393,7 +390,7 @@
                                             <action selector="toggleCameraPosition:" destination="U8g-fB-d4T" eventType="touchUpInside" id="8WL-WZ-l53"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asB-Ia-u4Z">
+                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asB-Ia-u4Z">
                                         <rect key="frame" x="415" y="480" width="69" height="39"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="CtM-RN-CIp"/>
@@ -448,8 +445,8 @@
                                 <action selector="cancel:" destination="U8g-fB-d4T" id="pkw-8X-igz"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="fZX-nD-AcG">
-                            <color key="tintColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="fZX-nD-AcG">
+                            <color key="tintColor" red="0.1333333333" green="0.76470588240000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="save:" destination="U8g-fB-d4T" id="sCA-vo-Avp"/>
                             </connections>
@@ -481,9 +478,9 @@
         <scene sceneID="yad-jn-uyN">
             <objects>
                 <navigationController title="Scenes" automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="pgs-lo-jPl" sceneMemberID="viewController">
-                    <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="7Rr-2e-KyG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -494,7 +491,7 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="JqY-AQ-8JV">
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="rmD-vR-3wP">
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -550,23 +547,15 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Scene Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQW-6q-vVa">
                                 <rect key="frame" x="117" y="78" width="180" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Scene Description" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JBP-u4-VOL">
-                                <rect key="frame" x="341" y="79" width="232" height="91"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="61.5" id="hiZ-sa-hfe"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="132" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
-                                <rect key="frame" x="0.0" y="184" width="600" height="372"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="125" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
+                                <rect key="frame" x="0.0" y="189" width="600" height="367"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="separatorColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="TakeTableViewCell" textLabel="zuM-n7-cp6" rowHeight="132" style="IBUITableViewCellStyleDefault" id="Xhc-UF-0A1" customClass="TakeTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="TakeTableViewCell" textLabel="zuM-n7-cp6" rowHeight="125" style="IBUITableViewCellStyleDefault" id="Xhc-UF-0A1">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xhc-UF-0A1" id="99L-c9-IjN">
@@ -575,11 +564,13 @@
                                                 <label multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zuM-n7-cp6">
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <inset key="separatorInset" minX="4" minY="0.0" maxX="1" maxY="0.0"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -587,28 +578,21 @@
                                     <outlet property="delegate" destination="vf8-J6-cpX" id="hcD-vF-e0N"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Scene Title" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hjl-CH-C5s">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Scene Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hjl-CH-C5s">
                                 <rect key="frame" x="117" y="112" width="230" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="63n-fp-zOj"/>
-                                    <constraint firstAttribute="width" constant="180" id="s3r-vl-Tcy"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.58194009989999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                <color key="textColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fvc-qQ-D6S">
-                                <rect key="frame" x="236" y="232" width="86" height="67"/>
-                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.074509803920000006" green="0.0" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.91699951340924535" green="0.98510026879778123" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="JBP-u4-VOL" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="15" id="0cD-CH-wA8"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4QG-oE-SNw" secondAttribute="trailing" constant="-16" id="1zz-n7-6Fa"/>
-                            <constraint firstItem="JBP-u4-VOL" firstAttribute="leading" secondItem="hjl-CH-C5s" secondAttribute="trailing" constant="15" id="3Xg-NC-WFZ"/>
                             <constraint firstItem="hjl-CH-C5s" firstAttribute="leading" secondItem="PSi-eA-hn7" secondAttribute="trailing" constant="15" id="8Xp-2v-bOA"/>
                             <constraint firstItem="PSi-eA-hn7" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="15" id="ABe-OL-MOk"/>
-                            <constraint firstItem="JBP-u4-VOL" firstAttribute="leading" secondItem="rQW-6q-vVa" secondAttribute="trailing" constant="15" id="Bni-Wb-RrX"/>
                             <constraint firstItem="rQW-6q-vVa" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="15" id="E9R-v6-Eqf"/>
                             <constraint firstItem="ehm-bg-IRS" firstAttribute="top" secondItem="4QG-oE-SNw" secondAttribute="bottom" id="N2s-10-TZj"/>
                             <constraint firstItem="PSi-eA-hn7" firstAttribute="leading" secondItem="Vcs-fS-NPP" secondAttribute="leadingMargin" id="Pqp-fG-7KJ"/>
@@ -616,34 +600,44 @@
                             <constraint firstItem="hjl-CH-C5s" firstAttribute="top" secondItem="rQW-6q-vVa" secondAttribute="bottom" constant="10" id="XGg-GQ-shh"/>
                             <constraint firstItem="4QG-oE-SNw" firstAttribute="leading" secondItem="Vcs-fS-NPP" secondAttribute="leading" id="Xza-Ls-1CX"/>
                             <constraint firstItem="4QG-oE-SNw" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="120" id="ZKS-Y3-y9p"/>
+                            <constraint firstItem="4QG-oE-SNw" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="125" id="bQG-vG-1Ed"/>
                             <constraint firstItem="4QG-oE-SNw" firstAttribute="trailing" secondItem="Vcs-fS-NPP" secondAttribute="trailing" id="ctO-ha-EC7"/>
-                            <constraint firstItem="ehm-bg-IRS" firstAttribute="top" secondItem="JBP-u4-VOL" secondAttribute="bottom" constant="410.5" id="fTW-um-MAC"/>
                             <constraint firstAttribute="centerX" secondItem="4QG-oE-SNw" secondAttribute="centerX" id="l1K-CV-Xqu"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="JBP-u4-VOL" secondAttribute="trailing" constant="11" id="lUc-eH-3LS"/>
                             <constraint firstItem="rQW-6q-vVa" firstAttribute="leading" secondItem="PSi-eA-hn7" secondAttribute="trailing" constant="15" id="lpA-Cf-vcV"/>
-                            <constraint firstItem="ehm-bg-IRS" firstAttribute="top" secondItem="PSi-eA-hn7" secondAttribute="bottom" constant="410" id="x8d-SO-Pyf"/>
-                            <constraint firstAttribute="centerY" secondItem="PSi-eA-hn7" secondAttribute="centerY" constant="178" id="x9n-j1-MBD"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="1zz-n7-6Fa"/>
+                                <exclude reference="ZKS-Y3-y9p"/>
                             </mask>
                         </variation>
                     </view>
                     <toolbarItems>
-                        <barButtonItem systemItem="action" id="fbr-BL-nbM">
-                            <inset key="imageInsets" minX="29" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <barButtonItem enabled="NO" title="Action" width="100" id="fbr-BL-nbM">
+                            <inset key="imageInsets" minX="0.0" minY="0.0" maxX="50" maxY="0.0"/>
                         </barButtonItem>
-                        <barButtonItem image="little-vid-icon2.png" width="195" id="Cwf-0L-jkX"/>
-                        <barButtonItem title="Play" width="99" id="Wqb-xd-leg">
-                            <inset key="imageInsets" minX="17" minY="0.0" maxX="49" maxY="0.0"/>
+                        <barButtonItem systemItem="play" id="Wqb-xd-leg">
+                            <inset key="imageInsets" minX="50" minY="0.0" maxX="50" maxY="0.0"/>
+                            <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="playMovie:" destination="vf8-J6-cpX" id="9VZ-do-Mpa"/>
+                            </connections>
                         </barButtonItem>
-                        <barButtonItem title="delete" width="53" id="QZe-eb-KYW">
-                            <inset key="imageInsets" minX="41" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <barButtonItem image="unselectedStar" style="plain" id="HxS-I0-kWh">
+                            <inset key="imageInsets" minX="100" minY="0.0" maxX="50" maxY="0.0"/>
+                            <connections>
+                                <action selector="addAsFavourite:" destination="vf8-J6-cpX" id="eDq-vH-DCl"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="trash" id="QZe-eb-KYW">
+                            <inset key="imageInsets" minX="150" minY="0.0" maxX="50" maxY="0.0"/>
+                            <connections>
+                                <action selector="delete:" destination="vf8-J6-cpX" id="adb-3p-jU1"/>
+                            </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Takes" id="g0l-ge-YlZ">
-                        <barButtonItem key="rightBarButtonItem" title="ADD TAKE" id="WF2-ri-fe5">
+                        <barButtonItem key="rightBarButtonItem" image="little-vid-icon2.png" id="WF2-ri-fe5">
                             <connections>
                                 <segue destination="U8g-fB-d4T" kind="show" identifier="" id="46v-NC-qKM"/>
                             </connections>
@@ -652,9 +646,8 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="actionButton" destination="fbr-BL-nbM" id="otU-Jm-fMA"/>
-                        <outlet property="deleteTakeButton" destination="QZe-eb-KYW" id="gFT-CE-Hhx"/>
+                        <outlet property="deleteTakeButton" destination="QZe-eb-KYW" id="U0s-pz-I1K"/>
                         <outlet property="playTakeButton" destination="Wqb-xd-leg" id="JCI-5M-wFP"/>
-                        <outlet property="sceneDescriptionLabel" destination="JBP-u4-VOL" id="zW1-98-D6C"/>
                         <outlet property="sceneNumberLabel" destination="rQW-6q-vVa" id="di5-bw-cwf"/>
                         <outlet property="sceneTitleLabel" destination="hjl-CH-C5s" id="Gh6-yv-tHk"/>
                         <outlet property="tableView" destination="4QG-oE-SNw" id="MKo-Du-1Wm"/>
@@ -669,8 +662,9 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="xm6-hf-0Po" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cPD-zX-TsE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="cPD-zX-TsE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -696,9 +690,9 @@
         <image name="little-vid-icon2.png" width="64" height="54"/>
         <image name="noun_clapperboard_78382.png" width="300" height="300"/>
         <image name="noun_record-music_72322" width="300" height="300"/>
-        <image name="noun_record-music_72322.png" width="300" height="300"/>
         <image name="noun_webcam_58296" width="300" height="300"/>
         <image name="selectedStar" width="32" height="32"/>
+        <image name="unselectedStar" width="32" height="32"/>
     </resources>
     <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

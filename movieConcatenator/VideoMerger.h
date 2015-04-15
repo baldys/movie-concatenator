@@ -21,6 +21,7 @@
 @property (nonatomic, strong) AVMutableComposition *mixComposition;
 @property (nonatomic, strong) AVMutableVideoComposition *mainComposition;
 
+@property (nonatomic, strong) NSMutableArray *mergedMovies;
 -(AVAsset*)spliceAssets: (NSArray*)takes;
 
 -(void) exportVideoComposition:(AVAsset*)composition;

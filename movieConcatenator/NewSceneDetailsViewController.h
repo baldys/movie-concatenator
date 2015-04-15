@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Scene.h"
+
 @interface NewSceneDetailsViewController : UIViewController
 
 @property (nonatomic, strong) Scene *scene;

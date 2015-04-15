@@ -15,26 +15,50 @@
 #import "TakesViewController.h"
 
 #define kHeaderSectionHeight 32
-#define kTableCellHeight     90
+#define kTableCellHeight     98
 
-@interface ScenesTableViewController () <TakeCellDelegate>
+@interface ScenesTableViewController () //<TakeCellDelegate>
 {
     UIActivityIndicatorView *activityIndicator;
 }
 @property (nonatomic, strong) NSMutableArray *scenes;
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) UIButton *addTakeButton;
-@property (nonatomic) NSInteger currentSceneIndex;
+@property (weak, nonatomic) IBOutlet UITableView *_tableView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *concatenateButton;
 
+//@property UIBarButtonItem *concatenatingActivityButton;
+@property (nonatomic) NSInteger currentSceneIndex;
+//@property (weak, nonatomic) IBOutlet UIToolbar *scenesToolbar;
 
 
 @end
 
 @implementation ScenesTableViewController
 
+
+- (void) setUpToolbar
+{
+    //- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
+    
+    
+    if (activityIndicator ==nil)
+    {
+        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] ;
+    }
+    
+    //UIBarButtonItem *concatenatingActivityButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+    //[concatenatingActivityButton setEnabled:NO];
+    
+    
+    
+    NSArray *items = [NSArray arrayWithObject:self.concatenateButton];
+    [self.navigationController.toolbar setItems:items animated:YES];
+    [self.navigationController.toolbar setHidden:NO];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setUpToolbar];
 
     // self.navigationItem.leftBarButtonItem = self.editButtonItem;
     /// self.library =
@@ -67,13 +91,9 @@
      selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
-    
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishJoiningVideos:) name:@"didFinishJoiningVideos" object:nil];
-    
-    if (!self.takesToConcatenate)
-    {
-        self.takesToConcatenate = [NSMutableArray array];
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
+  
     
 }
 
@@ -140,12 +160,12 @@
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
-   // UIEdgeInsets buttonPadding = UIEdgeInsetsMake(2,8,2,8);
-    
+
     UIImage *buttonImage = [UIImage imageNamed:@"disclosure"];
     
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
+    
     headerView.backgroundColor = [UIColor colorWithRed:0.129 green:0.129 blue:0.51 alpha:1.0];
     
      UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 0, 40, kHeaderSectionHeight)];
@@ -159,28 +179,15 @@
     sceneHeaderButton.showsTouchWhenHighlighted = YES;
     // these compress and stretch the button accordingly:
     [sceneHeaderButton setImageEdgeInsets:UIEdgeInsetsMake(5,12,5,12)];
-    
-    //UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"white-disclosure-indicator-64.png"] highlightedImage:[UIImage imageNamed:@"highlighted-white-disclosure-indicator-64"]];
-    //[sceneHeaderButton addSubview:imageView];
-    
-    
-                                                                              
-    
+
     //[sceneHeaderButton setImage:[UIImage imageNamed:@"highlighted-white-disclosure-indicator-64"] forState:UIControlStateSelected];
-    //[sceneHeaderButton.imageView setFrame:CGRectMake(self.tableView.frame.size.width-32, 0, 32, 32)];
-    //sceneHeaderButton.adjustsImageWhenHighlighted = YES;
-    
-    
-    
-    
     
     //sceneHeaderButton.backgroundColor = [UIColor colorWithRed:0 green:0.7583 blue:1.0 alpha:1.0];
-
+    //UIColor *bg2 = [UIColor colorWithRed:0 green:greenLevel2 blue:1.0 alpha:1.0];
+    //headerView.layer.borderColor = [UIColor colorWithRed:0.2510 green:0 blue:1.0 alpha:1.0].CGColor;
     [headerView addSubview:sceneHeaderButton];
     
-    //UIColor *bg2 = [UIColor colorWithRed:0 green:greenLevel2 blue:1.0 alpha:1.0];
-   //headerView.layer.borderColor = [UIColor colorWithRed:0.2510 green:0 blue:1.0 alpha:1.0].CGColor;
-    
+
     //// borders for section header.
     //headerView.layer.borderColor = [UIColor blackColor].CGColor;
     //headerView.layer.cornerRadius = 2.0;
@@ -199,9 +206,8 @@
     //[self.addTakeButton setTitle:@"Add Take" forState:UIControlStateNormal];
     //[self.addTakeButton setTintColor:[UIColor yellowColor]];
     //[self.addTakeButton title:[UIColor colorWithRed:0.0 green:0.7176 blue:1.0]];
-    //[self.addTakeButton setFrame:CGRectMake(self.tableView.frame.size.width-40,0,40,kHeaderSectionHeight)];
-    //[self.addTakeButton setImageEdgeInsets:UIEdgeInsetsMake(2,5,2,5)];
-    //self.addTakeButton.tag = section;
+
+    
     //self.addTakeButton.hidden = NO;
     //[self.addTakeButton setBackgroundColor:[UIColor purpleColor]];
     //[self.addTakeButton addTarget:self action:@selector(addTakeButtonPressed:) //forControlEvents:UIControlEventTouchUpInside];
@@ -210,8 +216,10 @@
     // title
     UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(12,0,self.tableView.frame.size.width-40,kHeaderSectionHeight)];
     Scene *sectionData = self.library.scenes[section];
+
+    
     headerLabel.text = sectionData.title;
-    //headerLabel.minimumScaleFactor = 1.2;
+    
     [headerLabel.font fontWithSize:22];
     headerLabel.textColor = [UIColor blackColor];
     
@@ -220,7 +228,7 @@
     return headerView;
 }
 
-- (IBAction)showTakesInScene:(UIButton*)sender
+- (void)showTakesInScene:(UIButton*)sender
 {
    // [sender setSelected:YES];
     [sender setHighlighted:YES];
@@ -232,6 +240,8 @@
     
 
 }
+
+
 /////
 - (UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
 {
@@ -254,6 +264,8 @@
 {
     return kTableCellHeight;
 }
+
+
 
 //- (IBAction)addTakeButtonPressed:(UIButton*)sender
 //{
@@ -285,11 +297,41 @@
 
 //}
 
+
+
+- (IBAction)ConcatenateSelectedTakes:(id)sender
+{
+    VideoMerger *merger = [[VideoMerger alloc]init];
+    NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
+    if (self.takesToConcatenate.count > 1)
+    {
+        [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
+    }
+    else
+    {
+        NSLog(@"Please select more than one video.");
+    }
+}
+
+- (void) playTheTakesVideoFromFileURL:(NSURL*)url
+{
+    PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
+    
+    videoPlayerVC.takeURL = url;
+    if (videoPlayerVC.takeURL)
+    {
+        //UINavigationController *navcont = [[UINavigationController alloc] initWithRootViewController:self];
+        [self presentViewController:videoPlayerVC animated:YES completion:^{
+            NSLog(@"Presented videoPlayerVC!!!");
+        }];
+    }
+}
+
 - (void) didSelectItemFromCollectionView:(NSNotification*)notification
 {
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
-
-   videoPlayerVC.takeURL = [notification object];
+    
+    videoPlayerVC.takeURL = [notification object];
     if (videoPlayerVC.takeURL)
     {
         //UINavigationController *navcont = [[UINavigationController alloc] initWithRootViewController:self];
@@ -301,53 +343,91 @@
 
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
 {
+    if (!self.takesToConcatenate)
+    {
+        self.takesToConcatenate = [NSMutableArray array];
+    }
+    
+    
     Take *take = [notification object];
-
+    
     if (take.isSelected && ![self.takesToConcatenate containsObject:take])
     {
         [self.takesToConcatenate addObject:take];
-        NSLog(@"take is selected but does not contain object %@", take.assetID);
-                
     }
     else if (!take.isSelected && [self.takesToConcatenate containsObject:take])
     {
         [self.takesToConcatenate removeObject:take];
     }
-
-
 }
 
-- (IBAction)ConcatenateSelectedTakes:(id)sender
+- (void) didStartConcatenatingVideos:(NSNotification*)notification
 {
-    
-    VideoMerger *merger = [[VideoMerger alloc]init];
-    
-    NSLog(@"################# number of items in  %lu",(unsigned long)[self.takesToConcatenate count]);
-    if (self.takesToConcatenate.count > 1)
-    {
-        
-        [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
-        self.takesToConcatenate = nil;
-        [self showActivityIndicator];
-        
-    }
-    else
-    {
-        NSLog(@"one or fewer videos were selected");
-
-    }
-    
-    
-    
-}
-
-- (void) showActivityIndicator
-{
+    NSLog(@"video merging starting?");
     activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    // if concatenation finished successfully, stop animating the view, hide it from the toolbar and re-enable the concatenate button so another video can be merged.
+    if (activityIndicator.isAnimating == YES) return;
+    
     [activityIndicator startAnimating];
+    
+    // right now only the concatenator button should be showing in the toolbar
+    //[self.navigationController.toolbarItems[0] setHidden:NO];
+   // [self.navigationController.toolbarItems[1] setHidden:YES];
+    [self.concatenateButton setEnabled:NO];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     NSArray *items = [[NSArray alloc] initWithObjects:item, nil];
+    ///[self.navigationController.toolbarItems
     [self.navigationController.toolbar setItems:items];
+    
+}
+
+- (void) didFinishConcatenatingVideos:(NSNotification*)notification
+{
+    if (activityIndicator.isAnimating==NO)
+    {
+        NSLog(@"The activity indiciator cannot stop animating when is not animating");
+        return;
+    }
+    
+    NSLog(@"Will be stopping animation");
+    
+    
+    [activityIndicator stopAnimating];
+
+    [self.concatenateButton setEnabled:YES];
+    NSArray *items = [[NSArray alloc] initWithObjects:self.concatenateButton, nil];
+    ///[self.navigationController.toolbarItems
+    [self.navigationController.toolbar setItems:items];
+    
+    
+    for (int i=0; i<self.takesToConcatenate.count; i++)
+    {
+        [self.takesToConcatenate[i] setSelected:NO];
+    }
+    
+    
+    //[self.takesToConcatenate removeAllObjects];
+    self.takesToConcatenate = nil;
+}
+
+- (void) didFinishRecordingVideoToURL:(NSNotification*)notification
+{
+    __weak __typeof(self) weakSelf = self;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+                   ^{
+                       Take *newTake = [[Take alloc] initWithURL:notification.object];
+                       newTake.sceneNumber = _currentSceneIndex;
+                       
+                       [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
+                       [weakSelf.library saveToFilename:@"videolibrary.plist"];
+                       
+                       dispatch_async(dispatch_get_main_queue(), ^{
+                           [weakSelf.tableView reloadData];
+                       });
+                   });
+    // after presenting the record view controller with a modal segue instead of storyboard, dismiss the view controller here.
+    
 }
 
 # pragma mark - Segues
@@ -380,23 +460,11 @@
 //        {
 //        }
     }
-    
-       // UIButton *addTakeButton = (UIButton*)sender;
-        //NSLog(@"buttontag = %li", (long)addTakeButton.tag);
-        //self.sceneIndexForNewTake = addTakeButton.tag;
-    
-    
-    
+  
     
 
     //Scene *currentScene = self.library.scenes[addTakeButton.tag];
 
-    //RecordVideoViewController *recordViewController = segue.destinationViewController;
-    //[recordViewController setSceneIndex:addTakeButton.tag];
-    //[recordViewController setLibrary:self.library];
-    //[recordViewController setScene:currentScene];
-
-    //NSLog(@"recordViewController.scene has been set to %@", currentScene.title);
 
 }
 
@@ -413,10 +481,16 @@
     __weak __typeof(self) weakSelf = self;
     self.library.completionBlock = ^void (BOOL success)
     {
+//        if (success)
+//        {
+//            NSLog(@"saving video");
+//            [weakSelf.library saveToFilename:@"videolibrary.plist"];
+//        }
+//            //        [weakSelf.tableView reloadData];
         NSLog(@"completion block called!");
         dispatch_async(dispatch_get_main_queue(), ^{
-            
             [weakSelf.tableView reloadSectionIndexTitles];
+            //[weakSelf.tableView scrollToRowAtIndexPath:<#(NSIndexPath *)#> atScrollPosition:<#(UITableViewScrollPosition)#> animated:<#(BOOL)#>]
         });
         
         
@@ -474,25 +548,6 @@
     
 }
 
-- (void) didFinishRecordingVideoToURL:(NSNotification*)notification
-{
-    __weak __typeof(self) weakSelf = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-       ^{
-           Take *newTake = [[Take alloc] initWithURL:notification.object];
-           newTake.sceneNumber = _currentSceneIndex;
-           
-        
-           [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
-           [weakSelf.library saveToFilename:@"videolibrary.plist"];
-          
-           dispatch_async(dispatch_get_main_queue(), ^{
-               [weakSelf.tableView reloadData];
-           });
-       });
-    // after presenting the record view controller with a modal segue instead of storyboard, dismiss the view controller here.
 
-}
 @end
 
