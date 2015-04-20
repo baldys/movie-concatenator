@@ -215,7 +215,7 @@
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
 
-    UIImage *buttonImage = [UIImage imageNamed:@"disclosure"];
+    UIImage *buttonImage = [UIImage imageNamed:@"disclosure-white"];
     
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
@@ -243,9 +243,9 @@
     
 
     //// borders for section header.
-    //headerView.layer.borderColor = [UIColor blackColor].CGColor;
-    //headerView.layer.cornerRadius = 2.0;
-    //headerView.layer.borderWidth = 5.0;
+//    headerView.layer.borderColor = [UIColor whiteColor].CGColor;
+//    headerView.layer.cornerRadius = 2.0;
+//    headerView.layer.borderWidth = 3.0;
    
     
     //camera2-4.png    simple vid camera icon

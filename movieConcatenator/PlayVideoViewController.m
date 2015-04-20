@@ -11,23 +11,45 @@
 ///
 #import "PlayVideoViewController.h"
 
-@interface PlayVideoViewController ()
+@interface PlayVideoViewController () <MPMediaPlayback>
 
 @end
 
 @implementation PlayVideoViewController
 
+- (void) beginSeekingForward
+{
+    
+    
+}
+- (void) beginSeekingBackward
+{
+    
+}
+- (void) stop
+{
+    
+}
+- (void) pause
+{
+    
+}
+
+- (void) prepareToPlay
+{
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self configureMoviePlayer];
-    [self.navigationController setNavigationBarHidden:NO];
+    //[self.navigationController setNavigationBarHidden:NO];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneAction:)];
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(doneAction:)];
     //[doneButton setEnabled:YES];
     //self.navigationItem.leftBarButtonItem = doneButton;
     
-    
+ 
     
 }
 -(void) configureMoviePlayer
@@ -37,8 +59,11 @@
     
     self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:self.takeURL];
     self.moviePlayer.view.backgroundColor = [UIColor blackColor];
-    
+   
+
     [self.moviePlayer prepareToPlay];
+    
+    
     
     [self.moviePlayer.view setFrame:self.view.bounds];
     [self.view addSubview:self.moviePlayer.view];
@@ -47,29 +72,67 @@
                                              selector:@selector(myMovieFinishedCallback:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(doneAction:)
+                                                 name:MPMoviePlayerWillExitFullscreenNotification
+                                               object:nil];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self
+//                                             selector:@selector(movieControlActions:)
+//                                                 name:MPMoviePlayerPlaybackStateDidChangeNotification
+//                                               object:nil];
+    
+    /// then get the reason user info key
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.moviePlayer play];
+
 }
 
+
+-(void) play
+{
+    [self.moviePlayer play];
+    
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
-- (void)doneAction:(UIBarButtonItem*)sender
+- (void)doneAction:(NSNotification*)notification
 {
-    NSLog(@"Done was pressed.");
+    //NSNumber *reason = [notification.userInfo objectForKey:MPMoviePlayerPlaybackDidFinishReasonUserInfoKey];
     
-    [self dismissMoviePlayerViewControllerAnimated];
+    //if ([reason intValue] == MPMovieFinishReasonUserExited) {
+        // Your done button action here
+        NSLog(@"Done was pressed.");
+        
+        
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        //
-         NSLog(@"Dismissed View Controller.");
-    }];
+        
+        [self dismissMoviePlayerViewControllerAnimated];
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+            [[NSNotificationCenter defaultCenter]
+             removeObserver:self
+             name:MPMoviePlayerWillExitFullscreenNotification
+             object:nil];
+            [[NSNotificationCenter defaultCenter]
+             removeObserver:self
+             name:MPMoviePlayerPlaybackDidFinishNotification
+             object:nil];
+            
+            NSLog(@"Dismissed View Controller.");
+            
+        }];
+        
+  
+   
 }
 
 /// When the movie is done, release the controller.
@@ -79,9 +142,9 @@
     MPMoviePlayerController* moviePlayer = [aNotification object];
     
     [[NSNotificationCenter defaultCenter]
-     removeObserver:self
-               name:MPMoviePlayerPlaybackDidFinishNotification
-             object:moviePlayer];
+      removeObserver:self
+      name:MPMoviePlayerPlaybackDidFinishNotification
+      object:moviePlayer];
     
     [self dismissMoviePlayerViewControllerAnimated];
     

@@ -11,6 +11,8 @@
 		9F18027A1ACB0C1E00CFBCB4 /* UIImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1802791ACB0C1E00CFBCB4 /* UIImage+Extras.m */; };
 		9F1802831ACD130D00CFBCB4 /* NewSceneDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1802821ACD130D00CFBCB4 /* NewSceneDetailsViewController.m */; };
 		9F1802851ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F1802841ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png */; };
+		9F3B4D4E1AE4BD360056E4C7 /* recording.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D4D1AE4BD360056E4C7 /* recording.png */; };
+		9F3B4D501AE4BF9C0056E4C7 /* disclosure-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */; };
 		9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */; };
 		9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */; };
 		9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815811AB306780027F1A0 /* white-outline-star-64.png */; };
@@ -89,6 +91,8 @@
 		9F1802811ACD130D00CFBCB4 /* NewSceneDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewSceneDetailsViewController.h; sourceTree = "<group>"; };
 		9F1802821ACD130D00CFBCB4 /* NewSceneDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewSceneDetailsViewController.m; sourceTree = "<group>"; };
 		9F1802841ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noun_vhs-tape_52451.png"; sourceTree = "<group>"; };
+		9F3B4D4D1AE4BD360056E4C7 /* recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recording.png; sourceTree = "<group>"; };
+		9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure-white.png"; sourceTree = "<group>"; };
 		9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TakeCollectionViewCell.xib; sourceTree = "<group>"; };
 		9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "00cdea-outline-star-64.png"; sourceTree = "<group>"; };
 		9F4815811AB306780027F1A0 /* white-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-outline-star-64.png"; sourceTree = "<group>"; };
@@ -244,8 +248,10 @@
 				9F4815811AB306780027F1A0 /* white-outline-star-64.png */,
 				9F758F9C1AE4931F0092E685 /* filmstrip-35mm1.png */,
 				9F740EA51AD3A4F100F3F23D /* play-48.png */,
+				9F3B4D4D1AE4BD360056E4C7 /* recording.png */,
 				9F740EA11AD3A48E00F3F23D /* little-vid-icon.png */,
 				9F740EA21AD3A48F00F3F23D /* little-vid-icon2.png */,
+				9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */,
 				9F8E5DAD1AD35FB2009BE712 /* videos-concatenate.png */,
 				9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */,
 				9F9BC5311ACE8A3900994E9A /* camera2-4.png */,
@@ -483,6 +489,7 @@
 			files = (
 				9F740EB11AD79B1300F3F23D /* white-disclosure-indicator-64.png in Resources */,
 				9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */,
+				9F3B4D501AE4BF9C0056E4C7 /* disclosure-white.png in Resources */,
 				9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */,
 				9F740EA61AD3A4F100F3F23D /* play-48.png in Resources */,
 				9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */,
@@ -497,6 +504,7 @@
 				9F740EA31AD3A48F00F3F23D /* little-vid-icon.png in Resources */,
 				9F8E5DAE1AD35FB2009BE712 /* videos-concatenate.png in Resources */,
 				9F740EA41AD3A48F00F3F23D /* little-vid-icon2.png in Resources */,
+				9F3B4D4E1AE4BD360056E4C7 /* recording.png in Resources */,
 				9F9BC54A1AD0F62900994E9A /* video-camera2d.png in Resources */,
 				9F9BC5101ACE088E00994E9A /* ffffff-clapperboard-48.png in Resources */,
 				9FAFA74E1A98884A00F7396B /* Main.storyboard in Resources */,
