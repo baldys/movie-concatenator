@@ -64,7 +64,7 @@
         
         _selected = NO;
         
-        _imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
+        //_imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
         //;
 
@@ -73,12 +73,12 @@
         ////// to make this work must add ::
         
       //_thumbnail = [[UIImage alloc] init];
-//      [self loadThumbnailWithCompletionHandler:^(UIImage *image){
+     [self loadThumbnailWithCompletionHandler:^(UIImage *image){
 //    
-//            //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
+            self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
 //        
-//            self.thumbnail = image;
-//      }];
+            self.thumbnail = image;
+      }];
         
         
         if (_thumbnail == nil)
@@ -123,6 +123,7 @@
     if (!_imageGenerator)
     {
         self.imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
+        self.imageGenerator.appliesPreferredTrackTransform = YES;
 
     }
 }
@@ -232,12 +233,10 @@
     // before:::__weak __block
     __weak __block Take *weakSelf = (Take *)self;
 //
-
-   
- dispatch_once(&_thumbnailToken,
-     ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+     
         /////???
-        weakSelf.imageGenerator.appliesPreferredTrackTransform = YES;
+        
         
         [weakSelf.imageGenerator generateCGImagesAsynchronouslyForTimes:[NSArray arrayWithObject:[NSValue valueWithCMTime:kCMTimeZero]]completionHandler:^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError *error)
         {
@@ -249,7 +248,7 @@
                   ^{
                       NSLog(@"Loaded thumbnail");
                       
-                      completionHandler(weakSelf.thumbnail);
+                       completionHandler(weakSelf.thumbnail);
                   });
               }
               else if (result == AVAssetImageGeneratorFailed)

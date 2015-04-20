@@ -50,7 +50,7 @@
 
 - (NSURL*)getPathURL;
 - (NSString*) documentsDirectory;
-- (void)getThumbnailImage;
+//- (void)getThumbnailImage;
 
 //- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(void))completionHandler;
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;

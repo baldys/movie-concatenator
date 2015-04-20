@@ -15,9 +15,9 @@
 #import "TakesViewController.h"
 
 #define kHeaderSectionHeight 32
-#define kTableCellHeight     98
+#define kTableCellHeight     80
 
-@interface ScenesTableViewController () //<TakeCellDelegate>
+@interface ScenesTableViewController () <TakeCellDelegate>
 {
     UIActivityIndicatorView *activityIndicator;
 }
@@ -39,33 +39,45 @@
 {
     //- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
     
-    
     if (activityIndicator ==nil)
     {
-        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge] ;
+        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        activityIndicator.hidesWhenStopped = YES;
     }
+    [self.navigationController.toolbar setHidden:NO];
     
     //UIBarButtonItem *concatenatingActivityButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
     //[concatenatingActivityButton setEnabled:NO];
     
-    
-    
+    [self showConcatenatorButtonInToolbar];
+    if (self.takesToConcatenate.count <= 1)
+    {
+        [self.navigationController.toolbar.items[0] setEnabled:NO];
+    }
+
+}
+- (void) showConcatenatorButtonInToolbar
+{
+    if ([activityIndicator isAnimating] && activityIndicator != nil)
+        return;
+    [self.concatenateButton setEnabled:YES];
     NSArray *items = [NSArray arrayWithObject:self.concatenateButton];
     [self.navigationController.toolbar setItems:items animated:YES];
-    [self.navigationController.toolbar setHidden:NO];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self setUpToolbar];
-
+    [self tableHeader];
     // self.navigationItem.leftBarButtonItem = self.editButtonItem;
     /// self.library =
     /// self.library = [VideoLibrary libraryWithFilename:@:videolibrary.plist];
     /// if (!self.library)
     ///{
+    
     VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
+    
     if (!library)
     {
         NSLog(@"no library");
@@ -75,8 +87,6 @@
     self.library = library;
     self.scenes = library.scenes;
     
-
-
     // Register the table cell
     /// only use if you did not put an identifier in the storyboard.
     [self.tableView registerClass:[SceneTableViewCell class] forCellReuseIdentifier:@"SceneTableViewCell"];
@@ -84,16 +94,50 @@
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(didSelectItemFromCollectionView:)
-            name:@"didSelectItemFromCollectionView" object:nil];
+      name:@"didSelectItemFromCollectionView" object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self
-     selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
+        selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
-  
+    [[NSNotificationCenter defaultCenter]
+    addObserver:self
+       selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+        selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self selector:@selector(didDeleteTake:)
+     name:@"didDeleteTake" object:nil];
+    
+    [library listFileAtPath:[library documentsDirectory]];
+    
+}
+
+- (void) tableHeader
+{
+    UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
+    tableHeader.backgroundColor = [UIColor blackColor];
+    
+    /// header label:
+//    UILabel *tableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(8,5,self.tableView.frame.size.width,20)];
+//    [tableHeaderLabel setText:self.library.title];
+//    [tableHeader addSubview:tableHeaderLabel];
+    /// header image:
+    //UIImageView *headerImage = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
+    //[headerImage setImage:[UIImage imageNamed:@"filmstrip-35mm1.png"]];
+    //[tableHeader addSubview:headerImage];
+    
+    self.tableView.tableHeaderView = tableHeader;
+    
+}
+
+- (void)didDeleteTake:(NSNotification*)notification
+{
+    [self.library deleteTake:notification.object fromSceneAtIndex:_currentSceneIndex];
     
 }
 
@@ -101,7 +145,7 @@
 {
     [super viewDidDisappear:animated];
     
-    //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectItemFromCollectionView" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"didDeleteTake" object:nil];
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectStrButtonInCell" object:nil];
 }
 
@@ -137,16 +181,26 @@
     SceneTableViewCell *cell=
     [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
 
+    if (!cell)
+    {
+        cell = [[SceneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableViewCellIdentifier];
+    }
+    
     //Scene *scene = self.scenes[indexPath.section];
     //[cell setCollectionData:scene];
     ///////>>>>>>>>>>>>>>>>>>>>>
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         Scene *scene = self.scenes[indexPath.section];
         dispatch_async(dispatch_get_main_queue(), ^{
             [cell setCollectionData:scene];
-        });
-        
     });
+       
+ });
+////////>>>>>>>>>>>
+    
+    
+  
 
     return cell;
 }
@@ -166,9 +220,9 @@
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
     
-    headerView.backgroundColor = [UIColor colorWithRed:0.129 green:0.129 blue:0.51 alpha:1.0];
-    
-     UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 0, 40, kHeaderSectionHeight)];
+    //headerView.backgroundColor = [UIColor colorWithRed:0.129 green:0.129 blue:0.51 alpha:1.0];
+    headerView.backgroundColor = [UIColor blackColor];
+    UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 0, 40, kHeaderSectionHeight)];
     // img 25 width 40 height. make buttons 40x40 clickable portion).
     [sceneHeaderButton setImage:buttonImage forState:UIControlStateNormal];
     
@@ -220,8 +274,8 @@
     
     headerLabel.text = sectionData.title;
     
-    [headerLabel.font fontWithSize:22];
-    headerLabel.textColor = [UIColor blackColor];
+    [headerLabel.font fontWithSize:26];
+    headerLabel.textColor = [UIColor whiteColor];
     
     [headerView addSubview:headerLabel];
     
@@ -234,18 +288,14 @@
     [sender setHighlighted:YES];
  
     self.currentSceneIndex = sender.tag;
-    //[[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectHeaderButtonInScene" object:scene];
-    //[self.navigationController pushViewController:takesVC animated:YES];
+
     [self performSegueWithIdentifier:@"ShowTakesViewController" sender:sender];
-    
 
 }
 
-
-/////
 - (UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
 {
-    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0.0, 0.0, 0, 0)];
+    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0.0, 0.0, self.tableView.frame.size.width, kHeaderSectionHeight)];
     footerView.backgroundColor = [UIColor blackColor];
     return footerView;
 }
@@ -257,7 +307,7 @@
 /////
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0;
+    return kHeaderSectionHeight;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -313,20 +363,6 @@
     }
 }
 
-- (void) playTheTakesVideoFromFileURL:(NSURL*)url
-{
-    PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
-    
-    videoPlayerVC.takeURL = url;
-    if (videoPlayerVC.takeURL)
-    {
-        //UINavigationController *navcont = [[UINavigationController alloc] initWithRootViewController:self];
-        [self presentViewController:videoPlayerVC animated:YES completion:^{
-            NSLog(@"Presented videoPlayerVC!!!");
-        }];
-    }
-}
-
 - (void) didSelectItemFromCollectionView:(NSNotification*)notification
 {
     PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
@@ -346,6 +382,11 @@
     if (!self.takesToConcatenate)
     {
         self.takesToConcatenate = [NSMutableArray array];
+    }
+    if (self.takesToConcatenate.count > 1)
+    {
+        //[self.navigationController.toolbarItems[0] setEnabled:YES];
+        [self.navigationController.toolbar.items[0] setEnabled:YES];
     }
     
     
@@ -371,34 +412,30 @@
     [activityIndicator startAnimating];
     
     // right now only the concatenator button should be showing in the toolbar
-    //[self.navigationController.toolbarItems[0] setHidden:NO];
-   // [self.navigationController.toolbarItems[1] setHidden:YES];
+    // so disable it
     [self.concatenateButton setEnabled:NO];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    NSArray *items = [[NSArray alloc] initWithObjects:item, nil];
-    ///[self.navigationController.toolbarItems
-    [self.navigationController.toolbar setItems:items];
+    NSArray *items = [NSArray arrayWithObject:item];
+    // show activity indicator in the toolbar instead
+    [self.navigationController.toolbar setItems:items animated:YES];
     
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    //[[UIDevice currentDevice].generatesDeviceOrientationNotifications];
 }
 
 - (void) didFinishConcatenatingVideos:(NSNotification*)notification
 {
-    if (activityIndicator.isAnimating==NO)
-    {
-        NSLog(@"The activity indiciator cannot stop animating when is not animating");
-        return;
-    }
+    if (activityIndicator.isAnimating==NO) return;
     
     NSLog(@"Will be stopping animation");
     
-    
     [activityIndicator stopAnimating];
 
-    [self.concatenateButton setEnabled:YES];
-    NSArray *items = [[NSArray alloc] initWithObjects:self.concatenateButton, nil];
-    ///[self.navigationController.toolbarItems
-    [self.navigationController.toolbar setItems:items];
-    
+    [self showConcatenatorButtonInToolbar];
+    //[self.navigationController.toolbarItems[0] setHidden:NO];
     
     for (int i=0; i<self.takesToConcatenate.count; i++)
     {
@@ -412,6 +449,7 @@
 
 - (void) didFinishRecordingVideoToURL:(NSNotification*)notification
 {
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_currentSceneIndex] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     __weak __typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -423,12 +461,15 @@
                        [weakSelf.library saveToFilename:@"videolibrary.plist"];
                        
                        dispatch_async(dispatch_get_main_queue(), ^{
+                           
                            [weakSelf.tableView reloadData];
                        });
                    });
     // after presenting the record view controller with a modal segue instead of storyboard, dismiss the view controller here.
     
 }
+
+
 
 # pragma mark - Segues
 
@@ -490,14 +531,14 @@
         NSLog(@"completion block called!");
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadSectionIndexTitles];
-            //[weakSelf.tableView scrollToRowAtIndexPath:<#(NSIndexPath *)#> atScrollPosition:<#(UITableViewScrollPosition)#> animated:<#(BOOL)#>]
+            //[self.tableView scrollToRowAtIndexPath:self.library.scenes.count];
         });
         
         
     };
     
-    
-    
+}
+
 //    Scene *currentScene = self.library.scenes[self.segue.destinationViewController.sceneIndex];
     
 //    Take *newTake = [[Take alloc] initWithURL:segue.destinatiooutputFileURL];
@@ -546,7 +587,42 @@
     
 //    };
     
-}
+
+
+
+ // Override to support conditional editing of the table view.
+// - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+// // Return NO if you do not want the specified item to be editable.
+// return YES;
+// }
+
+
+/*
+ // Override to support editing the table view.
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+ if (editingStyle == UITableViewCellEditingStyleDelete) {
+ // Delete the row from the data source
+ [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+ } else if (editingStyle == UITableViewCellEditingStyleInsert) {
+ // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+ }
+ }
+ */
+
+/*
+ // Override to support rearranging the table view.
+ - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+ }
+ */
+
+/*
+ // Override to support conditional rearranging of the table view.
+ - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+ // Return NO if you do not want the item to be re-orderable.
+ return YES;
+ }
+ */
+
 
 
 @end

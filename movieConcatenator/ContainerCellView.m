@@ -19,6 +19,8 @@
 
 @end
 
+#define kCellSpacing 8
+
 @implementation ContainerCellView
 
 - (void)awakeFromNib
@@ -26,25 +28,25 @@
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    
+    flowLayout.minimumInteritemSpacing = 0.0;
+    flowLayout.minimumLineSpacing = 0.0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
-    flowLayout.itemSize = CGSizeMake(120, 80);
+    flowLayout.itemSize = CGSizeMake(130, 75);
     [self.collectionView setCollectionViewLayout:flowLayout];
     
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
     //_collectionView.layer.borderColor = [UIColor whiteColor].CGColor;
      //_collectionView.layer.cornerRadius = 3.0;
      //_collectionView.layer.borderWidth = 0.4;
-
-   
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"didDeleteTake" object:nil];
+
 }
 
 
 
 - (void) didSelectStarButtonInCell:(TakeCollectionViewCell *)takeCell
 {
-
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:takeCell.take];
 }
 
@@ -55,6 +57,19 @@
     [_collectionView setContentOffset:CGPointZero animated:NO];
     [_collectionView reloadData];
     
+}
+-(void)insertItem:(Take*)item
+{
+    [_collectionData.takes addObject:item];
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:_collectionData.takes.count] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+    
+    [_collectionView reloadItemsAtIndexPaths:[self.collectionData.takes lastObject]];
+}
+
+-(void)deleteItem:(Take*)item
+{
+    [_collectionData.takes removeObject:item];
+    [_collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource methods
@@ -74,11 +89,16 @@
     
     TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
     
- 
-      //  CGRect screenRect = [[UIScreen mainScreen] bounds];
-       // screenRect.size.width
-        
-        
+//    CGRect screenRect = [[UIScreen mainScreen] bounds];
+//    CGFloat screenWidth = CGRectGetWidth(screenRect);
+    
+    
+    if (!cell)
+    {
+        cell = [[TakeCollectionViewCell alloc] init];
+    }
+
+    cell.starTake.hidden = NO;
     cell.starTake.tag = indexPath.item;
     
     //collectionView.tag = indexPath.item;
@@ -88,19 +108,42 @@
     // set the delegate for the collection view cell:
     cell.delegate = self;
     
- 
+    //Take *take = self.scene.takes[indexPath.row];
+    
+    
+   // cell.textLabel.text = [NSString stringWithFormat:@"Take # %lu", (unsigned long)indexPath.row];
+    [cell cellWithTake:take];
+    if (take.thumbnail == nil)
+    {
+        NSLog(@"thumbnail image is nil");
+        
+        [take loadThumbnailWithCompletionHandler:^(UIImage* image)
+         {
+             dispatch_async(dispatch_get_main_queue(),^{
+                cell.thumbnailImageView.image = image;
+                NSLog(@"loaded thumbnail for collection view cell");
+                });
+             
+         }];
+    }
+    else
+    {
+        cell.thumbnailImageView.image= take.thumbnail;
+        
+    }
+
    
-    [take loadThumbnailWithCompletionHandler:^ (UIImage *image){
-        //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
-        take.thumbnail = image;
-        //cell.thumbnailImageView.image = take.thumbnail;
-        dispatch_async(dispatch_get_main_queue(),
-        ^{
-            
-            [cell cellWithTake:take];
-            
-        });
-    }];
+//    take.thumbnail = [take loadThumbnailWithCompletionHandler:^ (UIImage *image){
+//        //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
+//        //take.thumbnail = image;
+//        //cell.thumbnailImageView.image = take.thumbnail;
+//        dispatch_async(dispatch_get_main_queue(),
+//        ^{
+//            
+//            [cell cellWithTake:take];
+//            
+//        });
+//    }];
 
 
 

@@ -53,6 +53,7 @@
     NSLog(@"reuse");
     //self.videoAsset = [[AVURLAsset alloc]initWithURL:self.assetURL options:nil];
     
+    
 }
 
 
@@ -73,24 +74,6 @@
     {
         self.starTake.selected = NO;
     }
-
-
-    if (take.thumbnail==nil)
-    {
-        
-        
-    }
-    self.thumbnailImageView.image = take.thumbnail;
-
-  
-    ////
-//    
-//        if (self.imageArray == nil)
-//        {
-//                self.imageArray = [NSMutableDictionary dictionaryWithContentsOfFile:];
-//        }
-//            [self.imageArray addObject:take.thumbnail];
-//        }
 
 }
 
@@ -113,15 +96,15 @@
 /// green 0
 /// blue 0.6588
 
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
-{
-    // Drawing code
-   
-    self.layer.borderColor = [[self darkBlueWithPurp] CGColor];
-    self.layer.borderWidth = 2.0;
-    //self.layer.cornerRadius = 2.0;
-}
+ //Only override drawRect: if you perform custom drawing.
+ //An empty implementation adversely affects performance during animation.
+//- (void)drawRect:(CGRect)rect
+//{
+//    // Drawing code
+//   
+//    self.layer.borderColor = [[UIColor blackColor] CGColor];
+//    self.layer.borderWidth = 2.0;
+//    //self.layer.cornerRadius = 2.0;
+//}
 
 @end

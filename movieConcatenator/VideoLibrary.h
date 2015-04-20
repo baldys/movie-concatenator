@@ -18,6 +18,9 @@
 
 -(void)saveToFilename:(NSString *)filename;
 -(void) addScene:(Scene*)newScene;
+-(NSArray *)listFileAtPath:(NSString *)path;
+- (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex;
+- (NSString*) documentsDirectory;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 

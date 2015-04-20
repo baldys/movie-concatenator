@@ -83,7 +83,7 @@
     {
         self.scene.title = [NSString stringWithFormat:@"Scene %i", self.scene.libraryIndex];
     }
-    self.scene.libraryIndex = [self.numberField.text integerValue]+1;
+    self.scene.libraryIndex = [self.numberField.text integerValue];
     
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.

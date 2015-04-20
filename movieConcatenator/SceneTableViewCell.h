@@ -13,7 +13,7 @@
 #import "ContainerCellView.h"
 
 @class Scene;
-
+@class Take;
 
 @interface SceneTableViewCell : UITableViewCell
 
@@ -23,6 +23,6 @@
 @property (strong, nonatomic) ContainerCellView *containerCellView;
 
 - (void)setCollectionData:(Scene *)collectionData;
-
+- (void)insertItemInCollectionData:(Take*)item;
 
 @end

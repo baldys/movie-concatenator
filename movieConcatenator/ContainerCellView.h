@@ -14,10 +14,10 @@
 
 @class TakeCollectionViewCell;
 @class Take;
-@class UIImage;
+
 
 @interface ContainerCellView : UIView <TakeCellDelegate>
 
 - (void)setCollectionData:(Scene*)collectionData;
-
+- (void)insertItem:(Take*)item;
 @end

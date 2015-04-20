@@ -105,10 +105,47 @@
     });
 }
 
-- (void) addTake:(Take*)newTake toSceneWithIndex:(NSInteger)sceneIndex
+
+
+
+
+-(NSArray *)listFileAtPath:(NSString *)path
 {
+    //-----> LIST ALL FILES <-----//
+    NSLog(@"LISTING ALL FILES FOUND");
     
+    int count;
+    
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
+    for (count = 0; count < (int)[directoryContent count]; count++)
+    {
+        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
+    }
+    return directoryContent;
 }
+
+- (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex
+{
+
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[take getPathURL].path])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] removeItemAtPath:[take getPathURL].path error:&error];
+
+        if (error)
+        {
+            NSLog(@"Error deleting file: %@",error);
+            
+        }
+        else
+        {
+            [self.scenes[sceneIndex] removeObject:take];
+        }
+        [self saveToFilename:@"videolibrary.plist"];
+    }
+
+}
+
 
 ////////////////
 // // TODO: put into video model class so that for each video, you can retrieve the url path that
