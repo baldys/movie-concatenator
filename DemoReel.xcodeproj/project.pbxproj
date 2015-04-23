@@ -13,6 +13,10 @@
 		9F1802851ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F1802841ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png */; };
 		9F3B4D4E1AE4BD360056E4C7 /* recording.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D4D1AE4BD360056E4C7 /* recording.png */; };
 		9F3B4D501AE4BF9C0056E4C7 /* disclosure-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */; };
+		9F3B4D521AE8A72D0056E4C7 /* player_record.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D511AE8A72D0056E4C7 /* player_record.png */; };
+		9F3B4D541AE8A7530056E4C7 /* flash29-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D531AE8A7530056E4C7 /* flash29-2.png */; };
+		9F3B4D561AE8A76D0056E4C7 /* noun_120099.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D551AE8A76D0056E4C7 /* noun_120099.png */; };
+		9F3B4D581AE8A7850056E4C7 /* noun_120097.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D571AE8A7850056E4C7 /* noun_120097.png */; };
 		9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */; };
 		9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */; };
 		9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815811AB306780027F1A0 /* white-outline-star-64.png */; };
@@ -93,6 +97,10 @@
 		9F1802841ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noun_vhs-tape_52451.png"; sourceTree = "<group>"; };
 		9F3B4D4D1AE4BD360056E4C7 /* recording.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recording.png; sourceTree = "<group>"; };
 		9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure-white.png"; sourceTree = "<group>"; };
+		9F3B4D511AE8A72D0056E4C7 /* player_record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_record.png; sourceTree = "<group>"; };
+		9F3B4D531AE8A7530056E4C7 /* flash29-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flash29-2.png"; sourceTree = "<group>"; };
+		9F3B4D551AE8A76D0056E4C7 /* noun_120099.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noun_120099.png; sourceTree = "<group>"; };
+		9F3B4D571AE8A7850056E4C7 /* noun_120097.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noun_120097.png; sourceTree = "<group>"; };
 		9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TakeCollectionViewCell.xib; sourceTree = "<group>"; };
 		9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "00cdea-outline-star-64.png"; sourceTree = "<group>"; };
 		9F4815811AB306780027F1A0 /* white-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-outline-star-64.png"; sourceTree = "<group>"; };
@@ -253,12 +261,16 @@
 				9F740EA21AD3A48F00F3F23D /* little-vid-icon2.png */,
 				9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */,
 				9F8E5DAD1AD35FB2009BE712 /* videos-concatenate.png */,
+				9F3B4D511AE8A72D0056E4C7 /* player_record.png */,
 				9F8B65841AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png */,
 				9F9BC5311ACE8A3900994E9A /* camera2-4.png */,
 				9F9BC5491AD0F62900994E9A /* video-camera2d.png */,
 				9F9BC5391ACFA11A00994E9A /* camera2.png */,
 				9F9BC5131ACE08EF00994E9A /* UITabBarMostViewed_2x.png */,
+				9F3B4D531AE8A7530056E4C7 /* flash29-2.png */,
 				9F9BC50F1ACE088E00994E9A /* ffffff-clapperboard-48.png */,
+				9F3B4D571AE8A7850056E4C7 /* noun_120097.png */,
+				9F3B4D551AE8A76D0056E4C7 /* noun_120099.png */,
 				9F740EAE1AD79B1300F3F23D /* highlighted-white-disclosure-indicator-selected-white-64.png */,
 				9F740EAF1AD79B1300F3F23D /* white-disclosure-indicator-64.png */,
 				9F9BC5431AD0F37A00994E9A /* video-camera2.png */,
@@ -490,6 +502,7 @@
 				9F740EB11AD79B1300F3F23D /* white-disclosure-indicator-64.png in Resources */,
 				9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */,
 				9F3B4D501AE4BF9C0056E4C7 /* disclosure-white.png in Resources */,
+				9F3B4D521AE8A72D0056E4C7 /* player_record.png in Resources */,
 				9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */,
 				9F740EA61AD3A4F100F3F23D /* play-48.png in Resources */,
 				9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */,
@@ -498,6 +511,7 @@
 				9F9BC50E1ACE088100994E9A /* ffffff-switch-camera-64.png in Resources */,
 				9F9BC5321ACE8A3900994E9A /* camera2-4.png in Resources */,
 				9F9BC50C1ACDD3A800994E9A /* noun_clapperboard_1650.png in Resources */,
+				9F3B4D541AE8A7530056E4C7 /* flash29-2.png in Resources */,
 				9F9BC5481AD0F4F600994E9A /* video-camera2b.png in Resources */,
 				9F1802851ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png in Resources */,
 				9F9BC5081ACDD38E00994E9A /* noun_clapperboard_78382.png in Resources */,
@@ -515,11 +529,13 @@
 				9F740EB01AD79B1300F3F23D /* highlighted-white-disclosure-indicator-selected-white-64.png in Resources */,
 				9FAFA7531A98884A00F7396B /* LaunchScreen.xib in Resources */,
 				9F9BC5121ACE089D00994E9A /* noun_101983.png in Resources */,
+				9F3B4D561AE8A76D0056E4C7 /* noun_120099.png in Resources */,
 				9F758F9D1AE4931F0092E685 /* filmstrip-35mm1.png in Resources */,
 				9F9BC5361ACE8B2100994E9A /* noun_switch-camera_78816.png in Resources */,
 				9F9BC5041ACDD2D200994E9A /* ffffff-clapperboard-32.png in Resources */,
 				9FAFA7501A98884A00F7396B /* Images.xcassets in Resources */,
 				9F740EAA1AD4AF5500F3F23D /* disclosure-indicator-64.png in Resources */,
+				9F3B4D581AE8A7850056E4C7 /* noun_120097.png in Resources */,
 				9F9BC52D1ACE3EEC00994E9A /* noun_video-camera_65291.png in Resources */,
 				9FB69C091AD8B51400524106 /* disclosure.png in Resources */,
 				9FB69C071AD8B13A00524106 /* disclosure-black-3.png in Resources */,

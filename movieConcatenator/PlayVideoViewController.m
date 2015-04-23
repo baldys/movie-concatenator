@@ -21,6 +21,7 @@
 {
     
     
+    
 }
 - (void) beginSeekingBackward
 {
@@ -39,6 +40,7 @@
 {
     
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -52,6 +54,10 @@
  
     
 }
+- (void)endSeeking
+{
+    
+}
 -(void) configureMoviePlayer
 {
     //self.view.backgroundColor = [UIColor blackColor];
@@ -59,12 +65,8 @@
     
     self.moviePlayer = [[MPMoviePlayerController alloc] initWithContentURL:self.takeURL];
     self.moviePlayer.view.backgroundColor = [UIColor blackColor];
-   
 
     [self.moviePlayer prepareToPlay];
-    
-    
-    
     [self.moviePlayer.view setFrame:self.view.bounds];
     [self.view addSubview:self.moviePlayer.view];
     
@@ -77,6 +79,8 @@
                                              selector:@selector(doneAction:)
                                                  name:MPMoviePlayerWillExitFullscreenNotification
                                                object:nil];
+    [self.moviePlayer setControlStyle:MPMovieControlStyleEmbedded];
+    [self.moviePlayer setFullscreen:NO animated:YES];
     
 //    [[NSNotificationCenter defaultCenter] addObserver:self
 //                                             selector:@selector(movieControlActions:)
@@ -84,6 +88,8 @@
 //                                               object:nil];
     
     /// then get the reason user info key
+    
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -110,10 +116,7 @@
     //if ([reason intValue] == MPMovieFinishReasonUserExited) {
         // Your done button action here
         NSLog(@"Done was pressed.");
-        
-        
     
-        
         [self dismissMoviePlayerViewControllerAnimated];
         
         [self dismissViewControllerAnimated:YES completion:^{

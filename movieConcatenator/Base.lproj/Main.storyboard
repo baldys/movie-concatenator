@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="pgs-lo-jPl">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -51,7 +52,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="150" height="125"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="add-Video-2.png" translatesAutoresizingMaskIntoConstraints="NO" id="eCX-V3-1lM">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="1420512706_audio-video-outline-play-128" translatesAutoresizingMaskIntoConstraints="NO" id="eCX-V3-1lM">
                                             <rect key="frame" x="8" y="8" width="133" height="109"/>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </imageView>
@@ -176,12 +177,14 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems>
-                        <barButtonItem title="Join Selected Videos" width="419" id="Z2j-fG-02q">
+                        <barButtonItem systemItem="flexibleSpace" id="pkb-jU-wxM"/>
+                        <barButtonItem title="Join Selected Videos" width="200" id="Z2j-fG-02q">
                             <color key="tintColor" red="0.0" green="1" blue="0.94934334050000002" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="ConcatenateSelectedTakes:" destination="J0d-P8-PPs" id="Mdc-it-azO"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem systemItem="flexibleSpace" id="06W-Zm-hlc"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Scenes" id="nvH-Zh-J1x">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Rt2-49-wUS">
@@ -355,11 +358,11 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IUw-RP-VCu" customClass="RecordVideoView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-RV-2L4">
-                                        <rect key="frame" x="243" y="465" width="115" height="115"/>
+                                    <button opaque="NO" alpha="0.49999999999999961" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkd-RV-2L4">
+                                        <rect key="frame" x="494" y="260" width="80" height="80"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="115" id="9de-0y-Hh6"/>
-                                            <constraint firstAttribute="width" constant="115" id="gGS-T4-hju"/>
+                                            <constraint firstAttribute="width" constant="80" id="Wdh-R5-4sv"/>
+                                            <constraint firstAttribute="height" constant="80" id="evQ-99-a6f"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="tintColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -375,18 +378,25 @@
                                             <action selector="toggleRecording:" destination="U8g-fB-d4T" eventType="touchUpInside" id="hOv-4P-sLE"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asB-Ia-u4Z">
-                                        <rect key="frame" x="370" y="482" width="138" height="80"/>
-                                        <state key="normal" image="flash-off">
+                                    <button opaque="NO" contentMode="scaleAspectFit" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="asB-Ia-u4Z">
+                                        <rect key="frame" x="517" y="209" width="33" height="36"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="asB-Ia-u4Z" secondAttribute="height" multiplier="11:12" id="ZpD-N9-FKv"/>
+                                            <constraint firstAttribute="height" constant="36" id="kjj-Ze-dX1"/>
+                                        </constraints>
+                                        <state key="normal" image="flash29-2.png">
                                             <color key="titleShadowColor" red="0.21342579727470046" green="0.022121627183624093" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="toggleFlash:" destination="U8g-fB-d4T" eventType="touchUpInside" id="fnG-Q8-NZG"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HbT-De-sub">
-                                        <rect key="frame" x="93" y="482" width="138" height="80"/>
-                                        <inset key="contentEdgeInsets" minX="34" minY="25" maxX="34" maxY="25"/>
+                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HbT-De-sub">
+                                        <rect key="frame" x="509" y="367" width="51" height="27"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="27" id="SoO-Rl-EMT"/>
+                                            <constraint firstAttribute="width" secondItem="HbT-De-sub" secondAttribute="height" multiplier="17:9" id="TZB-NK-YIp"/>
+                                        </constraints>
                                         <state key="normal" image="camera-toggle">
                                             <color key="titleShadowColor" red="0.018286214950000001" green="0.0" blue="0.97328756309999997" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
@@ -399,20 +409,17 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="jkd-RV-2L4" secondAttribute="bottom" constant="20" id="0kk-Lz-6Vk"/>
-                                    <constraint firstAttribute="centerY" secondItem="jkd-RV-2L4" secondAttribute="centerY" constant="-222" id="3EA-mJ-mfJ"/>
-                                    <constraint firstItem="HbT-De-sub" firstAttribute="width" secondItem="asB-Ia-u4Z" secondAttribute="width" id="535-It-Vkz"/>
-                                    <constraint firstAttribute="centerX" secondItem="jkd-RV-2L4" secondAttribute="centerX" id="Age-mT-Fyj"/>
-                                    <constraint firstAttribute="centerY" secondItem="HbT-De-sub" secondAttribute="centerY" constant="-222" id="KZI-5f-eqv"/>
-                                    <constraint firstItem="asB-Ia-u4Z" firstAttribute="leading" secondItem="jkd-RV-2L4" secondAttribute="trailing" constant="12" id="LKP-OF-dHI"/>
-                                    <constraint firstItem="jkd-RV-2L4" firstAttribute="leading" secondItem="HbT-De-sub" secondAttribute="trailing" constant="12" id="Qc1-2S-oan"/>
-                                    <constraint firstItem="jkd-RV-2L4" firstAttribute="leading" secondItem="HbT-De-sub" secondAttribute="trailing" constant="33" id="hrS-Hm-OIB"/>
-                                    <constraint firstAttribute="centerY" secondItem="asB-Ia-u4Z" secondAttribute="centerY" constant="-222" id="tUE-dM-gVg"/>
-                                    <constraint firstItem="HbT-De-sub" firstAttribute="height" secondItem="asB-Ia-u4Z" secondAttribute="height" id="vDI-qO-p8H"/>
+                                    <constraint firstAttribute="trailing" secondItem="jkd-RV-2L4" secondAttribute="trailing" constant="26" id="2Ek-ED-hv9"/>
+                                    <constraint firstItem="jkd-RV-2L4" firstAttribute="top" secondItem="asB-Ia-u4Z" secondAttribute="bottom" constant="15" id="2xG-cq-dKw"/>
+                                    <constraint firstAttribute="centerY" secondItem="jkd-RV-2L4" secondAttribute="centerY" constant="0.5" id="MGa-Ca-Iba"/>
+                                    <constraint firstItem="HbT-De-sub" firstAttribute="top" secondItem="jkd-RV-2L4" secondAttribute="bottom" constant="27" id="Wyz-2y-XDE"/>
+                                    <constraint firstItem="HbT-De-sub" firstAttribute="centerY" secondItem="jkd-RV-2L4" secondAttribute="centerY" constant="0.5" id="cf6-Aa-ss3"/>
+                                    <constraint firstItem="HbT-De-sub" firstAttribute="centerX" secondItem="jkd-RV-2L4" secondAttribute="centerX" constant="0.5" id="gtI-dW-NnG"/>
+                                    <constraint firstItem="jkd-RV-2L4" firstAttribute="centerX" secondItem="asB-Ia-u4Z" secondAttribute="centerX" constant="0.5" id="rlz-Ox-xtu"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
-                                        <exclude reference="hrS-Hm-OIB"/>
+                                        <exclude reference="cf6-Aa-ss3"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -422,17 +429,11 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="centerY" secondItem="IUw-RP-VCu" secondAttribute="centerY" id="0Zc-kG-1x9"/>
-                            <constraint firstAttribute="trailing" secondItem="IUw-RP-VCu" secondAttribute="trailing" id="LtO-hI-aMq"/>
-                            <constraint firstItem="3VI-jT-oZ3" firstAttribute="top" secondItem="IUw-RP-VCu" secondAttribute="bottom" id="hMr-no-8Lr"/>
-                            <constraint firstItem="IUw-RP-VCu" firstAttribute="leading" secondItem="2gY-cd-Z15" secondAttribute="leading" id="vOF-vB-PwI"/>
-                            <constraint firstAttribute="trailing" secondItem="IUw-RP-VCu" secondAttribute="trailing" id="xxp-PF-Q20"/>
+                            <constraint firstAttribute="centerY" secondItem="IUw-RP-VCu" secondAttribute="centerY" id="DaM-Ed-QfG"/>
+                            <constraint firstAttribute="width" secondItem="IUw-RP-VCu" secondAttribute="width" id="MoC-i5-dvW"/>
+                            <constraint firstAttribute="height" secondItem="IUw-RP-VCu" secondAttribute="height" id="jWQ-nZ-yHs"/>
+                            <constraint firstAttribute="centerX" secondItem="IUw-RP-VCu" secondAttribute="centerX" id="mZq-BG-M1n"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="LtO-hI-aMq"/>
-                            </mask>
-                        </variation>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="UfT-Kk-fKz">
@@ -460,6 +461,7 @@
                         <outlet property="flashButton" destination="asB-Ia-u4Z" id="o6R-1x-h07"/>
                         <outlet property="recordButton" destination="jkd-RV-2L4" id="7Ji-BX-LGE"/>
                         <outlet property="recordVideoView" destination="IUw-RP-VCu" id="Wh7-uz-4EG"/>
+                        <outlet property="saveButton" destination="fZX-nD-AcG" id="75v-7B-od6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKY-EO-hbW" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -543,10 +545,10 @@
                                 <color key="textColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" rowHeight="125" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
                                 <rect key="frame" x="0.0" y="64" width="600" height="492"/>
-                                <color key="backgroundColor" red="0.014868547561179184" green="0.0051238731053551215" blue="0.038174715909090939" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.31802799847670649" green="0.37392273545014776" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.53271280399104015" green="0.31130972061010076" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -653,11 +655,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="1420512706_audio-video-outline-play-128" width="512" height="512"/>
         <image name="1420512718_audio-video-outline-stop-128.png" width="128" height="128"/>
-        <image name="add-Video-2.png" width="512" height="512"/>
         <image name="camera-toggle" width="120" height="62"/>
         <image name="camera-toggle-pressed" width="120" height="62"/>
-        <image name="flash-off" width="70" height="31"/>
+        <image name="flash29-2.png" width="128" height="128"/>
         <image name="noun_record-music_72322" width="300" height="300"/>
         <image name="recording.png" width="229" height="242"/>
         <image name="selectedStar" width="32" height="32"/>

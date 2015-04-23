@@ -13,21 +13,22 @@
 #import "Take.h"
 #import "VideoController.h"
 
+/*
+//// check the orientation of the device
+ if it is in portrait mode, disable buttons and show a label that tells user to rotate device
+ ///
+*/
 static void * RecordingContext = &RecordingContext;
 static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDeviceAuthorizedContext;
 
-
-
 @interface RecordVideoViewController () <AVCaptureFileOutputRecordingDelegate>
-
-
-
 
 @property (nonatomic, weak) IBOutlet RecordVideoView *recordVideoView;
 @property (nonatomic, weak) IBOutlet UIButton *recordButton;
-//@property (nonatomic, weak) IBOutlet UIButton *cameraPosition;
 @property (weak, nonatomic) IBOutlet UIButton *cameraPosition;
 @property (weak, nonatomic) IBOutlet UIButton *flashButton;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *saveButton;
+
 
 - (IBAction)toggleRecording:(id)sender;
 - (IBAction)toggleCameraPosition:(id)sender;
@@ -44,6 +45,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic, readonly, getter = isSessionRunningAndDeviceAuthorized) BOOL sessionRunningAndDeviceAuthorized;
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
+@property (nonatomic) UILabel *incorrectOrientationLabel;
 @end
 
 
@@ -75,20 +77,75 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return [NSSet setWithObjects:@"session.running", @"deviceAuthorized", nil];
 }
 
+- (void) checkOrientation:(UIInterfaceOrientation)orientation
+{
+    if (orientation == UIInterfaceOrientationPortrait)
+    {
+        [self hideButtons];
+        [self showLabel];
+        NSLog(@"orientation incorrect, should hide buttons and show the label");
+        
+    }
+    else if (orientation == UIInterfaceOrientationLandscapeLeft || orientation ==UIInterfaceOrientationLandscapeRight)
+    {
+        [self showButtons];
+        [self hideLabel];
+        NSLog(@"orientation correct, should unhide buttons and hide the label");
+    }
+   
+}
+
+- (void) showLabel
+{
+    if (!self.incorrectOrientationLabel)
+    {
+        self.incorrectOrientationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height/2, 100, 20)];
+        [self.incorrectOrientationLabel setText:@"please rotate device for best results"];
+        [self.incorrectOrientationLabel setTextColor:[UIColor whiteColor]];
+        [self.view addSubview:self.incorrectOrientationLabel];
+    }
+    else
+    {
+        [self.incorrectOrientationLabel setHidden:NO];
+    }
+}
+
+- (void) hideLabel
+{
+    [self.incorrectOrientationLabel setHidden:YES];
+}
+
+- (void)hideButtons
+{
+    [[self cameraPosition] setEnabled:NO];
+    [[self cameraPosition] setHidden:YES];
+    [[self recordButton] setEnabled:NO];
+    [[self recordButton] setHidden:YES];
+    [[self flashButton] setHidden:YES];
+}
+- (void)showButtons
+{
+    [[self cameraPosition] setEnabled:YES];
+    [[self cameraPosition] setHidden:NO];
+    [[self recordButton] setEnabled:YES];
+    [[self recordButton] setHidden:NO];
+    [[self flashButton] setHidden:NO];
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(deviceOrientationDidChange)
-//                                                 name:UIDeviceOrientationDidChangeNotification
-//                                               object:[UIDevice currentDevice]];
-    
+
+    [self.saveButton setEnabled:NO];
     // Keep track of changes to the device orientation so we can update the capture pipeline
+    
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
-    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector (deviceOrientationDidChange:) name: UIDeviceOrientationDidChangeNotification object: nil];
-    
+    [self checkOrientation:orientation];
+        
     
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
@@ -162,13 +219,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
             [self setMovieFileOutput:movieFileOutput];
         }
         
-        //AVCaptureStillImageOutput *stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-       // if ([session canAddOutput:stillImageOutput])
-//        {
-//            [stillImageOutput setOutputSettings:@{AVVideoCodecKey : AVVideoCodecJPEG}];
-//            [session addOutput:stillImageOutput];
-            //[self setStillImageOutput:stillImageOutput];
-       // }
+
         [[self session] commitConfiguration];
     });
 }
@@ -187,9 +238,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 -(void) addObservers
 {
-   
+   [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:[UIDevice currentDevice]];
         [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
-        //[self addObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:CapturingStillImageContext];
         [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
         
@@ -218,7 +268,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self removeObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" context:SessionRunningAndDeviceAuthorizedContext];
         //[self removeObserver:self forKeyPath:@"stillImageOutput.capturingStillImage" context:CapturingStillImageContext];
         [self removeObserver:self forKeyPath:@"movieFileOutput.recording" context:RecordingContext];
+        
     });
+    
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    
+    
 
   
 }
@@ -247,6 +302,21 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
+    NSLog(@"changed orientation");
+    if (toInterfaceOrientation == UIInterfaceOrientationPortrait)
+    {
+        NSLog(@" /n INVALID ORIENTATION"); 
+    }
+    else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        self.currentOrientation = UIInterfaceOrientationLandscapeRight;
+    }
+    else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+    {
+        self.currentOrientation = UIInterfaceOrientationLandscapeLeft;
+    }
+    [self checkOrientation:toInterfaceOrientation];
+    
     [[(AVCaptureVideoPreviewLayer *)[[self recordVideoView] layer] connection] setVideoOrientation:(AVCaptureVideoOrientation)toInterfaceOrientation];
 }
 
@@ -329,6 +399,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         {
         
             [self setLockInterfaceRotation:YES];
+
             
             if ([[UIDevice currentDevice] isMultitaskingSupported])
             {
@@ -508,8 +579,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     [self setLockInterfaceRotation:NO];
     
     // Note the backgroundRecordingID for use in the ALAssetsLibrary completion handler to end the background task associated with this recording. This allows a new recording to be started, associated with a new UIBackgroundTaskIdentifier, once the movie file output's -isRecording is back to NO — which happens sometime after this method returns.
-    
-    //_reserved	void *	@"file:///private/var/mobile/Containers/Data/Application/25532DA4-56CC-45E7-9CF3-1392B659D0C2/tmp/take.mov"	0x155ea720
+   
     
     UIBackgroundTaskIdentifier backgroundRecordingID = [self backgroundRecordingID];
     [self setBackgroundRecordingID:UIBackgroundTaskInvalid];
@@ -528,11 +598,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         //[[NSFileManager defaultManager] removeItemAtURL:outputFileURL error:nil];
         ////////////////
      if (backgroundRecordingID != UIBackgroundTaskInvalid)
-     {             [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
+     {
+         [[UIApplication sharedApplication] endBackgroundTask:backgroundRecordingID];
 
      }
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
+    [self.saveButton setEnabled:YES];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didFinishRecordingVideoToURL" object:outputFileURL];
     //}];
     

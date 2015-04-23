@@ -385,7 +385,7 @@
     }
     if (self.takesToConcatenate.count > 1)
     {
-        //[self.navigationController.toolbarItems[0] setEnabled:YES];
+        [self.concatenateButton setEnabled:YES];
         [self.navigationController.toolbar.items[0] setEnabled:YES];
     }
     
