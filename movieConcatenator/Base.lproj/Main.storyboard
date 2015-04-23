@@ -161,7 +161,7 @@
         <scene sceneID="fMK-9Z-Ae0">
             <objects>
                 <tableViewController title="Scenes" id="J0d-P8-PPs" customClass="ScenesTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="120" sectionHeaderHeight="32" sectionFooterHeight="1" id="iLZ-Xg-fI4">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelectionDuringEditing="YES" rowHeight="130" sectionHeaderHeight="32" sectionFooterHeight="1" id="iLZ-Xg-fI4">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -179,7 +179,7 @@
                     <toolbarItems>
                         <barButtonItem systemItem="flexibleSpace" id="pkb-jU-wxM"/>
                         <barButtonItem title="Join Selected Videos" width="200" id="Z2j-fG-02q">
-                            <color key="tintColor" red="0.0" green="1" blue="0.94934334050000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="ConcatenateSelectedTakes:" destination="J0d-P8-PPs" id="Mdc-it-azO"/>
                             </connections>
@@ -536,28 +536,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scene Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hjl-CH-C5s">
-                                <rect key="frame" x="16" y="79" width="568" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="gAE-47-EgV"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
-                                <color key="textColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" sectionIndexMinimumDisplayRowCount="1" rowHeight="110" sectionHeaderHeight="40" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.31802799847670649" green="0.37392273545014776" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.53271280399104015" green="0.31130972061010076" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TakeTableViewCell" id="gaw-Id-exC">
+                                    <tableViewCell contentMode="scaleAspectFit" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TakeTableViewCell" rowHeight="124" id="gaw-Id-exC">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gaw-Id-exC" id="BZz-4O-ved">
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -568,24 +560,19 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="4QG-oE-SNw" secondAttribute="trailing" id="1zz-n7-6Fa"/>
-                            <constraint firstItem="4QG-oE-SNw" firstAttribute="leading" secondItem="Vcs-fS-NPP" secondAttribute="leading" id="3Bw-qD-RZG"/>
-                            <constraint firstItem="hjl-CH-C5s" firstAttribute="leading" secondItem="Vcs-fS-NPP" secondAttribute="leadingMargin" id="LfD-be-lMS"/>
-                            <constraint firstItem="ehm-bg-IRS" firstAttribute="top" secondItem="4QG-oE-SNw" secondAttribute="bottom" id="N2s-10-TZj"/>
-                            <constraint firstItem="4QG-oE-SNw" firstAttribute="top" secondItem="hjl-CH-C5s" secondAttribute="bottom" constant="-47" id="QLd-A6-vaF"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="hjl-CH-C5s" secondAttribute="trailing" id="V1f-KJ-FRZ"/>
-                            <constraint firstItem="4QG-oE-SNw" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="120" id="ZKS-Y3-y9p"/>
-                            <constraint firstItem="4QG-oE-SNw" firstAttribute="trailing" secondItem="Vcs-fS-NPP" secondAttribute="trailing" id="ctO-ha-EC7"/>
-                            <constraint firstItem="hjl-CH-C5s" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" constant="15" id="dAv-KR-lKg"/>
-                            <constraint firstItem="4QG-oE-SNw" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" id="j54-qx-CGQ"/>
-                            <constraint firstAttribute="centerX" secondItem="4QG-oE-SNw" secondAttribute="centerX" id="l1K-CV-Xqu"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="4QG-oE-SNw" secondAttribute="trailing" id="zr4-6c-Pf3"/>
+                            <constraint firstAttribute="width" secondItem="4QG-oE-SNw" secondAttribute="width" id="1o5-aZ-jSQ"/>
+                            <constraint firstAttribute="centerY" secondItem="4QG-oE-SNw" secondAttribute="centerY" id="3KF-0M-WGS"/>
+                            <constraint firstItem="4QG-oE-SNw" firstAttribute="top" secondItem="icq-KF-1zM" secondAttribute="bottom" id="MlP-Ah-iQq"/>
+                            <constraint firstAttribute="centerX" secondItem="4QG-oE-SNw" secondAttribute="centerX" id="RtK-Br-MDp"/>
+                            <constraint firstAttribute="width" secondItem="4QG-oE-SNw" secondAttribute="width" id="hp4-fp-J6d"/>
+                            <constraint firstAttribute="height" secondItem="4QG-oE-SNw" secondAttribute="height" id="kGO-DQ-4b6"/>
+                            <constraint firstItem="ehm-bg-IRS" firstAttribute="top" secondItem="4QG-oE-SNw" secondAttribute="bottom" constant="-209" id="ybN-B0-sBY"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="1zz-n7-6Fa"/>
-                                <exclude reference="ZKS-Y3-y9p"/>
-                                <exclude reference="zr4-6c-Pf3"/>
+                                <exclude reference="1o5-aZ-jSQ"/>
+                                <exclude reference="MlP-Ah-iQq"/>
+                                <exclude reference="ybN-B0-sBY"/>
                             </mask>
                         </variation>
                     </view>
@@ -598,7 +585,7 @@
                         </barButtonItem>
                         <barButtonItem systemItem="flexibleSpace" id="4bU-To-Q8K"/>
                         <barButtonItem image="unselectedStar" style="plain" id="HxS-I0-kWh">
-                            <color key="tintColor" red="0.31802799850000002" green="0.37392273549999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" red="0.018286214950000001" green="0.0" blue="0.97328756309999997" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="addAsFavourite:" destination="vf8-J6-cpX" id="eDq-vH-DCl"/>
                             </connections>
@@ -618,11 +605,11 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="deleteTakeButton" destination="QZe-eb-KYW" id="U0s-pz-I1K"/>
                         <outlet property="playMovieButton" destination="Wqb-xd-leg" id="5Rw-tf-jOh"/>
-                        <outlet property="sceneTitleLabel" destination="hjl-CH-C5s" id="Gh6-yv-tHk"/>
                         <outlet property="tableView" destination="4QG-oE-SNw" id="MKo-Du-1Wm"/>
                     </connections>
                 </viewController>

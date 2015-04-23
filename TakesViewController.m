@@ -49,8 +49,8 @@
     
     [self.navigationItem setTitle:[NSString stringWithFormat:@"Scene # %li", (long)self.scene.libraryIndex]];
     
-    [self.playMovieButton setEnabled:YES];
-    [self.deleteTakeButton setEnabled:YES];
+    [self.playMovieButton setEnabled:NO];
+    [self.deleteTakeButton setEnabled:NO];
     //[self.favouriteTakeButton setEnabled:NO];
     //[self.actionButton setEnabled:YES];
     
@@ -58,16 +58,10 @@
     [self.playMovieButton setAction:@selector(playMovie:)];
     // Do any additional setup after loading the view.
     
+//    self.sceneTitleLabel.text = self.scene.title;
+//    [self.tableView.tableHeaderView addSubview:self.sceneTitleLabel];
+//    self.tableView.tableHeaderView add
     
-//    UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,30)];
-//    tableHeader.backgroundColor = [UIColor blueColor];
-//    UILabel *tableHeaderLabel = [[UILabel alloc] initWithFrame:CGRectMake(8,5,self.tableView.frame.size.width,20)];
-//    [tableHeaderLabel setText:self.scene.title];
-//    [tableHeader addSubview:tableHeaderLabel];
-//    UIImageView *headerImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width,0,30,30)];
-//    [tableHeader addSubview:headerImage];
-//    self.tableView.tableHeaderView = tableHeader;
-//    
     
 }
 - (void) viewWillAppear:(BOOL)animated
@@ -94,6 +88,34 @@
 {
     return [self.scene.takes count];
 }
+
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    // 1. The view for the header
+    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 40)];
+    
+    // 2. Set a custom background color and a border
+    headerView.backgroundColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.4f];
+    headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.6f].CGColor;
+    
+    headerView.layer.borderWidth = 2.0;
+    
+    // 3. Add a label
+    UILabel* headerLabel = [[UILabel alloc] init];
+    headerLabel.frame = CGRectMake(5, 2, tableView.frame.size.width - 5,30);
+    headerLabel.backgroundColor = [UIColor clearColor];
+    headerLabel.textColor = [UIColor whiteColor];
+    headerLabel.font = [UIFont boldSystemFontOfSize:24.0];
+    headerLabel.text = @"This is the custom header view";
+    headerLabel.textAlignment = NSTextAlignmentLeft;
+    
+    // 4. Add the label to the header view
+    [headerView addSubview:headerLabel];
+    
+    // 5. Finally return
+    return headerView;
+}
+
 
 #pragma mark - Table View delegate
 
@@ -157,7 +179,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.navigationController setToolbarHidden:NO animated:YES];
+    [self.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    [[self.tableView cellForRowAtIndexPath:indexPath] setSelectionStyle:UITableViewCellSelectionStyleBlue];
+    [self.navigationController setToolbarHidden:NO animated:NO];
     [self.deleteTakeButton setEnabled:YES];
     [self.playMovieButton setEnabled:YES];
     
@@ -172,7 +196,7 @@
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.navigationController setToolbarHidden:YES animated:YES];
+    [self.navigationController setToolbarHidden:YES animated:NO];
     
     [self.deleteTakeButton setEnabled:NO];
     [self.playMovieButton setEnabled:NO];
@@ -189,26 +213,35 @@
     Take *take = self.scene.takes[indexPath.row];
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
+        
+        //NSIndexPath *index = self.tableView.indexPathForSelectedRow;
+//        if (index == nil)
+//        {
+//            return;
+//        }
+        //Take *selectedTake = self.scene.takes[index.row];
+        // add code here for when you hit delete
+        [self.scene.takes removeObject:take];
+        
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"didDeleteTake" object:indexPath];
        // add code here for when you hit delete
         //[self.library.scenes removeObjectAtIndex:indexPathFor];
-        NSError *error = nil;
-        if ([[NSFileManager defaultManager] fileExistsAtPath:[take getPathURL].path])
-        {
-            
-            [[NSFileManager defaultManager] removeItemAtURL:[take getPathURL] error:&error];
-        
-        }
-        if (!error)
-        {
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
-        }
+//        NSError *error = nil;
+//        if ([[NSFileManager defaultManager] fileExistsAtPath:[take getPathURL].path])
+//        {
+//            
+//            [[NSFileManager defaultManager] removeItemAtURL:[take getPathURL] error:&error];
+//        
+//        }
+//        if (!error)
+//        {
+//            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationRight];
+//        }
     
     }
     
-
-
-
-    //UITableViewCellEditingStyleDelete
 
 }
 
@@ -257,6 +290,7 @@
 
 - (IBAction)addAsFavourite:(id)sender
 {
+    
     
 }
 

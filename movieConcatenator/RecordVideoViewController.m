@@ -99,9 +99,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 {
     if (!self.incorrectOrientationLabel)
     {
-        self.incorrectOrientationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2, self.view.frame.size.height/2, 100, 20)];
-        [self.incorrectOrientationLabel setText:@"please rotate device for best results"];
+        self.incorrectOrientationLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.frame.size.width/5, (self.view.frame.size.height/2)-50, 200, 100)];
+        [self.incorrectOrientationLabel setText:@"Recording in landscape mode will ensure best results. To enable recording, please rotate your device."];
+        self.incorrectOrientationLabel.numberOfLines = 0;
         [self.incorrectOrientationLabel setTextColor:[UIColor whiteColor]];
+        [self.incorrectOrientationLabel setTextAlignment:NSTextAlignmentCenter];
+        self.incorrectOrientationLabel.adjustsFontSizeToFitWidth = YES;
         [self.view addSubview:self.incorrectOrientationLabel];
     }
     else
@@ -294,11 +297,11 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     return ![self lockInterfaceRotation];
 }
 
-- (NSUInteger)supportedInterfaceOrientations
-{
-    return //UIInterfaceOrientationMaskLandscapeLeft;
-    UIInterfaceOrientationMaskLandscapeLeft;
-}
+//- (NSUInteger)supportedInterfaceOrientations
+//{
+//    return //UIInterfaceOrientationMaskLandscapeLeft;
+//    UIInterfaceOrientationMaskLandscapeLeft;
+//}
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
