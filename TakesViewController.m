@@ -95,8 +95,8 @@
     UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 40)];
     
     // 2. Set a custom background color and a border
-    headerView.backgroundColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.4f];
-    headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.6f].CGColor;
+    headerView.backgroundColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.6f];
+    headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.8f].CGColor;
     
     headerView.layer.borderWidth = 2.0;
     
@@ -106,7 +106,7 @@
     headerLabel.backgroundColor = [UIColor clearColor];
     headerLabel.textColor = [UIColor whiteColor];
     headerLabel.font = [UIFont boldSystemFontOfSize:24.0];
-    headerLabel.text = @"This is the custom header view";
+    headerLabel.text = self.scene.title;
     headerLabel.textAlignment = NSTextAlignmentLeft;
     
     // 4. Add the label to the header view
@@ -197,7 +197,7 @@
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.navigationController setToolbarHidden:YES animated:NO];
-    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self.deleteTakeButton setEnabled:NO];
     [self.playMovieButton setEnabled:NO];
     //Take *take = self.scene.takes[indexPath.row];
@@ -285,7 +285,15 @@
 
 - (IBAction)playMovie:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:[self.currentSelection getPathURL]];
+    NSIndexPath *index = self.tableView.indexPathForSelectedRow;
+    NSMutableArray *takesQueue = [NSMutableArray array];
+    for (int i=index.row; i<self.scene.takes.count; i++)
+    {
+        Take *cellData = self.scene.takes[i];
+        [takesQueue addObject:cellData];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:takesQueue];
 }
 
 - (IBAction)addAsFavourite:(id)sender

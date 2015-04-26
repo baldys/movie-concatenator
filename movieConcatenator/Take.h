@@ -24,11 +24,11 @@
 
 
 
-@property (nonatomic, strong) AVAsset *asset;
+@property (nonatomic, strong) AVAsset *assetItem;
 
 @property (nonatomic, strong) UIImage *thumbnail; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
 //@property (nonatomic, strong) NSString *thumbnail;
-
+- (AVAsset*)createAssetItem;
 
 // save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
 

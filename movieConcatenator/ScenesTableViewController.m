@@ -13,7 +13,7 @@
 #import "PlayVideoViewController.h"
 #import "NewSceneDetailsViewController.h"
 #import "TakesViewController.h"
-
+#import "PlaybackViewController.h"
 #define kHeaderSectionHeight 32
 #define kTableCellHeight     80
 
@@ -24,7 +24,7 @@
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (weak, nonatomic) IBOutlet UITableView *_tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *concatenateButton;
-
+@property (nonatomic, strong) PlaybackViewController *playbackViewController;
 //@property UIBarButtonItem *concatenatingActivityButton;
 @property (nonatomic) NSInteger currentSceneIndex;
 //@property (weak, nonatomic) IBOutlet UIToolbar *scenesToolbar;
@@ -364,18 +364,24 @@
     }
 }
 
+
 - (void) didSelectItemFromCollectionView:(NSNotification*)notification
 {
-    PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
+//    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[[notification.object firstObject]getPathURL] options:nil];
+//    
+//    [self didPickURL:asset];
+//
+    [self performSegueWithIdentifier:@"showVideo" sender:notification.object];
+    //PlayVideoViewController *videoPlayerVC = [[PlayVideoViewController alloc]init];
     
-    videoPlayerVC.takeURL = [notification object];
-    if (videoPlayerVC.takeURL)
-    {
-        //UINavigationController *navcont = [[UINavigationController alloc] initWithRootViewController:self];
-        [self presentViewController:videoPlayerVC animated:YES completion:^{
-            NSLog(@"Presented videoPlayerVC!!!");
-        }];
-    }
+    
+    //if (videoPlayerVC.playerItems)
+    //{
+//        UINavigationController *navcont = [[UINavigationController alloc] initWithRootViewController:self];
+        //[self presentViewController:videoPlayerVC animated:YES completion:^{
+           // NSLog(@"Presented videoPlayerVC!!!");
+        //}];
+    //}
 }
 
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
@@ -420,11 +426,6 @@
     // show activity indicator in the toolbar instead
     [self.navigationController.toolbar setItems:items animated:YES];
     
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    //[[UIDevice currentDevice].generatesDeviceOrientationNotifications];
 }
 
 - (void) didFinishConcatenatingVideos:(NSNotification*)notification
@@ -490,24 +491,16 @@
         takesVC.scene = [[Scene alloc] init];
         [takesVC setScene:scene];
         
-        
-        
-        //[takesVC configureTableViewWithScene:scene];
 
-        
-        //asvc.sceneData = sceneToAdd;
-        //asvc.sceneNumberField.text: self.scenes.count;
-
-//        else if ([segue.identifier isEqualToString:@"recordATake"])
-//        {
-//        }
     }
-  
-    
-
-    //Scene *currentScene = self.library.scenes[addTakeButton.tag];
-
-
+ 
+    else if ([segue.identifier isEqualToString:@"showVideo"])
+    {
+        UINavigationController *navController = (UINavigationController*)segue.destinationViewController;
+        PlayVideoViewController *playVideoVC = (PlayVideoViewController*)navController.topViewController;
+        playVideoVC.playerItems = [NSMutableArray arrayWithArray:sender];
+        
+    }
 }
 
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue

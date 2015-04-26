@@ -198,6 +198,7 @@
                         <outlet property="_tableView" destination="iLZ-Xg-fI4" id="6a9-qZ-BVY"/>
                         <outlet property="concatenateButton" destination="Z2j-fG-02q" id="qL9-Nm-wgh"/>
                         <segue destination="xm6-hf-0Po" kind="show" identifier="ShowTakesViewController" id="QGb-Jn-TGM"/>
+                        <segue destination="QcI-xS-b4n" kind="show" identifier="showVideo" id="PQA-qc-9Oq"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E8B-TA-I0e" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -333,15 +334,51 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5BN-vI-uPg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bXt-Ye-JOT" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="946" y="-583"/>
+            <point key="canvasLocation" x="822" y="-583"/>
         </scene>
-        <!--AV Player View Controller-->
-        <scene sceneID="xnX-a7-Cng">
+        <!--Play Video View Controller-->
+        <scene sceneID="n8S-1w-vJC">
             <objects>
-                <avPlayerViewController videoGravity="AVLayerVideoGravityResizeAspect" id="6dK-Cf-iRZ" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="VyD-eb-Qhg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="SGa-fN-PaT" customClass="PlayVideoViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="O6A-GS-eyR"/>
+                        <viewControllerLayoutGuide type="bottom" id="ALM-aq-JVx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Fm1-5R-g9Z">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ROi-B5-3cU" appends="YES" id="JhO-3f-TBG"/>
+                        </connections>
+                    </view>
+                    <toolbarItems>
+                        <barButtonItem image="white-outline-star-32" id="23t-pI-rAC">
+                            <color key="tintColor" red="0.0" green="1" blue="0.94934334050000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="star:" destination="SGa-fN-PaT" id="tjn-Oq-ShR"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem systemItem="flexibleSpace" id="onj-g2-nEw"/>
+                        <barButtonItem systemItem="flexibleSpace" id="Zac-oa-ApC"/>
+                        <barButtonItem tag="1" systemItem="trash" id="fiq-it-Le2">
+                            <color key="tintColor" red="0.0" green="0.1764705882" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="delete:" destination="SGa-fN-PaT" id="XwA-lh-DWN"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="Vif-RI-k3Q"/>
+                    <connections>
+                        <outlet property="starButton" destination="23t-pI-rAC" id="Qet-af-ZU4"/>
+                        <outlet property="trashButton" destination="fiq-it-Le2" id="aVC-fQ-oOB"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i3l-7m-Zm2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="ROi-B5-3cU"/>
             </objects>
-            <point key="canvasLocation" x="-1281" y="1128"/>
+            <point key="canvasLocation" x="-298" y="854"/>
         </scene>
         <!--Record Video View Controller-->
         <scene sceneID="PT9-2p-6nJ">
@@ -471,7 +508,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1482" y="145"/>
+            <point key="canvasLocation" x="1499" y="145"/>
         </scene>
         <!--Scenes-->
         <scene sceneID="yad-jn-uyN">
@@ -544,7 +581,7 @@
                                 <color key="sectionIndexBackgroundColor" red="0.31802799847670649" green="0.37392273545014776" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.53271280399104015" green="0.31130972061010076" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleAspectFit" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TakeTableViewCell" rowHeight="124" id="gaw-Id-exC">
+                                    <tableViewCell contentMode="scaleAspectFit" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TakeTableViewCell" rowHeight="124" id="gaw-Id-exC">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gaw-Id-exC" id="BZz-4O-ved">
                                             <autoresizingMask key="autoresizingMask"/>
@@ -624,9 +661,12 @@
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="cPD-zX-TsE">
+                    <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" barStyle="black" id="cPD-zX-TsE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="zBe-L8-gMA">
@@ -640,6 +680,29 @@
             </objects>
             <point key="canvasLocation" x="148" y="140"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="0yf-M7-gJ7">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" hidesBarsOnTap="YES" hidesBarsWhenVerticallyCompact="YES" id="QcI-xS-b4n" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="MZS-FO-0oo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="Q3S-aV-Yba">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
+                    <connections>
+                        <segue destination="SGa-fN-PaT" kind="relationship" relationship="rootViewController" id="SnF-wi-hdf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Cj0-pS-Pz4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1117" y="838"/>
+        </scene>
     </scenes>
     <resources>
         <image name="1420512706_audio-video-outline-play-128" width="512" height="512"/>
@@ -651,6 +714,7 @@
         <image name="recording.png" width="229" height="242"/>
         <image name="selectedStar" width="32" height="32"/>
         <image name="unselectedStar" width="32" height="32"/>
+        <image name="white-outline-star-32" width="32" height="32"/>
     </resources>
     <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

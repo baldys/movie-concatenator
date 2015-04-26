@@ -17,6 +17,7 @@
 		9F3B4D541AE8A7530056E4C7 /* flash29-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D531AE8A7530056E4C7 /* flash29-2.png */; };
 		9F3B4D561AE8A76D0056E4C7 /* noun_120099.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D551AE8A76D0056E4C7 /* noun_120099.png */; };
 		9F3B4D581AE8A7850056E4C7 /* noun_120097.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D571AE8A7850056E4C7 /* noun_120097.png */; };
+		9F3B4D5B1AEA06D60056E4C7 /* CustomToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */; };
 		9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */; };
 		9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */; };
 		9F4815821AB306780027F1A0 /* white-outline-star-64.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815811AB306780027F1A0 /* white-outline-star-64.png */; };
@@ -74,6 +75,9 @@
 		9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA78F1A9EBBB300F7396B /* VideoLibrary.m */; };
 		9FB69C071AD8B13A00524106 /* disclosure-black-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB69C061AD8B13A00524106 /* disclosure-black-3.png */; };
 		9FB69C091AD8B51400524106 /* disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB69C081AD8B51400524106 /* disclosure.png */; };
+		9FB854061AEB5E8D00D7F66C /* PlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB854051AEB5E8D00D7F66C /* PlaybackView.m */; };
+		9FB854091AEB5F5100D7F66C /* PlaybackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB854081AEB5F5100D7F66C /* PlaybackViewController.m */; };
+		9FB946E31AEB9275001C34E3 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB946E21AEB9275001C34E3 /* AVKit.framework */; };
 		9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +105,8 @@
 		9F3B4D531AE8A7530056E4C7 /* flash29-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flash29-2.png"; sourceTree = "<group>"; };
 		9F3B4D551AE8A76D0056E4C7 /* noun_120099.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noun_120099.png; sourceTree = "<group>"; };
 		9F3B4D571AE8A7850056E4C7 /* noun_120097.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noun_120097.png; sourceTree = "<group>"; };
+		9F3B4D591AEA06D60056E4C7 /* CustomToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomToolbar.h; sourceTree = "<group>"; };
+		9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomToolbar.m; sourceTree = "<group>"; };
 		9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TakeCollectionViewCell.xib; sourceTree = "<group>"; };
 		9F48157F1AB306500027F1A0 /* 00cdea-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "00cdea-outline-star-64.png"; sourceTree = "<group>"; };
 		9F4815811AB306780027F1A0 /* white-outline-star-64.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-outline-star-64.png"; sourceTree = "<group>"; };
@@ -175,6 +181,11 @@
 		9FAFA78F1A9EBBB300F7396B /* VideoLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoLibrary.m; sourceTree = "<group>"; };
 		9FB69C061AD8B13A00524106 /* disclosure-black-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure-black-3.png"; sourceTree = "<group>"; };
 		9FB69C081AD8B51400524106 /* disclosure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = disclosure.png; sourceTree = "<group>"; };
+		9FB854041AEB5E8D00D7F66C /* PlaybackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaybackView.h; sourceTree = "<group>"; };
+		9FB854051AEB5E8D00D7F66C /* PlaybackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaybackView.m; sourceTree = "<group>"; };
+		9FB854071AEB5F5100D7F66C /* PlaybackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaybackViewController.h; sourceTree = "<group>"; };
+		9FB854081AEB5F5100D7F66C /* PlaybackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaybackViewController.m; sourceTree = "<group>"; };
+		9FB946E21AEB9275001C34E3 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoView.h; sourceTree = "<group>"; };
 		9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -184,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FB946E31AEB9275001C34E3 /* AVKit.framework in Frameworks */,
 				9FAFA76E1A997DEB00F7396B /* AssetsLibrary.framework in Frameworks */,
 				9FAFA76F1A997DEB00F7396B /* AVFoundation.framework in Frameworks */,
 				9FAFA7701A997DEB00F7396B /* CoreMedia.framework in Frameworks */,
@@ -294,6 +306,9 @@
 		9FAFA7331A98884A00F7396B = {
 			isa = PBXGroup;
 			children = (
+				9FB946E21AEB9275001C34E3 /* AVKit.framework */,
+				9F3B4D591AEA06D60056E4C7 /* CustomToolbar.h */,
+				9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
@@ -384,6 +399,10 @@
 				9FAFA78F1A9EBBB300F7396B /* VideoLibrary.m */,
 				9FAFA7801A9D2BC700F7396B /* VideoController.h */,
 				9FAFA7811A9D2BC700F7396B /* VideoController.m */,
+				9FB854041AEB5E8D00D7F66C /* PlaybackView.h */,
+				9FB854051AEB5E8D00D7F66C /* PlaybackView.m */,
+				9FB854071AEB5F5100D7F66C /* PlaybackViewController.h */,
+				9FB854081AEB5F5100D7F66C /* PlaybackViewController.m */,
 				9F0020B81AA6BFD60018592C /* VideoMerger.h */,
 				9F0020B91AA6BFD60018592C /* VideoMerger.m */,
 			);
@@ -561,9 +580,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F8E5DA81AD34C7A009BE712 /* TakesViewController.m in Sources */,
+				9FB854091AEB5F5100D7F66C /* PlaybackViewController.m in Sources */,
 				9F1802831ACD130D00CFBCB4 /* NewSceneDetailsViewController.m in Sources */,
 				9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */,
 				9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */,
+				9F3B4D5B1AEA06D60056E4C7 /* CustomToolbar.m in Sources */,
 				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
 				9F18027A1ACB0C1E00CFBCB4 /* UIImage+Extras.m in Sources */,
@@ -576,6 +597,7 @@
 				9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */,
 				9FAFA7421A98884A00F7396B /* main.m in Sources */,
 				9F6D10171AAD303A00FA7C20 /* ScenesTableViewController.m in Sources */,
+				9FB854061AEB5E8D00D7F66C /* PlaybackView.m in Sources */,
 				9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -22,7 +22,7 @@
 #import "VideoLibrary.h"
 #import "UIImage+Extras.h"
 
-@interface Take ()
+@interface Take () //<AVAsynchronousKeyValueLoading>
 
 @property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;
 @property (nonatomic, strong) AVAsset *videoAsset;
@@ -37,9 +37,8 @@
     self = [super init];
     if(self)
     {
-        NSLog(@"Instantiate a new take object \n\n\n");
         // create a unique identifier for the take so
-        // it can be stored and retreived
+        // it can be stored in the file system and retreived
 
         self.assetID = [[NSUUID UUID] UUIDString];
         
@@ -47,15 +46,11 @@
         
         NSLog(@"%@", self.assetID);
         
-       // NSURL *toUrl = [self getPathURL];
-       // NSLog(@"path url for the take: %@", toUrl);
-        
         NSLog(@"url to copy from for the take: %@", url);
         NSLog(@"path url for the take _assetURL %@", _assetURL);
         
         NSError *error = nil;
-        if (![[NSFileManager defaultManager]moveItemAtURL:url
-                toURL:self.assetURL error:&error])
+        if (![[NSFileManager defaultManager]moveItemAtURL:url toURL:self.assetURL error:&error])
         {
             NSLog(@"file copy error %@", error);
         }
@@ -72,7 +67,6 @@
         
         ////// to make this work must add ::
         
-      //_thumbnail = [[UIImage alloc] init];
      [self loadThumbnailWithCompletionHandler:^(UIImage *image){
 //    
             self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
@@ -92,6 +86,18 @@
     }
     return self;
 }
+
+- (AVAsset*) createAssetItem
+{
+    if (!self.assetItem)
+    {
+        self.assetURL = [self getPathURL];
+        self.assetItem = [AVAsset assetWithURL:self.assetURL];
+        
+    }
+    return self.assetItem;
+}
+
 
 // get the file url of the take or create one if it doesn't exist in the documents directory named by its randomly generated uuid.
 - (NSURL*) getPathURL

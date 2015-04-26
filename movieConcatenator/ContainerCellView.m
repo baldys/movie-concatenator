@@ -172,10 +172,18 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    Take *cellData = self.collectionData.takes[indexPath.item];
+    // create a list of takes the movie player should play in order to seek forward and backward in the list consecutively instead of only being able to play one at a time
+    NSMutableArray *videoQueue = [NSMutableArray array];
+    for (int i=indexPath.row; i<self.collectionData.takes.count; i++)
+    {
+        Take *cellData = self.collectionData.takes[i];
+        [videoQueue addObject:cellData];
+    }
     
-    // When collection view item is selected it plays the video for the selected take cell
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:[cellData getPathURL]];
+    
+    // When collection view item is selected it plays the video for the selected video clip.
+    // get the list of takes to play conseutively
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemFromCollectionView" object:videoQueue];
 }
 
 @end

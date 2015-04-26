@@ -81,7 +81,7 @@
     }
     else if (self.titleField.text.length == 0)
     {
-        self.scene.title = [NSString stringWithFormat:@"Scene %i", self.scene.libraryIndex];
+        self.scene.title = [NSString stringWithFormat:@"Scene %li", (long)self.scene.libraryIndex];
     }
     self.scene.libraryIndex = [self.numberField.text integerValue];
     

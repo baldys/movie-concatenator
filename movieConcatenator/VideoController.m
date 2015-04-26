@@ -40,7 +40,8 @@
     {
         [self.videos[sceneNumber] addObject:take];
     }
-    else {
+    else
+    {
         NSLog(@"scene does not exist yet");
     }
     
