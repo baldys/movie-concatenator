@@ -26,73 +26,82 @@
 
 -(AVAsset*)spliceAssets: (NSArray*)takes
 {
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
+    // creating the composition
     AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
-    AVMutableCompositionTrack *compositionTrack1_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    AVMutableCompositionTrack *compositionTrack1_audio = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_audio = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
 
     //keep track of CMTime *timer;
+    // timer = duration of the previous asset/assetTrack
+    // = initial point in time to insert the next asset
+    
     CMTime timer = kCMTimeZero;
     
-    NSMutableArray *assets = [NSMutableArray array];
+    self.mainComposition = [AVMutableVideoComposition videoComposition];
     
+    NSMutableArray *assets = [NSMutableArray array];
+    //NSMutableArray *compositionInstructions = [NSMutableArray array];
     for (Take* take in takes)
     {
         [assets addObject:[AVAsset assetWithURL:[take getPathURL]]];
     }
- 
+    // adding the assets
     for (AVAsset* asset in assets) {
         //add video from asset to track
-        //NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
-        AVAssetTrack *assetTrack1_video = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
-        AVAssetTrack *assetTrack1_audio = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
-        [compositionTrack1_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack1_video atTime:timer error:nil];
-        // audio audio from asset to track
-        [compositionTrack1_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack1_audio atTime:timer error:nil];
+        
+        NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
+        
+        AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
+        AVAssetTrack *assetTrack_audio = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        
+        [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_video atTime:timer error:nil];
+        
+        [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_audio atTime:timer error:nil];
         timer = CMTimeAdd(timer, asset.duration);
+        
+//        AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//        
+//        // set the time range to span the duration of the current video track.
+//        mainInstruction.timeRange = CMTimeRangeMake(timer, CMTimeAdd(timer, assetTrack_video.timeRange.duration));
+//        
+//        AVMutableVideoCompositionLayerInstruction *firstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+//        
+//        [firstlayerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+//        
+//        mainInstruction.layerInstructions = [NSArray arrayWithObjects:firstlayerInstruction, nil];
+   // compositionTrack_video.preferredTransform = CGAffineTransformMakeRotation(<#CGFloat angle#>)
+        
+        
     }
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
     
-    AVMutableVideoCompositionLayerInstruction *firstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack1_video];
-    [firstlayerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+    [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+    
+    [layerInstruction setTransform:compositionTrack_video.preferredTransform atTime:kCMTimeZero];
+    
     AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     
     mainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
-    mainInstruction.layerInstructions = [NSArray arrayWithObjects:firstlayerInstruction, nil];
+    
+    mainInstruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
     
     self.mainComposition = [AVMutableVideoComposition videoComposition];
     
     self.mainComposition.instructions = [NSArray arrayWithObject:mainInstruction];
     self.mainComposition.frameDuration = CMTimeMake(1, 30);
-    self.mainComposition.renderSize = CGSizeMake(320.0, 480.0);
+    
+    self.mainComposition.renderSize = compositionTrack_video.naturalSize;
     
     //NSLog(@"timer scale, value: %d %lld", timer.timescale, timer.value);
     //expecting positive values
-    //NSLog(@"mixComposition properties: %@", mixComposition.debugDescription);
+    NSLog(@"mixComposition properties: %@", mixComposition.debugDescription);
     
     
     return mixComposition;
 }
-
-
-// return a new composition by adding an asset to a compositon
-- (AVMutableComposition*) mixCompositionFromAsset
-{
-    AVMutableComposition *composition = [[AVMutableComposition alloc] init];
-    
-    // video composition track
-    //add a video track to the composition.
-    AVMutableCompositionTrack *compositionTrack_video =
-    [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    
-    // audio composition track
-    //add anaudio track to a composition.
-    AVMutableCompositionTrack *compositionTrack_audio =
-    [composition addMutableTrackWithMediaType:AVMediaTypeAudio                                     preferredTrackID:kCMPersistentTrackID_Invalid];
-    
-    return composition;
-}
-
-
 
 // existing asset -> audio+video asset tracks -> add to  MutableComposition
 // put in some controller class
@@ -114,51 +123,31 @@
                             [self exportDidFinish:exporter];
                             NSLog(@"exported video");
                             
+                            
                         });
      }];
 }
 
-// TODO: put into video model class so that for each video you can retrieve the url path that contains it?
-- (NSURL*) createOutputURL
+- (void) addURLToMergedVideosArray:(NSURL*)url
 {
-    // 4 - Get path
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"mergeVideo-%d.mov",arc4random() % 1000]];
-    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
-    return url;
+    if (!self.mergedMovies)
+    {
+        self.mergedMovies = [NSMutableArray array];
+    }
+    [self.mergedMovies addObject:url];
+    
 }
 
-/*
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+- (NSURL*) createOutputURL
 {
-    // 1 - Get media type
-    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
-    
-    // 2 - Dismiss image picker
-    //[self dismissModalViewControllerAnimated:NO];
-    
-    // 3 - Handle video selection
-    if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo)
-    {
-        //if (isSelectingAssetOne)
-        //{
-            NSLog(@"Video One  Loaded");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Video One Loaded"
-                                                           delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            self.firstAsset = [AVAsset assetWithURL:[info objectForKey:UIImagePickerControllerMediaURL]];
-        }
-        else
-        {
-            NSLog(@"Video two Loaded");
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Asset Loaded" message:@"Video Two Loaded" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alert show];
-            self.secondAsset = [AVAsset assetWithURL:[info objectForKey:UIImagePickerControllerMediaURL]];
-        }
-    }
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"auditionVideo-%d.mov",arc4random() % 1000]];
+    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+  
+    [self addURLToMergedVideosArray:url];
+    return url;
 }
-*/
 
 -(void)exportDidFinish:(AVAssetExportSession*)session
 {
@@ -173,22 +162,30 @@
             [library writeVideoAtPathToSavedPhotosAlbum:outputURL completionBlock:^(NSURL *assetURL, NSError *error)
              {
                  dispatch_async(dispatch_get_main_queue(),
-                                ^{
-                                    if (error)
-                                    {
-                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                        [alert show];
-                                    }
-                                    else
-                                    {
-                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                        [alert show];
-                                    }
-                                });
+                ^{
+                     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingCompletedNotification" object:nil];
+                    if (error)
+                    {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [alert show];
+                    }
+                    else
+                    {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        
+                        [alert show];
+                       
+                        
+                        
+                    }
+                    
+                    
+                });
              }];
         }
     }
 }
+
 
 
 

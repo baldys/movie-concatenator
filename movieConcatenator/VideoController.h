@@ -8,16 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "Take.h"
+#import "Scene.h"
 #import "VideoLibrary.h"
 
 @interface VideoController : NSObject
 
 
 @property (nonatomic, retain) NSMutableArray *videos;
+
 +(VideoController*)videoController;
 
-- (void) addTake:(Take*)take;
+- (void) addTake:(Take*)take toSceneAtIndex:(NSInteger)sceneNumber;
 
+- (void) addScene:(Scene*)scene;
 
 @end
 

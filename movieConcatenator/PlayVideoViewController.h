@@ -10,11 +10,15 @@
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "Take.h"
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-
-@interface PlayVideoViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
-
-@property (nonatomic, strong) Take *take;
-@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
+@interface PlayVideoViewController : UIViewController
+@property (nonatomic, strong) AVPlayerViewController *playerViewController;
+@property (nonatomic, strong) NSURL *takeURL;
+@property (nonatomic, strong) Take *takeToPlay;
+//@property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
+@property (nonatomic, strong) AVQueuePlayer *queuePlayer;
+@property (nonatomic, strong) NSArray *playerItems;
 
 @end

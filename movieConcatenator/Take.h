@@ -13,39 +13,46 @@
 
 @interface Take : NSObject <NSCoding>
 
-@property (nonatomic) NSInteger takeNumber;
+//@property (nonatomic) NSInteger takeNumber;
+
 @property (nonatomic) NSInteger sceneNumber;
+
 @property (nonatomic, strong) NSString* assetID;
+@property (nonatomic, strong) NSURL *assetURL;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
 
-@property (nonatomic, strong) AVAssetImageGenerator *imageGenerator;
 
-@property (nonatomic, strong) AVAsset *asset;
 
-@property (nonatomic, strong) UIImage *thumbailImg; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
+@property (nonatomic, strong) AVAsset *assetItem;
 
-//@property (nonatomic,strong) CMTi
+@property (nonatomic, strong) UIImage *thumbnail; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
+//@property (nonatomic, strong) NSString *thumbnail;
+- (AVAsset*)createAssetItem;
 
 // save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
 
+//- (NSURL*) thumbnailURL;
+
 //- (void) saveToFile:
 
-@property AVMutableComposition *mutableComposition;
-@property AVMutableVideoComposition *mutableVideoComposition;
-@property AVMutableAudioMix *mutableAudioMix;
-@property (nonatomic) CMTime *insertionPoint;
+//@property AVMutableComposition *mutableComposition;
+//@property AVMutableVideoComposition *mutableVideoComposition;
+//@property AVMutableAudioMix *mutableAudioMix;
+//@property (nonatomic) CMTime *insertionPoint;
 
-@property (nonatomic, strong) NSArray *assetTracks;
+//@property (nonatomic, strong) NSArray *assetTracks;
 
 - (instancetype) initWithURL:(NSURL *)url;
 
-- (NSArray*)assetTracks;
+//- (NSArray*)assetTracks;
 
 
 - (NSURL*)getPathURL;
 - (NSString*) documentsDirectory;
+//- (void)getThumbnailImage;
 
+//- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(void))completionHandler;
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
 
 @end

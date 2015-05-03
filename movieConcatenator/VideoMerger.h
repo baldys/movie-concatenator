@@ -21,20 +21,13 @@
 @property (nonatomic, strong) AVMutableComposition *mixComposition;
 @property (nonatomic, strong) AVMutableVideoComposition *mainComposition;
 
-//- (IBAction)loadVideo1:(id)sender;
-//
-//- (IBAction)loadVideo2:(id)sender;
-
+@property (nonatomic, strong) NSMutableArray *mergedMovies;
 -(AVAsset*)spliceAssets: (NSArray*)takes;
-
-//- (void)concatenateAssets:(NSMutableArray*)assetArray;
 
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
 
 -(void) exportDidFinish:(AVAssetExportSession*)session;
-
-
 
 @end

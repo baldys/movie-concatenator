@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>7C98038B-3E80-420C-97CE-95D4A28955AC</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>BD893928031B82E11AF375E900FD2C7660C961C2</key>
+		<string>github.com:baldys/movie-concatenator.git</string>
+	</dict>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>BD893928031B82E11AF375E900FD2C7660C961C2</key>
+		<string>movieConcatenator/</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:baldys/movie-concatenator.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>BD893928031B82E11AF375E900FD2C7660C961C2</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BD893928031B82E11AF375E900FD2C7660C961C2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>movieConcatenator</string>
+		</dict>
+	</array>
+</dict>
+</plist>

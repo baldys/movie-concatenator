@@ -6,10 +6,7 @@
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 
 // Responsible for
-// 1. saving takes (videos) to either: the assets library &&/|| a managed file library created in the documents directory (saved to the disk)
-// not sure if it should store the takes themseves with their assets/video stuff
-// or whether just their url filepath/filename/directory name need to be saved
-// TODO get some clarification
+// 1. saving takes (videos)
 ////  reminder to me:
 //// video controller allows new take/scene data to be accessed by evertyhing. if a new take is added to the shared array the otehr view controllers can update itself with the new data in response to that change
 // DocumentsDirectory/takeFilePath<RANDOM NUMBER>.mov
@@ -35,14 +32,29 @@
     return shared;
 }
 
--(void)addVideo:(id)video
+-(void)addTake:(Take*)take toSceneAtIndex:(NSInteger)sceneNumber
 {
     //VideoController *vc = [VideoController videoController];
     // adds new take to the shared videos array
-    [self.videos addObject:video];
+    if (self.videos[sceneNumber])
+    {
+        [self.videos[sceneNumber] addObject:take];
+    }
+    else
+    {
+        NSLog(@"scene does not exist yet");
+    }
+    
+    
     // save take to the documents directory;
     
    NSLog(@"%@",[VideoController videoController].videos);
+}
+
+- (void) addScene:(Scene*)scene
+{
+    
+    
 }
 
 //- (void) insertObject:(Take *)object inSharedVideoArrayAtIndex:(NSIndexPath)sectionIndex;

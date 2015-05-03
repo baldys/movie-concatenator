@@ -17,11 +17,23 @@
         {
             self.takes = [NSMutableArray array];
         }
-        self.title = @"scene";
-        
-        
-        //Take *newScene = [[Take alloc] init];
-        //[self.takes addObject:newScene];
+        self.title = nil;
+       // self.description = nil;
+        //self.libraryIndex = 0;
+    }
+    return self;
+}
+
+- (instancetype) initWithTitle:(NSString*)title
+{
+    self = [super init];
+    if (self)
+    {
+        self.title = title;
+        if (!self.takes)
+        {
+            self.takes = [NSMutableArray array];
+        }
     }
     return self;
 }
@@ -36,7 +48,7 @@
     {
         self.title = [aDecoder decodeObjectForKey:@"title"];
         self.takes = [[aDecoder decodeObjectForKey:@"takes"] mutableCopy];
-        
+        self.libraryIndex = [aDecoder decodeIntegerForKey:@"libraryIndex"];
     }
     return self;
 }
@@ -45,6 +57,7 @@
 {
     [aCoder encodeObject:self.title forKey:@"title"];
     [aCoder encodeObject:self.takes forKey:@"takes"];
+    [aCoder encodeInteger:self.libraryIndex forKey:@"libraryIndex"];
 }
 
 

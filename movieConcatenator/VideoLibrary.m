@@ -7,36 +7,38 @@
 //
 
 #import "VideoLibrary.h"
-#import "Scene.h"
-
-#import <MediaPlayer/MediaPlayer.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-#import <MobileCoreServices/MobileCoreServices.h>
-
 
 @interface VideoLibrary ()
 
-- (void) buildMediaLibrary;
-- (void) buildAssetLibrary;
-- (void) buildApplicationBundleLibrary;
-
-- (void)addURL:(NSURL *)url;
+//- (void) buildMediaLibrary;
+//- (void) buildAssetLibrary;
+//- (void) buildApplicationBundleLibrary;
+//
+//- (void)addURL:(NSURL *)url;
 
 
 //@property(nonatomic, strong) NSMutableArray *assetItems;
-@property(readonly, unsafe_unretained) dispatch_queue_t assetItemsQueue;
-
-@property(readonly, unsafe_unretained) dispatch_group_t libraryGroup;
-@property(readonly, unsafe_unretained) dispatch_queue_t libraryQueue;
+//@property(readonly, unsafe_unretained) dispatch_queue_t assetItemsQueue;
+//
+//@property(readonly, unsafe_unretained) dispatch_group_t libraryGroup;
+//@property(readonly, unsafe_unretained) dispatch_queue_t libraryQueue;
 
 @end
 
 @implementation VideoLibrary
 
+
+// use a shared scenes array instead (make it a singleton)
 -(instancetype)init {
-    if (self = [super init]) {
-        ///
-        self.scenes = [[NSMutableArray alloc] init];
+    if (self = [super init])
+    {
+    
+        if (!self.scenes)
+        {
+             self.scenes = [NSMutableArray array];
+        }
+        
+       
         ///
     }
     return self;
@@ -73,20 +75,98 @@
 }
 
 
--(BOOL)saveToFilename:(NSString *)filename
+-(void)saveToFilename:(NSString *)filename
 {
     NSString *myPathDocs =  [[self documentsDirectory] stringByAppendingPathComponent:filename];
-   return [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+    [NSKeyedArchiver archiveRootObject:self toFile:myPathDocs];
+    
 }
-
 
 - (NSString*) documentsDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSLog(@"Documents Directory: %@", documentsDirectory);
+   
     return documentsDirectory;
 }
+
+- (void) addScene:(Scene*)newScene
+{
+    NSLog(@" adding a scene with title: %@", newScene.title);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+        [self.scenes addObject:newScene];
+        newScene.libraryIndex = self.scenes.count;
+        [self saveToFilename:@"videolibrary.plist"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.completionBlock(YES);
+        });
+        
+        
+    });
+}
+
+
+
+
+
+-(NSArray *)listFileAtPath:(NSString *)path
+{
+    //-----> LIST ALL FILES <-----//
+    NSLog(@"LISTING ALL FILES FOUND");
+    
+    int count;
+    
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:NULL];
+    for (count = 0; count < (int)[directoryContent count]; count++)
+    {
+        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
+    }
+    return directoryContent;
+}
+
+- (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex
+{
+    for (Scene *scene in self.scenes)
+    {
+        NSLog(@"SCENES IN LIBRARY Scene title: %@", scene.title );
+    }
+
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
+//                   ^{
+//
+//        
+//    })
+    NSLog(@"delete take was called");
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[take getPathURL].path])
+    {
+        NSLog(@"Take to delete: %@", [take getPathURL].path);
+        NSError *error = nil;
+        if (![[NSFileManager defaultManager]removeItemAtURL:[take getPathURL] error:nil])
+        {
+            NSLog(@"Error deleting file: %@",error);
+        }
+        else
+        {
+            NSLog(@"removed take - scene number: %ld", (long)take.sceneNumber);
+            Scene *scene = [self.scenes objectAtIndex:take.sceneNumber];
+            [scene.takes removeObject:take];
+            //[[self.scenes objectAtIndex:take.sceneNumber].takes removeObject:take];
+            [self saveToFilename:@"videolibrary.plist"];
+        }
+        //[[NSFileManager defaultManager] removeItemAtPath:[take getPathURL].path error:&error];
+//
+//        if (error)
+//        {
+//            NSLog(@"Error deleting file: %@",error);
+//            
+//        }
+        
+        
+    }
+
+}
+
+
 ////////////////
 // // TODO: put into video model class so that for each video, you can retrieve the url path that
 

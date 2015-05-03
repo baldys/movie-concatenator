@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@class Take;
+#import "Scene.h"
+#import "Take.h"
 
 @interface VideoLibrary : NSObject <NSCoding>
 
@@ -17,16 +17,11 @@
 + (instancetype)libraryWithFilename:(NSString*)filename;
 
 -(void)saveToFilename:(NSString *)filename;
+-(void) addScene:(Scene*)newScene;
+-(NSArray *)listFileAtPath:(NSString *)path;
+- (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex;
+- (NSString*) documentsDirectory;
+@property (nonatomic, copy) void (^completionBlock)(BOOL);
 
-
-@property(readonly, strong) NSMutableArray *assetItems;
-
-//- (id)initWithLibraryChangedHandler:(void (^)(void))libraryChangedHandler;
-
-//- (void)loadLibraryWithCompletionBlock:(void (^)(void))completionHandler;
-
-//+ (BOOL)saveMovieAtPathToAssetLibrary:(NSURL *)path withCompletionHandler:(void (^)(NSError *))completionHandler;
-
-- (NSURL*) getPathURL;
 
 @end
