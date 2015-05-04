@@ -67,7 +67,6 @@
 		9FAFA7711A997DEB00F7396B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76B1A997DEB00F7396B /* MediaPlayer.framework */; };
 		9FAFA7721A997DEB00F7396B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76C1A997DEB00F7396B /* MobileCoreServices.framework */; };
 		9FAFA7731A997DEB00F7396B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */; };
-		9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */; };
 		9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */; };
 		9FAFA77F1A9C170A00F7396B /* Take.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA77E1A9C170A00F7396B /* Take.m */; };
 		9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7811A9D2BC700F7396B /* VideoController.m */; };
@@ -86,6 +85,7 @@
 		9FB946EF1AED24AE001C34E3 /* white-outline-star-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946ED1AED24AE001C34E3 /* white-outline-star-32.png */; };
 		9FB946F11AED2EE0001C34E3 /* camera-toggle.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946F01AED2EE0001C34E3 /* camera-toggle.png */; };
 		9FB946F31AED331C001C34E3 /* camera-toggle-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946F21AED331C001C34E3 /* camera-toggle-pressed.png */; };
+		9FB946F91AF7F374001C34E3 /* BestTakesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */; };
 		9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */; };
 /* End PBXBuildFile section */
 
@@ -158,7 +158,7 @@
 		9F9BC5471AD0F4F600994E9A /* video-camera2b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video-camera2b.png"; sourceTree = "<group>"; };
 		9F9BC5491AD0F62900994E9A /* video-camera2d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video-camera2d.png"; sourceTree = "<group>"; };
 		9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie-noPlay-blank.png"; sourceTree = "<group>"; };
-		9FAFA73C1A98884A00F7396B /* movieConcatenator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = movieConcatenator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FAFA73C1A98884A00F7396B /* movieConcatenator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = movieConcatenator.app; path = DemoReel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FAFA7401A98884A00F7396B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FAFA7411A98884A00F7396B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9FAFA7431A98884A00F7396B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -175,8 +175,6 @@
 		9FAFA76B1A997DEB00F7396B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		9FAFA76C1A997DEB00F7396B /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		9FAFA7741A99844C00F7396B /* PlayVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayVideoViewController.h; sourceTree = "<group>"; };
-		9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayVideoViewController.m; sourceTree = "<group>"; };
 		9FAFA7771A99845A00F7396B /* RecordVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoViewController.h; sourceTree = "<group>"; };
 		9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoViewController.m; sourceTree = "<group>"; };
 		9FAFA77D1A9C170A00F7396B /* Take.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Take.h; sourceTree = "<group>"; };
@@ -202,6 +200,8 @@
 		9FB946ED1AED24AE001C34E3 /* white-outline-star-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-outline-star-32.png"; sourceTree = "<group>"; };
 		9FB946F01AED2EE0001C34E3 /* camera-toggle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-toggle.png"; sourceTree = "<group>"; };
 		9FB946F21AED331C001C34E3 /* camera-toggle-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera-toggle-pressed.png"; path = "Images.xcassets/Image-3.imageset/camera-toggle-pressed.png"; sourceTree = "<group>"; };
+		9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BestTakesViewController.h; sourceTree = "<group>"; };
+		9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BestTakesViewController.m; sourceTree = "<group>"; };
 		9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoView.h; sourceTree = "<group>"; };
 		9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -334,6 +334,8 @@
 				9F3B4D591AEA06D60056E4C7 /* CustomToolbar.h */,
 				9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
+				9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */,
+				9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
 				9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */,
@@ -454,8 +456,6 @@
 				9FB854051AEB5E8D00D7F66C /* PlaybackView.m */,
 				9FB854071AEB5F5100D7F66C /* PlaybackViewController.h */,
 				9FB854081AEB5F5100D7F66C /* PlaybackViewController.m */,
-				9FAFA7741A99844C00F7396B /* PlayVideoViewController.h */,
-				9FAFA7751A99844C00F7396B /* PlayVideoViewController.m */,
 				9FB9C3C71AC273F300952250 /* Video Camera */,
 			);
 			name = "Video Player";
@@ -617,10 +617,10 @@
 				9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */,
 				9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */,
 				9F3B4D5B1AEA06D60056E4C7 /* CustomToolbar.m in Sources */,
-				9FAFA7761A99844C00F7396B /* PlayVideoViewController.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
 				9F18027A1ACB0C1E00CFBCB4 /* UIImage+Extras.m in Sources */,
 				9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */,
+				9FB946F91AF7F374001C34E3 /* BestTakesViewController.m in Sources */,
 				9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */,
 				9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */,
 				9FAFA77F1A9C170A00F7396B /* Take.m in Sources */,

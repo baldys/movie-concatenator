@@ -119,9 +119,9 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     self.mPlayButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(play:)];
     self.mPauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pause:)];
     self.mScrubber = [[UISlider alloc] init];
-    [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
-    [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDown];
-    [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchCancel];
+    [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
+    [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+    [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
     
     [self.trashButton setAction:@selector(delete:)];
     

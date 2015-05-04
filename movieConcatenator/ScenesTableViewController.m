@@ -63,6 +63,10 @@
     [self.navigationController.toolbar setItems:items animated:YES];
 }
 
+
+
+//////////////
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -109,6 +113,8 @@
      name:@"shouldDeleteTake" object:nil];
     
     [library listFileAtPath:[library documentsDirectory]];
+    
+    
     
 }
 
