@@ -200,8 +200,8 @@
 		9FB946ED1AED24AE001C34E3 /* white-outline-star-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "white-outline-star-32.png"; sourceTree = "<group>"; };
 		9FB946F01AED2EE0001C34E3 /* camera-toggle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-toggle.png"; sourceTree = "<group>"; };
 		9FB946F21AED331C001C34E3 /* camera-toggle-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera-toggle-pressed.png"; path = "Images.xcassets/Image-3.imageset/camera-toggle-pressed.png"; sourceTree = "<group>"; };
-		9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BestTakesViewController.h; sourceTree = "<group>"; };
-		9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BestTakesViewController.m; sourceTree = "<group>"; };
+		9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BestTakesViewController.h; path = ../BestTakesViewController.h; sourceTree = "<group>"; };
+		9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BestTakesViewController.m; path = ../BestTakesViewController.m; sourceTree = "<group>"; };
 		9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoView.h; sourceTree = "<group>"; };
 		9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -334,8 +334,6 @@
 				9F3B4D591AEA06D60056E4C7 /* CustomToolbar.h */,
 				9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
-				9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */,
-				9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
 				9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */,
@@ -401,6 +399,8 @@
 		9FAFA7831A9EA5B200F7396B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */,
+				9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */,
 				9F8E5DA61AD34C7A009BE712 /* TakesViewController.h */,
 				9F8E5DA71AD34C7A009BE712 /* TakesViewController.m */,
 				9F1802811ACD130D00CFBCB4 /* NewSceneDetailsViewController.h */,

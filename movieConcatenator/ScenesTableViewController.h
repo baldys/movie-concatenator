@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) VideoLibrary *library;
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
-- (IBAction)ConcatenateSelectedTakes:(id)sender;
+//- (IBAction)ConcatenateSelectedTakes:(id)sender;
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue;
 
 

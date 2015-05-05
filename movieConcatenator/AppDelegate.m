@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "BestTakesViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,6 +19,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+
+    BestTakesViewController *bestTakesVC = [[BestTakesViewController alloc] init];
+
     return YES;
 }
 

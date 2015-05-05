@@ -175,15 +175,7 @@
                             <outlet property="delegate" destination="J0d-P8-PPs" id="ecg-l5-J79"/>
                         </connections>
                     </tableView>
-                    <toolbarItems>
-                        <barButtonItem systemItem="flexibleSpace" id="pkb-jU-wxM"/>
-                        <barButtonItem title="Join Selected Videos" width="200" id="Z2j-fG-02q">
-                            <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="ConcatenateSelectedTakes:" destination="J0d-P8-PPs" id="Mdc-it-azO"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Scenes" id="nvH-Zh-J1x">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="zBu-bC-YBm">
                             <connections>
@@ -193,7 +185,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="_tableView" destination="iLZ-Xg-fI4" id="6a9-qZ-BVY"/>
-                        <outlet property="concatenateButton" destination="Z2j-fG-02q" id="qL9-Nm-wgh"/>
                         <segue destination="xm6-hf-0Po" kind="show" identifier="ShowTakesViewController" id="QGb-Jn-TGM"/>
                         <segue destination="QcI-xS-b4n" kind="show" identifier="showVideo" id="PQA-qc-9Oq"/>
                         <segue destination="6gR-HO-YQm" kind="show" identifier="showPlayback" id="aJ8-Zi-cLI"/>
@@ -201,7 +192,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E8B-TA-I0e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-60" y="-1146"/>
+            <point key="canvasLocation" x="-203" y="-1295"/>
         </scene>
         <!--Playback View Controller-->
         <scene sceneID="pzd-HZ-STo">
@@ -664,19 +655,26 @@
                     </view>
                     <toolbarItems>
                         <barButtonItem systemItem="flexibleSpace" id="OD2-fR-zc9"/>
-                        <barButtonItem title="Item" id="4lJ-OC-YHD"/>
+                        <barButtonItem title="Join Videos" id="4lJ-OC-YHD">
+                            <connections>
+                                <action selector="concatenateSelectedTakes:" destination="WwK-h8-bXp" id="hnK-q0-lHs"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem systemItem="flexibleSpace" id="Bde-sl-ogY"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Best Takes" id="lpG-4N-duq"/>
+                    <navigationItem key="navigationItem" title="Best Takes" id="lpG-4N-duq">
+                        <barButtonItem key="leftBarButtonItem" title="Item" id="SDq-Kd-3KG"/>
+                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
+                        <outlet property="concatenateButton" destination="4lJ-OC-YHD" id="VN7-bs-DhB"/>
                         <outlet property="tableView" destination="25e-Ix-das" id="3Ia-Hk-ua9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iev-nR-9o8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-203" y="-1044"/>
+            <point key="canvasLocation" x="-22" y="-647"/>
         </scene>
         <!--Add New Scene-->
         <scene sceneID="ncj-BI-Qkd">

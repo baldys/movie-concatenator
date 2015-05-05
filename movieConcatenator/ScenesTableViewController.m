@@ -14,6 +14,8 @@
 #import "NewSceneDetailsViewController.h"
 #import "TakesViewController.h"
 #import "PlaybackViewController.h"
+
+#import "BestTakesViewController.h"
 #define kHeaderSectionHeight 32
 #define kTableCellHeight     98
 
@@ -32,45 +34,49 @@
 
 @implementation ScenesTableViewController
 
+/////****
+//- (void) setUpToolbar
+//{
+//    //- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
+//    
+//    if (activityIndicator ==nil)
+//    {
+//        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//        activityIndicator.hidesWhenStopped = YES;
+//    }
+//    [self.navigationController.toolbar setHidden:NO];
+//    
+//    //UIBarButtonItem *concatenatingActivityButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+//    //[concatenatingActivityButton setEnabled:NO];
+//    
+//    [self showConcatenatorButtonInToolbar];
+//    if (self.takesToConcatenate.count <= 1)
+//    {
+//        [self.navigationController.toolbar.items[0] setEnabled:NO];
+//    }
+//}
 
-- (void) setUpToolbar
-{
-    //- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
-    
-    if (activityIndicator ==nil)
-    {
-        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        activityIndicator.hidesWhenStopped = YES;
-    }
-    [self.navigationController.toolbar setHidden:NO];
-    
-    //UIBarButtonItem *concatenatingActivityButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    //[concatenatingActivityButton setEnabled:NO];
-    
-    [self showConcatenatorButtonInToolbar];
-    if (self.takesToConcatenate.count <= 1)
-    {
-        [self.navigationController.toolbar.items[0] setEnabled:NO];
-    }
-
-}
-- (void) showConcatenatorButtonInToolbar
-{
-    if ([activityIndicator isAnimating] && activityIndicator != nil)
-        return;
-    [self.concatenateButton setEnabled:YES];
-    NSArray *items = [NSArray arrayWithObject:self.concatenateButton];
-    [self.navigationController.toolbar setItems:items animated:YES];
-}
-
-
+///////*
+//- (void) showConcatenatorButtonInToolbar
+//{
+//    if ([activityIndicator isAnimating] && activityIndicator != nil)
+//        return;
+//    [self.concatenateButton setEnabled:YES];
+//    NSArray *items = [NSArray arrayWithObject:self.concatenateButton];
+//    [self.navigationController.toolbar setItems:items animated:YES];
+//}
+//
+//
 
 //////////////
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setUpToolbar];
+    //[self setUpToolbar];
+    
+   
+    
     [self tableHeader];
     
     //self.navigationItem.leftBarButtonItem = self.editButtonItem;
@@ -101,12 +107,12 @@
      addObserver:self
         selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
     
-    [[NSNotificationCenter defaultCenter]
-    addObserver:self
-       selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-        selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//    addObserver:self
+//       selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter]
+//     addObserver:self
+//        selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
     
     [[NSNotificationCenter defaultCenter]
      addObserver:self selector:@selector(shouldDeleteTake:)
@@ -332,20 +338,20 @@
 //}
 
 
-
-- (IBAction)ConcatenateSelectedTakes:(id)sender
-{
-    VideoMerger *merger = [[VideoMerger alloc]init];
-    NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
-    if (self.takesToConcatenate.count > 1)
-    {
-        [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
-    }
-    else
-    {
-        NSLog(@"Please select more than one video.");
-    }
-}
+/////****
+//- (IBAction)ConcatenateSelectedTakes:(id)sender
+//{
+//    VideoMerger *merger = [[VideoMerger alloc]init];
+//    NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
+//    if (self.takesToConcatenate.count > 1)
+//    {
+//        [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
+//    }
+//    else
+//    {
+//        NSLog(@"Please select more than one video.");
+//    }
+//}
 
 #pragma mark - Notifications
 
@@ -365,29 +371,25 @@
 {
     [self performSegueWithIdentifier:@"showPlayback" sender:[notification object]];
 }
-
+///////******
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
 {
     if (!self.takesToConcatenate)
     {
         self.takesToConcatenate = [NSMutableArray array];
     }
-    if ([self.takesToConcatenate count]-1 > 1)
-    {
-        NSLog(@"self.takestoconcatenate = %lu", (unsigned long)[self.takesToConcatenate count]);
-        [self.concatenateButton setEnabled:YES];
-        [self.navigationController.toolbar.items[0] setEnabled:YES];
-    }
-    else if (self.takesToConcatenate.count < 2)
-    {
-        [self.concatenateButton setEnabled:NO];
-        [self.navigationController.toolbar.items[0] setEnabled:NO];
-    }
-    else
-    {
-        [self.concatenateButton setEnabled:YES];
-        [self.navigationController.toolbar.items[0] setEnabled:YES];
-    }
+//    if (self.takesToConcatenate.count >= 2)
+//    {
+//        NSLog(@"self.takesToConcatenate = %lu", (unsigned long)[self.takesToConcatenate count]);
+//        [self.concatenateButton setEnabled:YES];
+//        //[self.navigationController.toolbar.items[0] setEnabled:YES];
+//    }
+//    else if (self.takesToConcatenate.count < 2)
+//    {
+//        [self.concatenateButton setEnabled:NO];
+//        [self.navigationController.toolbar.items[0] setEnabled:NO];
+//    }
+//   
     
     
     Take *take = [notification object];
@@ -401,46 +403,46 @@
         [self.takesToConcatenate removeObject:take];
     }
 }
-
-- (void) didStartConcatenatingVideos:(NSNotification*)notification
-{
-    NSLog(@"video merging starting?");
-    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-    // if concatenation finished successfully, stop animating the view, hide it from the toolbar and re-enable the concatenate button so another video can be merged.
-    if (activityIndicator.isAnimating == YES) return;
-    
-    [activityIndicator startAnimating];
-    
-    // right now only the concatenator button should be showing in the toolbar
-    // so disable it
-    [self.concatenateButton setEnabled:NO];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-    NSArray *items = [NSArray arrayWithObject:item];
-    // show activity indicator in the toolbar instead
-    [self.navigationController.toolbar setItems:items animated:YES];
-    
-}
-
-- (void) didFinishConcatenatingVideos:(NSNotification*)notification
-{
-    if (activityIndicator.isAnimating==NO) return;
-    
-    NSLog(@"Will be stopping animation");
-    
-    [activityIndicator stopAnimating];
-
-    [self showConcatenatorButtonInToolbar];
-    //[self.navigationController.toolbarItems[0] setHidden:NO];
-    
-    for (int i=0; i<self.takesToConcatenate.count; i++)
-    {
-        [self.takesToConcatenate[i] setSelected:NO];
-    }
-    
-    
-    //[self.takesToConcatenate removeAllObjects];
-    self.takesToConcatenate = nil;
-}
+//////*****
+//- (void) didStartConcatenatingVideos:(NSNotification*)notification
+//{
+//    NSLog(@"video merging starting?");
+//    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    // if concatenation finished successfully, stop animating the view, hide it from the toolbar and re-enable the concatenate button so another video can be merged.
+//    if (activityIndicator.isAnimating == YES) return;
+//    
+//    [activityIndicator startAnimating];
+//    
+//    // right now only the concatenator button should be showing in the toolbar
+//    // so disable it
+//    [self.concatenateButton setEnabled:NO];
+//    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
+//    NSArray *items = [NSArray arrayWithObject:item];
+//    // show activity indicator in the toolbar instead
+//    [self.navigationController.toolbar setItems:items animated:YES];
+//    
+//}
+//////*****
+//- (void) didFinishConcatenatingVideos:(NSNotification*)notification
+//{
+//    if (activityIndicator.isAnimating==NO) return;
+//    
+//    NSLog(@"Will be stopping animation");
+//    
+//    [activityIndicator stopAnimating];
+//
+//    [self showConcatenatorButtonInToolbar];
+//    //[self.navigationController.toolbarItems[0] setHidden:NO];
+//    
+//    for (int i=0; i<self.takesToConcatenate.count; i++)
+//    {
+//        [self.takesToConcatenate[i] setSelected:NO];
+//    }
+//    
+//    
+//    //[self.takesToConcatenate removeAllObjects];
+//    self.takesToConcatenate = nil;
+//}
 
 - (void) didFinishRecordingVideoToURL:(NSNotification*)notification
 {
@@ -593,43 +595,7 @@
 
 //
 // // Override to support conditional editing of the table view.
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-//// // Return NO if you do not want the specified item to be editable.
-//
-//    return YES;
-//}
-//
-//
-//
-// // Override to support editing the table view.
-// - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//     if (editingStyle == UITableViewCellEditingStyleDelete)
-//     {
-// // Delete the row from the data source
-//         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//     }
-//     else if (editingStyle == UITableViewCellEditingStyleInsert) {
-// // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//    }
-// }
-//
-//
-//
-// // Override to support rearranging the table view.
-// - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-//{
-//}
-//
-//
-//
-// // Override to support conditional rearranging of the table view.
-// - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-// // Return NO if you do not want the item to be re-orderable.
-// 
-//     return YES;
-// }
-//
+
 
 
 

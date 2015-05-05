@@ -22,6 +22,6 @@
 - (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex;
 - (NSString*) documentsDirectory;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
-
+@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 
 @end

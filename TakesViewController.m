@@ -9,7 +9,7 @@
 #import "TakesViewController.h"
 #import "Scene.h"
 #import "Take.h"
-#import "PlayVideoViewController.h"
+//#import "PlayVideoViewController.h"
 //#import "TakeTableViewCell.h"
 @interface TakesViewController ()
 

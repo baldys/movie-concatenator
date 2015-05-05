@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Take.h"
+@class Take;
 @interface BestTakesViewController : UIViewController
 
+- (void)addTakeToTakesToConcatenate:(NSNotification*)notification;
+@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
+- (IBAction)concatenateSelectedTakes:(id)sender;
 @end
