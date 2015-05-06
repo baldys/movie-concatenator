@@ -158,7 +158,7 @@
 		9F9BC5471AD0F4F600994E9A /* video-camera2b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video-camera2b.png"; sourceTree = "<group>"; };
 		9F9BC5491AD0F62900994E9A /* video-camera2d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video-camera2d.png"; sourceTree = "<group>"; };
 		9FA5D86B1AABB94400318DF8 /* movie-noPlay-blank.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "movie-noPlay-blank.png"; sourceTree = "<group>"; };
-		9FAFA73C1A98884A00F7396B /* movieConcatenator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = movieConcatenator.app; path = DemoReel.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FAFA73C1A98884A00F7396B /* DemoReel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoReel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FAFA7401A98884A00F7396B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9FAFA7411A98884A00F7396B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9FAFA7431A98884A00F7396B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -349,7 +349,7 @@
 		9FAFA73D1A98884A00F7396B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9FAFA73C1A98884A00F7396B /* movieConcatenator.app */,
+				9FAFA73C1A98884A00F7396B /* DemoReel.app */,
 				9FAFA7581A98884A00F7396B /* movieConcatenatorTests.xctest */,
 			);
 			name = Products;
@@ -478,7 +478,7 @@
 			);
 			name = DemoReel;
 			productName = movieConcatenator;
-			productReference = 9FAFA73C1A98884A00F7396B /* movieConcatenator.app */;
+			productReference = 9FAFA73C1A98884A00F7396B /* DemoReel.app */;
 			productType = "com.apple.product-type.application";
 		};
 		9FAFA7571A98884A00F7396B /* movieConcatenatorTests */ = {

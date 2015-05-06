@@ -91,7 +91,8 @@
 //        }
 //    }
 //    
-    self.tabBarItem.selectedImage = [UIImage imageNamed:@"blue-star-32.png"];
+    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"blue-star-32.png"]];
+    
 //    if (!self.takesToConcatenate)
 //    {
 //        self.takesToConcatenate = [NSMutableArray array];
@@ -139,11 +140,11 @@
  
     if (take.isSelected && ![self.takesToConcatenate containsObject:take])
     {
-        //[self.takesToConcatenate addObject:take];
+        [self.takesToConcatenate addObject:take];
     }
     else if (!take.isSelected && [self.takesToConcatenate containsObject:take])
     {
-        //[self.takesToConcatenate removeObject:take];
+        [self.takesToConcatenate removeObject:take];
     }
     
     // disable the toolbar button if there are less than two takes

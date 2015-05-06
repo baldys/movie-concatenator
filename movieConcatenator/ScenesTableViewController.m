@@ -25,49 +25,12 @@
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (weak, nonatomic) IBOutlet UITableView *_tableView;
-//@property (weak, nonatomic) IBOutlet UIBarButtonItem *concatenateButton;
 @property (nonatomic, strong) PlaybackViewController *playbackViewController;
 @property (nonatomic) NSInteger currentSceneIndex;
 
 @end
 
 @implementation ScenesTableViewController
-
-/////****
-//- (void) setUpToolbar
-//{
-//    //- (instancetype)initWithNavigationBarClass:(Class)navigationBarClass toolbarClass:(Class)toolbarClass
-//    
-//    if (activityIndicator ==nil)
-//    {
-//        activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//        activityIndicator.hidesWhenStopped = YES;
-//    }
-//    [self.navigationController.toolbar setHidden:NO];
-//    
-//    //UIBarButtonItem *concatenatingActivityButton = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-//    //[concatenatingActivityButton setEnabled:NO];
-//    
-//    [self showConcatenatorButtonInToolbar];
-//    if (self.takesToConcatenate.count <= 1)
-//    {
-//        [self.navigationController.toolbar.items[0] setEnabled:NO];
-//    }
-//}
-
-///////*
-//- (void) showConcatenatorButtonInToolbar
-//{
-//    if ([activityIndicator isAnimating] && activityIndicator != nil)
-//        return;
-//    [self.concatenateButton setEnabled:YES];
-//    NSArray *items = [NSArray arrayWithObject:self.concatenateButton];
-//    [self.navigationController.toolbar setItems:items animated:YES];
-//}
-//
-//
-
-//////////////
 
 - (void)viewDidLoad
 {
@@ -109,21 +72,7 @@
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
-    
-//    [[NSNotificationCenter defaultCenter]
-//    addObserver:self
-//       selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
-//    [[NSNotificationCenter defaultCenter]
-//     addObserver:self
-//        selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
-    
-    ///// I might be overthinking this but....
-    // In the case when BestTakesViewController was not loaded yet and takes have already been selected (items have already been starred) the BestTakesVC will not get the chance to update its data source and will be empty unless it has been registered for "didSelectTake" notifications. It is added as an observer for these "didSelectStarButton..." notifications in viewDidLoad; tIt cannot receive these notifications if it has not been loaded into memory yet (since it is added as an observer in view did load) So and despite having items selected, its array will be empty therefore inconsistent with what was actually selected. so BestTakesVC must inform this view controller (ScenesTableVC) when it has loaded so it (ScenesTableVC) can copy the contents of its array of selected takes (takesToConcatenate) into the BestTakesVC's array of selected takes. This way the selected takes are consistent among all view controllers. Messy but seems like a viable solution for now.
-    // alternatively, I might be able to use a shared array or singleton of some sort (maybe located in the VideoLibrary class). notification that a take has been starred -> add this to video library's array. This array can be used as the data source for the best takes view controller. deletions and reordering methods on the array can be implemented in the VideoLibrary class, and used by the bestTakesVC when these events occur.
-    ///???????
-    ///
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bestTakesVCDidLoad:) name:@"BestTakesVCDidLoad" object:nil];
-    
+ 
     [[NSNotificationCenter defaultCenter]
      addObserver:self selector:@selector(shouldDeleteTake:)
      name:@"shouldDeleteTake" object:nil];
@@ -178,7 +127,7 @@
     self.bestTakesVC = [nc.viewControllers firstObject];
     if (self.bestTakesVC.takesToConcatenate == nil)
     {
-        self.bestTakesVC.takesToConcatenate = [[NSArray alloc] initWithArray:self.takesToConcatenate copyItems:YES];
+        self.bestTakesVC.takesToConcatenate = [[NSMutableArray alloc] initWithArray:self.takesToConcatenate];
     }
     
     
@@ -463,6 +412,13 @@
     {
         [self.takesToConcatenate removeObject:take];
     }
+    
+    if (self.takesToConcatenate.count != 0)
+    {
+        NSString *badgeValue = [NSString stringWithFormat:@"%d", self.takesToConcatenate.count];
+        [[[self.tabBarController.viewControllers objectAtIndex:1] tabBarItem] setBadgeValue:badgeValue];
+    }
+    
 }
 //////*****
 //- (void) didStartConcatenatingVideos:(NSNotification*)notification

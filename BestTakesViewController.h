@@ -13,7 +13,7 @@
 @interface BestTakesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 - (void)addTakeToTakesToConcatenate:(NSNotification*)notification;
-@property (nonatomic, strong) NSArray *takesToConcatenate;
+@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 - (IBAction)concatenateSelectedTakes:(id)sender;
 
 @end
