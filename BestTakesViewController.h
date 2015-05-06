@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "Take.h"
 @class Take;
-@interface BestTakesViewController : UIViewController
+
+@interface BestTakesViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
 - (void)addTakeToTakesToConcatenate:(NSNotification*)notification;
-@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
+@property (nonatomic, strong) NSArray *takesToConcatenate;
 - (IBAction)concatenateSelectedTakes:(id)sender;
+
 @end

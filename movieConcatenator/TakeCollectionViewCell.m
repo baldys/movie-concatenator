@@ -23,7 +23,7 @@
     
     if (self.starTake.selected)
     {
-        self.take.selected = YES; // by default all cells are not selected
+        [self.take setSelected:YES]; // by default all cells are not selected
         NSLog(@" asset id of selected take: %@" , self.take.assetID);
         NSLog(@"SELECTED %ld ", (long)self.starTake.tag);
 

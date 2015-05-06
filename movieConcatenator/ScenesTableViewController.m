@@ -15,18 +15,17 @@
 #import "TakesViewController.h"
 #import "PlaybackViewController.h"
 
-#import "BestTakesViewController.h"
 #define kHeaderSectionHeight 32
 #define kTableCellHeight     98
 
-@interface ScenesTableViewController () <TakeCellDelegate>
+@interface ScenesTableViewController () <TakeCellDelegate, UITabBarControllerDelegate>
 {
     UIActivityIndicatorView *activityIndicator;
 }
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (weak, nonatomic) IBOutlet UITableView *_tableView;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *concatenateButton;
+//@property (weak, nonatomic) IBOutlet UIBarButtonItem *concatenateButton;
 @property (nonatomic, strong) PlaybackViewController *playbackViewController;
 @property (nonatomic) NSInteger currentSceneIndex;
 
@@ -74,8 +73,12 @@
 {
     [super viewDidLoad];
     //[self setUpToolbar];
-    
-   
+    [self.navigationController setToolbarHidden:YES];
+    self.tabBarController.delegate = self;
+    if (self.takesToConcatenate == nil)
+    {
+        self.takesToConcatenate = [[NSMutableArray alloc] init];
+    }
     
     [self tableHeader];
     
@@ -114,6 +117,13 @@
 //     addObserver:self
 //        selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
     
+    ///// I might be overthinking this but....
+    // In the case when BestTakesViewController was not loaded yet and takes have already been selected (items have already been starred) the BestTakesVC will not get the chance to update its data source and will be empty unless it has been registered for "didSelectTake" notifications. It is added as an observer for these "didSelectStarButton..." notifications in viewDidLoad; tIt cannot receive these notifications if it has not been loaded into memory yet (since it is added as an observer in view did load) So and despite having items selected, its array will be empty therefore inconsistent with what was actually selected. so BestTakesVC must inform this view controller (ScenesTableVC) when it has loaded so it (ScenesTableVC) can copy the contents of its array of selected takes (takesToConcatenate) into the BestTakesVC's array of selected takes. This way the selected takes are consistent among all view controllers. Messy but seems like a viable solution for now.
+    // alternatively, I might be able to use a shared array or singleton of some sort (maybe located in the VideoLibrary class). notification that a take has been starred -> add this to video library's array. This array can be used as the data source for the best takes view controller. deletions and reordering methods on the array can be implemented in the VideoLibrary class, and used by the bestTakesVC when these events occur.
+    ///???????
+    ///
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(bestTakesVCDidLoad:) name:@"BestTakesVCDidLoad" object:nil];
+    
     [[NSNotificationCenter defaultCenter]
      addObserver:self selector:@selector(shouldDeleteTake:)
      name:@"shouldDeleteTake" object:nil];
@@ -124,6 +134,32 @@
     
 }
 
+//- (void) bestTakesVCDidLoad:(NSNotification*)notification
+//{
+//    // if no takes have been selected yet then nothing needs to be done since the selected takes are consistent already.
+//    // otherwise:
+//    
+//    
+//    if (!(self.takesToConcatenate.count == 0))
+//    {
+//        // get a reference to BestTakesViewController
+//        self.bestTakesVC = [[self.tabBarController.viewControllers objectAtIndex:1] ];
+//        
+//        //self.bestTakesVC = [nc topViewController];
+//        if (self.bestTakesVC.takesToConcatenate.count == 0)
+//        {
+//            self.bestTakesVC.takesToConcatenate = self.takesToConcatenate;
+//        }
+////        for (Take *take in self.takesToConcatenate)
+////        {
+////            [self.bestTakesVC.takesToConcatenate addObject:[take copy]];
+////        }
+//        
+//        //[notification object].takesToConcatenate = self.takesToConcatenate;
+//        
+//        
+//    }
+//}
 - (void) tableHeader
 {
     UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
@@ -132,9 +168,32 @@
 
 }
 
+- (void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    
+    
+    //self.bestTakesVC = (BestTakesViewController*)viewController;
+    
+    UINavigationController *nc = (UINavigationController*)viewController;
+    self.bestTakesVC = [nc.viewControllers firstObject];
+    if (self.bestTakesVC.takesToConcatenate == nil)
+    {
+        self.bestTakesVC.takesToConcatenate = [[NSArray alloc] initWithArray:self.takesToConcatenate copyItems:YES];
+    }
+    
+    
+}
+
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    //[self.library listScenesAndTakes];
+//    BestTakesViewController *bestTakesVC = [self.tabBarController.viewControllers objectAtIndex:1];
+//    if (bestTakesVC.takesToConcatenate == nil)
+//    {
+//        bestTakesVC.takesToConcatenate = [[NSArray alloc] initWithArray:self.takesToConcatenate copyItems:YES];
+//         UINavigationController *nc = (UINavigationController*)[self.tabBarController.viewControllers objectAtIndex:0];
+//    }
     ///***
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"shouldDeleteTake" object:nil];
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectStrButtonInCell" object:nil];
@@ -143,6 +202,8 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    //[self.library listScenesAndTakes];
+    
     [self._tableView reloadData];
 }
 
@@ -374,10 +435,10 @@
 ///////******
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
 {
-    if (!self.takesToConcatenate)
-    {
-        self.takesToConcatenate = [NSMutableArray array];
-    }
+//    if (!self.takesToConcatenate)
+//    {
+//        self.takesToConcatenate = [NSMutableArray array];
+//    }
 //    if (self.takesToConcatenate.count >= 2)
 //    {
 //        NSLog(@"self.takesToConcatenate = %lu", (unsigned long)[self.takesToConcatenate count]);
@@ -462,8 +523,6 @@
                            [weakSelf._tableView reloadData];
                        });
                    });
-    // after presenting the record view controller with a modal segue instead of storyboard, dismiss the view controller here.
-    
 }
 
 

@@ -20,7 +20,7 @@
     // Override point for customization after application launch.
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
-    BestTakesViewController *bestTakesVC = [[BestTakesViewController alloc] init];
+    //BestTakesViewController *bestTakesVC = [[BestTakesViewController alloc] init];
 
     return YES;
 }

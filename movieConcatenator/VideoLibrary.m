@@ -28,6 +28,18 @@
 @implementation VideoLibrary
 
 
+
+//+(VideoLibrary *)sharedLibrary {
+//    static dispatch_once_t pred;
+//    static VideoLibrary *videoLibrary = nil;
+//    dispatch_once(&pred, ^{
+//        videoLibrary = [[VideoLibrary alloc] init];
+//        videoLibrary.takesToConcatenate = [[NSMutableArray alloc]init];
+//    });
+//    return videoLibrary;
+//}
+
+
 // use a shared scenes array instead (make it a singleton)
 -(instancetype)init {
     if (self = [super init])
@@ -35,7 +47,8 @@
     
         if (!self.scenes)
         {
-             self.scenes = [NSMutableArray array];
+            self.scenes = [NSMutableArray array];
+            
         }
         
        
@@ -122,6 +135,41 @@
         NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
     }
     return directoryContent;
+}
+
+-(void)listScenesAndTakes
+{
+    for (Scene *scene in self.scenes)
+    {
+        for (Take *take in scene.takes)
+        {
+            NSLog(@"SELECTED? %hhd", take.isSelected);
+        }
+    }
+}
+
+- (NSMutableArray*) selectedTakes
+{
+    //NSMutableArray *selectedTakes = [NSMutableArray array];
+    if (!_takesToConcatenate)
+    {
+        _takesToConcatenate = [[NSMutableArray alloc] init];
+    }
+    
+    for (Scene *scene in self.scenes)
+    {
+        for (Take *take in scene.takes)
+        {
+            if (take.isSelected)
+            {
+                NSLog(@"TAKE URL %@ ", [take getPathURL]);
+                [_takesToConcatenate addObject:take];
+            }
+        }
+    }
+    
+    
+    return _takesToConcatenate;
 }
 
 - (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex

@@ -12,13 +12,13 @@
 #import "ContainerCellView.h"
 #import "SceneTableViewCell.h"
 #import "RecordVideoViewController.h"
-
+#import "BestTakesViewController.h"
 @class RecordVideoViewController;
 @class TakeCollectionViewCell;
 @class Take;
 
 @interface ScenesTableViewController:UITableViewController<UITableViewDataSource, UITableViewDelegate>
-
+@property (nonatomic, strong) BestTakesViewController *bestTakesVC;
 @property (nonatomic, strong) VideoLibrary *library;
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 //- (IBAction)ConcatenateSelectedTakes:(id)sender;

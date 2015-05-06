@@ -9,10 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "Scene.h"
 #import "Take.h"
-
+@class TakeCollectionViewCell;
 @interface VideoLibrary : NSObject <NSCoding>
 
 @property (nonatomic, strong) NSMutableArray *scenes;
+
+//+ (VideoLibrary*)selectedVideos;
+@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 
 + (instancetype)libraryWithFilename:(NSString*)filename;
 
@@ -22,6 +25,7 @@
 - (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex;
 - (NSString*) documentsDirectory;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
-@property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 
+- (void)listScenesAndTakes;
+- (NSMutableArray*)selectedTakes;
 @end
