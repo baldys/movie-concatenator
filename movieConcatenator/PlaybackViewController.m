@@ -452,13 +452,20 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
 - (void)viewDidUnload
 {
-    
-    
     [super viewDidUnload];
 }
+//- (void) viewWillAppear:(BOOL)animated
+//{
+//    [super viewDidAppear:animated];
+//    [self.tabBarController hidesBottomBarWhenPushed];
+//    [self.navigationController setToolbarHidden:NO animated:NO];
+//}
+
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    
     if (self.takeToPlay)
     {
         [self setURLFromTake];
@@ -470,9 +477,11 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [super viewDidLoad];
     [self setPlayer:nil];
     [self creteBarButtonItems];
+    
     UIView* view  = [self view];
 
-    
+    [self.navigationController setToolbarHidden:NO animated:NO];
+//    [self.tabBarController.tabBar setHidden:YES];
     //[self setURLFromTake];
     UISwipeGestureRecognizer* swipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     [swipeUpRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
@@ -484,7 +493,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     UIBarButtonItem *scrubberItem = [[UIBarButtonItem alloc] initWithCustomView:self.mScrubber];
     
-    UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    //UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     //UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
     
@@ -492,7 +501,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     //UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
     
-    self.mToolbar.items = @[self.mPlayButton, flexItem, scrubberItem];//, infoItem];
+    self.mToolbar.items = @[self.mPlayButton, scrubberItem];//, infoItem];
     isSeeking = NO;
     [self initScrubberTimer];
     

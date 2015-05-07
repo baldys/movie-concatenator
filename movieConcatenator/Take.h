@@ -21,7 +21,7 @@
 @property (nonatomic, strong) NSURL *assetURL;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
-
+@property (nonatomic) BOOL *frontFacingVideo;
 
 
 @property (nonatomic, strong) AVAsset *assetItem;

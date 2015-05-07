@@ -32,21 +32,25 @@
 
 @implementation ScenesTableViewController
 
+#pragma mark - UIView
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //[self setUpToolbar];
+    
     [self.navigationController setToolbarHidden:YES];
+    
     self.tabBarController.delegate = self;
+    
     if (self.takesToConcatenate == nil)
     {
         self.takesToConcatenate = [[NSMutableArray alloc] init];
     }
     
-    [self tableHeader];
+    UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
+    tableHeader.backgroundColor = [UIColor blackColor];
+    self._tableView.tableHeaderView = tableHeader;
     
-    //self.navigationItem.leftBarButtonItem = self.editButtonItem;
-  
     VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
     
     if (!library)
@@ -65,84 +69,30 @@
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(didSelectItemForPlayback:)
-      name:@"didSelectItemForPlayback" object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSelectStarButtonInCell:) name:@"didSelectStarButtonInCell" object:nil];
-    
+            name:@"didSelectItemForPlayback" object:nil];
+    [[NSNotificationCenter defaultCenter]
+    addObserver:self
+       selector:@selector(didSelectStarButtonInCell:)
+           name:@"didSelectStarButtonInCell" object:nil];
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(didFinishRecordingVideoToURL:) name:@"didFinishRecordingVideoToURL" object:nil];
- 
     [[NSNotificationCenter defaultCenter]
-     addObserver:self selector:@selector(shouldDeleteTake:)
-     name:@"shouldDeleteTake" object:nil];
+     addObserver:self
+        selector:@selector(shouldDeleteTake:)
+            name:@"shouldDeleteTake" object:nil];
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+        selector:@selector(clearTakesToConcatenate:) name:@"videoMergingCompletedNotification" object:nil];
     
     [library listFileAtPath:[library documentsDirectory]];
-    
-    
-    
-}
 
-//- (void) bestTakesVCDidLoad:(NSNotification*)notification
-//{
-//    // if no takes have been selected yet then nothing needs to be done since the selected takes are consistent already.
-//    // otherwise:
-//    
-//    
-//    if (!(self.takesToConcatenate.count == 0))
-//    {
-//        // get a reference to BestTakesViewController
-//        self.bestTakesVC = [[self.tabBarController.viewControllers objectAtIndex:1] ];
-//        
-//        //self.bestTakesVC = [nc topViewController];
-//        if (self.bestTakesVC.takesToConcatenate.count == 0)
-//        {
-//            self.bestTakesVC.takesToConcatenate = self.takesToConcatenate;
-//        }
-////        for (Take *take in self.takesToConcatenate)
-////        {
-////            [self.bestTakesVC.takesToConcatenate addObject:[take copy]];
-////        }
-//        
-//        //[notification object].takesToConcatenate = self.takesToConcatenate;
-//        
-//        
-//    }
-//}
-- (void) tableHeader
-{
-    UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
-    tableHeader.backgroundColor = [UIColor blackColor];
-    self._tableView.tableHeaderView = tableHeader;
-
-}
-
-- (void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-    
-    
-    //self.bestTakesVC = (BestTakesViewController*)viewController;
-    
-    UINavigationController *nc = (UINavigationController*)viewController;
-    self.bestTakesVC = [nc.viewControllers firstObject];
-    if (self.bestTakesVC.takesToConcatenate == nil)
-    {
-        self.bestTakesVC.takesToConcatenate = [[NSMutableArray alloc] initWithArray:self.takesToConcatenate];
-    }
-    
-    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    //[self.library listScenesAndTakes];
-//    BestTakesViewController *bestTakesVC = [self.tabBarController.viewControllers objectAtIndex:1];
-//    if (bestTakesVC.takesToConcatenate == nil)
-//    {
-//        bestTakesVC.takesToConcatenate = [[NSArray alloc] initWithArray:self.takesToConcatenate copyItems:YES];
-//         UINavigationController *nc = (UINavigationController*)[self.tabBarController.viewControllers objectAtIndex:0];
-//    }
+    
     ///***
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"shouldDeleteTake" object:nil];
     //[[NSNotificationCenter defaultCenter] removeObserver:self name:@"didSelectStrButtonInCell" object:nil];
@@ -152,7 +102,7 @@
 {
     [super viewWillAppear:animated];
     //[self.library listScenesAndTakes];
-    
+    [self.navigationController setToolbarHidden:YES animated:NO];
     [self._tableView reloadData];
 }
 
@@ -161,7 +111,26 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
+#pragma mark - TabBarController Delegate
+- (void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    
+    
+    //self.bestTakesVC = (BestTakesViewController*)viewController;
+    
+    UINavigationController *nc = (UINavigationController*)viewController;
+    self.bestTakesVC = [nc.viewControllers firstObject];
+    if (self.bestTakesVC.takesToConcatenate == nil && !self.bestTakesVC.isViewLoaded)
+    {
+        self.bestTakesVC.takesToConcatenate = [[NSMutableArray alloc] initWithArray:self.takesToConcatenate];
+    }
+    
+    
+}
+
+
+
+#pragma mark - TableView data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [self.library.scenes count];
@@ -172,7 +141,7 @@
    return 1;
 }
 
-#pragma mark - Table View delegate
+#pragma mark - TableView delegate
 
 // each table view cell represents a scene in the video library's scenes array
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -188,10 +157,6 @@
         cell.tag = indexPath.section;
     }
     
-    //Scene *scene = self.scenes[indexPath.section];
-    //[cell setCollectionData:scene];
-    ///////>>>>>>>>>>>>>>>>>>>>>
-
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                    ^{
                        Scene *scene = self.scenes[indexPath.section];
@@ -200,18 +165,12 @@
                            [cell setCollectionData:scene];
                        });
                    });
-    
-    
-    
     return cell;
 }
 
 //// Dark blue RGB % .129, .129, .51
 ///
 ///
-
-
-#pragma mark - UITableView Delegate methods
 
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -243,10 +202,11 @@
     
 
     //// borders for section header.
-//    headerView.layer.borderColor = [UIColor whiteColor].CGColor;
-//    headerView.layer.cornerRadius = 2.0;
-//    headerView.layer.borderWidth = 3.0;
-   
+
+//    headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.7176 blue:1.0 alpha:1.0].CGColor;
+//  headerView.layer.cornerRadius = 2.0;
+//    headerView.layer.borderWidth = 0.3;
+//   
     
     //camera2-4.png    simple vid camera icon
     // camera2.png
@@ -275,22 +235,11 @@
     headerLabel.text = sectionData.title;
     
     headerLabel.font = [UIFont boldSystemFontOfSize:20];
-    headerLabel.textColor = [UIColor whiteColor];
+    headerLabel.textColor = [UIColor colorWithRed:0 green:0.7176 blue:1.0 alpha:1.0];
     
     [headerView addSubview:headerLabel];
     
     return headerView;
-}
-
-- (void)showTakesInScene:(UIButton*)sender
-{
-   // [sender setSelected:YES];
-    [sender setHighlighted:YES];
- 
-    self.currentSceneIndex = sender.tag;
-
-    [self performSegueWithIdentifier:@"ShowTakesViewController" sender:sender];
-
 }
 
 - (UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
@@ -347,21 +296,17 @@
 
 //}
 
+- (void)showTakesInScene:(UIButton*)sender
+{
+    // [sender setSelected:YES];
+    [sender setHighlighted:YES];
+    
+    self.currentSceneIndex = sender.tag;
+    
+    [self performSegueWithIdentifier:@"ShowTakesViewController" sender:sender];
+    
+}
 
-/////****
-//- (IBAction)ConcatenateSelectedTakes:(id)sender
-//{
-//    VideoMerger *merger = [[VideoMerger alloc]init];
-//    NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
-//    if (self.takesToConcatenate.count > 1)
-//    {
-//        [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
-//    }
-//    else
-//    {
-//        NSLog(@"Please select more than one video.");
-//    }
-//}
 
 #pragma mark - Notifications
 
@@ -381,27 +326,9 @@
 {
     [self performSegueWithIdentifier:@"showPlayback" sender:[notification object]];
 }
-///////******
+
 - (void) didSelectStarButtonInCell:(NSNotification*)notification
 {
-//    if (!self.takesToConcatenate)
-//    {
-//        self.takesToConcatenate = [NSMutableArray array];
-//    }
-//    if (self.takesToConcatenate.count >= 2)
-//    {
-//        NSLog(@"self.takesToConcatenate = %lu", (unsigned long)[self.takesToConcatenate count]);
-//        [self.concatenateButton setEnabled:YES];
-//        //[self.navigationController.toolbar.items[0] setEnabled:YES];
-//    }
-//    else if (self.takesToConcatenate.count < 2)
-//    {
-//        [self.concatenateButton setEnabled:NO];
-//        [self.navigationController.toolbar.items[0] setEnabled:NO];
-//    }
-//   
-    
-    
     Take *take = [notification object];
     
     if (take.isSelected && ![self.takesToConcatenate containsObject:take])
@@ -412,54 +339,21 @@
     {
         [self.takesToConcatenate removeObject:take];
     }
-    
-    if (self.takesToConcatenate.count != 0)
-    {
-        NSString *badgeValue = [NSString stringWithFormat:@"%d", self.takesToConcatenate.count];
-        [[[self.tabBarController.viewControllers objectAtIndex:1] tabBarItem] setBadgeValue:badgeValue];
-    }
+    [self updateBadgeValue];
+}
+
+- (void) updateBadgeValue
+{
+    NSString *badgeValue = [NSString stringWithFormat:@"%d", self.takesToConcatenate.count];
+    [[[self.tabBarController.viewControllers objectAtIndex:1] tabBarItem] setBadgeValue:badgeValue];
+}
+
+- (void)clearTakesToConcatenate:(NSNotification*)notification
+{
+    [self.takesToConcatenate removeAllObjects];
+    [self updateBadgeValue];
     
 }
-//////*****
-//- (void) didStartConcatenatingVideos:(NSNotification*)notification
-//{
-//    NSLog(@"video merging starting?");
-//    activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    // if concatenation finished successfully, stop animating the view, hide it from the toolbar and re-enable the concatenate button so another video can be merged.
-//    if (activityIndicator.isAnimating == YES) return;
-//    
-//    [activityIndicator startAnimating];
-//    
-//    // right now only the concatenator button should be showing in the toolbar
-//    // so disable it
-//    [self.concatenateButton setEnabled:NO];
-//    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator];
-//    NSArray *items = [NSArray arrayWithObject:item];
-//    // show activity indicator in the toolbar instead
-//    [self.navigationController.toolbar setItems:items animated:YES];
-//    
-//}
-//////*****
-//- (void) didFinishConcatenatingVideos:(NSNotification*)notification
-//{
-//    if (activityIndicator.isAnimating==NO) return;
-//    
-//    NSLog(@"Will be stopping animation");
-//    
-//    [activityIndicator stopAnimating];
-//
-//    [self showConcatenatorButtonInToolbar];
-//    //[self.navigationController.toolbarItems[0] setHidden:NO];
-//    
-//    for (int i=0; i<self.takesToConcatenate.count; i++)
-//    {
-//        [self.takesToConcatenate[i] setSelected:NO];
-//    }
-//    
-//    
-//    //[self.takesToConcatenate removeAllObjects];
-//    self.takesToConcatenate = nil;
-//}
 
 - (void) didFinishRecordingVideoToURL:(NSNotification*)notification
 {
@@ -480,8 +374,6 @@
                        });
                    });
 }
-
-
 
 # pragma mark - Segues
 

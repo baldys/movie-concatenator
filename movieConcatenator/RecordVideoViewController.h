@@ -26,6 +26,8 @@
 //- (IBAction)backToRootVC:(id)sender;
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
+@property (nonatomic) AVCaptureDevicePosition currentPosition;
+@property (nonatomic) UIDeviceOrientation videoOrientation;
 
 - (IBAction)cancel:(UIBarButtonItem *)sender;
 - (IBAction)save:(id)sender;

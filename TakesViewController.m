@@ -47,15 +47,16 @@
     
     [self.navigationController setToolbarHidden:NO animated:YES];
     
-    [self.navigationItem setTitle:[NSString stringWithFormat:@"Scene # %li", (long)self.scene.libraryIndex]];
+    [self.navigationItem setTitle:[NSString stringWithFormat:@"%@", self.scene.title]];
     
     [self.playMovieButton setEnabled:NO];
     [self.deleteTakeButton setEnabled:NO];
-    //[self.favouriteTakeButton setEnabled:NO];
+    [self.starButton setEnabled:NO];
     //[self.actionButton setEnabled:YES];
     
     [self.deleteTakeButton setAction:@selector(delete:)];
     [self.playMovieButton setAction:@selector(playMovie:)];
+    [self.starButton setAction:@selector(addAsFavourite:)];
     // Do any additional setup after loading the view.
     
 //    self.sceneTitleLabel.text = self.scene.title;
@@ -101,32 +102,32 @@
     return [self.scene.takes count];
 }
 
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    // 1. The view for the header
-    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 60)];
-    
-    // 2. Set a custom background color and a border
-    headerView.backgroundColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:1.0];
-    //headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.8f].CGColor;
-    
-    headerView.layer.borderWidth = 2.0;
-    
-    // 3. Add a label
-    UILabel* headerLabel = [[UILabel alloc] init];
-    headerLabel.frame = CGRectMake(5, 2, tableView.frame.size.width - 5,30);
-    headerLabel.backgroundColor = [UIColor clearColor];
-    headerLabel.textColor = [UIColor whiteColor];
-    headerLabel.font = [UIFont boldSystemFontOfSize:24.0];
-    headerLabel.text = self.scene.title;
-    headerLabel.textAlignment = NSTextAlignmentLeft;
-    
-    // 4. Add the label to the header view
-    [headerView addSubview:headerLabel];
-    
-    // 5. Finally return
-    return headerView;
-}
+//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    // 1. The view for the header
+//    UIView* headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 60)];
+//    
+//    // 2. Set a custom background color and a border
+//    headerView.backgroundColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:1.0];
+//    //headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.6788 blue:1.0 alpha:0.8f].CGColor;
+//    
+//    headerView.layer.borderWidth = 2.0;
+//    
+//    // 3. Add a label
+//    UILabel* headerLabel = [[UILabel alloc] init];
+//    headerLabel.frame = CGRectMake(5, 2, tableView.frame.size.width - 5,30);
+//    headerLabel.backgroundColor = [UIColor clearColor];
+//    headerLabel.textColor = [UIColor whiteColor];
+//    headerLabel.font = [UIFont boldSystemFontOfSize:24.0];
+//    headerLabel.text = self.scene.title;
+//    headerLabel.textAlignment = NSTextAlignmentLeft;
+//    
+//    // 4. Add the label to the header view
+//    [headerView addSubview:headerLabel];
+//    
+//    // 5. Finally return
+//    return headerView;
+//}
 
 
 #pragma mark - Table View delegate
@@ -184,6 +185,7 @@
     [self.navigationController setToolbarHidden:NO animated:NO];
     [self.deleteTakeButton setEnabled:YES];
     [self.playMovieButton setEnabled:YES];
+    [self.starButton setEnabled:YES];
     
     self.currentSelection = self.scene.takes[indexPath.row];
     
@@ -200,6 +202,7 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     [self.deleteTakeButton setEnabled:NO];
     [self.playMovieButton setEnabled:NO];
+    [self.starButton setEnabled:NO];
     //Take *take = self.scene.takes[indexPath.row];
     
     self.currentSelection = nil;

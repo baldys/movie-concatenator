@@ -183,7 +183,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="_tableView" destination="iLZ-Xg-fI4" id="6a9-qZ-BVY"/>
                         <segue destination="xm6-hf-0Po" kind="show" identifier="ShowTakesViewController" id="QGb-Jn-TGM"/>
@@ -206,8 +206,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="vet-jQ-qiS" customClass="PlaybackView">
-                                <rect key="frame" x="0.0" y="64" width="600" height="448"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vet-jQ-qiS" customClass="PlaybackView">
+                                <rect key="frame" x="-1" y="64" width="601" height="448"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
@@ -218,10 +218,9 @@
                                 <items/>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="vet-jQ-qiS" firstAttribute="width" secondItem="Vhd-uz-jiK" secondAttribute="width" id="4Ye-BG-d4a"/>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="width" secondItem="a4h-zP-2uA" secondAttribute="width" id="6Nx-Ja-asL"/>
                             <constraint firstAttribute="centerX" secondItem="a4h-zP-2uA" secondAttribute="centerX" id="A1g-dC-7QC"/>
                             <constraint firstItem="Bw4-le-lig" firstAttribute="top" secondItem="a4h-zP-2uA" secondAttribute="bottom" id="BSZ-P4-8FL"/>
                             <constraint firstAttribute="centerX" secondItem="vet-jQ-qiS" secondAttribute="centerX" constant="0.5" id="COX-Di-X5u"/>
@@ -279,14 +278,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="scene title" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="51j-0q-Luu">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="scene title" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="51j-0q-Luu">
                                 <rect key="frame" x="0.0" y="104" width="600" height="40"/>
                                 <color key="backgroundColor" red="0.0" green="0.90757804490000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Tz6-Gt-Ete"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
                                     <action selector="keyboardDismiss:" destination="IQ3-TJ-xNZ" eventType="editingDidEndOnExit" id="FMB-0h-P6C"/>
                                 </connections>
@@ -401,7 +400,7 @@
         <!--Record Video View Controller-->
         <scene sceneID="PT9-2p-6nJ">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" hidesBottomBarWhenPushed="YES" id="U8g-fB-d4T" customClass="RecordVideoViewController" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" modalTransitionStyle="flipHorizontal" hidesBottomBarWhenPushed="YES" id="U8g-fB-d4T" customClass="RecordVideoViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="yac-oi-NH7"/>
                         <viewControllerLayoutGuide type="bottom" id="3VI-jT-oZ3"/>
@@ -491,6 +490,7 @@
                             <constraint firstAttribute="centerX" secondItem="IUw-RP-VCu" secondAttribute="centerX" id="mZq-BG-M1n"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="UfT-Kk-fKz">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="sRD-IQ-2Um">
@@ -549,6 +549,7 @@
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="rmD-vR-3wP">
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
                         <segue destination="J0d-P8-PPs" kind="relationship" relationship="rootViewController" id="pLr-Aq-m67"/>
@@ -799,11 +800,11 @@
         <!--Best Takes-->
         <scene sceneID="n8o-td-V6w">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4qr-I9-33c" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="4qr-I9-33c" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="1" title="Best Takes" image="blue-star-32.png" id="ZVk-Ny-sSd"/>
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="0lP-14-cQU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -811,7 +812,6 @@
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="mG3-kY-ns7">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
                         <segue destination="WwK-h8-bXp" kind="relationship" relationship="rootViewController" id="ZZY-GD-pwr"/>

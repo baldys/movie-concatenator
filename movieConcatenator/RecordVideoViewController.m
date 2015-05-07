@@ -46,6 +46,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 @property (nonatomic) BOOL lockInterfaceRotation;
 @property (nonatomic) id runtimeErrorHandlingObserver;
 @property (nonatomic) UILabel *incorrectOrientationLabel;
+@property (nonatomic) BOOL cameraPositionFrontFacing;
 @end
 
 
@@ -82,7 +83,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         [self hideButtons];
         [self showLabel];
         NSLog(@"orientation incorrect, should hide buttons and show the label");
-        
     }
     else if (orientation == UIInterfaceOrientationLandscapeLeft || orientation ==UIInterfaceOrientationLandscapeRight)
     {
@@ -137,8 +137,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-
+    [self.tabBarController hidesBottomBarWhenPushed];
+    [self.tabBarController.tabBar setHidden:YES];
     [self.saveButton setEnabled:NO];
     // Keep track of changes to the device orientation so we can update the capture pipeline
     
@@ -152,7 +152,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     
     self.recordButton.layer.cornerRadius = self.flashButton.layer.cornerRadius = self.cameraPosition.layer.cornerRadius = 4;
     
-    self.recordButton.clipsToBounds = self.flashButton.clipsToBounds = self.cameraPosition.clipsToBounds = YES;
+    self.recordButton.clipsToBounds = self.flashButton.clipsToBounds = self.cameraPosition.clipsToBounds = NO;
     // Create the AVCaptureSession
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
 
@@ -178,6 +178,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         
         AVCaptureDevice *videoDevice = [RecordVideoViewController deviceWithMediaType:AVMediaTypeVideo preferringPosition:AVCaptureDevicePositionBack];
         AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
+        self.cameraPositionFrontFacing = YES;
         
         if (error)
         {
@@ -438,6 +439,7 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)toggleCameraPosition:(id)sender
 {
+    self.cameraPositionFrontFacing = !self.cameraPositionFrontFacing;
     [[self cameraPosition] setEnabled:NO];
     [[self recordButton] setEnabled:YES];
     [[self flashButton] setEnabled:YES];
@@ -445,9 +447,9 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     dispatch_async([self sessionQueue], ^{
         AVCaptureDevice *currentVideoDevice = [[self videoDeviceInput] device];
         AVCaptureDevicePosition preferredPosition = AVCaptureDevicePositionUnspecified;
-        AVCaptureDevicePosition currentPosition = [currentVideoDevice position];
+        self.currentPosition = [currentVideoDevice position];
         
-        switch (currentPosition)
+        switch (self.currentPosition)
         {
             case AVCaptureDevicePositionUnspecified:
                 preferredPosition = AVCaptureDevicePositionBack;
