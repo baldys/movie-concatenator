@@ -27,7 +27,7 @@
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
 @property (nonatomic) AVCaptureDevicePosition currentPosition;
-@property (nonatomic) UIDeviceOrientation videoOrientation;
+@property (nonatomic, getter=isVideoOrientationLandscapeLeft) BOOL videoOrientationLandscapeLeft;
 
 - (IBAction)cancel:(UIBarButtonItem *)sender;
 - (IBAction)save:(id)sender;

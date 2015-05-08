@@ -183,7 +183,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="_tableView" destination="iLZ-Xg-fI4" id="6a9-qZ-BVY"/>
                         <segue destination="xm6-hf-0Po" kind="show" identifier="ShowTakesViewController" id="QGb-Jn-TGM"/>
@@ -192,7 +191,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E8B-TA-I0e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-951" y="-1439"/>
+            <point key="canvasLocation" x="-1023" y="-1336"/>
         </scene>
         <!--Playback View Controller-->
         <scene sceneID="pzd-HZ-STo">
@@ -216,6 +215,7 @@
                                     <constraint firstAttribute="height" constant="44" id="X3x-lU-HIa"/>
                                 </constraints>
                                 <items/>
+                                <color key="barTintColor" red="0.040397758729999997" green="0.0" blue="0.1627801452" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -246,7 +246,9 @@
                                 <action selector="star:" destination="6gR-HO-YQm" id="mRF-fE-jFZ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem systemItem="flexibleSpace" id="DuH-IS-gDi"/>
+                        <barButtonItem systemItem="flexibleSpace" id="DuH-IS-gDi">
+                            <color key="tintColor" red="0.0" green="0.1764705882" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
                         <barButtonItem systemItem="trash" id="ZNo-8A-47y">
                             <connections>
                                 <action selector="delete:" destination="6gR-HO-YQm" id="0pA-VG-B4N"/>
@@ -264,7 +266,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a9c-Q6-GZ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-218" y="-546"/>
+            <point key="canvasLocation" x="-42" y="-562"/>
         </scene>
         <!--Add New Scene-->
         <scene sceneID="GdX-Ut-iyH">
@@ -395,7 +397,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5BN-vI-uPg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="bXt-Ye-JOT" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="491" y="-1289"/>
+            <point key="canvasLocation" x="475" y="-1329"/>
         </scene>
         <!--Record Video View Controller-->
         <scene sceneID="PT9-2p-6nJ">
@@ -490,7 +492,6 @@
                             <constraint firstAttribute="centerX" secondItem="IUw-RP-VCu" secondAttribute="centerX" id="mZq-BG-M1n"/>
                         </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="UfT-Kk-fKz">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="sRD-IQ-2Um">
@@ -527,7 +528,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1285" y="-2036"/>
+            <point key="canvasLocation" x="1197" y="-2047"/>
         </scene>
         <!--Scenes-->
         <scene sceneID="yad-jn-uyN">
@@ -535,7 +536,6 @@
                 <navigationController title="Scenes" automaticallyAdjustsScrollViewInsets="NO" id="pgs-lo-jPl" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Scenes" image="ffffff-clapperboard-32.png" id="OGw-zy-3o5"/>
                     <toolbarItems/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="7Rr-2e-KyG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -547,10 +547,6 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
-                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="rmD-vR-3wP">
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    </toolbar>
                     <connections>
                         <segue destination="J0d-P8-PPs" kind="relationship" relationship="rootViewController" id="pLr-Aq-m67"/>
                     </connections>
@@ -640,6 +636,7 @@
                 <navigationController title="Add New Scene" automaticallyAdjustsScrollViewInsets="NO" id="0hc-mZ-7uS" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="ovc-dZ-lgQ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -655,22 +652,22 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x7A-j5-mg7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-218" y="-1296"/>
+            <point key="canvasLocation" x="-282" y="-1336"/>
         </scene>
         <!--Takes-->
         <scene sceneID="Zdi-2b-zMu">
             <objects>
-                <viewController id="vf8-J6-cpX" customClass="TakesViewController" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" modalTransitionStyle="crossDissolve" id="vf8-J6-cpX" customClass="TakesViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="icq-KF-1zM"/>
                         <viewControllerLayoutGuide type="bottom" id="ehm-bg-IRS"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Vcs-fS-NPP">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleAspectFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" sectionIndexMinimumDisplayRowCount="1" rowHeight="110" sectionHeaderHeight="40" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="4QG-oE-SNw">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -709,6 +706,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems>
                         <barButtonItem width="32" systemItem="play" id="Wqb-xd-leg">
                             <color key="tintColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -739,7 +737,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="deleteTakeButton" destination="QZe-eb-KYW" id="U0s-pz-I1K"/>
                         <outlet property="playMovieButton" destination="Wqb-xd-leg" id="5Rw-tf-jOh"/>
@@ -749,7 +746,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G1g-Ur-m5d" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="539" y="-2036"/>
+            <point key="canvasLocation" x="475" y="-2060"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5sW-op-XZg">
@@ -757,7 +754,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" toolbarHidden="NO" id="xm6-hf-0Po" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" opaque="NO" contentMode="scaleToFill" barStyle="black" id="cPD-zX-TsE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -768,6 +765,7 @@
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="zBe-L8-gMA">
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
                         <segue destination="vf8-J6-cpX" kind="relationship" relationship="rootViewController" id="h1o-Xl-oST"/>
@@ -775,7 +773,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2HM-HP-Lmp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-212" y="-2036"/>
+            <point key="canvasLocation" x="-282" y="-2060"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="xbE-b1-Jj0">
@@ -804,7 +802,6 @@
                     <tabBarItem key="tabBarItem" tag="1" title="Best Takes" image="blue-star-32.png" id="ZVk-Ny-sSd"/>
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="0lP-14-cQU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -812,6 +809,7 @@
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" id="mG3-kY-ns7">
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="0.1279745883" green="0.80973873460000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </toolbar>
                     <connections>
                         <segue destination="WwK-h8-bXp" kind="relationship" relationship="rootViewController" id="ZZY-GD-pwr"/>

@@ -21,9 +21,8 @@
 @property (nonatomic, strong) NSURL *assetURL;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
-@property (nonatomic) BOOL *frontFacingVideo;
-
-
+@property (nonatomic, getter=isFrontFacingVideo) BOOL frontFacingVideo;
+@property (nonatomic, getter=isVideoLandscapeLeft) BOOL videoLandscapeLeft;
 @property (nonatomic, strong) AVAsset *assetItem;
 
 @property (nonatomic, strong) UIImage *thumbnail; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...

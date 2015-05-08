@@ -365,6 +365,9 @@
                        Take *newTake = [[Take alloc] initWithURL:notification.object];
                        newTake.sceneNumber = _currentSceneIndex;
                        
+                       newTake.videoLandscapeLeft = (BOOL)[[notification userInfo] objectForKey:@"videoOrientation"];
+                       newTake.frontFacingVideo = (BOOL)[[notification userInfo] objectForKey:@"videoDevicePosition"];
+                       
                        [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
                        [weakSelf.library saveToFilename:@"videolibrary.plist"];
                        

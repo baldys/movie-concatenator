@@ -88,6 +88,14 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     {
         [self showButtons];
         [self hideLabel];
+        if (orientation == UIInterfaceOrientationLandscapeLeft)
+        {
+            self.videoOrientationLandscapeLeft = YES;
+        }
+        if (orientation == UIInterfaceOrientationLandscapeRight)
+        {
+            self.videoOrientationLandscapeLeft = NO;
+        }
         NSLog(@"orientation correct, should unhide buttons and hide the label");
     }
    
@@ -241,19 +249,24 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 -(void) addObservers
 {
    [[NSNotificationCenter defaultCenter] addObserver: self selector: @selector(deviceOrientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:[UIDevice currentDevice]];
-        [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
-        [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
+
+    [self addObserver:self forKeyPath:@"sessionRunningAndDeviceAuthorized" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:SessionRunningAndDeviceAuthorizedContext];
+    
+    [self addObserver:self forKeyPath:@"movieFileOutput.recording" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:RecordingContext];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectAreaDidChange:) name:AVCaptureDeviceSubjectAreaDidChangeNotification object:[[self videoDeviceInput] device]];
         
-        __weak RecordVideoViewController *weakSelf = self;
-        [self setRuntimeErrorHandlingObserver:[[NSNotificationCenter defaultCenter] addObserverForName:AVCaptureSessionRuntimeErrorNotification object:[self session] queue:nil usingBlock:^(NSNotification *note){
-            RecordVideoViewController*strongSelf = weakSelf;
-            dispatch_async([strongSelf sessionQueue], ^{
-                // Manually restarting the session since it must have been stopped due to an error.
-                [[strongSelf session] startRunning];
-//                [[strongSelf recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
+    
+    __weak RecordVideoViewController *weakSelf = self;
+    [self setRuntimeErrorHandlingObserver:[[NSNotificationCenter defaultCenter] addObserverForName:AVCaptureSessionRuntimeErrorNotification object:[self session] queue:nil usingBlock:^(NSNotification *note)
+    {
+        RecordVideoViewController*strongSelf = weakSelf;
+        dispatch_async([strongSelf sessionQueue], ^{
+            // Manually restarting the session since it must have been stopped due to an error.
+            [[strongSelf session] startRunning];
+//          [[strongSelf recordButton] setTitle:NSLocalizedString(@"Record", @"Recording button record title") forState:UIControlStateNormal];
             });
-        }]];
+    }]];
        
 
 }
@@ -274,10 +287,8 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     });
     
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
-    
-    
+    [self.tabBarController.tabBar setHidden:NO];
 
-  
 }
 
 - (BOOL)prefersStatusBarHidden
@@ -312,10 +323,12 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
     else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
     {
         self.currentOrientation = UIInterfaceOrientationLandscapeRight;
+        self.videoOrientationLandscapeLeft = NO;
     }
     else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
     {
         self.currentOrientation = UIInterfaceOrientationLandscapeLeft;
+        self.videoOrientationLandscapeLeft = YES;
     }
     [self checkOrientation:toInterfaceOrientation];
     
@@ -439,7 +452,6 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
 
 - (IBAction)toggleCameraPosition:(id)sender
 {
-    self.cameraPositionFrontFacing = !self.cameraPositionFrontFacing;
     [[self cameraPosition] setEnabled:NO];
     [[self recordButton] setEnabled:YES];
     [[self flashButton] setEnabled:YES];
@@ -453,12 +465,15 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
         {
             case AVCaptureDevicePositionUnspecified:
                 preferredPosition = AVCaptureDevicePositionBack;
+                self.cameraPositionFrontFacing = NO;
                 break;
             case AVCaptureDevicePositionBack:
                 preferredPosition = AVCaptureDevicePositionFront;
+                self.cameraPositionFrontFacing = YES;
                 break;
             case AVCaptureDevicePositionFront:
                 preferredPosition = AVCaptureDevicePositionBack;
+                self.cameraPositionFrontFacing = NO;
                 break;
         }
         
@@ -630,9 +645,41 @@ static void * SessionRunningAndDeviceAuthorizedContext = &SessionRunningAndDevic
      }
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     [self.saveButton setEnabled:YES];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didFinishRecordingVideoToURL" object:outputFileURL];
-    //}];
     
+    const NSString *videoOrientationString = @"";
+    const NSString *cameraDevicePositionString = @"";
+    if (self.videoOrientationLandscapeLeft)
+    {
+        NSLog(@"video was recorded in landscape left");
+        videoOrientationString = @"Landscape Left";
+    
+    }
+    else {
+        NSLog(@"video was recorded in landscape right");
+        videoOrientationString = @"Landscape Right";
+    }
+    
+    if (self.cameraPositionFrontFacing)
+    {
+        NSLog(@"video was recorded with front facing camera");
+        cameraDevicePositionString = @"Front";
+        
+        
+    }
+    else {
+        NSLog(@"video was recorded with back facing camera");
+        cameraDevicePositionString = @"Back";
+    }
+    
+    NSArray *keys = [NSArray arrayWithObjects:@"videoDeviceOrientation", @"videoDevicePosition", nil];
+    
+    NSArray *objects = [NSArray arrayWithObjects:videoOrientationString, videoOrientationString, nil];
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:objects
+                                                           forKeys:keys];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didFinishRecordingVideoToURL" object:outputFileURL userInfo:dictionary];
+    //}];
+    // Back facing camera:  1920x1080 (decrease size)
+    // Front facing camera: 1080x720
 }
 
 #pragma mark Device Configuration
