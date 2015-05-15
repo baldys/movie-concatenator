@@ -39,22 +39,17 @@
     {
         // create a unique identifier for the take so
         // it can be stored in the file system and retreived
-
         self.assetID = [[NSUUID UUID] UUIDString];
         
-        _assetURL = [self getPathURL];
-        
-        NSLog(@"%@", self.assetID);
-        
-        NSLog(@"url to copy from for the take: %@", url);
-        NSLog(@"path url for the take _assetURL %@", _assetURL);
+        _assetURL = [self getFileURL];
         
         NSError *error = nil;
         if (![[NSFileManager defaultManager]moveItemAtURL:url toURL:self.assetURL error:&error])
         {
             NSLog(@"file copy error %@", error);
         }
-        
+        self.videoOrientation = @"unknown";
+        self.videoRecordingPosition = @"unknown";
        
         _videoAsset = [[AVURLAsset alloc] initWithURL:self.assetURL options:nil];
         
@@ -62,38 +57,74 @@
         
         //_imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
-        //;
-
-        ///// load lazily instead in collection view cell subclass.
         
-        ////// to make this work must add ::
-        
-     [self loadThumbnailWithCompletionHandler:^(UIImage *image){
-//    
+        [self loadThumbnailWithCompletionHandler:^(UIImage *image)
+        {
             self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
-         //CGRect screenRect = [UIScreen mainScreen].bounds;
-         //screenRect.size.
+            //CGRect screenRect = [UIScreen mainScreen].bounds;
+            //screenRect.size.
             self.thumbnail = image;
-      }];
-        
+        }];
+            
         
         if (_thumbnail == nil)
         {
             _thumbnail = [UIImage imageNamed:@"vid.png"];
         }
-        
-        
-        //[self getThumbnailImage];
-        
     }
     return self;
 }
+
+- (CGAffineTransform) transformForVideoOrientationAndPosition
+{
+    CGAffineTransform rotation = CGAffineTransformMakeRotation(M_PI);
+    
+    switch (self.videoOrientationAndPosition)
+    {
+        case LandscapeLeft_Back:
+            return CGAffineTransformIdentity;
+            break;
+        case LandscapeLeft_Front:
+            return rotation;
+            break;
+            
+        case LandscapeRight_Front:
+            return CGAffineTransformIdentity;
+            break;
+            
+        case LandscapeRight_Back:
+            return rotation;
+            break;
+    }
+    return CGAffineTransformIdentity;
+}
+
+
+
+
+//- (BOOL) videoOrientationLandscapeLeft
+//{
+//    if ([self.videoOrientation isEqualToString:@"Landscape Left"])
+//    {
+//        return YES;
+//    }
+//    return NO;
+//}
+//
+//- (BOOL) videoCameraFacingBack
+//{
+//    if ([self.videoRecordingPosition isEqualToString:@"Back"])
+//    {
+//        return YES;
+//    }
+//    return NO;
+//}
 
 - (AVAsset*) createAssetItem
 {
     if (!self.assetItem)
     {
-        self.assetURL = [self getPathURL];
+        self.assetURL = [self getFileURL];
         self.assetItem = [AVAsset assetWithURL:self.assetURL];
         
     }
@@ -102,7 +133,7 @@
 
 
 // get the file url of the take or create one if it doesn't exist in the documents directory named by its randomly generated uuid.
-- (NSURL*) getPathURL
+- (NSURL*) getFileURL
 {
     // 4 - Get path
     // generate a random filename for the movie
@@ -123,10 +154,7 @@
 {
     if (!_videoAsset)
     {
-        
-        _videoAsset = [[AVURLAsset alloc] initWithURL:[self getPathURL] options:nil];
-
-        
+        _videoAsset = [[AVURLAsset alloc] initWithURL:[self getFileURL] options:nil];
     }
     if (!_imageGenerator)
     {
@@ -144,6 +172,7 @@
         self.sceneNumber = [aDecoder decodeIntegerForKey:@"sceneNumber"];
         //NSLog(@"take number %@", self.takeNumber)
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
+        self.videoOrientationAndPosition = [aDecoder decodeIntegerForKey:@"videoOrientationAndPosition"];
         //self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
         //[self createGeneratorFromItemInFilePathURL];
         //self.selected = [aDecoder decodeBoolForKey:@"selected"];
@@ -151,7 +180,8 @@
 //        NSData *imageData = [aDecoder decodeObjectForKey:@"thumbnail"];
 //        self.thumbnail = [UIImage imageWithData:imageData];
 //        NSLog(@"\n\n\n\n>>>>%@\n\n\n\n\n\n", [aDecoder decodeObjectForKey:@"assetFileURL"]);
-//        
+//
+        
 
             
         
@@ -163,6 +193,7 @@
 {
     [aCoder encodeInteger:self.sceneNumber forKey:@"sceneNumber"];
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
+    [aCoder encodeInteger:self.videoOrientationAndPosition forKey:@"videoOrientationAndPosition"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     //[aCoder encodeBool:self.selected forKey:@"selected"];
     //[aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];

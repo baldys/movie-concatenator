@@ -76,10 +76,11 @@
     [self.navigationController.toolbar setHidden:NO];
     
     [self showConcatenatorButtonInToolbar];
-    if (self.takesToConcatenate.count <= 1)
-    {
-        [self.navigationController.toolbar.items[0] setEnabled:NO];
-    }
+    // uncomment later - testing purposes only
+//    if (self.takesToConcatenate.count <= 1)
+//    {
+//        [self.navigationController.toolbar.items[0] setEnabled:NO];
+//    }
 }
 
 /////*
@@ -88,7 +89,8 @@
     if ([loadingIndicator isAnimating] && loadingIndicator != nil)
         return;
     [self.concatenateButton setEnabled:YES];
-    NSArray *items = [NSArray arrayWithObject:self.concatenateButton];
+    UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    NSArray *items = [NSArray arrayWithObjects:flexItem, self.concatenateButton, nil];
     [self.navigationController.toolbar setItems:items animated:YES];
 }
 
@@ -191,14 +193,15 @@
 {
     VideoMerger *merger = [[VideoMerger alloc]init];
     NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
-    if (self.takesToConcatenate.count > 1)
-    {
+    // uncomment later - testing 
+    //if (self.takesToConcatenate.count > 1)
+    //{
         [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
-    }
-    else
-    {
-        NSLog(@"Please select more than one video.");
-    }
+    //}
+    //else
+    //{
+      //  NSLog(@"Please select more than one video.");
+    //}
 }
 
 #pragma mark - NSNotificationCenter

@@ -50,9 +50,6 @@
         }
     }
     
-    
-    // this is actually the interesting part:
-    
     UIGraphicsBeginImageContext(targetSize);
     
     CGRect thumbnailRect = CGRectZero;
@@ -66,7 +63,6 @@
     UIGraphicsEndImageContext();
     
     if(newImage == nil) NSLog(@"could not scale image");
-    
     
     return newImage ;
 }

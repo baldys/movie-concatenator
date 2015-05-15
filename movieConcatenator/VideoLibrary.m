@@ -162,7 +162,7 @@
         {
             if (take.isSelected)
             {
-                NSLog(@"TAKE URL %@ ", [take getPathURL]);
+                NSLog(@"TAKE URL %@ ", [take getFileURL]);
                 [_takesToConcatenate addObject:take];
             }
         }
@@ -185,11 +185,11 @@
 //        
 //    })
     NSLog(@"delete take was called");
-    if ([[NSFileManager defaultManager] fileExistsAtPath:[take getPathURL].path])
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[take getFileURL].path])
     {
-        NSLog(@"Take to delete: %@", [take getPathURL].path);
+        NSLog(@"Take to delete: %@", [take getFileURL].path);
         NSError *error = nil;
-        if (![[NSFileManager defaultManager]removeItemAtURL:[take getPathURL] error:nil])
+        if (![[NSFileManager defaultManager]removeItemAtURL:[take getFileURL] error:nil])
         {
             NSLog(@"Error deleting file: %@",error);
         }

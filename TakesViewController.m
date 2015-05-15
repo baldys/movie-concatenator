@@ -322,12 +322,23 @@
     
 }
 
-
-
-- (IBAction)star:(id)sender
+- (IBAction)unwindFromRecordVideoVC:(UIStoryboardSegue *)segue
 {
-
+    NSLog(@"unwind segue callled");
+    [self.tabBarController.tabBar setHidden:NO];
+    [self.tabBarController setHidesBottomBarWhenPushed:NO];
+    
 }
-
+//if ([self.takeToPlay isSelected])
+//{
+//    [self.starButton setImage:[UIImage imageNamed:@"blue-star-32"]];
+//    [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"blue-star-24"]];
+//}
+//else
+//{
+//    [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"white-outline-star-24"]];
+//}
+//
+//[self.starButton setAction:@selector(star:)];
 
 @end

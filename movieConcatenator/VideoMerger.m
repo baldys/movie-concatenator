@@ -8,6 +8,14 @@
 
 #import "VideoMerger.h"
 
+#define degreesToRadians( degrees ) ( ( degrees ) / 180.0 * M_PI )
+@interface VideoMerger ()
+
+
+@property (nonatomic, strong) NSMutableArray *layerInstructions;
+
+@end
+
 @implementation VideoMerger
 
 
@@ -24,33 +32,83 @@
 
 //make avasset from avmutablecomposition (is an avasset)
 
+//- (void) loadMetadata
+//{
+//    AVAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
+//    // Load the values of AVAsset keys to inspect subsequently
+//    NSArray *assetKeysToLoadAndTest = @[@"playable", @"composable", @"tracks", @"duration"];
+//    
+//    // Tells the asset to load the values of any of the specified keys that are not already loaded.
+//    [asset loadValuesAsynchronouslyForKeys:assetKeysToLoadAndTest completionHandler:
+//     ^{
+//         dispatch_async( dispatch_get_main_queue(),
+//                        ^{
+//                            // IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem.
+//                           // [self setUpPlaybackOfAsset:asset withKeys:assetKeysToLoadAndTest];
+//                        });
+//     }];
+//    
+//    self.inputAsset = asset;
+//}
 -(AVAsset*)spliceAssets: (NSArray*)takes
 {
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
-    // creating the composition
-    AVMutableComposition *mixComposition = [[AVMutableComposition alloc] init];
     
-    AVMutableCompositionTrack *compositionTrack_video = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    AVMutableCompositionTrack *compositionTrack_audio = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    // creating the composition
+    
 
     //keep track of CMTime *timer;
     // timer = duration of the previous asset/assetTrack
     // = initial point in time to insert the next asset
+    BOOL isFrontFacingVideoInAssets = NO;
     
+    
+    self.composition = [[AVMutableComposition alloc] init];
+    
+    AVMutableCompositionTrack *compositionTrack_video = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_audio = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    
+    self.videoComposition = [AVMutableVideoComposition videoComposition];
+    
+    
+    //self.layerInstructions = [[NSMutableArray alloc] init];
+    
+    
+   
     CMTime timer = kCMTimeZero;
     
-    self.mainComposition = [AVMutableVideoComposition videoComposition];
     
-    NSMutableArray *assets = [NSMutableArray array];
+//    CGAffineTransform rotation;
+//    CGAffineTransform translation;
+    //CGAffineTransform mixedTransform;
+    
+    CGAffineTransform t1;
+    CGAffineTransform t2;
+    
+    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    
+    
+    //AVMutableVideoCompositionLayerInstruction *layerInstruction = nil;
+    //AVMutableVideoCompositionInstruction *instruction = nil;
+    
+    //NSMutableArray *assets = [NSMutableArray array];
     //NSMutableArray *compositionInstructions = [NSMutableArray array];
+    t1 = CGAffineTransformMakeRotation(degreesToRadians(180));
+    t2 = CGAffineTransformMakeTranslation(1280,720);
+    CGAffineTransform A = CGAffineTransformIdentity;
+    BOOL isTransformApplied = NO;
+    
     for (Take* take in takes)
     {
-        [assets addObject:[AVAsset assetWithURL:[take getPathURL]]];
-    }
-    // adding the assets
-    for (AVAsset* asset in assets) {
-        //add video from asset to track
+        AVAsset *asset = [AVAsset assetWithURL:[take getFileURL]];
+        
+        
+        
+        
+        //AVAsset *rotatedAsset = (AVAsset*)[self performWithAsset:[AVAsset assetWithURL:[take getFileURL]]];
+        NSLog(@"video position/ orientation %ld", (long)take.videoOrientationAndPosition);
         
         NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
         
@@ -60,8 +118,172 @@
         [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_video atTime:timer error:nil];
         
         [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_audio atTime:timer error:nil];
-        timer = CMTimeAdd(timer, asset.duration);
         
+//        CGAffineTransform A;
+        
+//        if (!CGAffineTransformIsIdentity(A))
+//        {
+//            A = CGAffineTransformConcat(CGAffineTransformInvert(A), A);
+//            
+//        }
+     
+        
+       
+        
+        
+    
+        // Translate the composition to compensate the movement caused by rotation (since rotation would cause it to move out of frame)
+//        if (!self.videoComposition)
+//        {
+//            
+        
+        
+            
+            
+            //mixedTransform = CGAffineTransformConcat(t1, t2);
+        //}
+//        else
+//        {
+//            CGAffineTransform t3 = CGAffineTransformMakeTranslation(-1*assetTrack_video.naturalSize.width, 0.0);
+//            CGAffineTransform newTransform = CGAffineTransformConcat(t2, t3);
+//        }
+       // [compositionTrack_video setPreferredTransform:<#(CGAffineTransform)#>]
+        AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+    
+        [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+    
+        switch (take.videoOrientationAndPosition)
+        {
+            case LandscapeLeft_Back:
+                // no rotation needs to be applied
+                isFrontFacingVideoInAssets = NO;
+              
+                //[assets addObject:asset];
+                //[layerInstruction setTransform:CGAffineTransformIdentity atTime:timer];
+//
+                [layerInstruction setTransform:A atTime:timer];
+                // if a transform exists, then revert it back to
+                break;
+            case LandscapeLeft_Front:
+                //[assets addObject:asset];
+                //LRF
+                isFrontFacingVideoInAssets = YES;
+                //[layerInstruction setTransform:CGAffineTransformIdentity atTime:timer];
+                [layerInstruction setTransform:A atTime:timer];
+
+                break;
+            case LandscapeRight_Back:
+                //[assets addObject:asset];
+                isFrontFacingVideoInAssets = NO;
+                //rotation = CGAffineTransformMakeRotation(M_PI);
+                //translation = CGAffineTransformMakeTranslation(1280,720);
+                //mixedTransform = CGAffineTransformConcat(rotation, translation);
+                A = CGAffineTransformConcat(t1,t2);
+                [layerInstruction setTransform:A atTime:timer];
+                isTransformApplied = YES;
+                
+                break;
+            case LandscapeRight_Front:
+                //asset = (AVAsset*)[self performWithAsset:asset];
+                //[assets addObject:asset];
+                isFrontFacingVideoInAssets = YES;
+                //rotation = CGAffineTransformMakeRotation(M_PI);
+                //translation = CGAffineTransformMakeTranslation(1280,720);
+                 A = CGAffineTransformConcat(t1,t2);
+                [layerInstruction setTransform:A atTime:timer];
+                
+                isTransformApplied = YES;
+                break;
+            default:
+                [layerInstruction setTransform:CGAffineTransformIdentity atTime:kCMTimeZero];
+        }
+        timer = CMTimeAdd(timer, asset.duration);
+    
+        //AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+        
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
+        
+        instruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
+        // Extract the existing layer instruction on the videoComposition
+//        instruction = (self.videoComposition.instructions)[0];
+//        layerInstruction = (instruction.layerInstructions)[0];
+//        
+//        // Check if a transform already exists on this layer instruction, this is done to add the current transform on top of previous edits
+//        
+//        CGAffineTransform existingTransform;
+//        if (![layerInstruction getTransformRampForTime:[self.composition duration] startTransform:&existingTransform endTransform:NULL timeRange:NULL])
+//        {
+//                    [layerInstruction setTransform:t2 atTime:kCMTimeZero];
+            //        } else {
+            // Note: the point of origin for rotation is the upper left corner of the composition, t3 is to compensate for origin
+            //  CGAffineTransform t3 = CGAffineTransformMakeTranslation(-1*assetVideoTrack.naturalSize./2, 0.0);
+            // CGAffineTransform newTransform = CGAffineTransformConcat(t2, t3);
+            //CGAffineTransform newTransform = CGAffineTransformConcat(existingTransform, CGAffineTransformConcat(t2, t3));
+            // [layerInstruction setTransform:newTransform atTime:kCMTimeZero];
+            
+        self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
+        self.videoComposition.renderScale = 1.0;
+        self.videoComposition.frameDuration = CMTimeMake(1, 30);
+        
+        self.videoComposition.renderSize = compositionTrack_video.naturalSize;
+
+        A = CGAffineTransformIdentity;
+
+    }
+    
+
+
+    //self.videoComposition = [AVMutableVideoComposition videoComposition];
+//    self.videoComposition.renderScale = 1.0;
+//    self.videoComposition.frameDuration = CMTimeMake(1, 30);
+//    
+//    self.videoComposition.renderSize = compositionTrack_video.naturalSize;
+//    
+
+//    // adding the assets
+//    for (AVAsset* asset in assets) {
+        //add video from asset to track
+        
+       
+    
+//        if (layerInstruction == nil)
+//        {
+//            layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+//        }
+//        else{
+//            AVMutableVideoCompositionLayerInstruction *tempLayerInstruction = layerInstruction;
+//        }
+        
+//        layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+        //AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+        
+        
+        
+        
+        
+//        [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+//        CGAffineTransform mixedTransform = CGAffineTransformConcat(rotation, translation);
+//        
+//        [layerInstruction setTransform:mixedTransform atTime:kCMTimeZero];
+//        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
+//        instruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
+        
+//        for (int i=0;i<[asset tracksWithMediaType:AVMediaTypeVideo].count;i++)
+//        {
+//            AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:i];
+//            AVAssetTrack *previousVideoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:i-1];
+//            // check if any of video tracks have different sizes, so we can scale each track down to the same size
+//            // this is to prevent larger videos from being cropped or smaller ones from having black bars along the edges
+//            
+//            
+//            if ((videoTrack.naturalSize.height < previousVideoTrack.naturalSize.height) && (videoTrack.naturalSize.width < previousVideoTrack.naturalSize.width))
+//            {
+//                
+//                
+//            }
+//        }
+        
+        //
 //        AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
 //        
 //        // set the time range to span the duration of the current video track.
@@ -73,36 +295,172 @@
 //        
 //        mainInstruction.layerInstructions = [NSArray arrayWithObjects:firstlayerInstruction, nil];
    // compositionTrack_video.preferredTransform = CGAffineTransformMakeRotation(<#CGFloat angle#>)
+        // (compositionTrack_video.naturalSize
+  
+//        self.videoComposition = [AVMutableVideoComposition videoComposition];
+        //
         
+        //self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
         
-    }
-    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
-    
-    [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
-    
-    [layerInstruction setTransform:compositionTrack_video.preferredTransform atTime:kCMTimeZero];
-    
-    AVMutableVideoCompositionInstruction *mainInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    
-    mainInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
-    
-    mainInstruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
-    
-    self.mainComposition = [AVMutableVideoComposition videoComposition];
-    
-    self.mainComposition.instructions = [NSArray arrayWithObject:mainInstruction];
-    self.mainComposition.frameDuration = CMTimeMake(1, 30);
-    
-    self.mainComposition.renderSize = compositionTrack_video.naturalSize;
-    
-    //NSLog(@"timer scale, value: %d %lld", timer.timescale, timer.value);
-    //expecting positive values
-    NSLog(@"mixComposition properties: %@", mixComposition.debugDescription);
+//        self.videoComposition.frameDuration = CMTimeMake(1, 30);
+//        
+//        self.videoComposition.renderSize = compositionTrack_video.naturalSize;
+//        
+//        self.videoComposition.renderScale = 1.0;
+//        
+        
+        //NSLog(@"timer scale, value: %d %lld", timer.timescale, timer.value);
+        //expecting positive values
+//        NSLog(@"mixComposition properties: %@", self.composition.debugDescription);
+//        
+//        self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
+        
+   // }
+//  AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+//    
+//    
+//    CGAffineTransform mixedTransform = CGAffineTransformConcat(rotation, translateToCenter);
+//    [firstTrackInstruction setTransform:mixedTransform atTime:kCMTimeZero];
     
     
-    return mixComposition;
+    //[layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+    
+    //[layerInstruction setTransform:compositionTrack_video.preferredTransform atTime:kCMTimeZero];
+   // AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    
+    //instruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
+    
+
+    //instruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
+
+//    self.videoComposition = [AVMutableVideoComposition videoComposition];
+////    
+//    
+//    //self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
+//    
+//    self.videoComposition.frameDuration = CMTimeMake(1, 30);
+//    
+//    //self.videoComposition.renderSize = compositionTrack_video.naturalSize;
+//    
+//    self.videoComposition.renderScale = 1.0;
+//   
+//    
+//    //NSLog(@"timer scale, value: %d %lld", timer.timescale, timer.value);
+//    //expecting positive values
+//    NSLog(@"mixComposition properties: %@", self.composition.debugDescription);
+//    
+//    self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
+
+
+
+    return self.composition;
 }
 
+ - (AVAsset*)performWithAsset:(AVAsset*)asset
+{
+    AVMutableVideoCompositionInstruction *instruction = nil;
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = nil;
+    CGAffineTransform t1;
+    CGAffineTransform t2;
+    
+    AVAssetTrack *assetVideoTrack = nil;
+    AVAssetTrack *assetAudioTrack = nil;
+    // Check if the asset contains video and audio tracks
+    if ([[asset tracksWithMediaType:AVMediaTypeVideo] count] != 0) {
+        assetVideoTrack = [asset tracksWithMediaType:AVMediaTypeVideo][0];
+    }
+    if ([[asset tracksWithMediaType:AVMediaTypeAudio] count] != 0) {
+        assetAudioTrack = [asset tracksWithMediaType:AVMediaTypeAudio][0];
+    }
+    
+    CMTime insertionPoint = kCMTimeZero;
+    NSError *error = nil;
+    
+    
+    // Step 1
+    // Create a composition with the given asset and insert audio and video tracks into it from the asset
+
+        
+        // Check whether a composition has already been created, i.e, some other tool has already been applied
+        // Create a new composition
+        AVMutableComposition *composition = [AVMutableComposition composition];
+        
+        // Insert the video and audio tracks from AVAsset
+        if (assetVideoTrack != nil) {
+            AVMutableCompositionTrack *compositionVideoTrack = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+            [compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, [asset duration]) ofTrack:assetVideoTrack atTime:insertionPoint error:&error];
+        }
+        if (assetAudioTrack != nil) {
+            AVMutableCompositionTrack *compositionAudioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+            [compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, [asset duration]) ofTrack:assetAudioTrack atTime:insertionPoint error:&error];
+        }
+        
+    
+    
+    
+    // Step 2
+    // Translate the composition to compensate the movement caused by rotation (since rotation would cause it to move out of frame)
+    t1 = CGAffineTransformMakeTranslation(assetVideoTrack.naturalSize.width,assetVideoTrack.naturalSize.height);
+    // Rotate transformation
+    //t2 = CGAffineTransformMakeRotation(degreesToRadians(180.0));
+    
+    t2 = CGAffineTransformRotate(t1,degreesToRadians(180.0));
+    // Step 3
+    // Set the appropriate render sizes and rotational transforms
+    ///if (!self.videoComposition) {
+        
+        // Create a new video composition
+        self.videoComposition = [AVMutableVideoComposition videoComposition];
+    NSLog(@"natural size width: %f, height: %f",assetVideoTrack.naturalSize.width,assetVideoTrack.naturalSize.height);
+    
+        self.videoComposition.renderSize = CGSizeMake(assetVideoTrack.naturalSize.width,assetVideoTrack.naturalSize.height);
+    NSLog(@"1  render size width: %f, height:%f",self.videoComposition.renderSize.width,self.videoComposition.renderSize.height);
+        self.videoComposition.frameDuration = CMTimeMake(1, 30);
+        
+        // The rotate transform is set on a layer instruction
+        instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, [composition duration]);
+        layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:(composition.tracks)[0]];
+        [layerInstruction setTransform:t2 atTime:kCMTimeZero];
+        NSLog(@"2   render size width: %f, height:%f",self.videoComposition.renderSize.width,self.videoComposition.renderSize.height);
+//    } else {
+//        
+//        self.videoComposition.renderSize = CGSizeMake(self.videoComposition.renderSize.height, self.videoComposition.renderSize.width);
+//        
+        // Extract the existing layer instruction on the videoComposition
+        //instruction = (self.videoComposition.instructions)[0];
+        //layerInstruction = (instruction.layerInstructions)[0];
+        
+        // Check if a transform already exists on this layer instruction, this is done to add the current transform on top of previous edits
+        //CGAffineTransform existingTransform;
+        
+//        if (![layerInstruction getTransformRampForTime:[composition duration] startTransform:&existingTransform endTransform:NULL timeRange:NULL]) {
+//            [layerInstruction setTransform:t2 atTime:kCMTimeZero];
+//        } else {
+            // Note: the point of origin for rotation is the upper left corner of the composition, t3 is to compensate for origin
+          //  CGAffineTransform t3 = CGAffineTransformMakeTranslation(-1*assetVideoTrack.naturalSize./2, 0.0);
+           // CGAffineTransform newTransform = CGAffineTransformConcat(t2, t3);
+    //CGAffineTransform newTransform = CGAffineTransformConcat(existingTransform, CGAffineTransformConcat(t2, t3));
+           // [layerInstruction setTransform:newTransform atTime:kCMTimeZero];
+     //   }
+//        
+    //}
+    
+    
+    // Step 4
+    // Add the transform instructions to the video composition
+    instruction.layerInstructions = @[layerInstruction];
+    self.videoComposition.instructions = @[instruction];
+    
+    
+    // Step 5
+    // Notify AVSEViewController about rotation operation completion
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"completedVideoRotation" object:self];
+    return composition;
+}
+         
+         
+         
 // existing asset -> audio+video asset tracks -> add to  MutableComposition
 // put in some controller class
 - (void) exportVideoComposition:(AVAsset*)composition
@@ -113,7 +471,7 @@
     exporter.outputURL = [self createOutputURL];
     exporter.outputFileType = AVFileTypeQuickTimeMovie;
     exporter.shouldOptimizeForNetworkUse = YES;
-    exporter.videoComposition = self.mainComposition;
+    exporter.videoComposition = self.videoComposition;
     //TODO: exporter.audioComposition = an instance of MutableAudioMix
     
     [exporter exportAsynchronouslyWithCompletionHandler:
@@ -130,11 +488,11 @@
 
 - (void) addURLToMergedVideosArray:(NSURL*)url
 {
-    if (!self.mergedMovies)
+    if (!self.videoClips)
     {
-        self.mergedMovies = [NSMutableArray array];
+        self.videoClips = [NSMutableArray array];
     }
-    [self.mergedMovies addObject:url];
+    [self.videoClips addObject:url];
     
 }
 

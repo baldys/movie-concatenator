@@ -77,7 +77,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     {
         return;
     }
-        AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getPathURL] options:nil];
+        AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
         NSArray *requestedKeys = @[@"playable"];
         [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
          ^{

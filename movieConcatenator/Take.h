@@ -11,25 +11,40 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <UIKit/UIKit.h>
 
+
+typedef NS_ENUM(NSInteger, VideoOrientationAndPosition)
+{
+    LandscapeLeft_Back = 0,
+    LandscapeLeft_Front = 1,
+    LandscapeRight_Back = 2,
+    LandscapeRight_Front = 3,
+    None = 4
+};
+
+
 @interface Take : NSObject <NSCoding>
 
-//@property (nonatomic) NSInteger takeNumber;
+@property (nonatomic) NSInteger videoOrientationAndPosition;
 
 @property (nonatomic) NSInteger sceneNumber;
+@property (nonatomic, strong) NSString *title;
 
 @property (nonatomic, strong) NSString* assetID;
 @property (nonatomic, strong) NSURL *assetURL;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
-@property (nonatomic, getter=isFrontFacingVideo) BOOL frontFacingVideo;
-@property (nonatomic, getter=isVideoLandscapeLeft) BOOL videoLandscapeLeft;
+
+//./././.
+@property (nonatomic, strong) NSString *videoRecordingPosition;
+@property (nonatomic, strong) NSString *videoOrientation;
+//./././.
+
 @property (nonatomic, strong) AVAsset *assetItem;
 
-@property (nonatomic, strong) UIImage *thumbnail; //TODO: make a custom getter that generates thumbnails lazily if they do not exist...
-//@property (nonatomic, strong) NSString *thumbnail;
-- (AVAsset*)createAssetItem;
 
-// save todocuments directory (get the path of the folder and create a new empty file with the assetID.file_extension (i.e. .mp4 or .mov)c
+@property (nonatomic, strong) UIImage *thumbnail;
+
+- (AVAsset*)createAssetItem;
 
 //- (NSURL*) thumbnailURL;
 
@@ -47,11 +62,9 @@
 //- (NSArray*)assetTracks;
 
 
-- (NSURL*)getPathURL;
+- (NSURL*)getFileURL;
 - (NSString*) documentsDirectory;
-//- (void)getThumbnailImage;
 
-//- (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(void))completionHandler;
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
 
 @end

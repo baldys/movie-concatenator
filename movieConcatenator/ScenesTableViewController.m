@@ -245,7 +245,7 @@
 - (UIView*)tableView:(UITableView*)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0.0, 0.0, self.tableView.frame.size.width, kHeaderSectionHeight)];
-    footerView.backgroundColor = [UIColor blackColor];
+    footerView.backgroundColor = [UIColor clearColor];
     return footerView;
 }
 
@@ -357,7 +357,7 @@
 
 - (void) didFinishRecordingVideoToURL:(NSNotification*)notification
 {
-    ///[self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_currentSceneIndex] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    
     __weak __typeof(self) weakSelf = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -365,8 +365,54 @@
                        Take *newTake = [[Take alloc] initWithURL:notification.object];
                        newTake.sceneNumber = _currentSceneIndex;
                        
-                       newTake.videoLandscapeLeft = (BOOL)[[notification userInfo] objectForKey:@"videoOrientation"];
-                       newTake.frontFacingVideo = (BOOL)[[notification userInfo] objectForKey:@"videoDevicePosition"];
+                       // This is a very unelegant solution for the issue of retrieving the video orientations and the direction that the camera was facing during the recording of the video so that all the video orientations and sizes in the final AVMutableVideoComposition  are the same.
+                       // Basically im setting some string that identifies those properties from the RecordVideoViewController that are set when the orientation of the device changes or when switching between the front and back facing camera
+                       // the combinations are based on:
+                       // // the UIDevice/UIInterfaceOrientation that was used during video recording (avcapturedevice positon)
+                       // // and the AVCaptureDevicePosition (whether the video was recorded using the front facing or the back facing video camera)
+                       // this information is sent through the posted notifications' user info dictionary
+                       ////
+                       //
+                       //// Landscape Left + Back Facing camera
+                       ///////// rotate 0 degrees (correct orientation)
+                       ///////// scale down if the array of selected takes contains any videos recorded with front facing camera
+                       //// Landscape Left + Front Facing camera
+                       ///////// rotate 180 degrees
+                       ///scale down to the same size if the array of selected takes contains any videos recorded with front facing camera
+                       //// Landscape Right + Back Facing camera
+                       ///////// rotate 180 degrees
+                       //// Landscape Right + Front Facing camera
+                       ///////// rotate 0 degrees (correct orientation)
+                       // renderScale
+                       //
+                       
+                       NSString *videoOrientationString = [[notification userInfo] objectForKey:@"videoOrientation"];
+                       NSString *videoPositionString = [[notification userInfo] objectForKey:@"videoPosition"];
+                       if ([videoOrientationString isEqualToString:@"LandscapeLeft"]&&[videoPositionString isEqualToString:@"Back"])
+                       {
+                           newTake.videoOrientationAndPosition = LandscapeLeft_Back;
+                       }
+                       else if ([videoOrientationString isEqualToString:@"LandscapeLeft"]&&[videoPositionString isEqualToString:@"Front"])
+                       {
+                           newTake.videoOrientationAndPosition = LandscapeLeft_Front;
+                           
+                       }
+                       else if ([videoOrientationString isEqualToString:@"LandscapeRight"] && [videoPositionString isEqualToString:@"Back"])
+                       {
+                           newTake.videoOrientationAndPosition = LandscapeRight_Back;
+                           
+                       }
+                       else if ([videoOrientationString isEqualToString:@"LandscapeRight"]&&[videoPositionString isEqualToString:@"Front"])
+                       {
+                           newTake.videoOrientationAndPosition = LandscapeRight_Front;
+                       }
+                       else
+                       {
+                           newTake.videoOrientationAndPosition = None;
+                           NSLog(@"something is wrong wtf!!");
+                       }
+//                       newTake.videoOrientation = [[notification userInfo] objectForKey:@"videoOrientation"];
+//                       newTake.videoRecordingPosition = [[notification userInfo] objectForKey:@"videoPosition"];
                        
                        [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
                        [weakSelf.library saveToFilename:@"videolibrary.plist"];
@@ -421,7 +467,6 @@
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue
 {
     NSLog(@"unwind segue callled");
-    // add take stuff goes HERE!> get the file output url from the source view controller
 
     NewSceneDetailsViewController *nsdvc = (NewSceneDetailsViewController*)[segue sourceViewController];
     
@@ -449,6 +494,7 @@
     };
     
 }
+
 
 // TO DO:
 ////

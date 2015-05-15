@@ -22,12 +22,16 @@
 @property (nonatomic) NSInteger sceneIndex;
 
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
+
 @property (nonatomic, strong) NSURL *outputFileURL;
+
 //- (IBAction)backToRootVC:(id)sender;
+
 @property (nonatomic) UIDeviceOrientation currentOrientation;
 
 @property (nonatomic) AVCaptureDevicePosition currentPosition;
-@property (nonatomic, getter=isVideoOrientationLandscapeLeft) BOOL videoOrientationLandscapeLeft;
+
+
 
 - (IBAction)cancel:(UIBarButtonItem *)sender;
 - (IBAction)save:(id)sender;

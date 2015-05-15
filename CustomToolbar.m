@@ -38,7 +38,7 @@
         //[self.playMovieButton setAction:@selector(playMovie:)];
        
         self.deleteButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(delete:)];
-        
+        ///UIBarButtonItem *flexItem = [UIBarButtonItem alloc] in target:<#(id)#> action:<#(SEL)#>
         
         self.starButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"white-outline-star-32"] landscapeImagePhone:[UIImage imageNamed:@"white-outline-star-24"] style:UIBarButtonItemStylePlain target:self action:@selector(addToFavourites:)];
         

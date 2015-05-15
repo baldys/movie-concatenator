@@ -498,12 +498,13 @@
                             <color key="tintColor" red="0.0" green="0.75709639669999995" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="cancel:" destination="U8g-fB-d4T" id="pkw-8X-igz"/>
+                                <segue destination="IKh-R3-qdJ" kind="unwind" unwindAction="unwindFromRecordVideoVC:" id="jRv-OE-7MF"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="save" id="fZX-nD-AcG">
                             <color key="tintColor" red="0.1333333333" green="0.76470588240000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="save:" destination="U8g-fB-d4T" id="sCA-vo-Avp"/>
+                                <segue destination="IKh-R3-qdJ" kind="unwind" unwindAction="unwindFromRecordVideoVC:" id="Hwj-MO-tPY"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -522,6 +523,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fKY-EO-hbW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="IKh-R3-qdJ" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="RGO-h6-pIF">
                     <connections>
                         <action selector="focusAndExposeTap:" destination="U8g-fB-d4T" id="qbl-xS-Jou"/>
@@ -780,7 +782,7 @@
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="9DN-xd-kib" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" barStyle="black" id="sl8-1p-DwH">
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

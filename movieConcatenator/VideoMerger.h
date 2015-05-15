@@ -18,10 +18,10 @@
 
 @interface VideoMerger : NSObject
 
-@property (nonatomic, strong) AVMutableComposition *mixComposition;
-@property (nonatomic, strong) AVMutableVideoComposition *mainComposition;
+@property (nonatomic, strong) AVMutableComposition *composition;
+@property (nonatomic, strong) AVMutableVideoComposition *videoComposition;
 
-@property (nonatomic, strong) NSMutableArray *mergedMovies;
+@property (nonatomic, strong) NSMutableArray *videoClips;
 -(AVAsset*)spliceAssets: (NSArray*)takes;
 
 -(void) exportVideoComposition:(AVAsset*)composition;
