@@ -56,6 +56,8 @@
     [_collectionView reloadData];
     
 }
+
+
 -(void)insertItem:(Take*)item
 {
     [_collectionData.takes addObject:item];

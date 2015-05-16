@@ -344,7 +344,7 @@
 
 - (void) updateBadgeValue
 {
-    NSString *badgeValue = [NSString stringWithFormat:@"%d", self.takesToConcatenate.count];
+    NSString *badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)self.takesToConcatenate.count];
     [[[self.tabBarController.viewControllers objectAtIndex:1] tabBarItem] setBadgeValue:badgeValue];
 }
 

@@ -70,6 +70,8 @@
     {
         self.starTake.selected = NO;
     }
+    
+    
 
 }
 

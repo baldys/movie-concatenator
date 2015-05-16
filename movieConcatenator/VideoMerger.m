@@ -89,7 +89,7 @@
     
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     
-    
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
     //AVMutableVideoCompositionLayerInstruction *layerInstruction = nil;
     //AVMutableVideoCompositionInstruction *instruction = nil;
     
@@ -98,19 +98,17 @@
     t1 = CGAffineTransformMakeRotation(degreesToRadians(180));
     t2 = CGAffineTransformMakeTranslation(1280,720);
     CGAffineTransform A = CGAffineTransformIdentity;
+    A = CGAffineTransformConcat(t1,t2);
     BOOL isTransformApplied = NO;
     
     for (Take* take in takes)
     {
         AVAsset *asset = [AVAsset assetWithURL:[take getFileURL]];
         
-        
-        
-        
         //AVAsset *rotatedAsset = (AVAsset*)[self performWithAsset:[AVAsset assetWithURL:[take getFileURL]]];
         NSLog(@"video position/ orientation %ld", (long)take.videoOrientationAndPosition);
         
-        NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
+        //NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
         
         AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
         AVAssetTrack *assetTrack_audio = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
@@ -118,6 +116,7 @@
         [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_video atTime:timer error:nil];
         
         [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_audio atTime:timer error:nil];
+        
         
 //        CGAffineTransform A;
         
@@ -148,7 +147,7 @@
 //            CGAffineTransform newTransform = CGAffineTransformConcat(t2, t3);
 //        }
        // [compositionTrack_video setPreferredTransform:<#(CGAffineTransform)#>]
-        AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+//        AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
     
         [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
     
@@ -160,37 +159,53 @@
               
                 //[assets addObject:asset];
                 //[layerInstruction setTransform:CGAffineTransformIdentity atTime:timer];
+                NSLog(@"LANDSCAPE LEFT BACK DO NOT ROTATE");
+                NSLog(@"%f, %f, %f %f", A.a, A.b, A.c, A.d);
+//                if (isTransformApplied)
+//                {
+//                    /// set the transform so it reverts abck to original
+//                    A = CGAffineTransformInvert(t2);
+//                    A = CGAffineTransformInvert(t1);
+//                    
+//                }
+                NSLog(@"%f, %f, %f %f", compositionTrack_video.preferredTransform.a, compositionTrack_video.preferredTransform.b, compositionTrack_video.preferredTransform.c,compositionTrack_video.preferredTransform.d);
+                [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
 //
-                [layerInstruction setTransform:A atTime:timer];
+                //[layerInstruction setTransform:A atTime:timer];
+                isTransformApplied = NO;
                 // if a transform exists, then revert it back to
                 break;
             case LandscapeLeft_Front:
-                //[assets addObject:asset];
                 //LRF
+                NSLog(@"LANDSCAPE LEFT FRONT DO NOT ROTATE");
                 isFrontFacingVideoInAssets = YES;
-                //[layerInstruction setTransform:CGAffineTransformIdentity atTime:timer];
-                [layerInstruction setTransform:A atTime:timer];
+                NSLog(@"%f, %f, %f %f", compositionTrack_video.preferredTransform.a, compositionTrack_video.preferredTransform.b, compositionTrack_video.preferredTransform.c,compositionTrack_video.preferredTransform.d);
+                
+                [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
+                isTransformApplied = NO;
 
                 break;
             case LandscapeRight_Back:
                 //[assets addObject:asset];
                 isFrontFacingVideoInAssets = NO;
-                //rotation = CGAffineTransformMakeRotation(M_PI);
-                //translation = CGAffineTransformMakeTranslation(1280,720);
-                //mixedTransform = CGAffineTransformConcat(rotation, translation);
-                A = CGAffineTransformConcat(t1,t2);
-                [layerInstruction setTransform:A atTime:timer];
+                NSLog(@"LANDSCAPE RIGHT BACK ROTATE:");
+               [layerInstruction setTransform:CGAffineTransformMake(-1,0,0,-1,1280,720) atTime:timer];
+                 //[compositionTrack_video setPreferredTransform:A];
                 isTransformApplied = YES;
-                
+                /// try compositionTrack_video setPreferredTransform:A]
+                /// try setting the layer instructions in here instead of outside.
                 break;
             case LandscapeRight_Front:
                 //asset = (AVAsset*)[self performWithAsset:asset];
                 //[assets addObject:asset];
+
+                
+                NSLog(@"LANDSCAPE RIGHT FRONT WILL ROTATE");
                 isFrontFacingVideoInAssets = YES;
                 //rotation = CGAffineTransformMakeRotation(M_PI);
                 //translation = CGAffineTransformMakeTranslation(1280,720);
-                 A = CGAffineTransformConcat(t1,t2);
-                [layerInstruction setTransform:A atTime:timer];
+                 //A = CGAffineTransformConcat(t1,t2);
+                [layerInstruction setTransform:CGAffineTransformMake(-1,0,0,-1,1280,720) atTime:timer];
                 
                 isTransformApplied = YES;
                 break;
@@ -226,11 +241,14 @@
         self.videoComposition.frameDuration = CMTimeMake(1, 30);
         
         self.videoComposition.renderSize = compositionTrack_video.naturalSize;
-
-        A = CGAffineTransformIdentity;
+        
+      // NSLog(@"%f, %f, %f %f", A.a, A.b, A.c, A.d);
+//            A = CGAffineTransformInvert(t2);
+//            NSLog(@"%f, %f, %f %f", A.a, A.b, A.c, A.d);
+        
 
     }
-    
+    return self.composition;
 
 
     //self.videoComposition = [AVMutableVideoComposition videoComposition];
@@ -353,7 +371,7 @@
 
 
 
-    return self.composition;
+   
 }
 
  - (AVAsset*)performWithAsset:(AVAsset*)asset
