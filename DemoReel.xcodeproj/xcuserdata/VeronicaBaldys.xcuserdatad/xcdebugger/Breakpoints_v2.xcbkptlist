@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "443"
-            endingLineNumber = "443"
+            startingLineNumber = "391"
+            endingLineNumber = "391"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "452"
-            endingLineNumber = "452"
+            startingLineNumber = "400"
+            endingLineNumber = "400"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "453"
-            endingLineNumber = "453"
+            startingLineNumber = "401"
+            endingLineNumber = "401"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "455"
-            endingLineNumber = "455"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "457"
-            endingLineNumber = "457"
+            startingLineNumber = "405"
+            endingLineNumber = "405"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -154,11 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "462"
-            endingLineNumber = "462"
+            startingLineNumber = "410"
+            endingLineNumber = "410"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -170,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "456"
-            endingLineNumber = "456"
+            startingLineNumber = "404"
+            endingLineNumber = "404"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "464"
-            endingLineNumber = "464"
+            startingLineNumber = "412"
+            endingLineNumber = "412"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "480"
-            endingLineNumber = "480"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "483"
-            endingLineNumber = "483"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "481"
-            endingLineNumber = "481"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "492"
-            endingLineNumber = "492"
+            startingLineNumber = "440"
+            endingLineNumber = "440"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -282,11 +282,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "498"
-            endingLineNumber = "498"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "497"
-            endingLineNumber = "497"
+            startingLineNumber = "445"
+            endingLineNumber = "445"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -314,11 +314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
+            startingLineNumber = "150"
+            endingLineNumber = "150"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -330,71 +330,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
-            landmarkName = "-spliceAssets:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
-            landmarkName = "-spliceAssets:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "-spliceAssets:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
-            landmarkName = "-spliceAssets:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "177"
@@ -410,11 +346,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -426,11 +362,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -442,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -458,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -474,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453333346.748487"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -490,11 +426,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "-spliceAssets:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "movieConcatenator/VideoMerger.m"
+            timestampString = "453448675.218532"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "390"
+            endingLineNumber = "390"
             landmarkName = "-performWithAsset:"
             landmarkType = "5">
          </BreakpointContent>
@@ -506,11 +458,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "234"
-            endingLineNumber = "234"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -522,59 +474,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
-            landmarkName = "-spliceAssets:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[VideoMerger spliceAssets:]"
-                  moduleName = "DemoReel"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/VeronicaBaldys/Desktop/movie-concatenator-movieplayertoolbar/movieConcatenator/VideoMerger.m"
-                  timestampString = "453430148.660105"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "271"
-                  endingLineNumber = "271"
-                  offsetFromSymbolStart = "5258">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "-[VideoMerger spliceAssets:]"
-                  moduleName = "DemoReel"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/VeronicaBaldys/Desktop/movie-concatenator-movieplayertoolbar/movieConcatenator/VideoMerger.m"
-                  timestampString = "453430148.660313"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "271"
-                  endingLineNumber = "271"
-                  offsetFromSymbolStart = "5372">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>
@@ -586,11 +490,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/VideoMerger.m"
-            timestampString = "453430110.287349"
+            timestampString = "453448675.218532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "259"
-            endingLineNumber = "259"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "-spliceAssets:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "movieConcatenator/VideoMerger.m"
+            timestampString = "453448668.008823"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
             landmarkName = "-spliceAssets:"
             landmarkType = "5">
          </BreakpointContent>

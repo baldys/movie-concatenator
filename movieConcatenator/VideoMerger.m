@@ -69,37 +69,26 @@
     AVMutableCompositionTrack *compositionTrack_video = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     AVMutableCompositionTrack *compositionTrack_audio = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    
     self.videoComposition = [AVMutableVideoComposition videoComposition];
-    
-    
-    //self.layerInstructions = [[NSMutableArray alloc] init];
-    
-    
-   
+
     CMTime timer = kCMTimeZero;
-    
-    
-//    CGAffineTransform rotation;
-//    CGAffineTransform translation;
-    //CGAffineTransform mixedTransform;
-    
-    CGAffineTransform t1;
-    CGAffineTransform t2;
     
     AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
     
     AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
-    //AVMutableVideoCompositionLayerInstruction *layerInstruction = nil;
-    //AVMutableVideoCompositionInstruction *instruction = nil;
-    
+
     //NSMutableArray *assets = [NSMutableArray array];
     //NSMutableArray *compositionInstructions = [NSMutableArray array];
-    t1 = CGAffineTransformMakeRotation(degreesToRadians(180));
-    t2 = CGAffineTransformMakeTranslation(1280,720);
-    CGAffineTransform A = CGAffineTransformIdentity;
-    A = CGAffineTransformConcat(t1,t2);
-    BOOL isTransformApplied = NO;
+    //t1 = CGAffineTransformMakeRotation(degreesToRadians(180));
+    //t2 = CGAffineTransformMakeTranslation(1280,720);
+    //CGAffineTransform A = CGAffineTransformIdentity;
+    //A = CGAffineTransformConcat(t1,t2);
+    
+    //so we can adjust the video size according to the smallest video in the sequence, so we dont crop large portions of the large videos or have black bars around the small videos.
+    CGSize currentVideoSize;
+    CGSize previousVideoSize = CGSizeMake(0, 0);
+    
+    int i = 0;
     
     for (Take* take in takes)
     {
@@ -110,112 +99,95 @@
         
         //NSLog(@"[asset tracksWithMediaType:AVMediaTypeVideo].count: %lu", (unsigned long)[asset tracksWithMediaType:AVMediaTypeVideo].count) ;
         
-        AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] firstObject];
-        AVAssetTrack *assetTrack_audio = [[asset tracksWithMediaType:AVMediaTypeAudio] firstObject];
+        AVAssetTrack *assetTrack_video = [asset tracksWithMediaType:AVMediaTypeVideo][0];
+        AVAssetTrack *assetTrack_audio = [asset tracksWithMediaType:AVMediaTypeAudio][0];
         
         [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_video atTime:timer error:nil];
         
         [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, asset.duration) ofTrack:assetTrack_audio atTime:timer error:nil];
         
-        
-//        CGAffineTransform A;
-        
-//        if (!CGAffineTransformIsIdentity(A))
-//        {
-//            A = CGAffineTransformConcat(CGAffineTransformInvert(A), A);
-//            
-//        }
-     
-        
-       
-        
-        
-    
-        // Translate the composition to compensate the movement caused by rotation (since rotation would cause it to move out of frame)
-//        if (!self.videoComposition)
-//        {
-//            
-        
-        
-            
-            
-            //mixedTransform = CGAffineTransformConcat(t1, t2);
-        //}
-//        else
-//        {
-//            CGAffineTransform t3 = CGAffineTransformMakeTranslation(-1*assetTrack_video.naturalSize.width, 0.0);
-//            CGAffineTransform newTransform = CGAffineTransformConcat(t2, t3);
-//        }
-       // [compositionTrack_video setPreferredTransform:<#(CGAffineTransform)#>]
-//        AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
-    
+
         [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
-    
+        
+        currentVideoSize = assetTrack_video.naturalSize;
+        if (previousVideoSize.width == 0 && previousVideoSize.height == 0)
+        {
+            
+        }
+        CGFloat renderWidth, renderHeight;
         switch (take.videoOrientationAndPosition)
         {
             case LandscapeLeft_Back:
-                // no rotation needs to be applied
-                isFrontFacingVideoInAssets = NO;
-              
-                //[assets addObject:asset];
-                //[layerInstruction setTransform:CGAffineTransformIdentity atTime:timer];
-                NSLog(@"LANDSCAPE LEFT BACK DO NOT ROTATE");
-                NSLog(@"%f, %f, %f %f", A.a, A.b, A.c, A.d);
-//                if (isTransformApplied)
-//                {
-//                    /// set the transform so it reverts abck to original
-//                    A = CGAffineTransformInvert(t2);
-//                    A = CGAffineTransformInvert(t1);
-//                    
-//                }
-                NSLog(@"%f, %f, %f %f", compositionTrack_video.preferredTransform.a, compositionTrack_video.preferredTransform.b, compositionTrack_video.preferredTransform.c,compositionTrack_video.preferredTransform.d);
+                NSLog(@" # %i LANDSCAPE LEFT BACK DO NOT ROTATE",i);
                 [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
-//
-                //[layerInstruction setTransform:A atTime:timer];
-                isTransformApplied = NO;
-                // if a transform exists, then revert it back to
+                // all videos in composition so far are front facing
+                if (!isFrontFacingVideoInAssets)
+                {
+                    renderWidth = compositionTrack_video.naturalSize.width;
+                    renderHeight = compositionTrack_video.naturalSize.height;
+                    
+                }
+                else{
+                    // scale this current composition video track down to the size of the smallest composition track in the composition
+                }
                 break;
+                
             case LandscapeLeft_Front:
                 //LRF
-                NSLog(@"LANDSCAPE LEFT FRONT DO NOT ROTATE");
-                isFrontFacingVideoInAssets = YES;
+                NSLog(@"VIDEO # %i LANDSCAPE LEFT FRONT", i);
+                // if isFrontFacingVideoInAssets = NO then this is the first asset in the compostion that is front facing, so we must scale all previous videos in the composition down to a size that will fit this one. otherwise there will be black bars on the sides of this video.
+                
+                if (!isFrontFacingVideoInAssets)
+                {
+                    
+                }
+                renderWidth = compositionTrack_video.naturalSize.width;
+                renderHeight = compositionTrack_video.naturalSize.height;
+                
                 NSLog(@"%f, %f, %f %f", compositionTrack_video.preferredTransform.a, compositionTrack_video.preferredTransform.b, compositionTrack_video.preferredTransform.c,compositionTrack_video.preferredTransform.d);
                 
                 [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
-                isTransformApplied = NO;
+                isFrontFacingVideoInAssets = YES;
 
                 break;
+                
             case LandscapeRight_Back:
                 //[assets addObject:asset];
-                isFrontFacingVideoInAssets = NO;
-                NSLog(@"LANDSCAPE RIGHT BACK ROTATE:");
-               [layerInstruction setTransform:CGAffineTransformMake(-1,0,0,-1,1280,720) atTime:timer];
-                 //[compositionTrack_video setPreferredTransform:A];
-                isTransformApplied = YES;
+                
+                NSLog(@" # %i LANDSCAPE RIGHT BACK ROTATE:",i);
+
+                //[layerInstruction setTransform:CGAffineTransformMake(-1,0,0,-1,1280,720) atTime:timer];
+                [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
+                // if we havent seen a video that uses front fcaing camera, the render widtths and heights can be
+                if (!isFrontFacingVideoInAssets)
+                {
+                    renderWidth = compositionTrack_video.naturalSize.width;
+                    renderHeight = compositionTrack_video.naturalSize.height;
+                }
                 /// try compositionTrack_video setPreferredTransform:A]
                 /// try setting the layer instructions in here instead of outside.
                 break;
+                
             case LandscapeRight_Front:
-                //asset = (AVAsset*)[self performWithAsset:asset];
-                //[assets addObject:asset];
-
-                
-                NSLog(@"LANDSCAPE RIGHT FRONT WILL ROTATE");
+                NSLog(@" # %i LANDSCAPE RIGHT FRONT WILL ROTATE",i);
                 isFrontFacingVideoInAssets = YES;
-                //rotation = CGAffineTransformMakeRotation(M_PI);
-                //translation = CGAffineTransformMakeTranslation(1280,720);
-                 //A = CGAffineTransformConcat(t1,t2);
-                [layerInstruction setTransform:CGAffineTransformMake(-1,0,0,-1,1280,720) atTime:timer];
-                
-                isTransformApplied = YES;
+                // front facing video is in list of takes, overwrite previously set widths,heights for the other videos.
+                renderWidth = compositionTrack_video.naturalSize.width;
+                renderHeight = compositionTrack_video.naturalSize.height;
+                //[layerInstruction setTransform:CGAffineTransformMake(-1,0,0,-1,1280,720) atTime:timer];
+                [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
+               
                 break;
+                
             default:
                 [layerInstruction setTransform:CGAffineTransformIdentity atTime:kCMTimeZero];
         }
         timer = CMTimeAdd(timer, asset.duration);
     
-        //AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-        
+        previousVideoSize = currentVideoSize;
+    
+        i++;
+
         instruction.timeRange = CMTimeRangeMake(kCMTimeZero, timer);
         
         instruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
@@ -237,16 +209,14 @@
             // [layerInstruction setTransform:newTransform atTime:kCMTimeZero];
             
         self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
-        self.videoComposition.renderScale = 1.0;
+        
+        //self.videoComposition.renderScale
         self.videoComposition.frameDuration = CMTimeMake(1, 30);
         
         self.videoComposition.renderSize = compositionTrack_video.naturalSize;
         
-      // NSLog(@"%f, %f, %f %f", A.a, A.b, A.c, A.d);
-//            A = CGAffineTransformInvert(t2);
-//            NSLog(@"%f, %f, %f %f", A.a, A.b, A.c, A.d);
-        
-
+        NSLog(@"COMPOSITION TRACK VIDEO %i NATURAL SIZE: width = %f height = %f", i,compositionTrack_video.naturalSize.width, compositionTrack_video.naturalSize.height);
+        //NSLog(@)
     }
     return self.composition;
 
