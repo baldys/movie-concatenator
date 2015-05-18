@@ -16,6 +16,8 @@
 
 //+ (VideoLibrary*)selectedVideos;
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
+@property (nonatomic, strong) NSMutableArray *finalCompositions;
+
 
 + (instancetype)libraryWithFilename:(NSString*)filename;
 
@@ -27,5 +29,6 @@
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 - (void)listScenesAndTakes;
+
 - (NSMutableArray*)selectedTakes;
 @end

@@ -48,9 +48,11 @@
         if (!self.scenes)
         {
             self.scenes = [NSMutableArray array];
-            
         }
-        
+        if (!self.finalCompositions)
+        {
+            self.finalCompositions = [NSMutableArray array];
+        }
        
         ///
     }
@@ -67,6 +69,9 @@
         if (!self.scenes) {
             self.scenes  = [[NSMutableArray alloc] init];
         }
+        self.finalCompositions = [[aDecoder decodeObjectForKey:@"finalCompositions"]mutableCopy];
+        
+        
         
     }
     return self;

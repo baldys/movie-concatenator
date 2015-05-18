@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) NSString *title;
 
-//@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSString *comments;
 
 @property (nonatomic, strong) NSMutableArray *takes;
 

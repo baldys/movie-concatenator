@@ -116,14 +116,18 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableViewCellIdentifier];
     }
+    
     Take *take = self.takesToConcatenate[indexPath.row];
     
+    cell.textLabel.text = take.sceneTitle;
+   
     if (take.thumbnail == nil)
     {
         [take loadThumbnailWithCompletionHandler:^(UIImage* image)
          {
              dispatch_async(dispatch_get_main_queue(),
                             ^{
+                            
                                 cell.imageView.image = image;
                             });
          }];
@@ -196,12 +200,13 @@
     // uncomment later - testing 
     //if (self.takesToConcatenate.count > 1)
     //{
-        [merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
+        //[merger exportVideoComposition:[merger spliceAssets:self.takesToConcatenate]];
     //}
     //else
     //{
       //  NSLog(@"Please select more than one video.");
     //}
+    [merger exportVideoComposition:[merger buildCompositionObjects:self.takesToConcatenate]];
 }
 
 #pragma mark - NSNotificationCenter

@@ -18,21 +18,30 @@ typedef NS_ENUM(NSInteger, VideoOrientationAndPosition)
     LandscapeLeft_Front = 1,
     LandscapeRight_Back = 2,
     LandscapeRight_Front = 3,
-    None = 4
 };
-
+typedef NS_ENUM(NSInteger, TransitionTypes)
+{
+    None = 0,
+    Fade = 1,
+    Push = 2
+};
 
 @interface Take : NSObject <NSCoding>
 
 @property (nonatomic) NSInteger videoOrientationAndPosition;
 
+@property (nonatomic) NSInteger transitionType;
+
 @property (nonatomic) NSInteger sceneNumber;
+@property (nonatomic, strong) NSString *sceneTitle;
 @property (nonatomic, strong) NSString *title;
 
 @property (nonatomic, strong) NSString* assetID;
 @property (nonatomic, strong) NSURL *assetURL;
 
 @property (nonatomic, getter=isSelected) BOOL selected;
+@property (nonatomic) CMTime duration;
+@property (nonatomic) CMTimeRange timeRange;
 
 //./././.
 @property (nonatomic, strong) NSString *videoRecordingPosition;

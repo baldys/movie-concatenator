@@ -6,10 +6,10 @@
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
-@interface CustomToolbar : UIToolbar
-
-
-
-@end
+//#import <UIKit/UIKit.h>
+//
+//@interface CustomToolbar : UIToolbar
+//
+//
+//
+//@end

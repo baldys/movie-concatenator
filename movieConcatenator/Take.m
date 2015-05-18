@@ -32,6 +32,39 @@
 
 @implementation Take
 
+- (void)loadDurationOfAsset:(AVAsset*)asset
+{
+    
+    NSString *durationKey = @"duration";
+    [asset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
+     ^{
+         NSError *error = nil;
+         switch ([asset statusOfValueForKey:@"duration" error:&error])
+         {
+                 
+             case AVKeyValueStatusLoaded:
+                 // duration is now known, so we can fetch it without blocking
+                 //CMTime duration = [asset valueForKey:@"duration"];
+                 //CMTime duration = [asset duration];
+                 
+                 _duration = [asset duration];
+                 
+                 float seconds = _duration.value/_duration.timescale;
+                 
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     NSLog(@"duration of take loaded: time in seconds:%f", seconds);
+                 });
+                 
+                 break;
+             default:
+                 _duration = kCMTimeInvalid;
+                 break;
+         }
+         //// completion block
+         
+     }];
+    
+}
 - (instancetype) initWithURL:(NSURL*)url
 {
     self = [super init];
@@ -50,18 +83,20 @@
         }
         self.videoOrientation = @"unknown";
         self.videoRecordingPosition = @"unknown";
-       
-        _videoAsset = [[AVURLAsset alloc] initWithURL:self.assetURL options:nil];
+        
+       NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
+        _videoAsset = [[AVURLAsset alloc] initWithURL:self.assetURL options:options];
         
         _selected = NO;
         
         //_imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
+        [self loadDurationOfAsset:_videoAsset];
         
         [self loadThumbnailWithCompletionHandler:^(UIImage *image)
         {
             self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
-            //CGRect screenRect = [UIScreen mainScreen].bounds;
+            CGFloat screenScale = [UIScreen mainScreen].scale;
             //screenRect.size.
             self.thumbnail = image;
         }];
@@ -75,29 +110,6 @@
     return self;
 }
 
-- (CGAffineTransform) transformForVideoOrientationAndPosition
-{
-    CGAffineTransform rotation = CGAffineTransformMakeRotation(M_PI);
-    
-    switch (self.videoOrientationAndPosition)
-    {
-        case LandscapeLeft_Back:
-            return CGAffineTransformIdentity;
-            break;
-        case LandscapeLeft_Front:
-            return rotation;
-            break;
-            
-        case LandscapeRight_Front:
-            return CGAffineTransformIdentity;
-            break;
-            
-        case LandscapeRight_Back:
-            return rotation;
-            break;
-    }
-    return CGAffineTransformIdentity;
-}
 
 
 
@@ -173,6 +185,9 @@
         //NSLog(@"take number %@", self.takeNumber)
         self.assetID = [aDecoder decodeObjectForKey:@"assetID"];
         self.videoOrientationAndPosition = [aDecoder decodeIntegerForKey:@"videoOrientationAndPosition"];
+        self.sceneTitle = [aDecoder decodeObjectForKey:@"sceneTitle"];
+        self.title = [aDecoder decodeObjectForKey:@"title" ];
+        self.duration = [aDecoder decodeCMTimeForKey:@"duration"];
         //self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
         //[self createGeneratorFromItemInFilePathURL];
         //self.selected = [aDecoder decodeBoolForKey:@"selected"];
@@ -194,6 +209,9 @@
     [aCoder encodeInteger:self.sceneNumber forKey:@"sceneNumber"];
     [aCoder encodeObject:self.assetID forKey:@"assetID"];
     [aCoder encodeInteger:self.videoOrientationAndPosition forKey:@"videoOrientationAndPosition"];
+    [aCoder encodeObject:self.sceneTitle forKey:@"sceneTitle"];
+    [aCoder encodeObject:self.title forKey:@"title"];
+    [aCoder encodeCMTime:self.duration forKey:@"duration"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     //[aCoder encodeBool:self.selected forKey:@"selected"];
     //[aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];

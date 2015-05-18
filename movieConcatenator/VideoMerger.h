@@ -16,14 +16,32 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MediaPlayer/MediaPlayer.h>
 
+
+typedef NS_ENUM(NSInteger, TransitionType)
+{
+    TransitionTypeNone      = 0,
+    TransitionTypeCrossFade = 1,
+    TransitionTypePush      = 2
+};
+
 @interface VideoMerger : NSObject
 
+@property (nonatomic) NSInteger transitionType;
+
 @property (nonatomic, strong) AVMutableComposition *composition;
+
 @property (nonatomic, strong) AVMutableVideoComposition *videoComposition;
 
-@property (nonatomic, strong) NSMutableArray *videoClips;
--(AVAsset*)spliceAssets: (NSArray*)takes;
+@property (nonatomic, strong) NSArray *videoClips;
+@property (nonatomic, strong) NSMutableArray *clipTimeRanges; // array of CMTimeRanges stored in NSValues.
 
+
+@property (nonatomic, strong) NSMutableArray *compositions;
+
+@property (nonatomic) CMTime transitionDuration;
+
+-(AVAsset*)spliceAssets: (NSArray*)takes;
+- (AVAsset*)buildCompositionObjects:(NSArray*)takes;
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;

@@ -47,6 +47,7 @@
     if (self)
     {
         self.title = [aDecoder decodeObjectForKey:@"title"];
+        
         self.takes = [[aDecoder decodeObjectForKey:@"takes"] mutableCopy];
         self.libraryIndex = [aDecoder decodeIntegerForKey:@"libraryIndex"];
     }

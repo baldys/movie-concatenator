@@ -415,6 +415,11 @@
 //                       newTake.videoRecordingPosition = [[notification userInfo] objectForKey:@"videoPosition"];
                        
                        [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
+                       
+                       newTake.sceneTitle = [weakSelf.library.scenes[_currentSceneIndex]title];
+                       NSLog(@"new take scenr title: %@", newTake.sceneTitle);
+                       
+                       
                        [weakSelf.library saveToFilename:@"videolibrary.plist"];
                        
                        dispatch_async(dispatch_get_main_queue(), ^{
