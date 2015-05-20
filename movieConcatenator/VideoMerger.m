@@ -50,85 +50,72 @@
 //    self.inputAsset = asset;
 //}
 
-
-- (void)videoClipTimeRangesFromAssets:(NSMutableArray*)assets
-{
-    if (!_clipTimeRanges)
-    {
-        _clipTimeRanges = [NSMutableArray arrayWithCapacity:assets.count];
-    }
-    CMTime insertionPoint = kCMTimeZero;
-    
-    // _clipTimeRanges will be useful when trimming movies and we need to have a time range for the desired parts of the video that we wish to use.
-    
-    
-    for (int i=0; i<assets.count; i++)
-    {
-        AVAsset *asset = assets[i];
-        NSError *error = nil;
-        if ([assets[i] statusOfValueForKey:@"duration" error:&error] == AVKeyValueStatusLoaded)
-        {
-            NSValue *takeDuration = [NSValue valueWithCMTime:asset.duration];
-            NSValue *timeRangeOfAsset = [NSValue valueWithCMTimeRange:CMTimeRangeMake(insertionPoint, asset.duration)];
-            [_clipTimeRanges addObject:timeRangeOfAsset];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"ASSET TIME RANGE/DURATION: %@", timeRangeOfAsset.description);
-            });
-        }
-        else
-        {
-            //NSValue *timeRangeOfAsset = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, [self loadDurationOfAsset:asset])];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"ERROR: %@", error);
-            });
-            
-        }
-    }
-    
-}
-
-//- (CMTime)assetDuration:(AVAsset*)asset
+//
+//- (NSMutableArray*)videoClipTimeRangesFromAssets:(NSMutableArray*)assets
 //{
-//    NSError *error = nil;
-//    if ([asset statusOfValueForKey:@"duration" error:&error] == AVKeyValueStatusLoaded)
+//    NSMutableArray *timeRanges = [NSMutableArray array];
+//    CMTime insertionPoint = kCMTimeZero;
+//
+//    for (int i=0; i<assets.count; i++)
 //    {
-//        return([asset duration]);
+//        AVAsset *asset = assets[i];
+//        NSError *error = nil;
+//        if ([asset statusOfValueForKey:@"duration" error:&error] == AVKeyValueStatusLoaded)
+//        {
+//            
+//            NSValue *timeRangeOfAsset = [NSValue valueWithCMTimeRange:CMTimeRangeMake(insertionPoint, asset.duration)];
+//            [timeRanges addObject:timeRangeOfAsset];
+//            
+////            insertionPoint = CMTimeAdd(insertionPoint, asset.duration);
+//            
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSLog(@"ASSET TIME RANGE/DURATION: %@", timeRangeOfAsset.description);
+//            });
+//        }
+//        else
+//        {
+//            //NSValue *timeRangeOfAsset = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, [self loadDurationOfAsset:asset])];
+//            
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                NSLog(@"ERROR: %@", error);
+//            });
+//            
+//        }
 //    }
+//
 //    
-//    return(kCMTimeInvalid);
 //}
 
-- (void)loadDurationOfAsset:(AVAsset*)asset
-{
-    
-    
-    NSString *durationKey = @"duration";
-    
-    [asset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
-     ^{
-         NSError *error = nil;
-         switch ([asset statusOfValueForKey:@"duration" error:&error])
-         {
-                 
-             case AVKeyValueStatusLoaded:
-                 // duration is now known, so we can fetch it without blocking
-                 //CMTime duration = [asset valueForKey:@"duration"];
-                 //CMTime duration = [asset duration];
-                 //assetDuration = asset.duration;
-                 break;
-            default:
-                 break;
-         }
-         //// completion block
-         
-     }];
-    
-}
+//
+//- (void)loadDurationOfAsset:(AVAsset*)asset
+//{
+//    
+//    
+//    NSString *durationKey = @"duration";
+//    
+//    [asset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
+//     ^{
+//         NSError *error = nil;
+//         switch ([asset statusOfValueForKey:@"duration" error:&error])
+//         {
+//                 
+//             case AVKeyValueStatusLoaded:
+//                 // duration is now known, so we can fetch it without blocking
+//                 //CMTime duration = [asset valueForKey:@"duration"];
+//                 //CMTime duration = [asset duration];
+//                 //assetDuration = asset.duration;
+//                 break;
+//            default:
+//                 break;
+//         }
+//         //// completion block
+//         
+//     }];
+//    
+//}
 
 // get the assets from takes
-- (NSMutableArray*)prepareAssetsFromTakes:(NSArray*)takes
+- (void)prepareAssetsFromTakes:(NSArray*)takes
 {
     /// GET AN ARRAY OF ASSETS
     /*
@@ -152,68 +139,20 @@
     NSMutableArray *clips = [NSMutableArray array];
    
     self.frontFacingVideoInTakes = NO;
-    
-    int i = 0;
-    
-    
-    
+ 
     for (Take *take in takes)
     {
         NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
         // Load the values of AVAsset keys to inspect subsequently
         //NSArray *assetKeysToLoadAndTest = @[@"playable", @"composable", @"tracks", @"duration"];
         
-        AVAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
+        AVURLAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
         
-       
-        NSString *durationKey = @"duration";
+        CMTime durationOfAsset = urlAsset.duration;
+        NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, durationOfAsset)];
         
-        [urlAsset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
-         ^{
-             NSError *error = nil;
-             switch ([urlAsset statusOfValueForKey:@"duration" error:&error])
-             {
-                     
-                 case AVKeyValueStatusLoaded:
-                     
-                     break;
-                 default:
-                     break;
-             }
-             //// completion block
-             
-         }];
+        [self.clipTimeRanges addObject:timeRange];
       
-        //NSString *durationKey = @"duration";
-        
-//        [urlAsset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
-//         ^{
-//             NSError *error = nil;
-//             switch ([urlAsset statusOfValueForKey:@"duration" error:&error]) {
-//                     
-//                 case AVKeyValueStatusLoaded:
-//                     // duration is now known, so we can fetch it without blocking
-//                     
-//                     
-//                     
-//                     
-//                     
-//                     // dispatch a block to the main thread that updates the display of asset duration in my user interface,
-//                     // or do something else interesting with it
-//                 default:
-//                     dispatch_async(dispatch_get_main_queue(), ^{
-//                         NSLog(@"ERROR: %@", error);
-//                     });
-//                     // something went wrong; depending on what it was, we may want to dispatch a
-//                     // block to the main thread to report th         e error
-//             }
-//             // The completion block goes here.
-//         }];
-//        
-//        [urlAsset loadValuesAsynchronouslyForKeys:assetKeysToLoadAndTest completionHandler:
-//              ^{
-//                  dispatch_async( dispatch_get_main_queue(),
-
         [clips addObject:urlAsset];
         
         switch (take.videoOrientationAndPosition)
@@ -266,24 +205,23 @@
 
     }
     //[self videoClipTimeRangesFromAssets:clips];
-    _videoClips = clips;
+    _videoClips =[NSArray arrayWithArray:clips];
     
-    return clips;
 }
 
-- (void)buildPassThroughVideoComposition:(AVMutableVideoComposition *)videoComposition forComposition:(AVMutableComposition *)composition
-{
-
-    // Make a "pass through video track" video composition.
-    AVMutableVideoCompositionInstruction *passThroughInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
-    passThroughInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, [composition duration]);
-    
-    AVAssetTrack *videoTrack = [[composition tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-    AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
-    
-    passThroughInstruction.layerInstructions = [NSArray arrayWithObject:passThroughLayer];
-    videoComposition.instructions = [NSArray arrayWithObject:passThroughInstruction];
-}
+//- (void)buildPassThroughVideoComposition:(AVMutableVideoComposition *)videoComposition forComposition:(AVMutableComposition *)composition
+//{
+//
+//    // Make a "pass through video track" video composition.
+//    AVMutableVideoCompositionInstruction *passThroughInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//    passThroughInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, [composition duration]);
+//    
+//    AVAssetTrack *videoTrack = [[composition tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+//    AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrack];
+//    
+//    passThroughInstruction.layerInstructions = [NSArray arrayWithObject:passThroughLayer];
+//    videoComposition.instructions = [NSArray arrayWithObject:passThroughInstruction];
+//}
 
 
 
@@ -291,18 +229,12 @@
 {
     
     self.transitionDuration = CMTimeMakeWithSeconds(1, 1); // default transition time=1second
-    [self prepareAssetsFromTakes:takes];
+    //[self prepareAssetsFromTakes:takes];
     
     self.composition = [AVMutableComposition composition];
     self.videoComposition = [AVMutableVideoComposition videoComposition];
     
-    
-    
-    
-    
-    
-    
-    
+    NSInteger i;
     CMTime insertionTime = kCMTimeZero;
 
     
@@ -311,7 +243,7 @@
     
     // Make transitionDuration no greater than half the shortest clip duration.
     CMTime transitionDuration = self.transitionDuration;
-    for (int i = 0; i < _videoClips.count; i++ )
+    for (i = 0; i < _videoClips.count; i++ )
     {
         NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
         if (clipTimeRange)
@@ -332,24 +264,32 @@
     compositionAudioTracks[0] = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     compositionAudioTracks[1] = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
+    
+    
     CMTimeRange *passThroughTimeRanges = alloca(sizeof(CMTimeRange) * [_videoClips count]);
     CMTimeRange *transitionTimeRanges = alloca(sizeof(CMTimeRange) * [_videoClips count]);
     
 
-    AVMutableVideoCompositionInstruction *videoCompositionInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//    AVMutableVideoCompositionInstruction *videoCompositionInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//
+//    AVMutableVideoCompositionInstruction *preferredTransformInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//
+//    AVMutableVideoCompositionLayerInstruction *layer1 = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[0]];
+////
+//
+//    AVMutableVideoCompositionLayerInstruction *layer2 = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[1]];
+////    
 
-    AVMutableVideoCompositionLayerInstruction *layer1 = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[0]];
-
-    AVMutableVideoCompositionLayerInstruction *layer2 = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[1]];
-    
-    NSArray *layerInstructions = [NSArray arrayWithObjects:layer1, layer2, nil];
-//    
+    //NSArray *layerInstructions = [NSArray arrayWithObjects:layer1, layer2, nil];
+//
 //    CGAffineTransform preferredTransform;
     
     // Place clips into alternating video & audio tracks in composition, overlapped by transitionDuration.
-    for (int i = 0; i < _videoClips.count; i++ )
+    
+    NSMutableArray *preferredTransforms = [NSMutableArray array];
+    for (i = 0; i < _videoClips.count; i++ )
     {
-        
+        NSLog(@"videoClips.count: %i", _videoClips.count);
         NSInteger alternatingIndex = i % 2; // alternating targets: 0, 1, 0, 1, ...
         AVURLAsset *asset = [_videoClips objectAtIndex:i];
         
@@ -366,17 +306,56 @@
             timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, [asset duration]);
         }
     /////
+        
+        
         AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-        //preferredTransform = assetTrack_video.preferredTransform;
         
+        NSLog(@"assetTrack_video.preferredTransform:");
+        NSLog(@"%f,%f,%f,%f",assetTrack_video.preferredTransform.a, assetTrack_video.preferredTransform.b, assetTrack_video.preferredTransform.c, assetTrack_video.preferredTransform.d);
+
+        NSInteger *isIdentity;
+        
+    
+        if ([[NSNumber numberWithFloat: assetTrack_video.preferredTransform.a] isEqualToNumber:@1])
+        {
+            NSLog(@"assetTrack_video isEqual to @1!!!");
+            //do stuff to orient it properly
+        }
+        else
+        {
+            NSLog(@"assetTrack_video is NOT equal to @1!!!");
+        }
+        
+//        [preferredTransforms addObject:isIdentity];
+        
+        //[compositionVideoTracks[alternatingIndex] setPreferredTransform:assetTrack_video.preferredTransform];
     /////
+
         [compositionVideoTracks[alternatingIndex] insertTimeRange:timeRangeInAsset ofTrack:assetTrack_video atTime:insertionTime error:nil];
+//        
+//        [layerInstructions[alternatingIndex] setTransform:assetTrack_video.preferredTransform atTime:insertionTime];
+//        //[layerInstructions[alternatingIndex] setTransformRampFromStartTransform:assetTrack_video.preferredTransform toEndTransform:assetTrack_video.preferredTransform timeRange:timeRangeInAsset];
+//    
+//        preferredTransformInstruction.timeRange = timeRangeInAsset;
+//        //
+//        preferredTransformInstruction.layerInstructions = layerInstructions;
+//        [instructions addObject:preferredTransformInstruction];
         
-        [layerInstructions[alternatingIndex] setTransform:assetTrack_video.preferredTransform atTime:timeRangeInAsset.start];
         
-        videoCompositionInstruction.timeRange = CMTimeRangeMake(kCMTimeZero, asset.duration);
-        videoCompositionInstruction.layerInstructions = layerInstructions;
-        [instructions addObject:videoCompositionInstruction];
+//        // instructions for setting the preferred transform of the asset so that all the videos in the composition have the same orientation
+
+     
+
+//      AVMutableVideoCompositionLayerInstruction *transformLayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[alternatingIndex]];
+        //[transformLayerInstruction setTransformRampFromStartTransform:assetTrack_video.preferredTransform toEndTransform:assetTrack_video.preferredTransform timeRange:timeRangeInAsset];
+////
+//      preferredTransformInstruction.timeRange = timeRangeInAsset;
+//
+//        preferredTransformInstruction.layerInstructions = [NSArray arrayWithObject:transformLayerInstruction];
+//        [instructions addObject:preferredTransformInstruction];
+//        
+        
+        
         
         if ([[asset tracksWithMediaType:AVMediaTypeAudio] count] != 0)
         {
@@ -384,7 +363,6 @@
             [compositionAudioTracks[alternatingIndex] insertTimeRange:timeRangeInAsset ofTrack:assetTrack_audio atTime:insertionTime error:nil];
             
         }
-        self.videoComposition.renderSize = assetTrack_video.naturalSize;
         
         // Remember the time range in which this clip should pass through.
         // Every clip after the first begins with a transition.
@@ -403,42 +381,68 @@
         
         // The end of this clip will overlap the start of the next by transitionDuration.
         // (Note: this arithmetic falls apart if timeRangeInAsset.duration < 2 * transitionDuration.)
-//        if (timeRangeInAsset.duration.value < 2)
-//        {
-//            NSLog(@"duration is less than 2seconds.");
-//        }
-//        [orientationLayerInstruction1 setTransform:preferredTransform atTime:insertionTime];
+
         insertionTime = CMTimeAdd(insertionTime, timeRangeInAsset.duration);
-//        [orientationLayerInstruction2 setTransform:preferredTransform atTime:insertionTime];
-//        videoCompositionInstruction.timeRange = CMTimeRangeMake(insertionTime,timeRangeInAsset.duration);
-//        videoCompositionInstruction.layerInstructions = [NSArray arrayWithObjects:orientationLayerInstruction1, orientationLayerInstruction2, nil];
         
         insertionTime = CMTimeSubtract(insertionTime, transitionDuration);
         
         // Remember the time range for the transition to the next item.
-        transitionTimeRanges[i] = CMTimeRangeMake(insertionTime, transitionDuration);
-        
-        
-        
+        if (i+1 < _videoClips.count)
+        {
+            transitionTimeRanges[i] = CMTimeRangeMake(insertionTime, transitionDuration);
+        }
+
     }
     
     //[instructions addObject:videoCompositionInstruction];
+  
     
-    //NSMutableArray *instructions = [NSMutableArray array];
+    CMTime transformTime = kCMTimeZero;
     // Cycle between "pass through A", "transition from A to B", "pass through B", "transition from B to A".
     for (int i=0; i<_videoClips.count; i++ )
     {
+        AVURLAsset *asset = _videoClips[i];
+        AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+        
+        
         NSInteger alternatingIndex = i % 2; // alternating targets
-      
+    
         // Pass through clip i.
         AVMutableVideoCompositionInstruction *passThroughInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
         passThroughInstruction.timeRange = passThroughTimeRanges[i];
         AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[alternatingIndex]];
+        NSLog(@"assetTrack_video.preferredTransform:");
+        NSLog(@"%f,%f,%f,%f", asset.preferredTransform.a, asset.preferredTransform.b, asset.preferredTransform.c, asset.preferredTransform.d);
         
+        CGAffineTransform transform = assetTrack_video.preferredTransform;
+        if (transform.a == -1.0f && transform.d == -1.0f)
+        {
+            //CGAffineTransform t1 = CGAffineTransformMakeTranslation(1920, 1080);
+            //CGAffineTransform t2 = CGAffineTransformRotate(asset.preferredTransform, M_PI);
+            
+            //CGAffineTransform t3 = CGAffineTransformTranslate(asset.preferredTransform, 1920, 1080);
+            CGAffineTransform t2 = CGAffineTransformMake(-1, 0, 0, -1,1920,1080);
+            CGAffineTransform t3 = CGAffineTransformConcat(asset.preferredTransform, t2);
+            //CGAffineTransform t2 = asset.preferredTransform;
+            
+            [passThroughLayer setTransform:t3 atTime:transformTime];
+        }
+        else
+        {
+            
+        }
+       // CGAffineTransform t1 = CGAffineTransformRotate(asset.preferredTransform, M_PI);
+        //CGAffineTransform t2 = CGAffineTransformTranslate(t1, 1920, 1080);
+      
+       
+    
         passThroughInstruction.layerInstructions = [NSArray arrayWithObject:passThroughLayer];
+        
         [instructions addObject:passThroughInstruction];
-        //AVAssetTrack *assetTrack_video = [[_videoClips[i] tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-        //[toLayer setTransform:assetTrack_video.preferredTransform atTime:kCMTimeZero];
+        
+        transformTime = CMTimeAdd(transformTime, asset.duration);
+        
+        
         if (i+1 < [_videoClips count])
         {
             // Add transition from clip i to clip i+1.
@@ -448,24 +452,31 @@
             
             AVMutableVideoCompositionLayerInstruction *fromLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[alternatingIndex]];
             
-            //[fromLayer setTransform:preferredTransform atTime:
             AVMutableVideoCompositionLayerInstruction *toLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[1-alternatingIndex]];
+            
+            
             
             if (self.transitionType == TransitionTypeCrossFade)
             {
                 // Fade out the fromLayer by setting a ramp from 1.0 to 0.0.
                 [fromLayer setOpacityRampFromStartOpacity:1.0 toEndOpacity:0.0 timeRange:transitionTimeRanges[i]];
+                
+                //[fromLayer setTransform:preferredTransform atTime:transformTime];
             }
             else if (self.transitionType == TransitionTypePush)
             {
                 // Set a transform ramp on fromLayer from identity to all the way left of the screen.
                 [fromLayer setTransformRampFromStartTransform:CGAffineTransformIdentity toEndTransform:CGAffineTransformMakeTranslation(-self.composition.naturalSize.width, 0.0) timeRange:transitionTimeRanges[i]];
                 // Set a transform ramp on toLayer from all the way right of the screen to identity.
+                
+            
                 [toLayer setTransformRampFromStartTransform:CGAffineTransformMakeTranslation(+self.composition.naturalSize.width, 0.0) toEndTransform:CGAffineTransformIdentity timeRange:transitionTimeRanges[i]];
             }
             
             transitionInstruction.layerInstructions = [NSArray arrayWithObjects:fromLayer, toLayer, nil];
+            
             [instructions addObject:transitionInstruction];
+            
         }
     }
 
@@ -473,15 +484,23 @@
     self.videoComposition.renderScale = 1.0;
     self.videoComposition.renderSize = CGSizeMake(1920, 1080);
     
-    self.videoComposition.instructions = instructions;
+    self.videoComposition.instructions = [NSArray arrayWithArray:instructions];
+//    for (i=0; i<self.videoClips.count;i++)
+//    {
+//        NSValue *clipTimeRange = self.clipTimeRanges[i];
+//        NSLog(@"clip time ranges: %@", clipTimeRange.description);
+//        [self.composition.tracks objectAtIndex:i];
+//        
+//    }
     return self.composition;
 }
+
 
 
 - (AVAsset*)buildCompositionObjects:(NSArray*)takes
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
-    self.videoClips = [self prepareAssetsFromTakes:takes];
+    [self prepareAssetsFromTakes:takes];
     
     self.transitionType = TransitionTypeCrossFade;
     
@@ -508,7 +527,7 @@
         //videoComposition = [AVMutableVideoComposition videoComposition];
         return [self buildTransitionComposition:takes];
     }
-    return [self spliceAssets:takes];
+    //return [self spliceAssets:takes];
 }
 // regular composition without trnsitions
 -(AVAsset*)spliceAssets: (NSArray*)takes
@@ -568,7 +587,7 @@
             
           //[layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
        
-    
+        
         [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:insertionTime];
         
         
@@ -586,6 +605,8 @@
         self.videoComposition.renderSize = assetTrack_video.naturalSize;
         
         self.videoComposition.renderScale = 1.0;
+        
+        
    
 
     }
@@ -1050,7 +1071,7 @@
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         
         if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:outputURL])
-        {f
+        {
             [library writeVideoAtPathToSavedPhotosAlbum:outputURL completionBlock:^(NSURL *assetURL, NSError *error)
              {
                  dispatch_async(dispatch_get_main_queue(),
@@ -1075,6 +1096,22 @@
                 });
              }];
         }
+    }
+    else if (session.status == AVAssetExportSessionStatusFailed)
+    {
+        NSLog(@"EPIC FAIL");
+    }
+    else if (session.status == AVAssetExportSessionStatusExporting)
+    {
+        NSLog(@"exporting");
+    }
+    else if (session.status == AVAssetExportSessionStatusWaiting)
+    {
+        NSLog(@"waiting....");
+    }
+    else if (session.status == AVAssetExportSessionStatusUnknown)
+    {
+        NSLog(@"??????");
     }
 }
 

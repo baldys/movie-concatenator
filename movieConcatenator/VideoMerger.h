@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, TransitionType)
 
 @property (nonatomic, strong) NSArray *videoClips;
 @property (nonatomic, strong) NSMutableArray *clipTimeRanges; // array of CMTimeRanges stored in NSValues.
-
+@property (nonatomic, strong) void(^completionBlock)(BOOL success);
 
 @property (nonatomic, strong) NSMutableArray *compositions;
 
