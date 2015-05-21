@@ -245,7 +245,40 @@
     CMTime transitionDuration = self.transitionDuration;
     for (i = 0; i < _videoClips.count; i++ )
     {
+        AVURLAsset *asset = _videoClips[i];
+        
         NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
+        CMTime videoClipDuration = asset.duration;
+        
+        float videoClipSeconds = videoClipDuration.value/videoClipDuration.timescale;
+        NSLog(@"duration of video clip: %f", videoClipSeconds );
+        
+        float minimumVideoClipTime;
+        
+        // for the first and last clips, the minimum clip time is the duration of one transition
+        if (i == 0 || i == (_videoClips.count-1))
+        {
+            
+            
+        }
+        // the durations of the clips in the middle of the composition need to be longer than 2x the transition duration otherwise export will fail
+        else
+        {
+            minimumVideoClipTime = (transitionDuration.value/transitionDuration.timescale)*2.01;
+        }
+        NSLog(@"minimum time of video clip %f", minimumVideoClipTime);
+        
+        if (videoClipSeconds < minimumVideoClipTime)
+        {
+            NSLog(@"THIS VIDEO IS TOO SHORT TO ADD TRANSITIONS");
+            NSLog(@"videos will be combined with no transitions");
+            self.transitionType = TransitionTypeNone;
+            return [self spliceAssets:takes];
+            
+        }
+        
+        
+        
         if (clipTimeRange)
         {
             CMTime halfClipDuration = [clipTimeRange CMTimeRangeValue].duration;
@@ -306,6 +339,7 @@
             timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, [asset duration]);
         }
     /////
+        
         
         
         AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
@@ -387,10 +421,10 @@
         insertionTime = CMTimeSubtract(insertionTime, transitionDuration);
         
         // Remember the time range for the transition to the next item.
-        if (i+1 < _videoClips.count)
-        {
+//        if (i+1 < _videoClips.count)
+//        {
             transitionTimeRanges[i] = CMTimeRangeMake(insertionTime, transitionDuration);
-        }
+        //}
 
     }
     
@@ -398,11 +432,14 @@
   
     
     CMTime transformTime = kCMTimeZero;
+    
     // Cycle between "pass through A", "transition from A to B", "pass through B", "transition from B to A".
     for (int i=0; i<_videoClips.count; i++ )
     {
-        AVURLAsset *asset = _videoClips[i];
-        AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+        BOOL applyRotationToTransitionTimeRange = NO;
+        AVURLAsset *asset1 = _videoClips[i];
+        
+        AVAssetTrack *assetTrack_video1 = [[asset1 tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
         
         
         NSInteger alternatingIndex = i % 2; // alternating targets
@@ -412,9 +449,9 @@
         passThroughInstruction.timeRange = passThroughTimeRanges[i];
         AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[alternatingIndex]];
         NSLog(@"assetTrack_video.preferredTransform:");
-        NSLog(@"%f,%f,%f,%f", asset.preferredTransform.a, asset.preferredTransform.b, asset.preferredTransform.c, asset.preferredTransform.d);
+        NSLog(@"%f,%f,%f,%f", asset1.preferredTransform.a, asset1.preferredTransform.b, asset1.preferredTransform.c, asset1.preferredTransform.d);
         
-        CGAffineTransform transform = assetTrack_video.preferredTransform;
+        CGAffineTransform transform = assetTrack_video1.preferredTransform;
         if (transform.a == -1.0f && transform.d == -1.0f)
         {
             //CGAffineTransform t1 = CGAffineTransformMakeTranslation(1920, 1080);
@@ -422,15 +459,19 @@
             
             //CGAffineTransform t3 = CGAffineTransformTranslate(asset.preferredTransform, 1920, 1080);
             CGAffineTransform t2 = CGAffineTransformMake(-1, 0, 0, -1,1920,1080);
-            CGAffineTransform t3 = CGAffineTransformConcat(asset.preferredTransform, t2);
+            CGAffineTransform t3 = CGAffineTransformConcat(asset1.preferredTransform, t2);
             //CGAffineTransform t2 = asset.preferredTransform;
+            // transform insert time[1] = transformtimeprevious + duration of previous asset
+            // transform insert time[2] = transform time previous + duration of previous asset = transform insert time [1] + duratio
+            NSLog(@"transition time range.start = %lld", transitionTimeRanges[i].start.value/transitionTimeRanges[i].start.timescale);
             
-            [passThroughLayer setTransform:t3 atTime:transformTime];
-        }
-        else
-        {
+        
+            ///[passThroughLayer setTransform:t3 atTime:passThroughTimeRanges[i].start];
             
+            [passThroughLayer setTransformRampFromStartTransform:t3 toEndTransform:t3 timeRange:passThroughTimeRanges[i]];
+            applyRotationToTransitionTimeRange = YES;
         }
+        
        // CGAffineTransform t1 = CGAffineTransformRotate(asset.preferredTransform, M_PI);
         //CGAffineTransform t2 = CGAffineTransformTranslate(t1, 1920, 1080);
       
@@ -440,26 +481,60 @@
         
         [instructions addObject:passThroughInstruction];
         
-        transformTime = CMTimeAdd(transformTime, asset.duration);
+        transformTime = CMTimeAdd(transformTime, asset1.duration);
         
+        
+        //transformTime = CMTimeSubtract(transformTime, transition);
         
         if (i+1 < [_videoClips count])
         {
+            AVURLAsset *asset2 = _videoClips[i+1];
             // Add transition from clip i to clip i+1.
-            
+            AVAssetTrack *assetTrack_video2 = [asset2 tracksWithMediaType:AVMediaTypeVideo][0];
+            CGAffineTransform transform2 = assetTrack_video2.preferredTransform;
             AVMutableVideoCompositionInstruction *transitionInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+            
             transitionInstruction.timeRange = transitionTimeRanges[i];
             
             AVMutableVideoCompositionLayerInstruction *fromLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[alternatingIndex]];
             
             AVMutableVideoCompositionLayerInstruction *toLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[1-alternatingIndex]];
             
-            
-            
             if (self.transitionType == TransitionTypeCrossFade)
             {
                 // Fade out the fromLayer by setting a ramp from 1.0 to 0.0.
                 [fromLayer setOpacityRampFromStartOpacity:1.0 toEndOpacity:0.0 timeRange:transitionTimeRanges[i]];
+                
+                // check clip[i+1]'s asset track to see if it needs to be rotated during the transition
+                CGAffineTransform transform2 = assetTrack_video2.preferredTransform;
+                if (assetTrack_video2.preferredTransform.a == -1 && assetTrack_video2.preferredTransform.d == -1)
+                {
+                    //CGAffineTransform t1 = CGAffineTransformMakeTranslation(1920, 1080);
+                    //CGAffineTransform t2 = CGAffineTransformRotate(asset.preferredTransform, M_PI);
+                    
+                    //CGAffineTransform t3 = CGAffineTransformTranslate(asset.preferredTransform, 1920, 1080);
+                    CGAffineTransform t2 = CGAffineTransformMake(-1, 0, 0, -1,1920,1080);
+                    CGAffineTransform t3 = CGAffineTransformConcat(asset2.preferredTransform, t2);
+                    //CGAffineTransform t2 = asset.preferredTransform;
+                    //CMTime transformTime2 = CMTimeAdd(transitionTimeRanges[i].start, transitionTimeRanges[i].duration);
+                    //NSLog(@"transform time range 2 = %lld", transformTime2.value);
+                    
+                    
+                    ///[toLayer setTransform:t3 atTime:transitionTimeRanges[i].start];
+                   
+                    
+                    [toLayer setTransformRampFromStartTransform:t3 toEndTransform:t3 timeRange:transitionTimeRanges[i]];
+                }
+                // if asset1 has been rotated in its pass through time range, then it also needs to be rotated for the time range where it fades out during the transition to the next asset.
+                if (applyRotationToTransitionTimeRange)
+                {
+                    CGAffineTransform t2 = CGAffineTransformMake(-1, 0, 0, -1,1920,1080);
+                    CGAffineTransform t3 = CGAffineTransformConcat(asset1.preferredTransform, t2);
+                    
+                    [fromLayer setTransformRampFromStartTransform:t3 toEndTransform:t3 timeRange:transitionTimeRanges[i]];
+                    
+                    ///[fromLayer setTransform:t3 atTime:transitionTimeRanges[i].start];
+                }
                 
                 //[fromLayer setTransform:preferredTransform atTime:transformTime];
             }

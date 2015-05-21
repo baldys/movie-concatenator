@@ -50,17 +50,12 @@
 {
     [super prepareForReuse];
     self.thumbnailImageView.image = nil;
-    NSLog(@"reuse");
 }
 
 -(void)cellWithTake:(Take*)take
 {
     
     [self setTake:take];
-
-    // set a thumbnail image to the image of the first frame of that video
-    //self.assetURL = [take getPathURL];
-    //[self.take getThumbnailImage];
 
     if (take.isSelected)
     {
@@ -71,8 +66,6 @@
         self.starTake.selected = NO;
     }
     
-    
-
 }
 
 
