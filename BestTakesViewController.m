@@ -21,7 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) VideoLibrary *videoLibrary;
 @property (nonatomic) TransitionTypes transitionType;
-@property (nonatomic, strong) EditingOptionsViewController *editingOptionsVC;
+
 @end
 
 @implementation BestTakesViewController
@@ -34,7 +34,7 @@
 //    {
 //        self.takesToConcatenate = [NSMutableArray array];
 //    }
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addTakeToTakesToConcatenate:) name:@"didSelectStarButtonInCell" object:nil];
+    
 
     [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"blue-star-32.png"]];
 
@@ -46,14 +46,20 @@
     
     ///[self.editButtonItem setAction:@selector(editList:)];
     
+    self.videoMerger = [[VideoMerger alloc] init];
+    self.transitionType = TransitionTypeNone;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addTakeToTakesToConcatenate:) name:@"didSelectStarButtonInCell" object:nil];
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(didStartConcatenatingVideos:) name:@"videoMergingStartedNotification" object:nil];
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTransitionType:) name:@"changeTransitionType" object:nil];
+    
 }
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -203,16 +209,8 @@
 
 - (IBAction)concatenateSelectedTakes:(id)sender
 {
-    if (self.editingOptionsVC)
-    {
-        self.transitionType = self.editingOptionsVC.transitionType;
-    }
-    else
-    {
-        self.transitionType = TransitionTypeNone;
-    }
-    VideoMerger *merger = [[VideoMerger alloc] init];
-    merger.transitionType = _transitionType;
+    
+    self.videoMerger.transitionType = _transitionType;
     NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
     // uncomment later - testing 
     //if (self.takesToConcatenate.count > 1)
@@ -223,8 +221,8 @@
     //{
       //  NSLog(@"Please select more than one video.");
     //}
-    
-    [merger exportVideoComposition:[merger buildCompositionObjects:self.takesToConcatenate]];
+    self.videoMerger.transitionType = self.transitionType;
+    [self.videoMerger exportVideoComposition:[self.videoMerger buildCompositionObjects:self.takesToConcatenate]];
 }
 
 #pragma mark - NSNotificationCenter
@@ -295,6 +293,13 @@
     [self.takesToConcatenate removeAllObjects];
     //self.takesToConcatenate = nil;
     [self.tableView reloadData];
+}
+
+
+- (IBAction)unwindSegueFromEditingOptions:(UIStoryboardSegue*)segue
+{
+     EditingOptionsViewController *editingOptionsVC = (EditingOptionsViewController*)[segue sourceViewController];
+    self.transitionType = editingOptionsVC.transitionType;
 }
 
 /*

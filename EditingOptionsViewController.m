@@ -45,41 +45,6 @@ enum {
     kTitlesSection
 };
 
-//UIImage *getImageWithRoundedUpperLeftCorner(UIImage *image, CGFloat radius)
-//{
-//    CGSize imageSize = [image size];
-//    CGRect imageBounds = CGRectZero;
-//    imageBounds.size = imageSize;
-//    
-//    UIGraphicsBeginImageContext(imageSize);
-//    CGContextRef ctx = UIGraphicsGetCurrentContext();
-//    
-//    CGContextClearRect(ctx, imageBounds);
-//    
-//    CGContextMoveToPoint(ctx, CGRectGetMinX(imageBounds) + radius, CGRectGetMinY(imageBounds));
-//    CGContextAddArc(ctx, CGRectGetMinX(imageBounds) + radius, CGRectGetMinY(imageBounds) + radius, radius, M_PI, 3 * M_PI / 2, 0);
-//    CGContextMoveToPoint(ctx, CGRectGetMinX(imageBounds), CGRectGetMinY(imageBounds) + radius);
-//    CGContextAddLineToPoint(ctx, CGRectGetMinX(imageBounds), CGRectGetMaxY(imageBounds));
-//    CGContextAddLineToPoint(ctx, CGRectGetMaxX(imageBounds), CGRectGetMaxY(imageBounds));
-//    CGContextAddLineToPoint(ctx, CGRectGetMaxX(imageBounds), CGRectGetMinY(imageBounds));
-//    CGContextAddLineToPoint(ctx, CGRectGetMinX(imageBounds) + radius, CGRectGetMinY(imageBounds));
-//    
-//    CGContextClip(ctx);
-//    
-//    [image drawInRect:imageBounds];
-//    
-//    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
-//    UIGraphicsEndImageContext();
-//    
-//    return roundedImage;
-//}
-
-//@synthesize assetBrowser = _assetBrowser;
-//@synthesize editor = _editor;
-//@synthesize clips = _videoClips, clipTimeRanges = _clipTimeRanges, clipThumbnails = _clipThumbnails;
-//@synthesize commentary = _commentary, commentaryThumbnail = _commentaryThumbnail;
-//@synthesize titleText = _titleText;
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     if ((self = [super initWithStyle:style]))
@@ -132,7 +97,9 @@ enum {
     [super viewDidLoad];
     
     self.tableView.rowHeight = 49.0; // 1 pixel is for the divider, we want our thumbnails to have an even height.
-    self.title = @"AVEditDemo";
+    self.title = @"Editing Options";
+    
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -216,7 +183,8 @@ enum {
 #pragma mark -
 #pragma mark Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 2; // The titles section is the last section.
 }
 
@@ -244,21 +212,7 @@ enum {
     cell.accessoryView = nil;
     cell.imageView.image = nil;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
-//    
-//    // Configure the cell.
-//    if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
-//        AVURLAsset *clip = [self.clips objectAtIndex:section];
-//        if (row == 0) {
-//            if ([clip isKindOfClass:[NSNull class]]) {
-//                cell.textLabel.text = [NSString stringWithFormat:@"Clip %i", section+1];
-//            }
-//            else {
-//                cell.imageView.image = [self.clipThumbnails objectAtIndex:section];
-//                cell.textLabel.text = [[clip.URL lastPathComponent] stringByDeletingPathExtension];
-//            }
-//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//        }
-//        else {
+
 //            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
 //            timeCell.sliderXInset = 60.0;
 //            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:15.0];
@@ -300,25 +254,7 @@ enum {
             //[exportCell setProgressViewHidden:_exporting ? NO : YES];
             //[exportCell setDetailTextLabelHidden:_showSavedVideoToAssestsLibrary ? NO : YES];
         //}
-    
-//    else if ( section == kCommentarySection ) {
-//        if (row == 0) {
-//            cell.textLabel.text = @"Commentary";
-//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//            UISwitch *toggleSwitch = [[[UISwitch alloc] initWithFrame:CGRectZero] autorelease];
-//            toggleSwitch.on = _commentaryEnabled;
-//            [toggleSwitch addTarget:self action:@selector(toggleCommentaryEnabled:) forControlEvents:UIControlEventValueChanged];
-//            cell.accessoryView = toggleSwitch;
-//        }
-//        else if (row == 1) {
-//            if (self.commentary == nil) {
-//                cell.textLabel.text = @"Audio Clip";
-//            }
-//            else {
-//                cell.imageView.image = self.commentaryThumbnail;
-//                cell.textLabel.text = [[self.commentary.URL lastPathComponent] stringByDeletingPathExtension];
-//            }
-//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+
 //        }
 //        else if (row == 2) {
 //            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
@@ -334,11 +270,7 @@ enum {
                    // break;
                 //}
            // }
-            // Don't want to use 0.0 (div by 0), 1.0 is arbitrary.
-            //timeCell.duration = (self.commentary && userHasSelectedClips) ? self.projectDuration : 1.0;
-            //timeCell.maximumTime = (self.commentary && userHasSelectedClips) ? timeCell.duration : 0.0;
-            //timeCell.timeValue = _commentaryStartTime;
-//        }
+
 //    }
     if ( section == kTransitionsSection ) {
         if (row == 0)
@@ -364,13 +296,13 @@ enum {
 //            timeCell.maximumTime = timeCell.duration;
 //            timeCell.timeValue = _transitionDuration;
 //        }
-        else if (_transitionsEnabled && row == 1)
+        else if (row == 1)
         {
             cell.textLabel.text = @"Cross Fade";
             if (_transitionType == TransitionTypeCrossFade)
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
-        else if (_transitionsEnabled && row == 2)
+        else if (row == 2)
         {
             cell.textLabel.text = @"Push";
             if (_transitionType == TransitionTypePush)
@@ -412,14 +344,11 @@ enum {
     NSUInteger section = indexPath.section;
     NSUInteger row = indexPath.row;
 //    
-    //if ( //((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && ((row == 1) || (row == 2))
-        //|| ((section == kCommentarySection) && (row == 2))
+    
 //        ((section == kTransitionsSection) && (row == 1)) )
 //    {
 //        cellID = TimeSliderCellIdentifier;
-//    }
-   // else if ( (section == kProjectSection) && (row == 2) ) {
-//        cellID = ExportCellIdentifier;
+//}
 //    }
     if (section == kTransitionsSection)
     {
