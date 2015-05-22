@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, TransitionTypes)
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic) CMTime duration;
 @property (nonatomic) CMTimeRange timeRange;
+@property (nonatomic, strong) NSString *durationInSeconds;
 
 //./././.
 @property (nonatomic, strong) NSString *videoRecordingPosition;

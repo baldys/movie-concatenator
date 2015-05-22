@@ -16,7 +16,6 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-
 typedef NS_ENUM(NSInteger, TransitionType)
 {
     TransitionTypeNone      = 0,

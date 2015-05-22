@@ -36,6 +36,7 @@
 {
     
     NSString *durationKey = @"duration";
+    __weak __block Take *weakSelf = (Take *)self;
     [asset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
      ^{
          NSError *error = nil;
@@ -47,9 +48,10 @@
                  //CMTime duration = [asset valueForKey:@"duration"];
                  //CMTime duration = [asset duration];
                  
-                 _duration = [asset duration];
+                 weakSelf.duration = [asset duration];
                  
                  float seconds = _duration.value/_duration.timescale;
+                 
                  
                  dispatch_async(dispatch_get_main_queue(), ^{
                      NSLog(@"duration of take loaded: time in seconds:%f", seconds);
@@ -63,6 +65,22 @@
          //// completion block
          
      }];
+    
+    
+    float seconds = _duration.value/_duration.timescale;
+    int minutes = 0;
+    
+    
+
+    while (seconds-60 > 0)
+    {
+        minutes++;
+        seconds = seconds-60;
+    }
+        
+    
+    NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
+    self.durationInSeconds = [NSString stringWithFormat:@"%i:%f",minutes, seconds];
     
 }
 - (instancetype) initWithURL:(NSURL*)url
@@ -93,10 +111,13 @@
     
         [self loadDurationOfAsset:_videoAsset];
         
+        self.timeRange = CMTimeRangeMake(kCMTimeZero, self.duration);
+        
         [self loadThumbnailWithCompletionHandler:^(UIImage *image)
         {
             self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
             CGFloat screenScale = [UIScreen mainScreen].scale;
+            NSLog(@"scale: %f", screenScale);
             //screenRect.size.
             self.thumbnail = image;
         }];
@@ -212,6 +233,7 @@
     [aCoder encodeObject:self.sceneTitle forKey:@"sceneTitle"];
     [aCoder encodeObject:self.title forKey:@"title"];
     [aCoder encodeCMTime:self.duration forKey:@"duration"];
+    [aCoder encodeCMTimeRange:self.timeRange forKey:@"timeRange"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     //[aCoder encodeBool:self.selected forKey:@"selected"];
     //[aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];

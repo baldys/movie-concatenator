@@ -111,8 +111,30 @@
 //         //// completion block
 //         
 //     }];
+//
+
+//}
+
+//- (instancetype) init
+//{
+//    self = [super init];
+//    if (self)
+//    {
+//        self.transitionType = TransitionTypeNone;
+//    }
+//    return self;
 //    
 //}
+
+- (instancetype)initWithTransitionType:(TransitionType)transitionType
+{
+    self = [super init];
+    if (self)
+    {
+        self.transitionType = transitionType;
+    }
+    return self;
+}
 
 // get the assets from takes
 - (void)prepareAssetsFromTakes:(NSArray*)takes
@@ -149,6 +171,7 @@
         AVURLAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
         
         CMTime durationOfAsset = urlAsset.duration;
+        durationOfAsset = take.duration;
         NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, durationOfAsset)];
         
         [self.clipTimeRanges addObject:timeRange];
@@ -258,8 +281,7 @@
         // for the first and last clips, the minimum clip time is the duration of one transition
         if (i == 0 || i == (_videoClips.count-1))
         {
-            
-            
+            minimumVideoClipTime = (transitionDuration.value/transitionDuration.timescale)*1.01;
         }
         // the durations of the clips in the middle of the composition need to be longer than 2x the transition duration otherwise export will fail
         else
@@ -272,13 +294,12 @@
         {
             NSLog(@"THIS VIDEO IS TOO SHORT TO ADD TRANSITIONS");
             NSLog(@"videos will be combined with no transitions");
-            self.transitionType = TransitionTypeNone;
+            
             return [self spliceAssets:takes];
             
         }
         
-        
-        
+
         if (clipTimeRange)
         {
             CMTime halfClipDuration = [clipTimeRange CMTimeRangeValue].duration;
@@ -577,7 +598,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
     [self prepareAssetsFromTakes:takes];
     
-    self.transitionType = TransitionTypeCrossFade;
+    //self.transitionType = TransitionTypeCrossFade;
     
     
     //AVMutableAudioMix *audioMix = nil;

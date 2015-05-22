@@ -10,7 +10,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-
+#import "BestTakesViewController.h"
 //#import "AssetBrowserController.h"
 //#import "SimpleEditor.h"
 
@@ -28,8 +28,8 @@
 @interface EditingOptionsViewController () <TimeSliderCellDelegate>//,TitleEditingCellDelegate, AssetBrowserControllerDelegate>
 
 - (void)updateCell:(UITableViewCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)beginExport;
-- (void)exportDidFinish:(AVAssetExportSession*)session;
+//- (void)beginExport;
+//- (void)exportDidFinish:(AVAssetExportSession*)session;
 
 @end
 
@@ -41,11 +41,6 @@
 // If I put this at 2.0 and trim the clips as close as they will go then the videoComposition fails.
 
 enum {
-    kClip1Section,
-    kClip2Section,
-    kClip3Section,
-    kProjectSection,
-    kCommentarySection,
     kTransitionsSection,
     kTitlesSection
 };
@@ -89,23 +84,24 @@ enum {
 {
     if ((self = [super initWithStyle:style]))
     {
+       
+        
         //_editor = [[SimpleEditor alloc] init];
         
-        _videoClips = [[NSMutableArray alloc] initWithCapacity:3];
-        _clipTimeRanges = [[NSMutableArray alloc] initWithCapacity:3];
-        _clipThumbnails = [[NSMutableArray alloc] initWithCapacity:3];
-        NSUInteger idx;
-        for (idx = 0; idx < 3; idx++) {
-            [_videoClips addObject:[NSNull null]];
-            [_clipTimeRanges addObject:[NSNull null]];
-            [_clipThumbnails addObject:[NSNull null]];
-        }
-        _currentlyChoosingClipForSection = -1;
-        
-        _commentaryStartTime = 0.0;
+//        _videoClips = [[NSMutableArray alloc] initWithCapacity:3];
+//        _clipTimeRanges = [[NSMutableArray alloc] initWithCapacity:3];
+//        _clipThumbnails = [[NSMutableArray alloc] initWithCapacity:3];
+//        NSUInteger idx;
+//        for (idx = 0; idx < 3; idx++) {
+//            [_videoClips addObject:[NSNull null]];
+//            [_clipTimeRanges addObject:[NSNull null]];
+//            [_clipThumbnails addObject:[NSNull null]];
+//        }
+       // _currentlyChoosingClipForSection = -1;
+
         
         // Defaults for the transition settings.
-        //_transitionType = SimpleEditorTransitionTypeCrossFade;
+        //_transitionType = TransitionTypeNone;
         _transitionDuration = 1.0;
         
         _titleText = @"";
@@ -116,11 +112,13 @@ enum {
     return self;
 }
 
+
 - (NSArray*)indexPathsForSection:(NSUInteger)section inRange:(NSRange)range
 {
     NSUInteger idx;
     NSMutableArray *indexPaths = [NSMutableArray arrayWithCapacity:0];
-    for (idx = range.location; idx < range.location + range.length; idx++) {
+    for (idx = range.location; idx < range.location + range.length; idx++)
+    {
         [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:section]];
     }
     return [indexPaths copy];
@@ -171,71 +169,63 @@ enum {
 #pragma mark -
 #pragma mark Editor Sync
 
-- (void)synchronizeEditorClipsWithOurClips
-{
-    NSMutableArray *validClips = [NSMutableArray arrayWithCapacity:3];
-    for (AVURLAsset *asset in self.clips) {
-        if (! [asset isKindOfClass:[NSNull class]]) {
-            [validClips addObject:asset];
-        }
-    }
-    ///self.editor.clips = [validClips copy];
-}
+//- (void)synchronizeEditorClipsWithOurClips
+//{
+//    NSMutableArray *validClips = [NSMutableArray arrayWithCapacity:3];
+//    for (AVURLAsset *asset in self.clips) {
+//        if (! [asset isKindOfClass:[NSNull class]]) {
+//            [validClips addObject:asset];
+//        }
+//    }
+//    ///self.editor.clips = [validClips copy];
+//}
 
-- (void)synchronizeEditorClipTimeRangesWithOurClipTimeRanges
-{
-    NSMutableArray *validClipTimeRanges = [NSMutableArray arrayWithCapacity:3];
-    for (NSValue *timeRange in self.clipTimeRanges) {
-        if (! [timeRange isKindOfClass:[NSNull class]]) {
-            [validClipTimeRanges addObject:timeRange];
-        }
-    }
-    ///self.editor.clipTimeRanges = [[validClipTimeRanges copy] autorelease];
-}
+//- (void)synchronizeEditorClipTimeRangesWithOurClipTimeRanges
+//{
+//    NSMutableArray *validClipTimeRanges = [NSMutableArray arrayWithCapacity:3];
+//    for (NSValue *timeRange in self.clipTimeRanges) {
+//        if (! [timeRange isKindOfClass:[NSNull class]]) {
+//            [validClipTimeRanges addObject:timeRange];
+//        }
+//    }
+//    ///self.editor.clipTimeRanges = [[validClipTimeRanges copy] autorelease];
+//}
 
-- (void)synchronizeWithEditor
-{
-    // Clips
-    [self synchronizeEditorClipsWithOurClips];
-    [self synchronizeEditorClipTimeRangesWithOurClipTimeRanges];
-    
-    // Commentary
+//- (void)synchronizeWithEditor
+//{
+//    // Clips
+//    [self synchronizeEditorClipsWithOurClips];
+//    [self synchronizeEditorClipTimeRangesWithOurClipTimeRanges];
+//    
+//    // Commentary
 //    self.editor.commentary = _commentaryEnabled ? self.commentary : nil;
 //    CMTime commentaryStartTime = (_commentaryEnabled && self.commentary) ? CMTimeMakeWithSeconds(_commentaryStartTime, 600) : kCMTimeInvalid;
 //    self.editor.commentaryStartTime = commentaryStartTime;
     
     // Transitions
-    CMTime transitionDuration = _transitionsEnabled ? CMTimeMakeWithSeconds(_transitionDuration, 600) : kCMTimeInvalid;
-   
+//    CMTime transitionDuration = _transitionsEnabled ? CMTimeMakeWithSeconds(_transitionDuration, 600) : kCMTimeInvalid;
+
     ///self.editor.transitionDuration = transitionDuration;
     
     ///self.editor.transitionType = _transitionsEnabled ? _transitionType : SimpleEditorTransitionTypeNone;
     
     // Titles
-   // self.editor.titleText = _titlesEnabled ? self.titleText : nil;
-}
+   // self.editor.titleText = _titlesEnabled ? self.titleText : nil;//
+//}
 
 #pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return kTitlesSection+1; // The titles section is the last section.
+    return 2; // The titles section is the last section.
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
-        AVURLAsset *asset = [self.clips objectAtIndex:section];
-        return ([asset isKindOfClass:[NSNull class]]) ? 1 : 3;
-    }
-    else if ( section == kProjectSection ) {
-        return 3;
-    }
-    else if ( section == kCommentarySection) {
-        return _commentaryEnabled ? 3 : 1;
-    }
-    else if ( section == kTransitionsSection ) {
-        return _transitionsEnabled ? 4 : 1;
+
+    if ( section == kTransitionsSection )
+    {
+        return _transitionsEnabled ? 3 : 1;
     }
     else if ( section == kTitlesSection ) {
         return _titlesEnabled ? 2 : 1;
@@ -254,60 +244,56 @@ enum {
     cell.accessoryView = nil;
     cell.imageView.image = nil;
     cell.textLabel.textAlignment = NSTextAlignmentLeft;
-    
-    // Configure the cell.
-    if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
-        AVURLAsset *clip = [self.clips objectAtIndex:section];
-        if (row == 0) {
-            if ([clip isKindOfClass:[NSNull class]]) {
-                cell.textLabel.text = [NSString stringWithFormat:@"Clip %i", section+1];
-            }
-            else {
-                cell.imageView.image = [self.clipThumbnails objectAtIndex:section];
-                cell.textLabel.text = [[clip.URL lastPathComponent] stringByDeletingPathExtension];
-            }
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        else {
-            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
-            timeCell.sliderXInset = 60.0;
-            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:15.0];
-            
-            NSValue *timeRangeValue = [self.clipTimeRanges objectAtIndex:section];
-            CMTimeRange timeRange = [timeRangeValue CMTimeRangeValue];
-            CMTime startTime = timeRange.start;
-            CMTime endTime = CMTimeAdd(timeRange.start, timeRange.duration);
-            
-            timeCell.textLabel.text = (row == 1) ? @"Start" : @" End";
-            timeCell.flipSlider = (row == 1) ? NO : YES;
-            timeCell.duration = CMTimeGetSeconds(clip.duration);
-            float newTimeValue = CMTimeGetSeconds( ( row == 1) ? startTime : endTime );
-            timeCell.timeValue = newTimeValue;
-            if (row == 1) {
-                timeCell.minimumTime = 0.0;
-                
-                float maxTime = CMTimeGetSeconds(endTime);
-                if (_transitionsEnabled)
-                    maxTime -= TRANSITION_LEEWAY_MULTIPLIER*_transitionDuration; // Need extra time
-                timeCell.maximumTime = maxTime;
-            }
-            else {
-                float minTime = CMTimeGetSeconds(startTime);
-                if (_transitionsEnabled)
-                    minTime += TRANSITION_LEEWAY_MULTIPLIER*_transitionDuration;
-                timeCell.minimumTime = minTime;
-                
-                timeCell.maximumTime = timeCell.duration;
-            }
-        }
-    }
-    else if ( section == kProjectSection ) {
-        if (row == 0) {
-            cell.textLabel.text = @"Play";
-        }
-        else if (row == 1) {
-            cell.textLabel.text = @"View Thumbnails";
-        }
+//    
+//    // Configure the cell.
+//    if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
+//        AVURLAsset *clip = [self.clips objectAtIndex:section];
+//        if (row == 0) {
+//            if ([clip isKindOfClass:[NSNull class]]) {
+//                cell.textLabel.text = [NSString stringWithFormat:@"Clip %i", section+1];
+//            }
+//            else {
+//                cell.imageView.image = [self.clipThumbnails objectAtIndex:section];
+//                cell.textLabel.text = [[clip.URL lastPathComponent] stringByDeletingPathExtension];
+//            }
+//            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//        }
+//        else {
+//            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
+//            timeCell.sliderXInset = 60.0;
+//            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:15.0];
+//            
+//            NSValue *timeRangeValue = [self.clipTimeRanges objectAtIndex:section];
+//            CMTimeRange timeRange = [timeRangeValue CMTimeRangeValue];
+//            CMTime startTime = timeRange.start;
+//            CMTime endTime = CMTimeAdd(timeRange.start, timeRange.duration);
+//            
+//            timeCell.textLabel.text = (row == 1) ? @"Start" : @" End";
+//            timeCell.flipSlider = (row == 1) ? NO : YES;
+//            timeCell.duration = CMTimeGetSeconds(clip.duration);
+//            float newTimeValue = CMTimeGetSeconds( ( row == 1) ? startTime : endTime );
+//            timeCell.timeValue = newTimeValue;
+//            if (row == 1) {
+//                timeCell.minimumTime = 0.0;
+//                
+//                float maxTime = CMTimeGetSeconds(endTime);
+//                if (_transitionsEnabled)
+//                    maxTime -= TRANSITION_LEEWAY_MULTIPLIER*_transitionDuration; // Need extra time
+//                timeCell.maximumTime = maxTime;
+//            }
+//            else {
+//                float minTime = CMTimeGetSeconds(startTime);
+//                if (_transitionsEnabled)
+//                    minTime += TRANSITION_LEEWAY_MULTIPLIER*_transitionDuration;
+//                timeCell.minimumTime = minTime;
+//                
+//                timeCell.maximumTime = timeCell.duration;
+//            }
+//        }
+//    }
+
+
+//        
         //else {
             //cell.textLabel.text = @"Export";
             //ExportCell *exportCell = (ExportCell*)cell;
@@ -334,29 +320,30 @@ enum {
 //            }
 //            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 //        }
-        else if (row == 2) {
-            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
-            timeCell.textLabel.text = @"Start";
-            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
-            timeCell.sliderXInset = 64.0;
-            timeCell.flipSlider = NO;
-            timeCell.minimumTime = 0.0;
-            BOOL userHasSelectedClips = NO;
-            for (AVURLAsset *clip in self.clips) {
-                if (! [clip isKindOfClass:[NSNull class]]) {
-                    userHasSelectedClips = YES;
-                    break;
-                }
-            }
+//        else if (row == 2) {
+//            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
+//            timeCell.textLabel.text = @"Start";
+//            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
+//            timeCell.sliderXInset = 64.0;
+//            timeCell.flipSlider = NO;
+//            timeCell.minimumTime = 0.0;
+//            BOOL userHasSelectedClips = NO;
+           // for (AVURLAsset *clip in self.clips) {
+               // if (! [clip isKindOfClass:[NSNull class]]) {
+                   // userHasSelectedClips = YES;
+                   // break;
+                //}
+           // }
             // Don't want to use 0.0 (div by 0), 1.0 is arbitrary.
-            timeCell.duration = (self.commentary && userHasSelectedClips) ? self.projectDuration : 1.0;
-            timeCell.maximumTime = (self.commentary && userHasSelectedClips) ? timeCell.duration : 0.0;
-            timeCell.timeValue = _commentaryStartTime;
-        }
-    }
-    else if ( section == kTransitionsSection ) {
-        if (row == 0) {
-            cell.textLabel.text = @"Transitions";
+            //timeCell.duration = (self.commentary && userHasSelectedClips) ? self.projectDuration : 1.0;
+            //timeCell.maximumTime = (self.commentary && userHasSelectedClips) ? timeCell.duration : 0.0;
+            //timeCell.timeValue = _commentaryStartTime;
+//        }
+//    }
+    if ( section == kTransitionsSection ) {
+        if (row == 0)
+        {
+            cell.textLabel.text = @"Add Transitions";
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             UISwitch *toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
@@ -364,30 +351,36 @@ enum {
             [toggleSwitch addTarget:self action:@selector(toggleTransitionsEnabled:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = toggleSwitch;
         }
-        else if (row == 1) {
-            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
-            timeCell.textLabel.text = @"Length";
-            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
-            timeCell.sliderXInset = 72.0;
-            timeCell.flipSlider = NO;
-            timeCell.minimumTime = 0.0;
-            timeCell.duration = 4.0;
-            timeCell.maximumTime = timeCell.duration;
-            timeCell.timeValue = _transitionDuration;
-        }
-        else if (row == 2) {
+        
+//        else if (row == 1)
+//        {
+//            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
+//            timeCell.textLabel.text = @"Length";
+//            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
+//            timeCell.sliderXInset = 72.0;
+//            timeCell.flipSlider = NO;
+//            timeCell.minimumTime = 0.0;
+//            timeCell.duration = 4.0;
+//            timeCell.maximumTime = timeCell.duration;
+//            timeCell.timeValue = _transitionDuration;
+//        }
+        else if (_transitionsEnabled && row == 1)
+        {
             cell.textLabel.text = @"Cross Fade";
-            ///if (_transitionType == SimpleEditorTransitionTypeCrossFade)
-                ///cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            if (_transitionType == TransitionTypeCrossFade)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
-        else if (row == 3) {
+        else if (_transitionsEnabled && row == 2)
+        {
             cell.textLabel.text = @"Push";
-            ///if (_transitionType == SimpleEditorTransitionTypePush)
-                ///cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            if (_transitionType == TransitionTypePush)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
     }
-    else if ( section == kTitlesSection ) {
-        if (row == 0) {
+    else if ( section == kTitlesSection )
+    {
+        if (row == 0)
+        {
             cell.textLabel.text = @"Title";
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -396,85 +389,113 @@ enum {
             [toggleSwitch addTarget:self action:@selector(toggleTitlesEnabled:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = toggleSwitch;
         }
-        else {
-            //TitleEditingCell *editingCell = (TitleEditingCell*)cell;
-            //editingCell.titleText = self.titleText;
-        }
+//        else
+//        {
+////            TitleEditingCell *editingCell = (TitleEditingCell*)cell;
+////            editingCell.titleText = self.titleText;
+//        }
     }
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    //static NSString *NormalCellIdentifier = @"Cell";
-    static NSString *TimeSliderCellIdentifier = @"TimeCell";
-    //static NSString *ExportCellIdentifier = @"ExportCell";
-    //static NSString *TitleEditingCellIdentifier = @"TitleCell";
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+//    
+
+    static NSString *NormalCellIdentifier = @"Cell";
+//    static NSString *TimeSliderCellIdentifier = @"TimeCell";
+//    //static NSString *ExportCellIdentifier = @"ExportCell";
+
+    static NSString *TitleEditingCellIdentifier = @"TitleCell";
+//    
     NSString *cellID = nil;
-    
+//    
+
     NSUInteger section = indexPath.section;
     NSUInteger row = indexPath.row;
-    
-    if ( //((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && ((row == 1) || (row == 2))
+//    
+    //if ( //((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && ((row == 1) || (row == 2))
         //|| ((section == kCommentarySection) && (row == 2))
-        ((section == kTransitionsSection) && (row == 1)) )
-    {
-        cellID = TimeSliderCellIdentifier;
-    }
+//        ((section == kTransitionsSection) && (row == 1)) )
+//    {
+//        cellID = TimeSliderCellIdentifier;
+//    }
    // else if ( (section == kProjectSection) && (row == 2) ) {
 //        cellID = ExportCellIdentifier;
 //    }
-    //else if ( (section == kTitlesSection) && (row == 1) ) {
-//        cellID = TitleEditingCellIdentifier;
-//    }
+    if (section == kTransitionsSection)
+    {
+        cellID = NormalCellIdentifier;
+    }
+    if ( section == kTitlesSection )
+    {
+        cellID = TitleEditingCellIdentifier;
+    }
     //else {
 //        cellID = NormalCellIdentifier;
 //    }
+        ///////
+        ///////
+//
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (cell == nil)
-    {
-        if ( cellID == TimeSliderCellIdentifier )
-        {
-            cell = (UITableViewCell*)[[TimeSliderCell alloc] initWithReuseIdentifier:cellID];
-            [(TimeSliderCell*)cell setDelegate:self];
-        }
+
+    //if (cell == nil)
+//    {
+//        if ( cellID == TimeSliderCellIdentifier )
+//        {
+//            cell = (UITableViewCell*)[[TimeSliderCell alloc] initWithReuseIdentifier:cellID];
+//            [(TimeSliderCell*)cell setDelegate:self];
+//        }
+//   
+    
+    /////////
         //else if ( cellID == ExportCellIdentifier ) {
             //cell = (UITableViewCell*)[[[ExportCell alloc] initWithReuseIdentifier:cellID] autorelease];
             //cell.detailTextLabel.font = [UIFont systemFontOfSize:14.0];
             //cell.detailTextLabel.text = @"Video saved to Camera Roll";
         //}
-        ///else if ( cellID == TitleEditingCellIdentifier ) {
-            ///cell = (UITableViewCell*)[[[TitleEditingCell alloc] initWithReuseIdentifier:cellID] autorelease];
-            ///[(TitleEditingCell*)cell setDelegate:self];
-        ///}
-        else {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-            cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
-        }
+
+    if ( cellID == TitleEditingCellIdentifier ) {
+        //cell = (UITableViewCell*)[[[TitleEditingCell alloc] initWithReuseIdentifier:cellID];
+        cell = [(UITableViewCell*) [UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        //[(TitleEditingCell*)cell setDelegate:self];
+    }
+
+    else {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
     }
     
-    ///if (cellID == NormalCellIdentifier) {
-       /// cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-   /// }
+//
+    if (cellID == NormalCellIdentifier)
+    {
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    }
     
-    [self updateCell:cell forRowAtIndexPath:indexPath];
+  [self updateCell:cell forRowAtIndexPath:indexPath];
+//    
+   return cell;
+//}
     
-    return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     NSString *title = nil;
     
-    if ( section == kClip1Section ) {
-        title = @"Clips";
+    if ( section == kTransitionsSection ) {
+        title = @"Transitions";
     }
-    else if ( section  == kProjectSection ) {
-        title = @"Project";
+    if (section == kTitlesSection)
+    {
+        title = @"Text";
     }
-    else if ( section == kCommentarySection ) {
-        title = @"Options";
-    }
+    
+//    else if ( section  == kProjectSection ) {
+//        title = @"Project";
+//    }
+//    else if ( section == kCommentarySection ) {
+//        title = @"Options";
+//    }
     
     return title;
 }
@@ -488,10 +509,11 @@ enum {
     NSUInteger section = indexPath.section;
     NSUInteger row = indexPath.row;
     
+    
     // Use AssetBrowser for rows which allow clip selection.
-    if ( (((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && (row == 0))
-        || ((section == kCommentarySection) && (row == 1)) ) {
-        
+//    if ( (((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && (row == 0))
+//        || ((section == kCommentarySection) && (row == 1)) ) {
+//        
         //if (! self.assetBrowser)
         //{
             //			AssetBrowserController *browser = [[[AssetBrowserController alloc] initWithSourceType:AssetBrowserSourceTypeAll] autorelease];
@@ -504,117 +526,124 @@ enum {
            // browserAlbum.delegate = self;
             //self.assetBrowser = [[[UINavigationController alloc] initWithRootViewController:browserAlbum] autorelease];
        // }
-        
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-        _currentlyChoosingClipForSection = section;
-        [self presentViewController:self.assetBrowser animated:YES completion:NULL];
-        
-    }
-    else if ( section == kProjectSection )
-    {
-        BOOL userHasSelectedClips = NO;
-        for (AVURLAsset *clip in self.clips) {
-            if (! [clip isKindOfClass:[NSNull class]]) {
-                userHasSelectedClips = YES;
-                break;
-            }
-        }
-        if (! userHasSelectedClips) {
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-            return;
-        }
+//        
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+//        _currentlyChoosingClipForSection = section;
+//        [self presentViewController:self.assetBrowser animated:YES completion:NULL];
+//        
+//    }
+//    else if ( section == kProjectSection )
+//    {
+//        BOOL userHasSelectedClips = NO;
+//        for (AVURLAsset *clip in self.clips) {
+//            if (! [clip isKindOfClass:[NSNull class]]) {
+//                userHasSelectedClips = YES;
+//                break;
+//            }
+//        }
+//        if (! userHasSelectedClips) {
+//            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+//            return;
+//        }
         
         // Synchronize changes with the editor.
-        [self synchronizeWithEditor];
-        
-        if (row == 0) {
-            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-            [[self.navigationController navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
-            
+//        [self synchronizeWithEditor];
+//        
+//        if (row == 0) {
+//            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+
+    [[self.navigationController navigationBar] setBarStyle:UIBarStyleBlackTranslucent];
+//            
            // PlaybackViewController *playerController = [[[PlayerViewController alloc] initWithEditor:self.editor] autorelease];
             //[self.navigationController pushViewController:playerController animated:YES];
-        }
-        else if (row == 1) {
+//        }
+//        else if (row == 1) {
            // ThumbnailViewController *thumbnailController = [[[ThumbnailViewController alloc] initWithEditor:self.editor] autorelease];
            // [self.navigationController pushViewController:thumbnailController animated:YES];
             
-        }
-        else {
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-            if (_exporting) {
-                return;
-            }
-            [self beginExport];
-        }
-    }
-    else
-    {
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        
+        //}
+//        else {
+//            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+//            if (_exporting) {
+//                return;
+//            }
+//            [self beginExport];
+//        }
+//    }
+//    else
+//    {
+//        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+//        
         if (section == kTransitionsSection)
         {
-            if ( (row == 2) || (row == 3) )
+    
+            // if (row == 2 || row == 3)
+            if ( (row == 1) || (row == 2) )
             {
                 //////////
-//                NSUInteger newTransitionType = (row == 2) ? SimpleEditorTransitionTypeCrossFade : SimpleEditorTransitionTypePush;
-//                
-//                if (newTransitionType != _transitionType)
-//                {
-//                    _transitionType = newTransitionType;
-//                    NSRange range = {2,2};
-//                    
-//                    for (NSIndexPath *path in [self indexPathsForSection:section inRange:range])
-//                    {
-//                        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
-//                        [self updateCell:cell forRowAtIndexPath:path];
-//                    }
+                NSUInteger newTransitionType = (row == 1) ? TransitionTypeCrossFade : TransitionTypePush;
+
+                if (newTransitionType != _transitionType)
+                {
+                    _transitionType = newTransitionType;
+                    NSRange range = {1,2};
+                   
+                    for (NSIndexPath *path in [self indexPathsForSection:section inRange:range])
+                    {
+                        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:path];
+                        [self updateCell:cell forRowAtIndexPath:path];
+                    }
                 ////////
+                    
+
+                   
                 }
+                
             }
         }
 }
 
 
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSUInteger section = indexPath.section;
-    NSUInteger row = indexPath.row;
-    UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
-    
-    if ( ((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && (row == 0) ) {
-        AVURLAsset *clip = [self.clips objectAtIndex:section];
-        if (! [clip isKindOfClass:[NSNull class]]) {
-            style = UITableViewCellEditingStyleDelete;
-        }
-    }
-    return style;
-}
+//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSUInteger section = indexPath.section;
+//    NSUInteger row = indexPath.row;
+//    UITableViewCellEditingStyle style = UITableViewCellEditingStyleNone;
+//    
+//    if ( ((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && (row == 0) ) {
+//        AVURLAsset *clip = [self.clips objectAtIndex:section];
+//        if (! [clip isKindOfClass:[NSNull class]]) {
+//            style = UITableViewCellEditingStyleDelete;
+//        }
+//    }
+//    return style;
+//}
 
-- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return @"Remove";
-}
+//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return @"Remove";
+//}
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSUInteger section = indexPath.section;
-    NSUInteger row = indexPath.row;
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        if ( ((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && (row == 0) ) {
-            [self.clips replaceObjectAtIndex:indexPath.section withObject:[NSNull null]];
-            [self.clipTimeRanges replaceObjectAtIndex:indexPath.section withObject:[NSNull null]];
-            [self.clipThumbnails replaceObjectAtIndex:indexPath.section withObject:[NSNull null]];
-            
-            NSRange range = {1, 2};
-            NSArray *indexPathsToDelete = [self indexPathsForSection:section inRange:range];
-            [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
-            
-            NSIndexPath *indexPathToReload = [NSIndexPath indexPathForRow:0 inSection:section];
-            [self performSelector:@selector(reloadIndexPath:) withObject:indexPathToReload afterDelay:0.0];
-        }
-    }
-}
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSUInteger section = indexPath.section;
+//    NSUInteger row = indexPath.row;
+//    
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//        if ( ((section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section)) && (row == 0) ) {
+//            [self.clips replaceObjectAtIndex:indexPath.section withObject:[NSNull null]];
+//            [self.clipTimeRanges replaceObjectAtIndex:indexPath.section withObject:[NSNull null]];
+//            [self.clipThumbnails replaceObjectAtIndex:indexPath.section withObject:[NSNull null]];
+//            
+//            NSRange range = {1, 2};
+//            NSArray *indexPathsToDelete = [self indexPathsForSection:section inRange:range];
+//            [self.tableView deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+//            
+//            NSIndexPath *indexPathToReload = [NSIndexPath indexPathForRow:0 inSection:section];
+//            [self performSelector:@selector(reloadIndexPath:) withObject:indexPathToReload afterDelay:0.0];
+//        }
+//    }
+//}
 
 - (void)reloadIndexPath:(NSIndexPath*)path
 {
@@ -753,75 +782,75 @@ enum {
 #pragma mark Transitions
 
 // Includes the impact of clip overlap due to transitions.
-- (float)projectDuration
-{
-    NSMutableArray *validClipTimeRanges = [NSMutableArray arrayWithCapacity:3];
-    for (NSValue *timeRangeValue in self.clipTimeRanges) {
-        if (! [timeRangeValue isKindOfClass:[NSNull class]]) {
-            [validClipTimeRanges addObject:timeRangeValue];
-        }
-    }
+//- (float)projectDuration
+//{
+//    NSMutableArray *validClipTimeRanges = [NSMutableArray arrayWithCapacity:3];
+//    for (NSValue *timeRangeValue in self.clipTimeRanges) {
+//        if (! [timeRangeValue isKindOfClass:[NSNull class]]) {
+//            [validClipTimeRanges addObject:timeRangeValue];
+//        }
+//    }
     
-    CMTime projectDuration = kCMTimeZero;
-    NSUInteger idx = 0;
-    NSUInteger clipCount = [validClipTimeRanges count];
-    for (NSValue *timeRangeValue in validClipTimeRanges)
-    {
-        CMTime clipDuration = [timeRangeValue CMTimeRangeValue].duration;
-        projectDuration = CMTimeAdd(projectDuration, clipDuration);
-        if (_transitionsEnabled && (idx != (clipCount-1)) )
-        {
-            CMTime amountTrimmedByTransition = CMTimeMakeWithSeconds(_transitionDuration, 600);
-            if ( CMTIME_COMPARE_INLINE(amountTrimmedByTransition, >, clipDuration) ) {
-                amountTrimmedByTransition = clipDuration;
-            }
-            projectDuration = CMTimeSubtract(projectDuration, amountTrimmedByTransition);
-        }
-        idx++;
-    }
-    return CMTimeGetSeconds(projectDuration);
-}
-
-- (void)constrainClipTimeRangesBasedOnTransitionDuration
-{
-    if (_transitionsEnabled) {
-        // Constrain self.clipTimeRanges, and tell the clip sections to reload if they are visible.
-        NSUInteger idx;
-        for (idx = 0; idx < [self.clipTimeRanges count]; idx++)
-        {
-            NSValue *timeRangeValue = [self.clipTimeRanges objectAtIndex:idx];
-            if (! [timeRangeValue isKindOfClass:[NSNull class]])
-            {
-                CMTimeRange timeRange = [timeRangeValue CMTimeRangeValue];
-                CMTime minDuration = CMTimeMakeWithSeconds(TRANSITION_LEEWAY_MULTIPLIER*_transitionDuration, 600);
-                if ( CMTIME_COMPARE_INLINE(timeRange.duration, <, minDuration) )
-                {
-                    timeRange.duration = minDuration;
-                    CMTime assetDuration = [(AVURLAsset*)[self.clips objectAtIndex:idx] duration];
-                    if ( CMTIME_COMPARE_INLINE(timeRange.duration, >, assetDuration) )
-                    {
-                        CMTime differenceToMakeUp = CMTimeSubtract(timeRange.duration, assetDuration);
-                        timeRange.start = CMTimeSubtract(timeRange.start, differenceToMakeUp);
-                        if ( CMTIME_COMPARE_INLINE(timeRange.start, <, kCMTimeZero) )
-                        {
-                            timeRange.start = kCMTimeZero;
-                            timeRange.duration = assetDuration;
-                        }
-                    }
-                }
-                [self.clipTimeRanges replaceObjectAtIndex:idx withObject:[NSValue valueWithCMTimeRange:timeRange]];
-            }
-        }
-    }
-    for (NSIndexPath *visibleIndexPath in [self.tableView indexPathsForVisibleRows]) {
-        NSUInteger section = visibleIndexPath.section;
-        
-        if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:visibleIndexPath];
-            [self updateCell:cell forRowAtIndexPath:visibleIndexPath];
-        }
-    }
-}
+//    CMTime projectDuration = kCMTimeZero;
+//    NSUInteger idx = 0;
+//    NSUInteger clipCount = [validClipTimeRanges count];
+//    for (NSValue *timeRangeValue in validClipTimeRanges)
+//    {
+//        CMTime clipDuration = [timeRangeValue CMTimeRangeValue].duration;
+//        projectDuration = CMTimeAdd(projectDuration, clipDuration);
+//        if (_transitionsEnabled && (idx != (clipCount-1)) )
+//        {
+//            CMTime amountTrimmedByTransition = CMTimeMakeWithSeconds(_transitionDuration, 600);
+//            if ( CMTIME_COMPARE_INLINE(amountTrimmedByTransition, >, clipDuration) ) {
+//                amountTrimmedByTransition = clipDuration;
+//            }
+//            projectDuration = CMTimeSubtract(projectDuration, amountTrimmedByTransition);
+//        }
+//        idx++;
+//    }
+//    return CMTimeGetSeconds(projectDuration);
+//}
+//
+//- (void)constrainClipTimeRangesBasedOnTransitionDuration
+//{
+//    if (_transitionsEnabled) {
+//        // Constrain self.clipTimeRanges, and tell the clip sections to reload if they are visible.
+//        NSUInteger idx;
+//        for (idx = 0; idx < [self.clipTimeRanges count]; idx++)
+//        {
+//            NSValue *timeRangeValue = [self.clipTimeRanges objectAtIndex:idx];
+//            if (! [timeRangeValue isKindOfClass:[NSNull class]])
+//            {
+//                CMTimeRange timeRange = [timeRangeValue CMTimeRangeValue];
+//                CMTime minDuration = CMTimeMakeWithSeconds(TRANSITION_LEEWAY_MULTIPLIER*_transitionDuration, 600);
+//                if ( CMTIME_COMPARE_INLINE(timeRange.duration, <, minDuration) )
+//                {
+//                    timeRange.duration = minDuration;
+//                    CMTime assetDuration = [(AVURLAsset*)[self.clips objectAtIndex:idx] duration];
+//                    if ( CMTIME_COMPARE_INLINE(timeRange.duration, >, assetDuration) )
+//                    {
+//                        CMTime differenceToMakeUp = CMTimeSubtract(timeRange.duration, assetDuration);
+//                        timeRange.start = CMTimeSubtract(timeRange.start, differenceToMakeUp);
+//                        if ( CMTIME_COMPARE_INLINE(timeRange.start, <, kCMTimeZero) )
+//                        {
+//                            timeRange.start = kCMTimeZero;
+//                            timeRange.duration = assetDuration;
+//                        }
+//                    }
+//                }
+//                [self.clipTimeRanges replaceObjectAtIndex:idx withObject:[NSValue valueWithCMTimeRange:timeRange]];
+//            }
+//        }
+//    }
+//    for (NSIndexPath *visibleIndexPath in [self.tableView indexPathsForVisibleRows]) {
+//        NSUInteger section = visibleIndexPath.section;
+//        
+//        if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
+//            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:visibleIndexPath];
+//            [self updateCell:cell forRowAtIndexPath:visibleIndexPath];
+//        }
+//    }
+//}
 
 //- (void)constrainCommentaryStartTimeBasedOnProjectDuration
 //{
@@ -834,23 +863,31 @@ enum {
 //    }
 //}
 
-- (IBAction)toggleTransitionsEnabled:(UISwitch*)sender
+- (void)toggleTransitionsEnabled:(UISwitch*)sender
 {
     if (_transitionsEnabled == sender.on)
         return;
     _transitionsEnabled = sender.on;
+
+    NSRange range = {0, 2};
+   
+    //NSRange range = {1, 3};
+    NSIndexPath *indexPath1 = [NSIndexPath indexPathForRow:1 inSection:kTransitionsSection];
+    NSIndexPath *indexPath2 = [NSIndexPath indexPathForRow:2 inSection:kTransitionsSection];
     
-    NSRange range = {1, 3};
-    NSArray *indexPathsToInsertOrDeleted = [self indexPathsForSection:kTransitionsSection inRange:range];
+    NSArray *indexPathsToInsertOrDeleted = [NSArray arrayWithObjects:indexPath1,indexPath2,nil];
     
-    if (_transitionsEnabled) {
+    if (_transitionsEnabled)
+    {
+        self.videoMerger.transitionType = TransitionTypeCrossFade;
         [self.tableView insertRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
-        [self.tableView scrollToRowAtIndexPath:[indexPathsToInsertOrDeleted lastObject] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+        //[self.tableView scrollToRowAtIndexPath:[indexPathsToInsertOrDeleted lastObject] atScrollPosition:UITableViewScrollPositionNone animated:YES];
     }
     else {
+        self.videoMerger.transitionType = TransitionTypeNone;
         [self.tableView deleteRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
     }
-    [self constrainClipTimeRangesBasedOnTransitionDuration];
+   // [self constrainClipTimeRangesBasedOnTransitionDuration];
 //    [self constrainCommentaryStartTimeBasedOnProjectDuration];
 }
 
@@ -947,10 +984,10 @@ enum {
     [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 }
 
-- (void)assetBrowserDidCancel
-{
-    [self dismissViewControllerAnimated:YES completion:NULL];
-}
+//- (void)assetBrowserDidCancel
+//{
+//    [self dismissViewControllerAnimated:YES completion:NULL];
+//}
 
 
 //#pragma mark -
@@ -1029,45 +1066,45 @@ enum {
 #pragma mark -
 #pragma mark TimeSliderCell Delegate
 
-- (void)sliderCellTimeValueDidChange:(TimeSliderCell*)cell
-{
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    NSUInteger section = indexPath.section;
-    NSUInteger row = indexPath.row;
-    
-    // Update the selected time range.
-    if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
-        NSValue *timeRangeValue = [self.clipTimeRanges objectAtIndex:section];
-        CMTimeRange timeRange = [timeRangeValue CMTimeRangeValue];
-        
-        CMTime startTime = timeRange.start;
-        CMTime endTime = CMTimeAdd(timeRange.start, timeRange.duration);
-        if (row == 1) {
-            startTime = CMTimeMakeWithSeconds(cell.timeValue, 600);
-        }
-        else {
-            endTime = CMTimeMakeWithSeconds(cell.timeValue, 600);
-        }
-        
-        timeRange.start = startTime;
-        timeRange.duration = CMTimeSubtract(endTime, startTime);
-        
-        timeRangeValue = [NSValue valueWithCMTimeRange:timeRange];
-        [self.clipTimeRanges replaceObjectAtIndex:section withObject:timeRangeValue];
-        
-   
-    }
-    else if ((section == kCommentarySection) && (row == 2)) {
-        _commentaryStartTime = cell.timeValue;
-    }
-    else if ((section == kTransitionsSection) && (row == 1)) {
-        _transitionDuration = cell.timeValue;
-        [self constrainClipTimeRangesBasedOnTransitionDuration];
-       
-    }
-    
-    [self updateCell:cell forRowAtIndexPath:indexPath];
-}
+//- (void)sliderCellTimeValueDidChange:(TimeSliderCell*)cell
+//{
+//    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+//    NSUInteger section = indexPath.section;
+//    NSUInteger row = indexPath.row;
+//    
+//    // Update the selected time range.
+//    if ( (section == kClip1Section) || (section == kClip2Section) || (section == kClip3Section) ) {
+//        NSValue *timeRangeValue = [self.clipTimeRanges objectAtIndex:section];
+//        CMTimeRange timeRange = [timeRangeValue CMTimeRangeValue];
+//        
+//        CMTime startTime = timeRange.start;
+//        CMTime endTime = CMTimeAdd(timeRange.start, timeRange.duration);
+//        if (row == 1) {
+//            startTime = CMTimeMakeWithSeconds(cell.timeValue, 600);
+//        }
+//        else {
+//            endTime = CMTimeMakeWithSeconds(cell.timeValue, 600);
+//        }
+//        
+//        timeRange.start = startTime;
+//        timeRange.duration = CMTimeSubtract(endTime, startTime);
+//        
+//        timeRangeValue = [NSValue valueWithCMTimeRange:timeRange];
+//        [self.clipTimeRanges replaceObjectAtIndex:section withObject:timeRangeValue];
+//        
+//   
+//    }
+//    else if ((section == kCommentarySection) && (row == 2)) {
+//        _commentaryStartTime = cell.timeValue;
+//    }
+//    else if ((section == kTransitionsSection) && (row == 1)) {
+//        _transitionDuration = cell.timeValue;
+//        [self constrainClipTimeRangesBasedOnTransitionDuration];
+//       
+//    }
+//    
+//    [self updateCell:cell forRowAtIndexPath:indexPath];
+//}
 
 #pragma mark -
 #pragma mark TitleEditingCell Delegate

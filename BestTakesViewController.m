@@ -11,6 +11,7 @@
 #import "ScenesTableViewController.h"
 #import "VideoLibrary.h"
 #import "Take.h"
+#import "EditingOptionsViewController.h"
 @interface BestTakesViewController () <UINavigationControllerDelegate>
 {
     UIActivityIndicatorView *loadingIndicator;
@@ -19,7 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *concatenateButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) VideoLibrary *videoLibrary;
-
+@property (nonatomic) TransitionTypes transitionType;
+@property (nonatomic, strong) EditingOptionsViewController *editingOptionsVC;
 @end
 
 @implementation BestTakesViewController
@@ -50,7 +52,7 @@
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(didFinishConcatenatingVideos:) name:@"videoMergingCompletedNotification" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTransitionType:) name:@"changeTransitionType" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -120,7 +122,13 @@
     Take *take = self.takesToConcatenate[indexPath.row];
     
     cell.textLabel.text = take.sceneTitle;
+    
+    
+    
+    cell.detailTextLabel.text = take.durationInSeconds;
    
+    
+    
     if (take.thumbnail == nil)
     {
         [take loadThumbnailWithCompletionHandler:^(UIImage* image)
@@ -195,7 +203,16 @@
 
 - (IBAction)concatenateSelectedTakes:(id)sender
 {
-    VideoMerger *merger = [[VideoMerger alloc]init];
+    if (self.editingOptionsVC)
+    {
+        self.transitionType = self.editingOptionsVC.transitionType;
+    }
+    else
+    {
+        self.transitionType = TransitionTypeNone;
+    }
+    VideoMerger *merger = [[VideoMerger alloc] init];
+    merger.transitionType = _transitionType;
     NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
     // uncomment later - testing 
     //if (self.takesToConcatenate.count > 1)
@@ -206,6 +223,7 @@
     //{
       //  NSLog(@"Please select more than one video.");
     //}
+    
     [merger exportVideoComposition:[merger buildCompositionObjects:self.takesToConcatenate]];
 }
 
