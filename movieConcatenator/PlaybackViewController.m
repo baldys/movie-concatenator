@@ -22,9 +22,7 @@
 - (IBAction)scrub:(id)sender;
 - (IBAction)endScrubbing:(id)sender;
 - (BOOL)isScrubbing;
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
-//- (id)init;
-- (void)dealloc;
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation;
 - (void)viewDidLoad;
 - (void)viewWillDisappear:(BOOL)animated;
@@ -33,11 +31,12 @@
 - (void)setURLFromTake;
 //- (void)setURL:(NSURL*)URL;
 //- (NSURL*)URL;
-
+@property (nonatomic, getter=isTrimmingVideo) BOOL trimmingVideo;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *starButton;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *trashButton;
 - (IBAction)delete:(id)sender;
 - (IBAction)star:(id)sender;
+- (IBAction)trim:(id)sender;
 
 @end
 
@@ -69,44 +68,24 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 //}
 - (void)setURLFromTake
 {
-//    if (mURL != URL)
-//    {
-//        mURL = [URL copy];
-//    }
     if (!self.takeToPlay)
     {
         return;
     }
-        AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
-        NSArray *requestedKeys = @[@"playable"];
-        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
-         ^{
-             dispatch_async( dispatch_get_main_queue(),
-                            ^{
-                                /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
-                                [self prepareToPlayAsset:asset withKeys:requestedKeys];
-                            });
-         }];
-        
-    
-        /*
-         Create an asset for inspection of a resource referenced by a given URL.
-         Load the values for the asset key "playable".
-         */
-       // AVURLAsset *asset = [AVURLAsset URLAssetWithURL:mURL options:nil];
-        
-//        NSArray *requestedKeys = @[@"playable"];
-//        
-//        /* Tells the asset to load the values of any of the specified keys that are not already loaded. */
-//        [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
-//         ^{
-//             dispatch_async( dispatch_get_main_queue(),
-//                            ^{
-//                                /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
-//                                [self prepareToPlayAsset:asset withKeys:requestedKeys];
-//                            });
-//         }];
-    
+    /*
+     Create an asset for inspection of a resource referenced by a given URL.
+     Load the values for the asset key "playable".
+     */
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
+    NSArray *requestedKeys = @[@"playable"];
+    [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
+    ^{
+        dispatch_async( dispatch_get_main_queue(),
+        ^{
+            /* IMPORTANT: Must dispatch to main queue in order to operate on the AVPlayer and AVPlayerItem. */
+            [self prepareToPlayAsset:asset withKeys:requestedKeys];
+        });
+    }];
 }
 
 #pragma mark -
@@ -192,8 +171,6 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         if (didConfirmDelete)
         {
             NSLog(@"did confirm delete");
-            //[self dismissViewControllerAnimated:YES completion:nil];
-           // [self.navigationController popViewControllerAnimated:NO];
         }
     }];
     
@@ -218,6 +195,29 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     }
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:self.takeToPlay];
+    
+}
+
+- (IBAction)trim:(id)sender
+{
+    self.trimmingVideo = YES;
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(finishTrimmingVideo:)];
+    self.navigationItem.rightBarButtonItem = doneButton;
+    
+    
+    // if this button gets pressed, whatever position the slider is in will correspond to the time in which the video should be cut out when a done button is pressed. set this time to the new time range of the take that is being played.
+    
+    // if slider gets moved to a new position then the done button gets pressed, that value will be the new start time value
+    
+    
+}
+
+- (IBAction)finishTrimmingVideo:(id)sender
+{
+    // the done button was pressed. get the last time represented by the slider
+    self.trimmingVideo = NO;
+    
     
 }
 /* Display AVMetadataCommonKeyTitle and AVMetadataCommonKeyCopyrights metadata. */
@@ -320,6 +320,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     }
     
     double duration = CMTimeGetSeconds(playerDuration);
+    
     if (isfinite(duration))
     {
         float minValue = [self.mScrubber minimumValue];
@@ -349,18 +350,27 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         UISlider* slider = sender;
         
         CMTime playerDuration = [self playerItemDuration];
-        if (CMTIME_IS_INVALID(playerDuration)) {
+        if (CMTIME_IS_INVALID(playerDuration)){
             return;
         }
         
         double duration = CMTimeGetSeconds(playerDuration);
+        
+    
         if (isfinite(duration))
         {
             float minValue = [slider minimumValue];
             float maxValue = [slider maximumValue];
             float value = [slider value];
-            
+            NSLog(@"slider value: %f", value);
             double time = duration * (value - minValue) / (maxValue - minValue);
+            
+            // if the video is to be trimmed, get the sliders time
+            if (self.isTrimmingVideo)
+            {
+                self.trimmedTime_initial = time;
+                NSLog(@"time: %f", time);
+            }
             
             [self.mPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -383,6 +393,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         }
         
         double duration = CMTimeGetSeconds(playerDuration);
+        
         if (isfinite(duration))
         {
             CGFloat width = CGRectGetWidth([self.mScrubber bounds]);

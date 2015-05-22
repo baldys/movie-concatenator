@@ -221,7 +221,7 @@
     //{
       //  NSLog(@"Please select more than one video.");
     //}
-    self.videoMerger.transitionType = self.transitionType;
+    
     [self.videoMerger exportVideoComposition:[self.videoMerger buildCompositionObjects:self.takesToConcatenate]];
 }
 

@@ -240,7 +240,11 @@
                         </variation>
                     </view>
                     <toolbarItems>
-                        <barButtonItem title="Item" id="9co-a5-aTa"/>
+                        <barButtonItem title="Item" id="9co-a5-aTa">
+                            <connections>
+                                <action selector="trim:" destination="6gR-HO-YQm" id="OOn-4I-aiY"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem image="white-outline-star-32.png" id="7LK-zN-0co" userLabel="Star Button Item">
                             <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>

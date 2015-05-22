@@ -52,6 +52,11 @@
 @property (nonatomic, strong) UIBarButtonItem *mPauseButton;
 @property (nonatomic, strong) UISlider* mScrubber;
 @property (nonatomic, strong) NSArray *playbackItems;
+
+
+@property (nonatomic) double trimmedTime_initial;
+@property (nonatomic) double trimmedTime_final;
+
 - (IBAction)play:(id)sender;
 - (IBAction)pause:(id)sender;
 //- (IBAction)showMetadata:(id)sender;
