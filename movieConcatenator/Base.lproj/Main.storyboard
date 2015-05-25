@@ -206,35 +206,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vet-jQ-qiS" customClass="PlaybackView">
-                                <rect key="frame" x="-1" y="64" width="601" height="487"/>
+                            <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="vet-jQ-qiS" customClass="PlaybackView">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="bottom" misplaced="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
+                                        <rect key="frame" x="0.0" y="408" width="600" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="Q7e-SO-5lz"/>
+                                        </constraints>
+                                        <items/>
+                                        <color key="barTintColor" red="1" green="0.43643057072685643" blue="0.30567984724843511" alpha="1" colorSpace="calibratedRGB"/>
+                                    </toolbar>
+                                </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="bottom" ambiguous="YES" misplaced="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
-                                <rect key="frame" x="-1" y="556" width="600" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="X3x-lU-HIa"/>
+                                    <constraint firstAttribute="centerX" secondItem="a4h-zP-2uA" secondAttribute="centerX" id="CFW-DY-gUA"/>
+                                    <constraint firstAttribute="bottom" secondItem="a4h-zP-2uA" secondAttribute="bottom" constant="100" id="W9i-ct-cXH"/>
+                                    <constraint firstItem="a4h-zP-2uA" firstAttribute="width" secondItem="vet-jQ-qiS" secondAttribute="width" id="bVM-ay-CNv"/>
                                 </constraints>
-                                <items/>
-                                <color key="barTintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            </toolbar>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="width" secondItem="Vhd-uz-jiK" secondAttribute="width" id="4Ye-BG-d4a"/>
-                            <constraint firstAttribute="centerX" secondItem="vet-jQ-qiS" secondAttribute="centerX" id="COX-Di-X5u"/>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="leading" secondItem="Vhd-uz-jiK" secondAttribute="leadingMargin" constant="-16" id="Cft-tn-BRF"/>
-                            <constraint firstItem="Bw4-le-lig" firstAttribute="bottom" secondItem="vet-jQ-qiS" secondAttribute="bottom" id="PlB-LM-B39"/>
-                            <constraint firstItem="Bw4-le-lig" firstAttribute="bottom" secondItem="vet-jQ-qiS" secondAttribute="bottom" id="p4w-Ti-LNK"/>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="top" secondItem="FDz-mI-ma1" secondAttribute="top" id="wFK-XF-y8p"/>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="trailing" secondItem="Vhd-uz-jiK" secondAttribute="trailingMargin" constant="-16" id="yjq-5q-0vP"/>
+                            <constraint firstAttribute="width" secondItem="vet-jQ-qiS" secondAttribute="width" id="8vW-AG-0eU"/>
+                            <constraint firstAttribute="centerX" secondItem="vet-jQ-qiS" secondAttribute="centerX" id="Gux-dR-8pu"/>
+                            <constraint firstAttribute="height" secondItem="vet-jQ-qiS" secondAttribute="height" id="qPN-Ps-xvJ"/>
+                            <constraint firstAttribute="centerY" secondItem="vet-jQ-qiS" secondAttribute="centerY" id="qhW-kT-agA"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Cft-tn-BRF"/>
-                                <exclude reference="yjq-5q-0vP"/>
-                            </mask>
-                        </variation>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="ht7-1X-LiP"/>
@@ -247,7 +245,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a9c-Q6-GZ5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-42" y="-562"/>
+            <point key="canvasLocation" x="-80" y="-554"/>
         </scene>
         <!--Add New Scene-->
         <scene sceneID="GdX-Ut-iyH">
