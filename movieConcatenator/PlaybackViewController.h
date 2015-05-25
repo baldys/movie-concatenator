@@ -54,8 +54,8 @@
 @property (nonatomic, strong) NSArray *playbackItems;
 
 
-@property (nonatomic) double trimmedTime_initial;
-@property (nonatomic) double trimmedTime_final;
+@property (nonatomic) CMTime trimmedTime_initial;
+@property (nonatomic) CMTime trimmedTime_final;
 
 - (IBAction)play:(id)sender;
 - (IBAction)pause:(id)sender;

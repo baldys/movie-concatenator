@@ -107,10 +107,12 @@ enum {
     
     // Recover from the player's status bar transition.
     UIApplication *app = [UIApplication sharedApplication];
-    if ([app statusBarStyle] != UIStatusBarStyleDefault) {
+    if ([app statusBarStyle] != UIStatusBarStyleDefault)
+    {
         [app setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     }
-    if ([self.navigationController.navigationBar barStyle] != UIBarStyleDefault) {
+    if ([self.navigationController.navigationBar barStyle] != UIBarStyleDefault)
+    {
         [self.navigationController.navigationBar setBarStyle:UIBarStyleDefault];
     }
     

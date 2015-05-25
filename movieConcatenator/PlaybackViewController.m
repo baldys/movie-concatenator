@@ -31,9 +31,18 @@
 - (void)setURLFromTake;
 //- (void)setURL:(NSURL*)URL;
 //- (NSURL*)URL;
+
+@property (strong, nonatomic) UISlider *startTrimScrubber;
+@property (strong, nonatomic) UISlider *endTrimScrubber;
+
 @property (nonatomic, getter=isTrimmingVideo) BOOL trimmingVideo;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *starButton;
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *trashButton;
+@property (strong, nonatomic) UIBarButtonItem *starButton;
+@property (strong, nonatomic) UIBarButtonItem *trashButton;
+
+@property (strong, nonatomic) UIBarButtonItem *trimButton;
+@property (nonatomic, strong) UIView *trimmingControlsView;
+@property (strong, nonatomic) UIBarButtonItem *doneTrimmingButton;
+
 - (IBAction)delete:(id)sender;
 - (IBAction)star:(id)sender;
 - (IBAction)trim:(id)sender;
@@ -49,6 +58,8 @@
 - (void)observeValueForKeyPath:(NSString*) path ofObject:(id)object change:(NSDictionary*)change context:(void*)context;
 - (void)prepareToPlayAsset:(AVURLAsset *)asset withKeys:(NSArray *)requestedKeys;
 
+
+
 @end
 
 static void *PlaybackViewControllerRateObservationContext = &PlaybackViewControllerRateObservationContext;
@@ -57,8 +68,6 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
 #pragma mark -
 @implementation PlaybackViewController
-
-//@synthesize mPlayer, mPlayerItem, mPlaybackView, mToolbar, mPlayButton, mPauseButton, mScrubber;
 
 #pragma mark Asset URL
 
@@ -98,12 +107,10 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     self.mPlayButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(play:)];
     self.mPauseButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pause:)];
     self.mScrubber = [[UISlider alloc] init];
-    [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
-    [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
-    [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
     
-    [self.trashButton setAction:@selector(delete:)];
-    
+    self.trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(delete:)];
+    self.starButton = [[UIBarButtonItem alloc] init];
+    //[self.starButton setTarget:self];
     if ([self.takeToPlay isSelected])
     {
         [self.starButton setImage:[UIImage imageNamed:@"blue-star-32"]];
@@ -111,12 +118,43 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     }
     else
     {
+        [self.starButton setImage:[UIImage imageNamed:@"white-outline-star-32"]];
         [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"white-outline-star-24"]];
     }
-    
     [self.starButton setAction:@selector(star:)];
     
+    self.trimButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scissors-32"] landscapeImagePhone:[UIImage imageNamed:@"scissors-24"] style:UIBarButtonItemStyleDone target:self action:@selector(trim:)];
+    
+    [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
+    [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+    [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
+    
+    //[self.trashButton setAction:@selector(delete:)];
+    
+  
+    //[self.starButton setAction:@selector(star:)];
+    
 }
+
+//- (void) setSelectedStarImage
+//{
+//    if (![self.takeToPlay isSelected])
+//    {
+//        [self.starButton setImage:[UIImage imageNamed:@"blue-star-32"]];
+//        [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"blue-star-24"]];
+//        [self.takeToPlay setSelected:YES];
+//    }
+//    
+//}
+//-(void) setDeselectedStarImage
+//{
+//    
+//    [self.starButton setImage:[UIImage imageNamed:@"white-outline-star-32"]];
+//    [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"white-outline-star-24"]];
+//    [self.takeToPlay setSelected:NO];
+//    
+// 
+//}
 
 - (IBAction)play:(id)sender
 {
@@ -198,13 +236,134 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
 }
 
+- (void) enableTrimmingSliders
+{
+    [self.startTrimScrubber setEnabled:YES];
+    [self.endTrimScrubber setEnabled:YES];
+}
+
+- (void)disableTrimmingSliders
+{
+    [self.startTrimScrubber setEnabled:NO];
+    [self.endTrimScrubber setEnabled:NO];
+}
+
+- (void) unhideBars
+{
+    [self.mToolbar setHidden:NO];
+    
+    [self.tabBarController.tabBar setHidden:NO];
+}
+- (void) hideBars
+{
+    [self.mToolbar setHidden:YES];
+    
+    [self.tabBarController.tabBar setHidden:YES];
+    
+}
+
+- (void) showTrimmingControls
+{
+   // [self.trimmingControlsView setHidden:NO];
+    
+   // self.trimmingControlsView.frame = CGRectMake(0,self.view.frame.size.height-200, self.view.frame.size.width, 200);
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, CGRectGetHeight([self.trimmingControlsView bounds])) ];
+        //self.trimmingControlsView.frame = CGRectOffset(self.trimmingControlsView.frame, 0, -200);
+       // self.trimmingControlsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 200);
+
+    } completion:
+     ^(BOOL finished)
+     {
+         [self hideBars];
+     }];
+}
+- (void) hideTrimmingControls
+{
+    if (self.startTrimScrubber.isHidden && self.endTrimScrubber.isHidden)
+    {
+        return;
+    }
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.trimmingControlsView setTransform:CGAffineTransformIdentity];
+        //self.trimmingControlsView.frame = CGRectZero;
+    } completion:
+     ^(BOOL finished)
+     {
+         [self unhideBars];
+         [self.doneTrimmingButton setEnabled:NO];
+     }];
+    
+}
+#pragma mark - trimming controls
+
+// show trimming controls
+- (void)initializeTrimmingControls
+{
+    //UIView* view  = [self view];
+    
+    //self.trimmingControlsView = [[UIView alloc] init];
+    
+    //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-200, self.view.bounds.size.width, 200)];
+    
+    //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    
+    [self.trimmingControlsView setBackgroundColor:[UIColor redColor]];
+    [self.trimmingControlsView setOpaque:YES];
+    
+    [self.view addSubview:self.trimmingControlsView];
+
+    [self.view bringSubviewToFront:self.trimmingControlsView];
+    
+    
+    self.startTrimScrubber = [[UISlider alloc] init];
+    self.endTrimScrubber = [[UISlider alloc] init];
+    
+    [self.startTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
+    [self.startTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+    [self.startTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
+   
+    [self.endTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
+    [self.endTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+    [self.endTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
+    
+    self.startTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
+    self.endTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
+    
+    
+    //[self.view addSubview:self.trimmingControlsView];
+    [self.trimmingControlsView addSubview:self.startTrimScrubber];
+    [self.trimmingControlsView addSubview:self.endTrimScrubber];
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, -200)];
+        //self.trimmingControlsView.frame = CGRectOffset(self.trimmingControlsView.frame, 0, -200);
+        // self.trimmingControlsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 200);
+        
+    } completion:
+     ^(BOOL finished)
+     {
+         //[self hideBars];
+     }];
+
+    
+    
+}
+
 - (IBAction)trim:(id)sender
 {
+    [self.trimmingControlsView setHidden:NO];
     self.trimmingVideo = YES;
-    
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(finishTrimmingVideo:)];
-    self.navigationItem.rightBarButtonItem = doneButton;
-    
+    [self disableScrubber];
+    [self enableTrimmingSliders];
+    [self initializeTrimmingControls];
+    self.doneTrimmingButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(finishTrimmingVideo:)];
+    self.navigationItem.rightBarButtonItem = self.doneTrimmingButton;
+    [self.doneTrimmingButton setEnabled:YES];
     
     // if this button gets pressed, whatever position the slider is in will correspond to the time in which the video should be cut out when a done button is pressed. set this time to the new time range of the take that is being played.
     
@@ -217,7 +376,14 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 {
     // the done button was pressed. get the last time represented by the slider
     self.trimmingVideo = NO;
+    //self.trimmingControlsView.frame = self.view.frame.size.height;
     
+    
+    [self hideTrimmingControls];
+    [self enableScrubber];
+    [self disableTrimmingSliders];
+//    self.trimmingControlsView = nil;
+//    [self.trimmingControlsView removeFromSuperview];
     
 }
 /* Display AVMetadataCommonKeyTitle and AVMetadataCommonKeyCopyrights metadata. */
@@ -285,7 +451,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 /* Requests invocation of a given block during media playback to update the movie scrubber control. */
 -(void)initScrubberTimer
 {
-    double interval = .1f;
+    double interval = .01f;
     
     CMTime playerDuration = [self playerItemDuration];
     if (CMTIME_IS_INVALID(playerDuration))
@@ -301,12 +467,10 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     /* Update the scrubber during normal playback. */
     __weak PlaybackViewController *weakSelf = self;
-    mTimeObserver = [self.mPlayer addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC)
-                                                               queue:NULL /* If you pass NULL, the main queue is used. */
-                                                          usingBlock:^(CMTime time)
-                     {
-                         [weakSelf syncScrubber];
-                     }];
+    mTimeObserver = [self.mPlayer addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(interval, NSEC_PER_SEC) queue:NULL /* If you pass NULL, the main queue is used. */ usingBlock:^(CMTime time)
+        {
+            [weakSelf syncScrubber];
+        }];
 }
 
 /* Set the scrubber based on the player current time. */
@@ -350,7 +514,9 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         UISlider* slider = sender;
         
         CMTime playerDuration = [self playerItemDuration];
-        if (CMTIME_IS_INVALID(playerDuration)){
+        
+        if (CMTIME_IS_INVALID(playerDuration))
+        {
             return;
         }
         
@@ -365,10 +531,18 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
             NSLog(@"slider value: %f", value);
             double time = duration * (value - minValue) / (maxValue - minValue);
             
+            
             // if the video is to be trimmed, get the sliders time
             if (self.isTrimmingVideo)
             {
-                self.trimmedTime_initial = time;
+                if (sender == self.startTrimScrubber)
+                {
+                    self.trimmedTime_initial = CMTimeMake(duration*(value-minValue), maxValue-minValue);;
+                }
+                else if (sender == self.endTrimScrubber)
+                {
+                    self.trimmedTime_final = CMTimeMake(duration*(value-minValue), maxValue-minValue);;
+                }
                 NSLog(@"time: %f", time);
             }
             
@@ -492,8 +666,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     UIView* view  = [self view];
 
     [self.navigationController setToolbarHidden:NO animated:NO];
-//    [self.tabBarController.tabBar setHidden:YES];
-    //[self setURLFromTake];
+
     UISwipeGestureRecognizer* swipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     [swipeUpRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
     [view addGestureRecognizer:swipeUpRecognizer];
@@ -512,14 +685,23 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     //UIBarButtonItem *infoItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
     
-    self.mToolbar.items = @[self.mPlayButton, scrubberItem];//, infoItem];
+    self.mToolbar.items = @[self.mPlayButton, scrubberItem, self.trimButton, self.starButton, self.trashButton];//, infoItem];
+    CGFloat spaceForScrubberOnToolbar = self.view.frame.size.width - (36*self.mToolbar.items.count);
+    [scrubberItem setWidth:spaceForScrubberOnToolbar];
     isSeeking = NO;
     [self initScrubberTimer];
     
     [self syncPlayPauseButtons];
     [self syncScrubber];
+    //[self initializeTrimmingControls];
+    self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.view addSubview:self.trimmingControlsView];
+    self.trimmingControlsView.frame = CGRectMake(0, self.view.frame.size.height, self.view.bounds.size.width, 200);
+    [self.view bringSubviewToFront:self.trimmingControlsView];
     
-    
+    //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
+    //[self.view addSubview:self.trimmingControlsView];
+    [self.trimmingControlsView setHidden:NO];
 }
 
 -  (void)viewDidDisappear:(BOOL)animated

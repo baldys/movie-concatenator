@@ -183,6 +183,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="_tableView" destination="iLZ-Xg-fI4" id="6a9-qZ-BVY"/>
                         <segue destination="xm6-hf-0Po" kind="show" identifier="ShowTakesViewController" id="QGb-Jn-TGM"/>
@@ -206,30 +207,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vet-jQ-qiS" customClass="PlaybackView">
-                                <rect key="frame" x="-1" y="64" width="601" height="448"/>
+                                <rect key="frame" x="-1" y="64" width="601" height="487"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
-                                <rect key="frame" x="0.0" y="512" width="600" height="44"/>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="bottom" ambiguous="YES" misplaced="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
+                                <rect key="frame" x="-1" y="556" width="600" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="X3x-lU-HIa"/>
                                 </constraints>
                                 <items/>
-                                <color key="barTintColor" red="0.040397758729999997" green="0.0" blue="0.1627801452" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="vet-jQ-qiS" firstAttribute="width" secondItem="Vhd-uz-jiK" secondAttribute="width" id="4Ye-BG-d4a"/>
-                            <constraint firstAttribute="centerX" secondItem="a4h-zP-2uA" secondAttribute="centerX" id="A1g-dC-7QC"/>
-                            <constraint firstItem="Bw4-le-lig" firstAttribute="top" secondItem="a4h-zP-2uA" secondAttribute="bottom" id="BSZ-P4-8FL"/>
-                            <constraint firstAttribute="centerX" secondItem="vet-jQ-qiS" secondAttribute="centerX" constant="0.5" id="COX-Di-X5u"/>
+                            <constraint firstAttribute="centerX" secondItem="vet-jQ-qiS" secondAttribute="centerX" id="COX-Di-X5u"/>
                             <constraint firstItem="vet-jQ-qiS" firstAttribute="leading" secondItem="Vhd-uz-jiK" secondAttribute="leadingMargin" constant="-16" id="Cft-tn-BRF"/>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="top" secondItem="FDz-mI-ma1" secondAttribute="bottom" id="gV1-ov-2aQ"/>
-                            <constraint firstItem="a4h-zP-2uA" firstAttribute="top" secondItem="vet-jQ-qiS" secondAttribute="bottom" id="mj8-Rj-Fpj"/>
-                            <constraint firstItem="Bw4-le-lig" firstAttribute="top" secondItem="vet-jQ-qiS" secondAttribute="bottom" constant="44" id="p4w-Ti-LNK"/>
-                            <constraint firstAttribute="width" secondItem="a4h-zP-2uA" secondAttribute="width" id="qKd-3V-N0i"/>
-                            <constraint firstItem="vet-jQ-qiS" firstAttribute="top" secondItem="FDz-mI-ma1" secondAttribute="bottom" id="wFK-XF-y8p"/>
+                            <constraint firstItem="Bw4-le-lig" firstAttribute="bottom" secondItem="vet-jQ-qiS" secondAttribute="bottom" id="PlB-LM-B39"/>
+                            <constraint firstItem="Bw4-le-lig" firstAttribute="bottom" secondItem="vet-jQ-qiS" secondAttribute="bottom" id="p4w-Ti-LNK"/>
+                            <constraint firstItem="vet-jQ-qiS" firstAttribute="top" secondItem="FDz-mI-ma1" secondAttribute="top" id="wFK-XF-y8p"/>
                             <constraint firstItem="vet-jQ-qiS" firstAttribute="trailing" secondItem="Vhd-uz-jiK" secondAttribute="trailingMargin" constant="-16" id="yjq-5q-0vP"/>
                         </constraints>
                         <variation key="default">
@@ -239,35 +236,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem title="Item" id="9co-a5-aTa">
-                            <connections>
-                                <action selector="trim:" destination="6gR-HO-YQm" id="OOn-4I-aiY"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem image="white-outline-star-32.png" id="7LK-zN-0co" userLabel="Star Button Item">
-                            <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <action selector="star:" destination="6gR-HO-YQm" id="mRF-fE-jFZ"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem systemItem="flexibleSpace" id="DuH-IS-gDi">
-                            <color key="tintColor" red="0.0" green="0.1764705882" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        </barButtonItem>
-                        <barButtonItem systemItem="trash" id="ZNo-8A-47y">
-                            <connections>
-                                <action selector="delete:" destination="6gR-HO-YQm" id="0pA-VG-B4N"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" id="ht7-1X-LiP"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" barStyle="black"/>
                     <connections>
                         <outlet property="mPlaybackView" destination="vet-jQ-qiS" id="ga1-0d-6s9"/>
                         <outlet property="mToolbar" destination="a4h-zP-2uA" id="rpY-E6-e9J"/>
-                        <outlet property="starButton" destination="7LK-zN-0co" id="7ay-V9-hb9"/>
-                        <outlet property="trashButton" destination="ZNo-8A-47y" id="YUr-2H-WSs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a9c-Q6-GZ5" userLabel="First Responder" sceneMemberID="firstResponder"/>

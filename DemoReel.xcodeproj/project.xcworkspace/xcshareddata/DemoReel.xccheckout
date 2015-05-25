@@ -6,15 +6,19 @@
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>7C98038B-3E80-420C-97CE-95D4A28955AC</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DemoReel</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>BD893928031B82E11AF375E900FD2C7660C961C2</key>
 		<string>github.com:baldys/movie-concatenator.git</string>
 	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>DemoReel.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>BD893928031B82E11AF375E900FD2C7660C961C2</key>
-		<string>movieConcatenator/</string>
+		<string>../../../movie-concatenator-movieplayertoolbar</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:baldys/movie-concatenator.git</string>
@@ -24,6 +28,14 @@
 	<string>BD893928031B82E11AF375E900FD2C7660C961C2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>BD893928031B82E11AF375E900FD2C7660C961C2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>movie-concatenator-movieplayertoolbar</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

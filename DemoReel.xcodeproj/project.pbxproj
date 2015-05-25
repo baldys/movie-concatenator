@@ -89,6 +89,9 @@
 		9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */; };
 		9FEDAF901B07BEC900301DD3 /* TimeSliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF8F1B07BEC900301DD3 /* TimeSliderCell.m */; };
 		9FEDAF931B07BFEF00301DD3 /* EditingOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */; };
+		9FEDAF991B130E9600301DD3 /* TrimmingControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF981B130E9600301DD3 /* TrimmingControlsView.m */; };
+		9FEDAF9F1B13567F00301DD3 /* scissors-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FEDAF9E1B13567F00301DD3 /* scissors-32.png */; };
+		9FEDAFA11B13568400301DD3 /* scissors-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FEDAFA01B13568400301DD3 /* scissors-24.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,8 +211,12 @@
 		9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoView.m; sourceTree = "<group>"; };
 		9FEDAF8E1B07BEC900301DD3 /* TimeSliderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSliderCell.h; sourceTree = "<group>"; };
 		9FEDAF8F1B07BEC900301DD3 /* TimeSliderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeSliderCell.m; sourceTree = "<group>"; };
-		9FEDAF911B07BFEF00301DD3 /* EditingOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditingOptionsViewController.h; sourceTree = "<group>"; };
-		9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditingOptionsViewController.m; sourceTree = "<group>"; };
+		9FEDAF911B07BFEF00301DD3 /* EditingOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditingOptionsViewController.h; path = ../EditingOptionsViewController.h; sourceTree = "<group>"; };
+		9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditingOptionsViewController.m; path = ../EditingOptionsViewController.m; sourceTree = "<group>"; };
+		9FEDAF971B130E9600301DD3 /* TrimmingControlsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrimmingControlsView.h; sourceTree = "<group>"; };
+		9FEDAF981B130E9600301DD3 /* TrimmingControlsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrimmingControlsView.m; sourceTree = "<group>"; };
+		9FEDAF9E1B13567F00301DD3 /* scissors-32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scissors-32.png"; sourceTree = "<group>"; };
+		9FEDAFA01B13568400301DD3 /* scissors-24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scissors-24.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +287,8 @@
 			isa = PBXGroup;
 			children = (
 				9F9BC52F1ACE849A00994E9A /* switch19-2.png */,
+				9FEDAFA01B13568400301DD3 /* scissors-24.png */,
+				9FEDAF9E1B13567F00301DD3 /* scissors-32.png */,
 				9F9BC5241ACE3EEC00994E9A /* noun_video-camera_65291.png */,
 				9F8E5DA91AD35125009BE712 /* play-black-64.png */,
 				9F8E5DAB1AD35138009BE712 /* add-Video-120.png */,
@@ -341,8 +350,6 @@
 				9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9FEDAF8E1B07BEC900301DD3 /* TimeSliderCell.h */,
-				9FEDAF911B07BFEF00301DD3 /* EditingOptionsViewController.h */,
-				9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */,
 				9FEDAF8F1B07BEC900301DD3 /* TimeSliderCell.m */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
@@ -409,6 +416,8 @@
 		9FAFA7831A9EA5B200F7396B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				9FEDAF911B07BFEF00301DD3 /* EditingOptionsViewController.h */,
+				9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */,
 				9FB946F71AF7F374001C34E3 /* BestTakesViewController.h */,
 				9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */,
 				9F8E5DA61AD34C7A009BE712 /* TakesViewController.h */,
@@ -466,6 +475,8 @@
 				9FB854051AEB5E8D00D7F66C /* PlaybackView.m */,
 				9FB854071AEB5F5100D7F66C /* PlaybackViewController.h */,
 				9FB854081AEB5F5100D7F66C /* PlaybackViewController.m */,
+				9FEDAF971B130E9600301DD3 /* TrimmingControlsView.h */,
+				9FEDAF981B130E9600301DD3 /* TrimmingControlsView.m */,
 				9FB9C3C71AC273F300952250 /* Video Camera */,
 			);
 			name = "Video Player";
@@ -562,6 +573,7 @@
 				9F4815801AB306500027F1A0 /* 00cdea-outline-star-64.png in Resources */,
 				9F9BC5461AD0F43F00994E9A /* video-camera2c.png in Resources */,
 				9FB946EA1AED1B5A001C34E3 /* blue-star-48.png in Resources */,
+				9FEDAFA11B13568400301DD3 /* scissors-24.png in Resources */,
 				9F8B65851AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png in Resources */,
 				9F9BC50E1ACE088100994E9A /* ffffff-switch-camera-64.png in Resources */,
 				9F9BC5321ACE8A3900994E9A /* camera2-4.png in Resources */,
@@ -575,6 +587,7 @@
 				9F9BC5081ACDD38E00994E9A /* noun_clapperboard_78382.png in Resources */,
 				9F740EA31AD3A48F00F3F23D /* little-vid-icon.png in Resources */,
 				9F8E5DAE1AD35FB2009BE712 /* videos-concatenate.png in Resources */,
+				9FEDAF9F1B13567F00301DD3 /* scissors-32.png in Resources */,
 				9F740EA41AD3A48F00F3F23D /* little-vid-icon2.png in Resources */,
 				9F3B4D4E1AE4BD360056E4C7 /* recording.png in Resources */,
 				9F9BC54A1AD0F62900994E9A /* video-camera2d.png in Resources */,
@@ -636,6 +649,7 @@
 				9FAFA77F1A9C170A00F7396B /* Take.m in Sources */,
 				9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */,
 				9FEDAF901B07BEC900301DD3 /* TimeSliderCell.m in Sources */,
+				9FEDAF991B130E9600301DD3 /* TrimmingControlsView.m in Sources */,
 				9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */,
 				9FEDAF931B07BFEF00301DD3 /* EditingOptionsViewController.m in Sources */,
 				9FAFA7451A98884A00F7396B /* AppDelegate.m in Sources */,
