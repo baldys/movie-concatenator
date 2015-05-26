@@ -311,16 +311,19 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
     
     
-    [self.trimmingControlsView setBackgroundColor:[UIColor redColor]];
+    [self.trimmingControlsView setBackgroundColor:[UIColor blackColor]];
     [self.trimmingControlsView setOpaque:YES];
     
     [self.view addSubview:self.trimmingControlsView];
 
     [self.view bringSubviewToFront:self.trimmingControlsView];
     
+    if(!self.startTrimScrubber && !self.endTrimScrubber)
+    {
+        self.startTrimScrubber = [[UISlider alloc] init];
+        self.endTrimScrubber = [[UISlider alloc] init];
+    }
     
-    self.startTrimScrubber = [[UISlider alloc] init];
-    self.endTrimScrubber = [[UISlider alloc] init];
     
     [self.startTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
     [self.startTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
@@ -330,8 +333,8 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.endTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
     [self.endTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
     
-    self.startTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
-    self.endTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
+    self.startTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-140, 20);
+    self.endTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-50, self.trimmingControlsView.frame.size.width-140, 20);
     
     
     //[self.view addSubview:self.trimmingControlsView];
@@ -340,14 +343,14 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     [UIView animateWithDuration:0.5 animations:^{
         
-        [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, -200)];
+        [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, -100)];
         //self.trimmingControlsView.frame = CGRectOffset(self.trimmingControlsView.frame, 0, -200);
         // self.trimmingControlsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 200);
         
     } completion:
      ^(BOOL finished)
      {
-         //[self hideBars];
+         [self hideBars];
      }];
 
     
@@ -696,7 +699,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     //[self initializeTrimmingControls];
     self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.view addSubview:self.trimmingControlsView];
-    self.trimmingControlsView.frame = CGRectMake(0, self.view.frame.size.height, self.view.bounds.size.width, 200);
+    self.trimmingControlsView.frame = CGRectMake(0, self.view.frame.size.height, self.view.bounds.size.width, 100);
     [self.view bringSubviewToFront:self.trimmingControlsView];
     
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
