@@ -639,12 +639,12 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 {
     [super viewDidUnload];
 }
-//- (void) viewWillAppear:(BOOL)animated
-//{
+- (void) viewWillAppear:(BOOL)animated
+{
 //    [super viewDidAppear:animated];
 //    [self.tabBarController hidesBottomBarWhenPushed];
-//    [self.navigationController setToolbarHidden:NO animated:NO];
-//}
+    [self.navigationController setToolbarHidden:YES animated:NO];
+}
 
 - (void) viewDidAppear:(BOOL)animated
 {
@@ -665,7 +665,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     UIView* view  = [self view];
 
-    [self.navigationController setToolbarHidden:NO animated:NO];
+    //[self.navigationController setToolbarHidden:NO animated:NO];
 
     UISwipeGestureRecognizer* swipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
     [swipeUpRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];

@@ -209,21 +209,27 @@
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="vet-jQ-qiS" customClass="PlaybackView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="bottom" misplaced="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
-                                        <rect key="frame" x="0.0" y="408" width="600" height="44"/>
+                                    <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="bottom" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="a4h-zP-2uA">
+                                        <rect key="frame" x="0.0" y="506" width="600" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="Q7e-SO-5lz"/>
                                         </constraints>
                                         <items/>
-                                        <color key="barTintColor" red="1" green="0.43643057072685643" blue="0.30567984724843511" alpha="1" colorSpace="calibratedRGB"/>
                                     </toolbar>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="a4h-zP-2uA" secondAttribute="trailing" id="7bT-xf-Sux"/>
                                     <constraint firstAttribute="centerX" secondItem="a4h-zP-2uA" secondAttribute="centerX" id="CFW-DY-gUA"/>
-                                    <constraint firstAttribute="bottom" secondItem="a4h-zP-2uA" secondAttribute="bottom" constant="100" id="W9i-ct-cXH"/>
+                                    <constraint firstItem="a4h-zP-2uA" firstAttribute="leading" secondItem="vet-jQ-qiS" secondAttribute="leading" id="IFe-eO-Zlc"/>
+                                    <constraint firstAttribute="bottom" secondItem="a4h-zP-2uA" secondAttribute="bottom" constant="50" id="R5O-OG-YHG"/>
                                     <constraint firstItem="a4h-zP-2uA" firstAttribute="width" secondItem="vet-jQ-qiS" secondAttribute="width" id="bVM-ay-CNv"/>
+                                    <constraint firstItem="a4h-zP-2uA" firstAttribute="top" secondItem="vet-jQ-qiS" secondAttribute="top" constant="506" id="sWc-jU-q8b"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="sWc-jU-q8b"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
