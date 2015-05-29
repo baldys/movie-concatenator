@@ -16,7 +16,7 @@
 
 //+ (VideoLibrary*)selectedVideos;
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
-@property (nonatomic, strong) NSMutableArray *finalCompositions;
+@property (nonatomic, strong) NSMutableArray *editedVideoURLs;
 
 
 + (instancetype)libraryWithFilename:(NSString*)filename;
@@ -26,9 +26,9 @@
 -(NSArray *)listFileAtPath:(NSString *)path;
 - (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex;
 - (NSString*) documentsDirectory;
-@property (nonatomic, copy) void (^completionBlock)(BOOL);
 
-- (void)listScenesAndTakes;
+- (void) addURLToEditedVideos:(NSURL*)url;
+@property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 - (NSMutableArray*)selectedTakes;
 @end

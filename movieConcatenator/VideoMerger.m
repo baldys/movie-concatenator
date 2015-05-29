@@ -18,16 +18,25 @@
 
 @implementation VideoMerger
 
-
-- (instancetype)initWithTransitionType:(TransitionType)transitionType
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
-        self.transitionType = transitionType;
+        self.videoLibrary = [VideoLibrary libraryWithFilename:@"videoLibrary.plist"];
+      
     }
     return self;
 }
+//- (instancetype)initWithTransitionType:(TransitionType)transitionType
+//{
+//    self = [super init];
+//    if (self)
+//    {
+//        self.transitionType = transitionType;
+//    }
+//    return self;
+//}
 
 // get the assets from takes
 - (void)prepareAssetsFromTakes:(NSArray*)takes
@@ -143,7 +152,23 @@
 
 - (AVAsset*)buildTransitionComposition:(NSArray*)takes
 {
+    if (self.frontFacingVideoInTakes)
+    {
+        NSLog(@"front facing video is in the group of takes.");
+        for (int i=0; i<takes.count; i++)
+        {
+            if ([takes[i] videoOrientationAndPosition] == (LandscapeLeft_Back|LandscapeRight_Back))
+            {
+                NSLog(@"video was recorded using back facing camera, so this video willbe exported smaller?");
+                
+                
+                
+                
+            }
+        }
+    }
     
+        
     self.transitionDuration = CMTimeMakeWithSeconds(1, 1); // default transition time=1second
     
     self.composition = [AVMutableComposition composition];
@@ -553,6 +578,162 @@
     }
     
     return self.composition;
+}
+
+- (void) exportAssetToScaleDown:(AVAsset*)assetToScale
+{
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:assetToScale presetName:AVAssetExportPreset1280x720];
+    
+    
+}
+// create a new version of this take with the trimmed time range and replace the old take with the new take but keep the same file name so it can be accessed from the same location. Initially it is exported to the temporary directory then this file replaces the take in its original location with the same asset id
+
+- (void) exportTrimmedTake:(Take*)take
+{
+    AVAsset *asset = [AVURLAsset URLAssetWithURL:take.getFileURL options:nil];
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset1920x1080];
+    exporter.timeRange = take.timeRange;
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    //
+    exporter.outputURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"temp.mov"]];
+    
+    
+    [exporter exportAsynchronouslyWithCompletionHandler:
+     ^{
+         dispatch_async(dispatch_get_main_queue(),
+                        ^{
+                            [self exportDidFinish:exporter];
+                            NSLog(@"exported video");
+                            if (exporter.status ==AVAssetExportSessionStatusCompleted)
+                            {
+                                NSError *error = nil;
+                                NSURL *oldURL = take.getFileURL;
+                                NSLog(@"take url: %@", take.getFileURL);
+                                NSURL *outputURL = exporter.outputURL;
+                                [[NSFileManager defaultManager] replaceItemAtURL:[take getFileURL] withItemAtURL:outputURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&oldURL error:&error];
+                                if (error)
+                                {
+                                    NSLog(@"%@", error);
+                                }
+                                
+                            }
+                            
+                        });
+     }];
+    
+}
+
+// existing asset -> audio+video asset tracks -> add to  MutableComposition
+// put in some controller class
+- (void) exportVideoComposition:(AVAsset*)composition
+{
+    // 5 - Create exporter
+    
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPreset1920x1080];
+    
+    exporter.outputURL = [self createOutputURLWithFilename:@"videoComposition"];
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    exporter.shouldOptimizeForNetworkUse = YES;
+    exporter.videoComposition = self.videoComposition;
+    //TODO: exporter.audioComposition = an instance of MutableAudioMix
+    
+    [exporter exportAsynchronouslyWithCompletionHandler:
+     ^{
+         dispatch_async(dispatch_get_main_queue(),
+                        ^{
+                            [self exportDidFinish:exporter];
+                            NSLog(@"exported video");
+                            
+                            
+                        });
+     }];
+}
+
+- (void) addURLToMergedVideosArray:(NSURL*)url
+{
+    
+    if (!self.compositions)
+    {
+        self.compositions = [NSMutableArray array];
+    }
+    [self.compositions addObject:url];
+    
+}
+
+- (NSURL*) createOutputURLWithFilename:(NSString*)filename
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@-%d.mov",filename, arc4random() % 1000]];
+    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+    
+    
+    return url;
+}
+
+
+-(void)exportDidFinish:(AVAssetExportSession*)session
+{
+    if (session.status == AVAssetExportSessionStatusCompleted)
+    {
+        NSURL *outputURL = session.outputURL;
+        
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        
+        if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:outputURL])
+        {
+            [library writeVideoAtPathToSavedPhotosAlbum:outputURL completionBlock:^(NSURL *assetURL, NSError *error)
+             {
+                 dispatch_async(dispatch_get_main_queue(),
+                                ^{
+                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingCompletedNotification" object:nil];
+                                    if (error)
+                                    {
+                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                        [alert show];
+                                    }
+                                    else
+                                    {
+                                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                        [self addURLToMergedVideosArray:outputURL];
+                                        [self.videoLibrary addURLToEditedVideos:outputURL];
+                                        [alert show];
+                                        
+                                        
+                                        
+                                    }
+                                    
+                                    
+                                });
+             }];
+        }
+    }
+    else if (session.status == AVAssetExportSessionStatusFailed)
+    {
+        NSLog(@"EPIC FAIL");
+        if ([[NSFileManager defaultManager] fileExistsAtPath:session.outputURL.path])
+        {
+            if (![[NSFileManager defaultManager] removeItemAtURL:session.outputURL error:nil])
+            {
+                NSLog(@"error with removing item at outputURL");
+            }
+        }
+    }
+    else if (session.status == AVAssetExportSessionStatusExporting)
+    {
+        NSLog(@"exporting");
+    }
+    else if (session.status == AVAssetExportSessionStatusWaiting)
+    {
+        NSLog(@"waiting....");
+    }
+    else if (session.status == AVAssetExportSessionStatusUnknown)
+    {
+        NSLog(@"??????");
+    }
+}
+    
+
     /*
     for (AVAsset *asset in self.videoClips)
     {
@@ -849,7 +1030,7 @@
 
 
    
-}
+
 /*
  - (AVAsset*)performWithAsset:(AVAsset*)asset
 {
@@ -955,107 +1136,6 @@
 }
 */
          
-         
-// existing asset -> audio+video asset tracks -> add to  MutableComposition
-// put in some controller class
-- (void) exportVideoComposition:(AVAsset*)composition
-{
-    // 5 - Create exporter
-    
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPreset1920x1080];
-    
-    exporter.outputURL = [self createOutputURL];
-    exporter.outputFileType = AVFileTypeQuickTimeMovie;
-    exporter.shouldOptimizeForNetworkUse = YES;
-    exporter.videoComposition = self.videoComposition;
-    //TODO: exporter.audioComposition = an instance of MutableAudioMix
-    
-    [exporter exportAsynchronouslyWithCompletionHandler:
-     ^{
-         dispatch_async(dispatch_get_main_queue(),
-                        ^{
-                            [self exportDidFinish:exporter];
-                            NSLog(@"exported video");
-                            
-                            
-                        });
-     }];
-}
-
-- (void) addURLToMergedVideosArray:(NSURL*)url
-{
-    if (!self.compositions)
-    {
-        self.compositions = [NSMutableArray array];
-    }
-    [self.compositions addObject:url];
-    
-}
-
-- (NSURL*) createOutputURL
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"auditionVideo-%d.mov",arc4random() % 1000]];
-    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
-  
-    [self addURLToMergedVideosArray:url];
-    return url;
-}
-
--(void)exportDidFinish:(AVAssetExportSession*)session
-{
-    if (session.status == AVAssetExportSessionStatusCompleted)
-    {
-        NSURL *outputURL = session.outputURL;
-        
-        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-        
-        if ([library videoAtPathIsCompatibleWithSavedPhotosAlbum:outputURL])
-        {
-            [library writeVideoAtPathToSavedPhotosAlbum:outputURL completionBlock:^(NSURL *assetURL, NSError *error)
-             {
-                 dispatch_async(dispatch_get_main_queue(),
-                ^{
-                     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingCompletedNotification" object:nil];
-                    if (error)
-                    {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Video Saving Failed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        [alert show];
-                    }
-                    else
-                    {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                        
-                        [alert show];
-                       
-                        
-                        
-                    }
-                    
-                    
-                });
-             }];
-        }
-    }
-    else if (session.status == AVAssetExportSessionStatusFailed)
-    {
-        NSLog(@"EPIC FAIL");
-    }
-    else if (session.status == AVAssetExportSessionStatusExporting)
-    {
-        NSLog(@"exporting");
-    }
-    else if (session.status == AVAssetExportSessionStatusWaiting)
-    {
-        NSLog(@"waiting....");
-    }
-    else if (session.status == AVAssetExportSessionStatusUnknown)
-    {
-        NSLog(@"??????");
-    }
-}
-
 
 
 

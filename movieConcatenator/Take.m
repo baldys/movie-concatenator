@@ -80,7 +80,7 @@
         
     
     NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
-    self.durationInSeconds = [NSString stringWithFormat:@"%i:%f",minutes, seconds];
+    self.durationInSeconds = [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
     
 }
 - (instancetype) initWithURL:(NSURL*)url

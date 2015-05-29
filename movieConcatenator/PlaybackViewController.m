@@ -8,7 +8,7 @@
 
 #import "PlaybackViewController.h"
 #import "PlaybackView.h"
-
+#import "VideoMerger.h"
 @interface PlaybackViewController ()
 
 - (void)play:(id)sender;
@@ -124,15 +124,14 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.starButton setAction:@selector(star:)];
     
     self.trimButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scissors-32"] landscapeImagePhone:[UIImage imageNamed:@"scissors-24"] style:UIBarButtonItemStyleDone target:self action:@selector(trim:)];
+    // touch drag inside
+    [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
+    // touch drag enter
+    [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDown];
+    // touch drag exit
+    [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit|UIControlEventTouchUpInside];
     
-    [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
-    [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
-    [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
-    
-    //[self.trashButton setAction:@selector(delete:)];
-    
-  
-    //[self.starButton setAction:@selector(star:)];
+   
     
 }
 
@@ -364,7 +363,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self disableScrubber];
     [self enableTrimmingSliders];
     [self initializeTrimmingControls];
-    self.doneTrimmingButton = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:self action:@selector(finishTrimmingVideo:)];
+    self.doneTrimmingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(finishTrimmingVideo:)];
     self.navigationItem.rightBarButtonItem = self.doneTrimmingButton;
     [self.doneTrimmingButton setEnabled:YES];
     
@@ -385,8 +384,27 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self hideTrimmingControls];
     [self enableScrubber];
     [self disableTrimmingSliders];
+
+    // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
+    
+    
+    
 //    self.trimmingControlsView = nil;
 //    [self.trimmingControlsView removeFromSuperview];
+    
+    
+    // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
+    
+    self.takeToPlay.timeRange = CMTimeRangeFromTimeToTime(self.trimmedTime_initial, self.trimmedTime_final);
+    //CMTime newDuration = CMTimeMake(self.takeToPlay.timeRange.duration, NSEC_PER_MSEC);
+    
+    //self.takeToPlay.duration = self.takeToPlay.timeRange.duration;
+    //AVAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
+    self.videoMerger = [[VideoMerger alloc] init];
+    [self.videoMerger exportTrimmedTake:self.takeToPlay];
+    
+    ///NSLog(@"new duration: %d", self.takeToPlay.timeRange.duration);
+    
     
 }
 /* Display AVMetadataCommonKeyTitle and AVMetadataCommonKeyCopyrights metadata. */
@@ -540,16 +558,23 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
             {
                 if (sender == self.startTrimScrubber)
                 {
-                    self.trimmedTime_initial = CMTimeMake(duration*(value-minValue), maxValue-minValue);;
+                    // self.trimmedTime_initial = CMTimeMake(duration*(value-minValue), maxValue-minValue);
+                    self.trimmedTime_initial = CMTimeMakeWithSeconds(time, NSEC_PER_MSEC);
+                    
+                    NSLog(@"new start time: %f", time);
                 }
                 else if (sender == self.endTrimScrubber)
                 {
-                    self.trimmedTime_final = CMTimeMake(duration*(value-minValue), maxValue-minValue);;
+                    
+                    // time to the nearest milisecond?
+                    self.trimmedTime_final = CMTimeMakeWithSeconds(time, NSEC_PER_MSEC);
+                    NSLog(@"new end time: %f", time);
+                    
                 }
                 NSLog(@"time: %f", time);
             }
             
-            [self.mPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_SEC) completionHandler:^(BOOL finished) {
+            [self.mPlayer seekToTime:CMTimeMakeWithSeconds(time, NSEC_PER_MSEC) completionHandler:^(BOOL finished) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     isSeeking = NO;
                 });

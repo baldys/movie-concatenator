@@ -13,7 +13,7 @@
 
 @class AVURLAsset;
 
-@interface EditingOptionsViewController : UITableViewController//<AssetBrowserAlbumControllerDelegate>
+@interface EditingOptionsViewController : UITableViewController
 {
   
     
@@ -25,7 +25,6 @@
     NSMutableArray *_clipTimeRanges;
     
     BOOL _transitionsEnabled;
-    //SimpleEditorTransitionType _transitionType;
     float _transitionDuration;
     
     BOOL _titlesEnabled;

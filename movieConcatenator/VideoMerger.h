@@ -7,14 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Scene.h"
-#import "Take.h"
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "VideoLibrary.h"
+#import "Scene.h"
+#import "Take.h"
 
 typedef NS_ENUM(NSInteger, TransitionType)
 {
@@ -33,14 +34,14 @@ typedef NS_ENUM(NSInteger, TransitionType)
 
 @property (nonatomic, strong) NSArray *videoClips;
 @property (nonatomic, strong) NSMutableArray *clipTimeRanges; // array of CMTimeRanges stored in NSValues.
-@property (nonatomic, strong) void(^completionBlock)(BOOL success);
-
 @property (nonatomic, strong) NSMutableArray *compositions;
 
 @property (nonatomic) CMTime transitionDuration;
+@property (nonatomic, strong) VideoLibrary *videoLibrary;
 
 -(AVAsset*)spliceAssets: (NSArray*)takes;
-- (AVAsset*)buildCompositionObjects:(NSArray*)takes;
+-(AVAsset*)buildCompositionObjects:(NSArray*)takes;
+-(void) exportTrimmedTake:(Take*)take;
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;

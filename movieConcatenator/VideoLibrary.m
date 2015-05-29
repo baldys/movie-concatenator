@@ -49,9 +49,9 @@
         {
             self.scenes = [NSMutableArray array];
         }
-        if (!self.finalCompositions)
+        if (!self.editedVideoURLs)
         {
-            self.finalCompositions = [NSMutableArray array];
+            self.editedVideoURLs = [NSMutableArray array];
         }
        
         ///
@@ -69,7 +69,7 @@
         if (!self.scenes) {
             self.scenes  = [[NSMutableArray alloc] init];
         }
-        self.finalCompositions = [[aDecoder decodeObjectForKey:@"finalCompositions"]mutableCopy];
+        self.editedVideoURLs = [[aDecoder decodeObjectForKey:@"editedVideoURLs"]mutableCopy];
         
         
         
@@ -81,6 +81,17 @@
 - (void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.scenes forKey:@"scenes"];
+    [aCoder encodeObject:self.editedVideoURLs forKey:@"editedVideoURLs"];
+}
+
+- (void) addURLToEditedVideos:(NSURL*)url
+{
+    [self.editedVideoURLs addObject:url];
+    // __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+            [self saveToFilename:@"videolibrary.plist"];
+    });
+    
 }
 
 + (instancetype)libraryWithFilename:(NSString*)filename
@@ -111,6 +122,7 @@
 - (void) addScene:(Scene*)newScene
 {
     NSLog(@" adding a scene with title: %@", newScene.title);
+    // __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         [self.scenes addObject:newScene];
         newScene.libraryIndex = self.scenes.count;
@@ -142,16 +154,6 @@
     return directoryContent;
 }
 
--(void)listScenesAndTakes
-{
-    for (Scene *scene in self.scenes)
-    {
-        for (Take *take in scene.takes)
-        {
-            NSLog(@"SELECTED? %hhd", take.isSelected);
-        }
-    }
-}
 
 - (NSMutableArray*) selectedTakes
 {

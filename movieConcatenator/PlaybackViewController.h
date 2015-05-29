@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "Take.h"
 #import "PlaybackView.h"
+#import "VideoMerger.h"
 
 @class AVPlayer;
 @class PlaybackView;
@@ -52,7 +53,7 @@
 @property (nonatomic, strong) UIBarButtonItem *mPauseButton;
 @property (nonatomic, strong) UISlider* mScrubber;
 @property (nonatomic, strong) NSArray *playbackItems;
-
+@property (nonatomic, strong) VideoMerger *videoMerger;
 
 @property (nonatomic) CMTime trimmedTime_initial;
 @property (nonatomic) CMTime trimmedTime_final;
