@@ -15,7 +15,6 @@
 		9F3B4D501AE4BF9C0056E4C7 /* disclosure-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */; };
 		9F3B4D521AE8A72D0056E4C7 /* player_record.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D511AE8A72D0056E4C7 /* player_record.png */; };
 		9F3B4D541AE8A7530056E4C7 /* flash29-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F3B4D531AE8A7530056E4C7 /* flash29-2.png */; };
-		9F3B4D5B1AEA06D60056E4C7 /* CustomToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */; };
 		9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */; };
 		9F4815841AB308F10027F1A0 /* ContainerCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F4815831AB308F10027F1A0 /* ContainerCellView.xib */; };
 		9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F4815861AB3093F0027F1A0 /* ContainerCellView.m */; };
@@ -52,7 +51,6 @@
 		9FAFA76E1A997DEB00F7396B /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */; };
 		9FAFA76F1A997DEB00F7396B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA7691A997DEB00F7396B /* AVFoundation.framework */; };
 		9FAFA7701A997DEB00F7396B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */; };
-		9FAFA7711A997DEB00F7396B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76B1A997DEB00F7396B /* MediaPlayer.framework */; };
 		9FAFA7721A997DEB00F7396B /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76C1A997DEB00F7396B /* MobileCoreServices.framework */; };
 		9FAFA7731A997DEB00F7396B /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FAFA76D1A997DEB00F7396B /* QuartzCore.framework */; };
 		9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FAFA7781A99845A00F7396B /* RecordVideoViewController.m */; };
@@ -64,7 +62,6 @@
 		9FB69C091AD8B51400524106 /* disclosure.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB69C081AD8B51400524106 /* disclosure.png */; };
 		9FB854061AEB5E8D00D7F66C /* PlaybackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB854051AEB5E8D00D7F66C /* PlaybackView.m */; };
 		9FB854091AEB5F5100D7F66C /* PlaybackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB854081AEB5F5100D7F66C /* PlaybackViewController.m */; };
-		9FB946E31AEB9275001C34E3 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FB946E21AEB9275001C34E3 /* AVKit.framework */; };
 		9FB946E81AED1B5A001C34E3 /* blue-star-24.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946E41AED1B5A001C34E3 /* blue-star-24.png */; };
 		9FB946E91AED1B5A001C34E3 /* blue-star-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946E51AED1B5A001C34E3 /* blue-star-32.png */; };
 		9FB946EA1AED1B5A001C34E3 /* blue-star-48.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946E61AED1B5A001C34E3 /* blue-star-48.png */; };
@@ -74,7 +71,7 @@
 		9FB946F31AED331C001C34E3 /* camera-toggle-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FB946F21AED331C001C34E3 /* camera-toggle-pressed.png */; };
 		9FB946F91AF7F374001C34E3 /* BestTakesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */; };
 		9FBE6E8D1ABD146600DC3CF5 /* RecordVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */; };
-		9FEDAF901B07BEC900301DD3 /* TimeSliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF8F1B07BEC900301DD3 /* TimeSliderCell.m */; };
+		9FEDAF901B07BEC900301DD3 /* TimeRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF8F1B07BEC900301DD3 /* TimeRangeSlider.m */; };
 		9FEDAF931B07BFEF00301DD3 /* EditingOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */; };
 		9FEDAF991B130E9600301DD3 /* TrimmingControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF981B130E9600301DD3 /* TrimmingControlsView.m */; };
 		9FEDAF9F1B13567F00301DD3 /* scissors-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FEDAF9E1B13567F00301DD3 /* scissors-32.png */; };
@@ -103,8 +100,6 @@
 		9F3B4D4F1AE4BF9C0056E4C7 /* disclosure-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "disclosure-white.png"; sourceTree = "<group>"; };
 		9F3B4D511AE8A72D0056E4C7 /* player_record.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = player_record.png; sourceTree = "<group>"; };
 		9F3B4D531AE8A7530056E4C7 /* flash29-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flash29-2.png"; sourceTree = "<group>"; };
-		9F3B4D591AEA06D60056E4C7 /* CustomToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomToolbar.h; sourceTree = "<group>"; };
-		9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomToolbar.m; sourceTree = "<group>"; };
 		9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TakeCollectionViewCell.xib; sourceTree = "<group>"; };
 		9F4815831AB308F10027F1A0 /* ContainerCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContainerCellView.xib; sourceTree = "<group>"; };
 		9F4815851AB3093F0027F1A0 /* ContainerCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerCellView.h; sourceTree = "<group>"; };
@@ -182,8 +177,8 @@
 		9FB946F81AF7F374001C34E3 /* BestTakesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BestTakesViewController.m; path = ../BestTakesViewController.m; sourceTree = "<group>"; };
 		9FBE6E8B1ABD146600DC3CF5 /* RecordVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordVideoView.h; sourceTree = "<group>"; };
 		9FBE6E8C1ABD146600DC3CF5 /* RecordVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordVideoView.m; sourceTree = "<group>"; };
-		9FEDAF8E1B07BEC900301DD3 /* TimeSliderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSliderCell.h; sourceTree = "<group>"; };
-		9FEDAF8F1B07BEC900301DD3 /* TimeSliderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeSliderCell.m; sourceTree = "<group>"; };
+		9FEDAF8E1B07BEC900301DD3 /* TimeRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TimeRangeSlider.h; path = ../TimeRangeSlider.h; sourceTree = "<group>"; };
+		9FEDAF8F1B07BEC900301DD3 /* TimeRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TimeRangeSlider.m; path = ../TimeRangeSlider.m; sourceTree = "<group>"; };
 		9FEDAF911B07BFEF00301DD3 /* EditingOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditingOptionsViewController.h; path = ../EditingOptionsViewController.h; sourceTree = "<group>"; };
 		9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditingOptionsViewController.m; path = ../EditingOptionsViewController.m; sourceTree = "<group>"; };
 		9FEDAF971B130E9600301DD3 /* TrimmingControlsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrimmingControlsView.h; sourceTree = "<group>"; };
@@ -197,11 +192,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FB946E31AEB9275001C34E3 /* AVKit.framework in Frameworks */,
 				9FAFA76E1A997DEB00F7396B /* AssetsLibrary.framework in Frameworks */,
 				9FAFA76F1A997DEB00F7396B /* AVFoundation.framework in Frameworks */,
 				9FAFA7701A997DEB00F7396B /* CoreMedia.framework in Frameworks */,
-				9FAFA7711A997DEB00F7396B /* MediaPlayer.framework in Frameworks */,
 				9FAFA7721A997DEB00F7396B /* MobileCoreServices.framework in Frameworks */,
 				9FAFA7731A997DEB00F7396B /* QuartzCore.framework in Frameworks */,
 			);
@@ -303,12 +296,8 @@
 		9FAFA7331A98884A00F7396B = {
 			isa = PBXGroup;
 			children = (
-				9FB946E21AEB9275001C34E3 /* AVKit.framework */,
-				9F3B4D591AEA06D60056E4C7 /* CustomToolbar.h */,
-				9F3B4D5A1AEA06D60056E4C7 /* CustomToolbar.m */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
-				9FEDAF8E1B07BEC900301DD3 /* TimeSliderCell.h */,
-				9FEDAF8F1B07BEC900301DD3 /* TimeSliderCell.m */,
+				9FB946E21AEB9275001C34E3 /* AVKit.framework */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
 				9FAFA7691A997DEB00F7396B /* AVFoundation.framework */,
 				9FAFA76A1A997DEB00F7396B /* CoreMedia.framework */,
@@ -422,6 +411,8 @@
 		9FB9C3C81AC2741E00952250 /* Video Player */ = {
 			isa = PBXGroup;
 			children = (
+				9FEDAF8F1B07BEC900301DD3 /* TimeRangeSlider.m */,
+				9FEDAF8E1B07BEC900301DD3 /* TimeRangeSlider.h */,
 				9FB854041AEB5E8D00D7F66C /* PlaybackView.h */,
 				9FB854051AEB5E8D00D7F66C /* PlaybackView.m */,
 				9FB854071AEB5F5100D7F66C /* PlaybackViewController.h */,
@@ -577,7 +568,6 @@
 				9F1802831ACD130D00CFBCB4 /* NewSceneDetailsViewController.m in Sources */,
 				9FAFA7821A9D2BC700F7396B /* VideoController.m in Sources */,
 				9F4815871AB3093F0027F1A0 /* ContainerCellView.m in Sources */,
-				9F3B4D5B1AEA06D60056E4C7 /* CustomToolbar.m in Sources */,
 				9FAFA78C1A9EB5FD00F7396B /* Scene.m in Sources */,
 				9F18027A1ACB0C1E00CFBCB4 /* UIImage+Extras.m in Sources */,
 				9F6D101B1AAD32DF00FA7C20 /* SceneTableViewCell.m in Sources */,
@@ -586,7 +576,7 @@
 				9F6D102D1AAD487E00FA7C20 /* TakeCollectionViewCell.m in Sources */,
 				9FAFA77F1A9C170A00F7396B /* Take.m in Sources */,
 				9FAFA7901A9EBBB300F7396B /* VideoLibrary.m in Sources */,
-				9FEDAF901B07BEC900301DD3 /* TimeSliderCell.m in Sources */,
+				9FEDAF901B07BEC900301DD3 /* TimeRangeSlider.m in Sources */,
 				9FEDAF991B130E9600301DD3 /* TrimmingControlsView.m in Sources */,
 				9F0020BA1AA6BFD60018592C /* VideoMerger.m in Sources */,
 				9FEDAF931B07BFEF00301DD3 /* EditingOptionsViewController.m in Sources */,

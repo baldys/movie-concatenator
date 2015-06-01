@@ -11,12 +11,13 @@
 #import "Take.h"
 #import "PlaybackView.h"
 #import "VideoMerger.h"
+#import "TimeRangeSlider.h"
 
 @class AVPlayer;
 @class PlaybackView;
 @class Take;
 
-@interface PlaybackViewController : UIViewController
+@interface PlaybackViewController : UIViewController <TimeRangeSliderDelegate>
 {
 //@private
     

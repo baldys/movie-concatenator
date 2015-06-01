@@ -1,5 +1,5 @@
 //
-//  MediaLibrary.h
+//  VideoLibrary.h
 //  movieConcatenator
 //
 //  Created by Veronica Baldys on 2015-02-25.

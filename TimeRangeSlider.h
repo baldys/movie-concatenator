@@ -8,26 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol TimeSliderCellDelegate;
+@protocol TimeRangeSliderDelegate;
 
 @class LimitedSlider;
 
-@interface TimeSliderCell : UITableViewCell
+@interface TimeRangeSlider : UIView
 {
     LimitedSlider *_slider;
     BOOL _flipSlider;
     
-    //id <TimeSliderCellDelegate> _delegate;
+    //id <TimeRangeSliderDelegate> _delegate;
     
     float _duration;
     CGFloat _sliderXinset;
 }
 
-- (id)initWithReuseIdentifier:(NSString *)identifier;
-
+- (id) initWithFrame:(CGRect)frame;
+@property (nonatomic, strong) LimitedSlider *slider;
 @property (nonatomic) BOOL flipSlider;
 @property (nonatomic) CGFloat sliderXInset;
-@property (nonatomic, weak) id <TimeSliderCellDelegate> delegate;
+@property (nonatomic, weak) id <TimeRangeSliderDelegate> delegate;
 
 @property (nonatomic) float duration;
 @property (nonatomic) float minimumTime;
@@ -37,9 +37,9 @@
 
 @end
 
-@protocol TimeSliderCellDelegate <NSObject>
+@protocol TimeRangeSliderDelegate <NSObject>
 @required
-- (void)sliderCellTimeValueDidChange:(TimeSliderCell*)cell;
+- (void)sliderTimeValueDidChange:(TimeRangeSlider*)slider;
 
 @end
 

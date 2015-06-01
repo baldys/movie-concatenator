@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Veronica Baldys. All rights reserved.
 //
 
-#import "TimeSliderCell.h"
+#import "TimeRangeSlider.h"
 
 
 
@@ -16,13 +16,20 @@
     float _smallestValue;
 }
 
+
 // The largest and smallest values the slider knob is limited to.
 @property (nonatomic) float smallestValue;
 @property (nonatomic) float largestValue;
 
+
 @end
 
 @implementation LimitedSlider
+
+- (void) sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
+{
+    //[self addTarget:target action:action forControlEvents:];
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -88,12 +95,15 @@
 @end
 
 
-@interface TimeSliderCell ()
-@property (nonatomic, retain) LimitedSlider *slider;
+@interface TimeRangeSlider ()
+
+
+@property (nonatomic, strong) UILabel *timeLabel;
+
 @end
 
 
-@implementation TimeSliderCell
+@implementation TimeRangeSlider
 
 @synthesize slider = _slider;
 @synthesize sliderXInset = _sliderXInset;
@@ -102,17 +112,16 @@
 #pragma mark -
 #pragma mark Initialization
 
-- (id)initWithReuseIdentifier:(NSString *)identifier
+- (id)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier])
+    if (self = [super initWithFrame:frame])
     {
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+       
         self.slider = [[LimitedSlider alloc] initWithFrame:CGRectZero];
         [self.slider addTarget:self action:@selector(sliderValueChanged) forControlEvents:UIControlEventValueChanged];
         self.sliderXInset = 60.0;
+        [self addSubview:self.slider];
         
-        [self.contentView addSubview:self.slider];
     }
     
     return self;
@@ -136,8 +145,8 @@
 {
     [super layoutSubviews];
     
-    CGSize contentSize = self.contentView.bounds.size;
-    CGSize sizeToFitIn = CGRectInset(self.contentView.bounds, self.sliderXInset, 0.0).size;
+    CGSize contentSize = self.bounds.size;
+    CGSize sizeToFitIn = CGRectInset(self.bounds, self.sliderXInset, 0.0).size;
     
     CGRect sliderRect = CGRectZero;
     sliderRect.size = [self.slider sizeThatFits:sizeToFitIn];
@@ -148,6 +157,10 @@
     sliderRect.origin.y = 0.5*(contentSize.height - sliderRect.size.height);
     sliderRect.origin.y = roundf(sliderRect.origin.y);
     self.slider.frame = sliderRect;
+    
+    
+    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.slider.frame.size.width-40, 20, 40, 20)];
+    
 }
 
 - (void)updateTimeLabel
@@ -155,10 +168,10 @@
     float timeInSeconds = [self timeValue];
     
     if (timeInSeconds < 60.0) {
-        self.detailTextLabel.text = [NSString stringWithFormat:@"%.1fs", [self timeValue]];
+        self.timeLabel.text = [NSString stringWithFormat:@"%.1fs", [self timeValue]];
     }
     else {
-        self.detailTextLabel.text = [NSString stringWithFormat:@"%.1fm", timeInSeconds/60.0];
+        self.timeLabel.text = [NSString stringWithFormat:@"%.1fm", timeInSeconds/60.0];
     }
 }
 
@@ -166,7 +179,7 @@
 {
     [self updateTimeLabel];
     if (_delegate) {
-        [_delegate sliderCellTimeValueDidChange:self];
+        [_delegate sliderTimeValueDidChange:self];
     }
 }
 
@@ -250,11 +263,10 @@
     [self updateTimeLabel];
 }
 
-//- (void)dealloc 
-//{
-//    self.slider = nil;
-//    
-//}
+- (void)dealloc
+{
+    self.slider = nil;
+}
 
 @end
 

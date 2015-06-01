@@ -31,11 +31,17 @@
 - (void)setURLFromTake;
 //- (void)setURL:(NSURL*)URL;
 //- (NSURL*)URL;
-
+/////
 @property (strong, nonatomic) UISlider *startTrimScrubber;
+
+@property (strong, nonatomic) TimeRangeSlider *trimScrubberStartTime;
+/////
 @property (strong, nonatomic) UISlider *endTrimScrubber;
 
+@property (strong, nonatomic) TimeRangeSlider *trimScrubberEndTime;
+/////
 @property (nonatomic, getter=isTrimmingVideo) BOOL trimmingVideo;
+
 @property (strong, nonatomic) UIBarButtonItem *starButton;
 @property (strong, nonatomic) UIBarButtonItem *trashButton;
 
@@ -124,11 +130,11 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.starButton setAction:@selector(star:)];
     
     self.trimButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"scissors-32"] landscapeImagePhone:[UIImage imageNamed:@"scissors-24"] style:UIBarButtonItemStyleDone target:self action:@selector(trim:)];
-    // touch drag inside
+   
     [self.mScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
-    // touch drag enter
+
     [self.mScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDown];
-    // touch drag exit
+    
     [self.mScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit|UIControlEventTouchUpInside];
     
    
@@ -235,6 +241,22 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
 }
 
+#pragma mark - TimeRangeSliderDelegate method
+
+- (void)sliderTimeValueDidChange:(TimeRangeSlider *)slider
+{
+    
+    if (slider == self.trimScrubberStartTime)
+    {
+        
+    }
+    
+    else if (slider == self.trimScrubberEndTime)
+    {
+        
+    }
+}
+
 - (void) enableTrimmingSliders
 {
     [self.startTrimScrubber setEnabled:YES];
@@ -260,7 +282,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.tabBarController.tabBar setHidden:YES];
     
 }
-
+/////
 - (void) showTrimmingControls
 {
    // [self.trimmingControlsView setHidden:NO];
@@ -297,7 +319,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
 }
 #pragma mark - trimming controls
-
+/////
 // show trimming controls
 - (void)initializeTrimmingControls
 {
@@ -308,8 +330,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-200, self.view.bounds.size.width, 200)];
     
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
-    
-    
+  
     [self.trimmingControlsView setBackgroundColor:[UIColor blackColor]];
     [self.trimmingControlsView setOpaque:YES];
     
@@ -321,25 +342,53 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     {
         self.startTrimScrubber = [[UISlider alloc] init];
         self.endTrimScrubber = [[UISlider alloc] init];
+        
     }
-    
-    
+
     [self.startTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
     [self.startTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
     [self.startTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
-   
+    
+    
+  //  [self.trimScrubberStartTime addTarget:self action:@selector(sliderTimeValueDidChange:) forControlEvents:UIControlEventValueChanged];
+ //   [self.trimScrubberStartTime addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+    
     [self.endTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
     [self.endTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
     [self.endTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
     
     self.startTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-140, 20);
     self.endTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-50, self.trimmingControlsView.frame.size.width-140, 20);
-    
-    
     //[self.view addSubview:self.trimmingControlsView];
     [self.trimmingControlsView addSubview:self.startTrimScrubber];
     [self.trimmingControlsView addSubview:self.endTrimScrubber];
     
+    
+    
+    ////////
+    ////////
+    
+    if (!self.trimScrubberStartTime && !self.trimScrubberEndTime)
+    {
+        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
+        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
+    }
+    self.trimScrubberStartTime.delegate = self;
+    self.trimScrubberEndTime.delegate = self;
+    self.trimScrubberStartTime.slider = self.startTrimScrubber;
+    
+    ////////
+    
+    self.trimScrubberStartTime.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
+    self.trimScrubberEndTime.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-120, self.trimmingControlsView.frame.size.width-140, 20);
+    ////////
+    [self.trimmingControlsView addSubview:self.trimScrubberStartTime];
+    [self.trimmingControlsView addSubview:self.trimScrubberEndTime];
+    
+    ////////
+    ////////
+    
+
     [UIView animateWithDuration:0.5 animations:^{
         
         [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, -100)];
@@ -369,7 +418,6 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     // if this button gets pressed, whatever position the slider is in will correspond to the time in which the video should be cut out when a done button is pressed. set this time to the new time range of the take that is being played.
     
-    // if slider gets moved to a new position then the done button gets pressed, that value will be the new start time value
     
     
 }
@@ -562,6 +610,10 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
                     self.trimmedTime_initial = CMTimeMakeWithSeconds(time, NSEC_PER_MSEC);
                     
                     NSLog(@"new start time: %f", time);
+                }
+                if (sender == self.trimScrubberStartTime)
+                {
+                    
                 }
                 else if (sender == self.endTrimScrubber)
                 {

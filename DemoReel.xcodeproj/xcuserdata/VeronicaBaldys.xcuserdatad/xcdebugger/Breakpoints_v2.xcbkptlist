@@ -708,11 +708,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "598"
-            endingLineNumber = "598"
+            startingLineNumber = "650"
+            endingLineNumber = "650"
             landmarkName = "-endScrubbing:"
             landmarkType = "5">
          </BreakpointContent>
@@ -724,11 +724,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "508"
-            endingLineNumber = "508"
+            startingLineNumber = "556"
+            endingLineNumber = "556"
             landmarkName = "-syncScrubber"
             landmarkType = "5">
          </BreakpointContent>
@@ -740,11 +740,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "523"
-            endingLineNumber = "523"
+            startingLineNumber = "571"
+            endingLineNumber = "571"
             landmarkName = "-beginScrubbing:"
             landmarkType = "5">
          </BreakpointContent>
@@ -756,11 +756,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "535"
-            endingLineNumber = "535"
+            startingLineNumber = "583"
+            endingLineNumber = "583"
             landmarkName = "-scrub:"
             landmarkType = "5">
          </BreakpointContent>
@@ -772,11 +772,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
+            startingLineNumber = "623"
+            endingLineNumber = "623"
             landmarkName = "-scrub:"
             landmarkType = "5">
          </BreakpointContent>
@@ -788,11 +788,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "562"
-            endingLineNumber = "562"
+            startingLineNumber = "610"
+            endingLineNumber = "610"
             landmarkName = "-scrub:"
             landmarkType = "5">
          </BreakpointContent>
@@ -804,11 +804,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "574"
-            endingLineNumber = "574"
+            startingLineNumber = "626"
+            endingLineNumber = "626"
             landmarkName = "-scrub:"
             landmarkType = "5">
          </BreakpointContent>
@@ -820,11 +820,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
+            startingLineNumber = "539"
+            endingLineNumber = "539"
             landmarkName = "-initScrubberTimer"
             landmarkType = "5">
          </BreakpointContent>
@@ -836,11 +836,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454403882.872287"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "-showTrimmingControls"
             landmarkType = "5">
             <Locations>
@@ -852,11 +852,11 @@
                   moduleName = "DemoReel"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/VeronicaBaldys/Desktop/movie-concatenator-movieplayertoolbar/movieConcatenator/PlaybackViewController.m"
-                  timestampString = "454470724.724038"
+                  timestampString = "454840654.313612"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "270"
-                  endingLineNumber = "270"
+                  startingLineNumber = "292"
+                  endingLineNumber = "292"
                   offsetFromSymbolStart = "70">
                </Location>
                <Location
@@ -867,11 +867,11 @@
                   moduleName = "DemoReel"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/VeronicaBaldys/Desktop/movie-concatenator-movieplayertoolbar/movieConcatenator/PlaybackViewController.m"
-                  timestampString = "454470724.724204"
+                  timestampString = "454840654.313751"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "270"
-                  endingLineNumber = "270"
+                  startingLineNumber = "292"
+                  endingLineNumber = "292"
                   offsetFromSymbolStart = "30">
                </Location>
             </Locations>
@@ -884,11 +884,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454403882.872287"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
             landmarkName = "-hideTrimmingControls"
             landmarkType = "5">
          </BreakpointContent>
@@ -900,11 +900,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "569"
-            endingLineNumber = "569"
+            startingLineNumber = "621"
+            endingLineNumber = "621"
             landmarkName = "-scrub:"
             landmarkType = "5">
          </BreakpointContent>
@@ -916,11 +916,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "550"
-            endingLineNumber = "550"
+            startingLineNumber = "598"
+            endingLineNumber = "598"
             landmarkName = "-scrub:"
             landmarkType = "5">
          </BreakpointContent>
@@ -932,11 +932,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "595"
-            endingLineNumber = "595"
+            startingLineNumber = "647"
+            endingLineNumber = "647"
             landmarkName = "-endScrubbing:"
             landmarkType = "5">
          </BreakpointContent>
@@ -948,12 +948,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "movieConcatenator/PlaybackViewController.m"
-            timestampString = "454470724.239496"
+            timestampString = "454840654.234127"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "589"
-            endingLineNumber = "589"
+            startingLineNumber = "641"
+            endingLineNumber = "641"
             landmarkName = "-endScrubbing:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "movieConcatenator/PlaybackViewController.m"
+            timestampString = "454840654.234127"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
+            landmarkName = "-sliderTimeValueDidChange:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "movieConcatenator/PlaybackViewController.m"
+            timestampString = "454840654.234127"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
+            landmarkName = "-sliderTimeValueDidChange:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

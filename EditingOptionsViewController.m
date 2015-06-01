@@ -19,13 +19,13 @@
 //#import "PlayerViewController.h"
 //#import "ThumbnailViewController.h"
 
-#import "TimeSliderCell.h"
+//#import "TimeSliderCell.h"
 //#import "ExportCell.h"
 //#import "TitleEditingCell.h"
 
 #import <AVFoundation/AVVideoComposition.h>
 
-@interface EditingOptionsViewController () <TimeSliderCellDelegate>//,TitleEditingCellDelegate, AssetBrowserControllerDelegate>
+@interface EditingOptionsViewController () //<TimeSliderCellDelegate>//,TitleEditingCellDelegate, AssetBrowserControllerDelegate>
 
 - (void)updateCell:(UITableViewCell*)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 //- (void)beginExport;
