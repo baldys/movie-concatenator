@@ -12,12 +12,13 @@
 #import "PlaybackView.h"
 #import "VideoMerger.h"
 #import "TimeRangeSlider.h"
+#import "TTRangeSlider.h"
 
 @class AVPlayer;
 @class PlaybackView;
 @class Take;
 
-@interface PlaybackViewController : UIViewController <TimeRangeSliderDelegate>
+@interface PlaybackViewController : UIViewController <TTRangeSliderDelegate>
 {
 //@private
     
@@ -64,5 +65,5 @@
 //- (IBAction)showMetadata:(id)sender;
 
 @property (nonatomic, strong) Take *takeToPlay;
-
+@property (nonatomic,strong) TTRangeSlider *slider;
 @end

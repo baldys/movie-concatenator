@@ -75,6 +75,12 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 #pragma mark -
 @implementation PlaybackViewController
 
+- (void) rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum
+{
+    
+
+}
+
 #pragma mark Asset URL
 
 //-(NSURL*)URL
@@ -323,6 +329,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 // show trimming controls
 - (void)initializeTrimmingControls
 {
+    
     //UIView* view  = [self view];
     
     //self.trimmingControlsView = [[UIView alloc] init];
@@ -330,7 +337,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-200, self.view.bounds.size.width, 200)];
     
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
-  
+    
     [self.trimmingControlsView setBackgroundColor:[UIColor blackColor]];
     [self.trimmingControlsView setOpaque:YES];
     
@@ -338,55 +345,82 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
     [self.view bringSubviewToFront:self.trimmingControlsView];
     
-    if(!self.startTrimScrubber && !self.endTrimScrubber)
-    {
-        self.startTrimScrubber = [[UISlider alloc] init];
-        self.endTrimScrubber = [[UISlider alloc] init];
-        
-    }
-
-    [self.startTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
-    [self.startTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
-    [self.startTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
     
     
-  //  [self.trimScrubberStartTime addTarget:self action:@selector(sliderTimeValueDidChange:) forControlEvents:UIControlEventValueChanged];
- //   [self.trimScrubberStartTime addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+//    if(!self.startTrimScrubber && !self.endTrimScrubber)
+//    {
+//        self.startTrimScrubber = [[UISlider alloc] init];
+//        self.endTrimScrubber = [[UISlider alloc] init];
+//        
+//    }
+//
+//    [self.startTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
+//    [self.startTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+//    [self.startTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
+//    
+//    
+  
+   // [self.endTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
+   // [self.endTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
+    //[self.endTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
     
-    [self.endTrimScrubber addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
-    [self.endTrimScrubber addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDragEnter];
-    [self.endTrimScrubber addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchDragExit];
-    
-    self.startTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-140, 20);
-    self.endTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-50, self.trimmingControlsView.frame.size.width-140, 20);
+    //self.startTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-140, 20);
+    //self.endTrimScrubber.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-50, self.trimmingControlsView.frame.size.width-140, 20);
     //[self.view addSubview:self.trimmingControlsView];
-    [self.trimmingControlsView addSubview:self.startTrimScrubber];
-    [self.trimmingControlsView addSubview:self.endTrimScrubber];
+    //[self.trimmingControlsView addSubview:self.startTrimScrubber];
+   // [self.trimmingControlsView addSubview:self.endTrimScrubber];
     
-    
-    
-    ////////
-    ////////
-    
-    if (!self.trimScrubberStartTime && !self.trimScrubberEndTime)
+    if (!self.slider)
     {
-        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
-        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
+        //self.slider=[[TimeRangeSlider alloc] initWithFrame:CGRectZero];
+        self.slider = [[TTRangeSlider alloc] init];
+        
+        
+        
+        CMTime playerDuration = [self playerItemDuration];
+        
+        
+        double duration = CMTimeGetSeconds(playerDuration);
+        
+        [self.slider setDuration:duration];
+        
+        
+        [self.slider addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
     }
-    self.trimScrubberStartTime.delegate = self;
-    self.trimScrubberEndTime.delegate = self;
-    self.trimScrubberStartTime.slider = self.startTrimScrubber;
     
+    self.slider.frame = CGRectMake(40, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-80, 40);
+
+    [self.trimmingControlsView addSubview:self.slider];
+    [self.trimmingControlsView bringSubviewToFront:self.slider];
+//
+    ///////
     ////////
     
-    self.trimScrubberStartTime.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
-    self.trimScrubberEndTime.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-120, self.trimmingControlsView.frame.size.width-140, 20);
+//    if (!self.trimScrubberStartTime && !self.trimScrubberEndTime)
+//    {
+//        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
+//        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
+//    }
+//    self.trimScrubberStartTime.delegate = self;
+//    self.trimScrubberEndTime.delegate = self;
+//    //self.trimScrubberStartTime.slider = self.startTrimScrubber;
+//    
+//    ////////
+//    
+//    self.trimScrub    berStartTime.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
+//    self.trimScrubberEndTime.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-120, self.trimmingControlsView.frame.size.width-140, 20);
+//    ////////
+//    [self.trimmingControlsView addSubview:self.trimScrubberStartTime];
+//    [self.trimmingControlsView addSubview:self.trimScrubberEndTime];
+//    
     ////////
-    [self.trimmingControlsView addSubview:self.trimScrubberStartTime];
-    [self.trimmingControlsView addSubview:self.trimScrubberEndTime];
+    ////////
     
-    ////////
-    ////////
+    
+   
+    //slider.delegate = self;
+   
+    //[self.trimmingControlsView addSubview:slider];
     
 
     [UIView animateWithDuration:0.5 animations:^{
@@ -440,19 +474,22 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 //    self.trimmingControlsView = nil;
 //    [self.trimmingControlsView removeFromSuperview];
     
-    
-    // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
-    
-    self.takeToPlay.timeRange = CMTimeRangeFromTimeToTime(self.trimmedTime_initial, self.trimmedTime_final);
-    //CMTime newDuration = CMTimeMake(self.takeToPlay.timeRange.duration, NSEC_PER_MSEC);
-    
-    //self.takeToPlay.duration = self.takeToPlay.timeRange.duration;
-    //AVAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
-    self.videoMerger = [[VideoMerger alloc] init];
-    [self.videoMerger exportTrimmedTake:self.takeToPlay];
-    
-    ///NSLog(@"new duration: %d", self.takeToPlay.timeRange.duration);
-    
+    if (sender == self.doneTrimmingButton)
+    {
+        // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
+        
+        self.takeToPlay.timeRange = CMTimeRangeFromTimeToTime(self.trimmedTime_initial, self.trimmedTime_final);
+        //CMTime newDuration = CMTimeMake(self.takeToPlay.timeRange.duration, NSEC_PER_MSEC);
+        
+        //self.takeToPlay.duration = self.takeToPlay.timeRange.duration;
+        //AVAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
+        self.videoMerger = [[VideoMerger alloc] init];
+        [self.videoMerger exportTrimmedTake:self.takeToPlay];
+        
+        ///NSLog(@"new duration: %d", self.takeToPlay.timeRange.duration);
+        
+        
+    }
     
 }
 /* Display AVMetadataCommonKeyTitle and AVMetadataCommonKeyCopyrights metadata. */
@@ -556,11 +593,26 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     if (isfinite(duration))
     {
-        float minValue = [self.mScrubber minimumValue];
-        float maxValue = [self.mScrubber maximumValue];
-        double time = CMTimeGetSeconds([self.mPlayer currentTime]);
         
-        [self.mScrubber setValue:(maxValue - minValue) * time / duration + minValue];
+        if (self.isTrimmingVideo)
+        {
+            
+            float maxValue = self.slider.minValue;
+            float minValue = self.slider.maxValue;
+            double time = CMTimeGetSeconds([self.mPlayer currentTime]);
+            
+        }
+        else
+        {
+            float minValue = [self.mScrubber minimumValue];
+            float maxValue = [self.mScrubber maximumValue];
+            double time = CMTimeGetSeconds([self.mPlayer currentTime]);
+            
+            [self.mScrubber setValue:(maxValue - minValue) * time / duration + minValue];
+            
+        }
+        
+        
     }
 }
 
@@ -572,6 +624,8 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     /* Remove previous timer. */
     [self removePlayerTimeObserver];
+    
+    
 }
 
 /* Set the player current time to match the scrubber position. */
@@ -604,6 +658,13 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
             // if the video is to be trimmed, get the sliders time
             if (self.isTrimmingVideo)
             {
+                
+//                if (sender == self.slider)
+//                {
+//                    self.trimmedTime_initial = CMTimeMakeWithSeconds(time, NSEC_PER_MSEC);
+//                    
+//                    NSLog(@"new start time: %f", time);
+//                }
                 if (sender == self.startTrimScrubber)
                 {
                     // self.trimmedTime_initial = CMTimeMake(duration*(value-minValue), maxValue-minValue);
@@ -611,10 +672,10 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
                     
                     NSLog(@"new start time: %f", time);
                 }
-                if (sender == self.trimScrubberStartTime)
-                {
-                    
-                }
+//                if (sender == self.trimScrubberStartTime)
+//                {
+//                    
+//                }
                 else if (sender == self.endTrimScrubber)
                 {
                     
@@ -632,6 +693,55 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
                 });
             }];
         }
+    }
+    else if ([sender isKindOfClass:[TTRangeSlider class]]&& !isSeeking)
+    {
+        isSeeking = YES;
+        CMTime playerDuration = [self playerItemDuration];
+        
+        if (CMTIME_IS_INVALID(playerDuration))
+        {
+            return;
+        }
+        
+        double duration = CMTimeGetSeconds(playerDuration);
+        
+        
+        if (isfinite(duration))
+        {
+            float minValue = [self.slider minValue];
+            float maxValue = [self.slider maxValue];
+            float maxSelectedValue = [self.slider selectedMaximum];
+            float minSelectedValue = [self.slider selectedMinimum];
+            
+            NSLog(@"minimum slider value: %f, maximum slider value: %f", minSelectedValue, maxSelectedValue);
+            
+            double minSelectedTime = duration * (minSelectedValue - minValue) / (maxValue - minValue);
+            double maxSelectedTime = duration * (maxSelectedValue - minValue)/ (maxValue - minValue);
+            NSLog(@"minimum slider TIME value: %f, maximum slider TIME value: %f", minSelectedTime, maxSelectedTime);
+            
+            // if the video is to be trimmed, get the sliders time
+            if (self.isTrimmingVideo)
+            {
+                [self.slider setDuration:duration];
+                
+                if (sender == self.slider)
+                {
+                    self.trimmedTime_initial = CMTimeMakeWithSeconds(minSelectedTime, NSEC_PER_MSEC);
+                    self.trimmedTime_final = CMTimeMakeWithSeconds(maxSelectedTime, NSEC_PER_MSEC);
+                    
+                    
+                    NSLog(@"new start time: %f & new end time: %f", minSelectedTime, maxSelectedTime);
+                    
+                }
+            }
+        }
+//        [self.mPlayer seekToTime:CMTimeMakeWithSeconds(minSelectedTime, NSEC_PER_MSEC) completionHandler:^(BOOL finished) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                isSeeking = NO;
+//            });
+//        }];
+        
     }
 }
 
@@ -651,6 +761,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         if (isfinite(duration))
         {
             CGFloat width = CGRectGetWidth([self.mScrubber bounds]);
+            
             double tolerance = 0.5f * duration / width;
             
             __weak PlaybackViewController *weakSelf = self;

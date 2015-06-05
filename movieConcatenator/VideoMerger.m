@@ -23,20 +23,12 @@
     self = [super init];
     if (self)
     {
-        self.videoLibrary = [VideoLibrary libraryWithFilename:@"videoLibrary.plist"];
+        self.videoLibrary = [VideoLibrary libraryWithFilename:@"VideoDatalist.plist"];
       
     }
     return self;
 }
-//- (instancetype)initWithTransitionType:(TransitionType)transitionType
-//{
-//    self = [super init];
-//    if (self)
-//    {
-//        self.transitionType = transitionType;
-//    }
-//    return self;
-//}
+
 
 // get the assets from takes
 - (void)prepareAssetsFromTakes:(NSArray*)takes
@@ -515,9 +507,9 @@
     //so we can adjust the video size according to the smallest video in the sequence, so we dont crop large portions of the large videos or have black bars around the small videos.
 
     
-    for (int i=0; i<self.videoClips.count; i++)
+    for (int i=0; i<_videoClips.count; i++)
     {
-        AVAsset *asset = [self.videoClips[i] copy];
+        AVURLAsset *asset = [self.videoClips[i] copy];
         NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
         CMTimeRange timeRangeInAsset;
         

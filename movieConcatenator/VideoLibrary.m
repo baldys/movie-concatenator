@@ -89,7 +89,7 @@
     [self.editedVideoURLs addObject:url];
     // __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
-            [self saveToFilename:@"videolibrary.plist"];
+            [self saveToFilename:@"VideoDatalist.plist"];
     });
     
 }
@@ -126,7 +126,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
         [self.scenes addObject:newScene];
         newScene.libraryIndex = self.scenes.count;
-        [self saveToFilename:@"videolibrary.plist"];
+        [self saveToFilename:@"VideoDatalist.plist"];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.completionBlock(YES);
         });
@@ -206,7 +206,7 @@
             Scene *scene = [self.scenes objectAtIndex:take.sceneNumber];
             [scene.takes removeObject:take];
             //[[self.scenes objectAtIndex:take.sceneNumber].takes removeObject:take];
-            [self saveToFilename:@"videolibrary.plist"];
+            [self saveToFilename:@"VideoDatalist.plist"];
         }
         //[[NSFileManager defaultManager] removeItemAtPath:[take getPathURL].path error:&error];
 //

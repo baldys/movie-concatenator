@@ -32,18 +32,17 @@
 
 @implementation Take
 
-- (void)loadDurationOfAsset:(AVAsset*)asset
+- (void)loadDurationOfAsset:(AVAsset*)asset withCompletionHandler:(void (^)(void))completionHandler
 {
-    
     NSString *durationKey = @"duration";
     __weak __block Take *weakSelf = (Take *)self;
     [asset loadValuesAsynchronouslyForKeys:@[durationKey] completionHandler:
      ^{
          NSError *error = nil;
-         switch ([asset statusOfValueForKey:@"duration" error:&error])
+         if ([asset statusOfValueForKey:durationKey error:&error] == AVKeyValueStatusLoaded)
          {
                  
-             case AVKeyValueStatusLoaded:
+            // case AVKeyValueStatusLoaded:
                  // duration is now known, so we can fetch it without blocking
                  //CMTime duration = [asset valueForKey:@"duration"];
                  //CMTime duration = [asset duration];
@@ -55,34 +54,17 @@
                  
                  dispatch_async(dispatch_get_main_queue(), ^{
                      NSLog(@"duration of take loaded: time in seconds:%f", seconds);
+                     
+                     completionHandler();
                  });
-                 
-                 break;
-             default:
-                 _duration = kCMTimeInvalid;
-                 break;
          }
-         //// completion block
-         
+         else
+         {
+             NSLog(@"FAAAAAAIIILLLLLLLLLL");
+         }
      }];
-    
-    
-    float seconds = _duration.value/_duration.timescale;
-    int minutes = 0;
-    
-    
-
-    while (seconds-60 > 0)
-    {
-        minutes++;
-        seconds = seconds-60;
-    }
-        
-    
-    NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
-    self.durationInSeconds = [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
-    
 }
+
 - (instancetype) initWithURL:(NSURL*)url
 {
     self = [super init];
@@ -102,16 +84,29 @@
         self.videoOrientation = @"unknown";
         self.videoRecordingPosition = @"unknown";
         
-       NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
+       
+        NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
         _videoAsset = [[AVURLAsset alloc] initWithURL:self.assetURL options:options];
         
         _selected = NO;
         
         //_imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
-        [self loadDurationOfAsset:_videoAsset];
-        
-        self.timeRange = CMTimeRangeMake(kCMTimeZero, self.duration);
+        [self loadDurationOfAsset:_videoAsset withCompletionHandler:^{
+            float seconds = _duration.value/_duration.timescale;
+            
+            int minutes = 0;
+            while (seconds-60 > 0)
+            {
+                minutes++;
+                seconds = seconds-60;
+            }
+            
+            NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
+            self.durationString = [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
+            self.timeRange = CMTimeRangeMake(kCMTimeZero, self.duration);
+            
+        }];
         
         [self loadThumbnailWithCompletionHandler:^(UIImage *image)
         {
@@ -131,6 +126,21 @@
     return self;
 }
 
+- (NSString*)convertSecondsToString:(CMTime)seconds
+{
+    float fseconds = _duration.value/_duration.timescale;
+    
+    int minutes = 0;
+    while (fseconds-60 > 0)
+    {
+        minutes++;
+        fseconds = fseconds-60;
+    }
+    
+    NSLog(@"Minutes:seconds = %i:%f", minutes, fseconds);
+    return [NSString stringWithFormat:@"%i:%.02f",minutes, fseconds];
+    
+}
 
 
 

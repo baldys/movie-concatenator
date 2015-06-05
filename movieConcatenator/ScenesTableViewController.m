@@ -51,13 +51,13 @@
     tableHeader.backgroundColor = [UIColor blackColor];
     self._tableView.tableHeaderView = tableHeader;
     
-    VideoLibrary *library = [VideoLibrary libraryWithFilename:@"videolibrary.plist"];
+    VideoLibrary *library = [VideoLibrary libraryWithFilename:@"VideoDatalist.plist"];
     
     if (!library)
     {
         NSLog(@"no library");
         library = [[VideoLibrary alloc] init];
-        [library saveToFilename:@"videolibrary.plist"];
+        [library saveToFilename:@"VideoDatalist.plist"];
     }
     self.library = library;
     self.scenes = library.scenes;
@@ -288,7 +288,7 @@
 //        if (success)
 //        {
 //            NSLog(@"saving video");
-//            [weakSelf.library saveToFilename:@"videolibrary.plist"];
+//            [weakSelf.library saveToFilename:@"VideoDatalist.plist"];
 //        }
 //        [weakSelf.tableView reloadData];
 //        
@@ -420,7 +420,7 @@
                        NSLog(@"new take scenr title: %@", newTake.sceneTitle);
                        
                        
-                       [weakSelf.library saveToFilename:@"videolibrary.plist"];
+                       [weakSelf.library saveToFilename:@"VideoDatalist.plist"];
                        
                        dispatch_async(dispatch_get_main_queue(), ^{
                            
@@ -484,7 +484,7 @@
         if (success)
         {
             NSLog(@"saving video");
-            [weakSelf.library saveToFilename:@"videolibrary.plist"];
+            [weakSelf.library saveToFilename:@"VideoDatalist.plist"];
         }
 //            //        [weakSelf.tableView reloadData];
         NSLog(@"completion block called!");
@@ -508,7 +508,7 @@
     
 //    Take *newTake = [[Take alloc] initWithURL:segue.destinatiooutputFileURL];
 //    [currentScene.takes insertObject:newTake atIndex:0];
-//    [self.library saveToFilename:@"videolibrary.plist"];
+//    [self.library saveToFilename:@"VideoDatalist.plist"];
     //[self.tableView reloadData];
     
 
@@ -525,7 +525,7 @@
 //            if (success)
 //            {
 //                NSLog(@"saving video");
-//                [weakSelf.library saveToFilename:@"videolibrary.plist"];
+//                [weakSelf.library saveToFilename:@"VideoDatalist.plist"];
 //                
 //                dispatch_async(dispatch_get_main_queue(), ^{
 //                    [self.tableView reloadData];
@@ -543,7 +543,7 @@
 //    [[self.scenes[recordViewController.sceneIndex] takes] addObject:newTake];
 
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [self.library saveToFilename:@"videolibrary.plist"];
+//        [self.library saveToFilename:@"VideoDatalist.plist"];
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            [self.tableView reloadData];
 //        });

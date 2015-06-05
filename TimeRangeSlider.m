@@ -24,6 +24,9 @@
 
 @end
 
+
+
+
 @implementation LimitedSlider
 
 - (void) sendAction:(SEL)action to:(id)target forEvent:(UIEvent *)event
@@ -35,6 +38,8 @@
 {
     _smallestValue = 0.0;
     _largestValue = 1.0;
+    
+    // Set the initial state
     
     self = [super initWithFrame:frame];
     return self;
@@ -99,47 +104,97 @@
 
 
 @property (nonatomic, strong) UILabel *timeLabel;
+-(float)xForValue:(float)value;
 
 @end
 
 
+IB_DESIGNABLE
 @implementation TimeRangeSlider
 
-@synthesize slider = _slider;
-@synthesize sliderXInset = _sliderXInset;
-@synthesize delegate = _delegate;
+//@synthesize slider = _slider;
+//@synthesize sliderXInset = _sliderXInset;
+//@synthesize delegate = _delegate;
 
 #pragma mark -
 #pragma mark Initialization
 
 - (id)initWithFrame:(CGRect)frame
 {
-    if (self = [super initWithFrame:frame])
-    {
-       
-        self.slider = [[LimitedSlider alloc] initWithFrame:CGRectZero];
-        [self.slider addTarget:self action:@selector(sliderValueChanged) forControlEvents:UIControlEventValueChanged];
-        self.sliderXInset = 60.0;
-        [self addSubview:self.slider];
-        
-    }
+     if (self = [super initWithFrame:frame])
+     {
+         _minThumbOn = false;
+         _maxThumbOn = false;
+         _padding = 20;
+         
+         self.minimumValue = 1;
+         self.selectedMinimumValue = 2;
+         self.maximumValue = 10;
+         self.selectedMinimumValue = 8;
+         self.minimumRange = 2;
+         
+         _trackBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bar-background.png"]];
+         //_trackBackground.frame = CGRectMake((frame.size.width - _trackBackground.frame.size.width) / 2, (frame.size.height - _trackBackground.frame.size.height) / 2, _trackBackground.frame.size.width, _trackBackground.frame.size.height);
+         
+         //_trackBackground.frame = CGRectMake(80, frame.size.height-75, frame.size.width-140, 20);
+         _trackBackground.frame = frame;
+         _trackBackground.backgroundColor = [UIColor redColor];
+         [self addSubview:_trackBackground];
+         
+         _track = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bar-highlight.png"]];
+         // _track.frame = CGRectMake((frame.size.width - _trackBackground.frame.size.width) / 2, (frame.size.height - _track.frame.size.height) / 2, _track.frame.size.width, _track.frame.size.height);
+         _track.frame = frame;
+         [self addSubview:_track];
+         //[self bringSubviewToFront:_trackBackground];
+         //[self bringSubviewToFront:_track];
+         
+         
+         _minThumb = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"handle.png"] highlightedImage:[UIImage imageNamed:@"handle-hover.png"]];
+         _minThumb.center = CGPointMake([self xForValue:self.selectedMinimumValue], frame.size.height / 2);
+         [self addSubview:_minThumb];
+         
+         _maxThumb = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"handle.png"] highlightedImage:[UIImage imageNamed:@"handle-hover.png"]];
+         _maxThumb.center = CGPointMake([self xForValue:self.selectedMaximumValue], frame.size.height / 2);
+         [self addSubview:_maxThumb];
+         //[self bringSubviewToFront:_minThumb];
+         //[self bringSubviewToFront:_maxThumb];
+         
+         //self.slider = [[LimitedSlider alloc] initWithFrame:CGRectZero];
+         //[self.slider addTarget:self action:@selector(sliderValueChanged) forControlEvents:UIControlEventValueChanged];
+         self.sliderXInset = 60.0;
+         //[self addSubview:self.slider];
+         
+         
+     }
     
+    
+    
+   
     return self;
 }
-
-- (BOOL)flipSlider
+-(float)xForValue:(float)value
 {
-    return _flipSlider;
+    return (_trackBackground.frame.size.width-(_padding*2))*((value -_minimumValue) / (_maximumValue - _minimumValue))+_padding;
 }
-
-- (void)setFlipSlider:(BOOL)flip
+- (void) initialState
 {
-    if (flip != _flipSlider) {
-        _flipSlider = flip;
-        CGAffineTransform transform = flip ? CGAffineTransformMakeScale(-1.0, 1.0) : CGAffineTransformIdentity;
-        self.slider.transform = transform;
-    }
+    
+    
 }
+//
+//- (BOOL)flipSlider
+//{
+//    return _flipSlider;
+//}
+//
+//- (void)setFlipSlider:(BOOL)flip
+//{
+//    if (flip != _flipSlider) {
+//        _flipSlider = flip;
+//        CGAffineTransform transform = flip ? CGAffineTransformMakeScale(-1.0, 1.0) : CGAffineTransformIdentity;
+//        self.slider.transform = transform;
+//    }
+//}
 
 - (void)layoutSubviews
 {
@@ -188,13 +243,13 @@
     return _duration;
 }
 
-- (void)setDuration:(float)duration
-{
-    if (_duration != duration) {
-        _duration = duration;
-        [self updateTimeLabel];
-    }
-}
+//- (void)setDuration:(float)duration
+//{
+//    if (_duration != duration) {
+//        _duration = duration;
+//        [self updateTimeLabel];
+//    }
+//}
 
 - (float)timeValue
 {
