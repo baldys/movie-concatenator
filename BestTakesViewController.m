@@ -131,7 +131,7 @@
     
     
     
-    cell.detailTextLabel.text = take.durationInSeconds;
+    cell.detailTextLabel.text = take.durationString;
    
     
     

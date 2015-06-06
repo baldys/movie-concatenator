@@ -44,16 +44,17 @@
                  
             // case AVKeyValueStatusLoaded:
                  // duration is now known, so we can fetch it without blocking
-                 //CMTime duration = [asset valueForKey:@"duration"];
+             
                  //CMTime duration = [asset duration];
                  
                  weakSelf.duration = [asset duration];
-                 
-                 float seconds = _duration.value/_duration.timescale;
-                 
+             
+             
+                 Float64 seconds = weakSelf.duration.value/weakSelf.duration.timescale;
+             
                  
                  dispatch_async(dispatch_get_main_queue(), ^{
-                     NSLog(@"duration of take loaded: time in seconds:%f", seconds);
+                     NSLog(@"duration of take loaded: time in seconds:%.002f", seconds);
                      
                      completionHandler();
                  });
@@ -93,17 +94,19 @@
         //_imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:_videoAsset];
     
         [self loadDurationOfAsset:_videoAsset withCompletionHandler:^{
+            
             float seconds = _duration.value/_duration.timescale;
             
-            int minutes = 0;
-            while (seconds-60 > 0)
-            {
-                minutes++;
-                seconds = seconds-60;
-            }
-            
-            NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
-            self.durationString = [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
+            self.durationString = [self convertSecondsToString:_duration];
+//            int minutes = 0;
+//            while (seconds-60 > 0)
+//            {
+//                minutes++;
+//                seconds = seconds-60;
+//            }
+//            
+//            NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
+//            self.durationString = [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
             self.timeRange = CMTimeRangeMake(kCMTimeZero, self.duration);
             
         }];
@@ -128,7 +131,7 @@
 
 - (NSString*)convertSecondsToString:(CMTime)seconds
 {
-    float fseconds = _duration.value/_duration.timescale;
+    Float64 fseconds = _duration.value/_duration.timescale;
     
     int minutes = 0;
     while (fseconds-60 > 0)

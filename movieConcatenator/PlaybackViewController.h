@@ -65,5 +65,5 @@
 //- (IBAction)showMetadata:(id)sender;
 
 @property (nonatomic, strong) Take *takeToPlay;
-@property (nonatomic,strong) TTRangeSlider *slider;
+@property (nonatomic, strong) TTRangeSlider *slider;
 @end

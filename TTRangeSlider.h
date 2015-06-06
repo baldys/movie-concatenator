@@ -68,14 +68,15 @@ IB_DESIGNABLE
 
 
 
-@property (nonatomic) float duration;
-@property (nonatomic) float minimumSelectedTime; // selectedMinValue * duration
-@property (nonatomic) float maximumSelectedTime; // selectedMaxValue * duration
+@property (nonatomic) Float64 duration;
+
+@property (nonatomic) Float64 minimumSelectedTime; // selectedMinValue * duration
+@property (nonatomic) Float64 maximumSelectedTime; // selectedMaxValue * duration
 
 
 - (void) updateTimeLabel;
 
-- (void) setDuration:(float)duration;
+//- (void) setDuration:(float;
 
 - (float)minSelectedTimeValue;
 - (float)maxSelectedTimeValue;

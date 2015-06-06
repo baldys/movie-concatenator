@@ -77,8 +77,21 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
 - (void) rangeSlider:(TTRangeSlider *)sender didChangeSelectedMinimumValue:(float)selectedMinimum andMaximumValue:(float)selectedMaximum
 {
+    [self scrub:sender];
+    [sender minimumSelectedTime];
     
+    [self.mPlayer seekToTime:CMTimeMakeWithSeconds(selectedMinimum, NSEC_PER_MSEC) completionHandler:^(BOOL finished) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            isSeeking = NO;
+        });
+    }];
+    self.trimmedTime_initial = CMTimeMakeWithSeconds([sender minSelectedTimeValue], NSEC_PER_MSEC);
+    
+    NSLog(@"new start time: %f", [sender minSelectedTimeValue]);
+    self.trimmedTime_final = CMTimeMakeWithSeconds([sender maxSelectedTimeValue], NSEC_PER_MSEC);
 
+    NSLog(@"new end time: %f", [sender maxSelectedTimeValue]);
+   
 }
 
 #pragma mark Asset URL
@@ -375,17 +388,20 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         //self.slider=[[TimeRangeSlider alloc] initWithFrame:CGRectZero];
         self.slider = [[TTRangeSlider alloc] init];
         
-        
+       
         
         CMTime playerDuration = [self playerItemDuration];
-        
         
         double duration = CMTimeGetSeconds(playerDuration);
         
         [self.slider setDuration:duration];
         
-        
         [self.slider addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
+        [self.slider addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDown];
+        [self.slider addTarget:self action:@selector(endScrubbing:)forControlEvents:UIControlEventTouchCancel|UIControlEventTouchDragExit|UIControlEventTouchUpInside];
+        //[self.slider addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventValueChanged];
+        
+        self.slider.delegate = self;
     }
     
     self.slider.frame = CGRectMake(40, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-80, 40);
@@ -444,7 +460,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.trimmingControlsView setHidden:NO];
     self.trimmingVideo = YES;
     [self disableScrubber];
-    [self enableTrimmingSliders];
+    //[self enableTrimmingSliders];
     [self initializeTrimmingControls];
     self.doneTrimmingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(finishTrimmingVideo:)];
     self.navigationItem.rightBarButtonItem = self.doneTrimmingButton;
@@ -601,6 +617,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
             float minValue = self.slider.maxValue;
             double time = CMTimeGetSeconds([self.mPlayer currentTime]);
             
+            
         }
         else
         {
@@ -694,7 +711,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
             }];
         }
     }
-    else if ([sender isKindOfClass:[TTRangeSlider class]]&& !isSeeking)
+    else if (sender== self.slider && !isSeeking)
     {
         isSeeking = YES;
         CMTime playerDuration = [self playerItemDuration];
@@ -730,17 +747,13 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
                     self.trimmedTime_initial = CMTimeMakeWithSeconds(minSelectedTime, NSEC_PER_MSEC);
                     self.trimmedTime_final = CMTimeMakeWithSeconds(maxSelectedTime, NSEC_PER_MSEC);
                     
-                    
                     NSLog(@"new start time: %f & new end time: %f", minSelectedTime, maxSelectedTime);
+                    
                     
                 }
             }
         }
-//        [self.mPlayer seekToTime:CMTimeMakeWithSeconds(minSelectedTime, NSEC_PER_MSEC) completionHandler:^(BOOL finished) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                isSeeking = NO;
-//            });
-//        }];
+        
         
     }
 }
@@ -1149,18 +1162,15 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         
         [self.mPlayerItem removeObserver:self forKeyPath:@"status"];
         
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                        name:AVPlayerItemDidPlayToEndTimeNotification
-                                                      object:self.mPlayerItem];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:self.mPlayerItem];
     }
     
     /* Create a new instance of AVPlayerItem from the now successfully loaded AVAsset. */
     self.mPlayerItem = [AVPlayerItem playerItemWithAsset:asset];
     
     /* Observe the player item "status" key to determine when it is ready to play. */
-    [self.mPlayerItem addObserver:self
-                       forKeyPath:@"status"
-                          options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
+    [self.mPlayerItem addObserver:self forKeyPath:@"status"
+                        options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                           context:PlaybackViewControllerStatusObservationContext];
     
     /* When the player item has played to its end time we'll toggle
