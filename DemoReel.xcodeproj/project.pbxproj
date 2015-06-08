@@ -35,7 +35,6 @@
 		9F8B80401B1CD4E10053D63D /* handle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B80381B1CD4E10053D63D /* handle@2x.png */; };
 		9F8B80421B1E51660053D63D /* VideoDatalist.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B80411B1E51660053D63D /* VideoDatalist.plist */; };
 		9F8B80461B1E52E40053D63D /* TimeRangeSlider.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B80451B1E52E40053D63D /* TimeRangeSlider.xib */; };
-		9F8B80481B1EE33C0053D63D /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 9F8B80471B1EE33C0053D63D /* Podfile */; };
 		9F8B804B1B1EE7000053D63D /* TTRangeSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F8B804A1B1EE7000053D63D /* TTRangeSlider.m */; };
 		9F8E5DA81AD34C7A009BE712 /* TakesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F8E5DA71AD34C7A009BE712 /* TakesViewController.m */; };
 		9F8E5DAC1AD35138009BE712 /* add-Video-120.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F8E5DAB1AD35138009BE712 /* add-Video-120.png */; };
@@ -136,7 +135,6 @@
 		9F8B80381B1CD4E10053D63D /* handle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "handle@2x.png"; sourceTree = "<group>"; };
 		9F8B80411B1E51660053D63D /* VideoDatalist.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = VideoDatalist.plist; sourceTree = "<group>"; };
 		9F8B80451B1E52E40053D63D /* TimeRangeSlider.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimeRangeSlider.xib; sourceTree = "<group>"; };
-		9F8B80471B1EE33C0053D63D /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		9F8B80491B1EE7000053D63D /* TTRangeSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTRangeSlider.h; sourceTree = "<group>"; };
 		9F8B804A1B1EE7000053D63D /* TTRangeSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTRangeSlider.m; sourceTree = "<group>"; };
 		9F8B804D1B1EFE260053D63D /* TTRangeSliderDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTRangeSliderDelegate.h; sourceTree = "<group>"; };
@@ -341,7 +339,6 @@
 				9F8B80491B1EE7000053D63D /* TTRangeSlider.h */,
 				9F8B804A1B1EE7000053D63D /* TTRangeSlider.m */,
 				9F8B80451B1E52E40053D63D /* TimeRangeSlider.xib */,
-				9F8B80471B1EE33C0053D63D /* Podfile */,
 				9FAFA74C1A98884A00F7396B /* Main.storyboard */,
 				9FB946E21AEB9275001C34E3 /* AVKit.framework */,
 				9FAFA7681A997DEB00F7396B /* AssetsLibrary.framework */,
@@ -575,7 +572,6 @@
 				9F9BC5481AD0F4F600994E9A /* video-camera2b.png in Resources */,
 				9F1802851ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png in Resources */,
 				9FB946EF1AED24AE001C34E3 /* white-outline-star-32.png in Resources */,
-				9F8B80481B1EE33C0053D63D /* Podfile in Resources */,
 				9F8B803E1B1CD4E10053D63D /* handle-hover@2x.png in Resources */,
 				9FB946F31AED331C001C34E3 /* camera-toggle-pressed.png in Resources */,
 				9F9BC5081ACDD38E00994E9A /* noun_clapperboard_78382.png in Resources */,

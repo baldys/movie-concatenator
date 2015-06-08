@@ -65,7 +65,7 @@ IB_DESIGNABLE
 
 @property (nonatomic, strong) UILabel *minTimeLabel;
 @property (nonatomic, strong) UILabel *maxTimeLabel;
-
+@property (nonatomic, strong) UILabel *durationLabel;
 
 
 @property (nonatomic) Float64 duration;
@@ -78,13 +78,15 @@ IB_DESIGNABLE
 
 //- (void) setDuration:(float;
 
-- (float)minSelectedTimeValue;
-- (float)maxSelectedTimeValue;
+- (Float64)minSelectedTimeValue;
+- (Float64)maxSelectedTimeValue;
 
-- (void)setMaxTimeValueFromSelectedValue:(float)maxSelectedValue;
-- (void)setMinTimeValueFromSelectedValue:(float)minSelectedValue;
+-(Float64)timeFromSelectedValue:(float)selectedValue;
+//
+//- (void)setMaxTimeValueFromSelectedValue:(float)maxSelectedValue;
+//- (void)setMinTimeValueFromSelectedValue:(float)minSelectedValue;
 
-
+- (BOOL)lastValueChangedWasMinimumValue;
 
 
 

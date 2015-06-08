@@ -37,6 +37,15 @@ static const CGFloat kLabelsFontSize = 12.0f;
 
 @implementation TTRangeSlider
 
+// indicates which value was last edited - minimum value or maximum value.
+- (BOOL) lastValueChangedWasMinimumValue
+{
+    if (self.leftHandleSelected)
+    {
+        return YES;
+    }
+    return NO;
+}
 //do all the setup in a common place, as there can be two initialisers called depending on if storyboards or code are used. The designated initialiser isn't always called :|
 - (void)initialiseControl {
     //defaults:
@@ -91,6 +100,8 @@ static const CGFloat kLabelsFontSize = 12.0f;
     }
     [self.layer addSublayer:self.maxLabel];
     
+   
+    
     [self refresh];
 }
 
@@ -132,11 +143,6 @@ static const CGFloat kLabelsFontSize = 12.0f;
     return self;
 }
 
-//- (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents
-//{
-//    [self addTarget:target action:action forControlEvents:controlEvents];
-//}
-
 - (float)getPercentageAlongLineForValue:(float)currentValue {
     if (self.minValue == self.maxValue){
         return 0; //stops divide by zero errors where maxMinDif would be zero. If the min and max are the same the percentage has no point.
@@ -175,7 +181,10 @@ static const CGFloat kLabelsFontSize = 12.0f;
     NSNumberFormatter *formatter = (self.numberFormatterOverride != nil) ? self.numberFormatterOverride : self.decimalNumberFormatter;
     
     //self.minLabel.string = [formatter stringFromNumber:@(self.selectedMinimum)];
+    
     self.minLabel.string = [formatter stringFromNumber:@([self minSelectedTimeValue])];
+    //self.minLabel.string = [NSString stringWithFormat:@"%fs]
+    //self.minLabel.string = self.minTimeLabel.text;
 
     //self.maxLabel.string = [formatter stringFromNumber:@(self.selectedMaximum)];
     self.maxLabel.string = [formatter stringFromNumber:@([self maxSelectedTimeValue])];
@@ -296,8 +305,6 @@ static const CGFloat kLabelsFontSize = 12.0f;
         if (selectedValue < self.selectedMaximum){
             self.selectedMinimum = selectedValue;
             [self setSelectedMinimum:selectedValue];
-            
-            
         }
         else {
             self.selectedMinimum = self.selectedMaximum;
@@ -411,7 +418,7 @@ static const CGFloat kLabelsFontSize = 12.0f;
     if (!_decimalNumberFormatter){
         _decimalNumberFormatter = [[NSNumberFormatter alloc] init];
         _decimalNumberFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-        _decimalNumberFormatter.maximumFractionDigits = 3;
+        _decimalNumberFormatter.maximumFractionDigits = 2;
     }
     return _decimalNumberFormatter;
 }
@@ -470,6 +477,7 @@ static const CGFloat kLabelsFontSize = 12.0f;
 
 - (void)updateTimeLabel
 {
+
     if (!self.minTimeLabel)
     {
         self.minTimeLabel = [[UILabel alloc] init];
@@ -486,6 +494,8 @@ static const CGFloat kLabelsFontSize = 12.0f;
     {
         //self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fs", self.minimumSelectedTime];
         self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fs", [self minSelectedTimeValue]];
+        
+        
         
     }
     else {
@@ -512,49 +522,49 @@ static const CGFloat kLabelsFontSize = 12.0f;
 ////    
 ////}
 // get the upper time value from the upper (right) handles' current value.
-- (float)maxSelectedTimeValue
+- (Float64)maxSelectedTimeValue
 {
     NSLog(@"MAXIMUM TIME VALUE: %.2f:", self.duration*self.selectedMaximum);
     return self.duration*self.selectedMaximum;
 }
 // get the lower time value from the lower (left) handles' current value.
-- (float)minSelectedTimeValue
+- (Float64)minSelectedTimeValue
 {
     NSLog(@"MINIMUM TIME VALUE: %.2f:", self.duration*self.selectedMinimum);
     return self.duration*self.selectedMinimum;
 }
 
 
-- (Float64)secondsFromSelectedValue:(float)selectedValue
+- (Float64)timeFromSelectedValue:(float)selectedValue
 {
     if(!_duration)
     {
         NSLog(@"duration not set");
         return 0;
     }
-    NSLog(@"FLOAT VALUE IN SECONDS: %.02f",(Float64)selectedValue/_duration);
-    return (Float64)selectedValue/_duration;
+    NSLog(@"FLOAT VALUE IN SECONDS: %.02f",(Float64)selectedValue*_duration);
+    return (Float64)selectedValue*_duration;
 }
 
 
 
-- (void)setMinTimeValueFromSelectedValue:(float)minSelected
-{
-    if (_duration > 0.0)
-    {
-        
-    }
-    self.selectedMinimum = minSelected/self.duration;
-    [self updateTimeLabel];
-}
+//- (void)setMinTimeValueFromSelectedValue:(float)minSelected
+//{
+//    if (_duration > 0.0)
+//    {
+//        
+//    }
+//    self.selectedMinimum = minSelected/self.duration;
+//    [self updateTimeLabel];
+//}
 
-- (void)setMaxTimeValueFromSelectedValue:(float)maxSelected;
-{
-    float maxSelectedValue = maxSelected/self.duration;
-  
-    self.selectedMaximum = maxSelectedValue;
-    [self updateTimeLabel];
-}
+//- (void)setMaxTimeValueFromSelectedValue:(float)maxSelected;
+//{
+//    float maxSelectedValue = maxSelected/self.duration;
+//  
+//    self.selectedMaximum = maxSelectedValue;
+//    [self updateTimeLabel];
+//}
 
 //- (float)minimumTime
 //{

@@ -574,6 +574,7 @@
 
 - (void) exportAssetToScaleDown:(AVAsset*)assetToScale
 {
+    
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:assetToScale presetName:AVAssetExportPreset1280x720];
     
     
@@ -594,8 +595,8 @@
      ^{
          dispatch_async(dispatch_get_main_queue(),
                         ^{
-                            [self exportDidFinish:exporter];
-                            NSLog(@"exported video");
+                            //[self exportDidFinish:exporter];
+                            
                             if (exporter.status ==AVAssetExportSessionStatusCompleted)
                             {
                                 NSError *error = nil;
@@ -607,6 +608,7 @@
                                 {
                                     NSLog(@"%@", error);
                                 }
+                                NSLog(@"Video has been trimmed and exported?");
                                 
                             }
                             
