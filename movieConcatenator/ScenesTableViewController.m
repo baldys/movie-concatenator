@@ -104,6 +104,8 @@
     //[self.library listScenesAndTakes];
     [self.navigationController setToolbarHidden:YES animated:NO];
     [self._tableView reloadData];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -324,6 +326,16 @@
 
 - (void) didSelectItemForPlayback:(NSNotification*)notification
 {
+    Take *take = notification.object;
+    
+    Scene *sceneContainingTakeForPlayback = self.library.scenes[take.sceneNumber];
+    
+    self.currentSceneIndex = take.sceneNumber;
+    
+    NSLog(@"did select item for playback: currentSceneIndex: %i", self.currentSceneIndex);
+    NSLog(@"Why it matters: so you can potientially pass an entire scene with the playback view controller in an AVPlayerQueue?, and implement swipe gestures to move between takes in the scene.");
+
+    
     [self performSegueWithIdentifier:@"showPlayback" sender:[notification object]];
 }
 
@@ -365,27 +377,6 @@
                        Take *newTake = [[Take alloc] initWithURL:notification.object];
                        newTake.sceneNumber = _currentSceneIndex;
                        
-                       // This is a very unelegant solution for the issue of retrieving the video orientations and the direction that the camera was facing during the recording of the video so that all the video orientations and sizes in the final AVMutableVideoComposition  are the same.
-                       // Basically im setting some string that identifies those properties from the RecordVideoViewController that are set when the orientation of the device changes or when switching between the front and back facing camera
-                       // the combinations are based on:
-                       // // the UIDevice/UIInterfaceOrientation that was used during video recording (avcapturedevice positon)
-                       // // and the AVCaptureDevicePosition (whether the video was recorded using the front facing or the back facing video camera)
-                       // this information is sent through the posted notifications' user info dictionary
-                       ////
-                       //
-                       //// Landscape Left + Back Facing camera
-                       ///////// rotate 0 degrees (correct orientation)
-                       ///////// scale down if the array of selected takes contains any videos recorded with front facing camera
-                       //// Landscape Left + Front Facing camera
-                       ///////// rotate 180 degrees
-                       ///scale down to the same size if the array of selected takes contains any videos recorded with front facing camera
-                       //// Landscape Right + Back Facing camera
-                       ///////// rotate 180 degrees
-                       //// Landscape Right + Front Facing camera
-                       ///////// rotate 0 degrees (correct orientation)
-                       // renderScale
-                       //
-                       
                        NSString *videoOrientationString = [[notification userInfo] objectForKey:@"videoOrientation"];
                        NSString *videoPositionString = [[notification userInfo] objectForKey:@"videoPosition"];
                        if ([videoOrientationString isEqualToString:@"LandscapeLeft"]&&[videoPositionString isEqualToString:@"Back"])
@@ -411,13 +402,11 @@
                            newTake.videoOrientationAndPosition = None;
                            NSLog(@"something is wrong wtf!!");
                        }
-//                       newTake.videoOrientation = [[notification userInfo] objectForKey:@"videoOrientation"];
-//                       newTake.videoRecordingPosition = [[notification userInfo] objectForKey:@"videoPosition"];
-                       
+
                        [[weakSelf.library.scenes[_currentSceneIndex] takes] addObject:newTake];
                        
                        newTake.sceneTitle = [weakSelf.library.scenes[_currentSceneIndex]title];
-                       NSLog(@"new take scenr title: %@", newTake.sceneTitle);
+                       NSLog(@"new take is in scene with title: %@", newTake.sceneTitle);
                        
                        
                        [weakSelf.library saveToFilename:@"VideoDatalist.plist"];
@@ -450,22 +439,13 @@
 
     }
  
-    else if ([segue.identifier isEqualToString:@"showVideo"])
-    {
-        UINavigationController *navController = (UINavigationController*)segue.destinationViewController;
-        PlayVideoViewController *playVideoVC = (PlayVideoViewController*)navController.topViewController;
-        playVideoVC.takeToPlay = sender;
-        
-    }
     else if ([segue.identifier isEqualToString:@"showPlayback"])
     {
-//        UINavigationController *navController = (UINavigationController*)segue.destinationViewController;
-//        PlaybackViewController *playbackVC = (PlaybackViewController*)navController.topViewController;
-//        
+
         PlaybackViewController *playbackVC = (PlaybackViewController*)segue.destinationViewController;
-        //playbackVC.takeToPlay = [[Take alloc] init ];
+        ///// later: set it to play the collection of takes in a scene (array of AVPlayerItems)
         [playbackVC setTakeToPlay:sender];
-        //[playbackVC setURL:[sender getPathURL]];
+        
     }
 }
 
@@ -483,7 +463,7 @@
     {
         if (success)
         {
-            NSLog(@"saving video");
+            //NSLog(@"saving video");
             [weakSelf.library saveToFilename:@"VideoDatalist.plist"];
         }
 //            //        [weakSelf.tableView reloadData];

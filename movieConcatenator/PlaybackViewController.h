@@ -20,26 +20,11 @@
 
 @interface PlaybackViewController : UIViewController <TTRangeSliderDelegate>
 {
-//@private
-    
-//    IBOutlet PlaybackView* mPlaybackView;
-//    
-//    UISlider* mScrubber;
-//    IBOutlet UIToolbar *mToolbar;
-//    UIBarButtonItem *mPlayButton;
-//    UIBarButtonItem *mPauseButton;
-//    
     float mRestoreAfterScrubbingRate;
     BOOL seekToZeroBeforePlay;
     id mTimeObserver;
     BOOL isSeeking;
-//
 
-    //NSURL* mURL;
-//    
-//    AVPlayer* mPlayer;
-//    AVPlayerItem * mPlayerItem;
-//}
 }
 
 //@property (nonatomic, copy) NSURL* URL;
@@ -54,16 +39,34 @@
 @property (nonatomic, strong) UIBarButtonItem *mPlayButton;
 @property (nonatomic, strong) UIBarButtonItem *mPauseButton;
 @property (nonatomic, strong) UISlider* mScrubber;
+
 @property (nonatomic, strong) NSArray *playbackItems;
 @property (nonatomic, strong) VideoMerger *videoMerger;
-
-@property (nonatomic) CMTime trimmedTime_initial;
-@property (nonatomic) CMTime trimmedTime_final;
 
 - (IBAction)play:(id)sender;
 - (IBAction)pause:(id)sender;
 //- (IBAction)showMetadata:(id)sender;
 
 @property (nonatomic, strong) Take *takeToPlay;
+
+@property (nonatomic) CMTime trimmedTime_initial;
+@property (nonatomic) CMTime trimmedTime_final;
 @property (nonatomic, strong) TTRangeSlider *slider;
+
 @end
+/* 
+TO DO:
+[x] initial right hand slider value should = the duration
+[x] cancel button to get out of trimming mode without saving
+[ ] UIAction sheet for confirming overwriting the video (give options: overwriting video and deleting original | create trimmed video while keeping the original video | cancel)
+ -> if original is kept, need to be able to create a backup copy. (bool backupCopy?)
+ ->
+ 
+[ ] make the slider value labels in this format mm:ss instead of decimal.
+[ ] a label for duration that updates as slider values change.
+[ ] play pause button for previewing the trimmed version
+[ ] after trimming the video is done want to update the current player item with the new trimmed
+version of that video so it doesn’t play parts that were just deleted
+[ ] need some sort of loading indicator ? if necessary….
+[ ] probably want the option to save the original video as backup (which provides a way to separate a video into multiple parts)
+*/

@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, TransitionType)
 
 -(AVAsset*)spliceAssets: (NSArray*)takes;
 -(AVAsset*)buildCompositionObjects:(NSArray*)takes;
--(void) exportTrimmedTake:(Take*)take;
+-(void) exportTrimmedTake:(Take*)take withCompletionHandler:(void (^)(void))completionHandler;
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;

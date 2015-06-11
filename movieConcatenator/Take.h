@@ -73,7 +73,8 @@ typedef NS_ENUM(NSInteger, TransitionTypes)
 
 
 - (NSURL*)getFileURL;
-- (NSString*) documentsDirectory;
+//- (NSString*) documentsDirectory;
+- (void)createTrimmedTakeWithCompletionHandler:(void (^)(NSURL*))completionHandler;
 - (void)loadDurationOfAsset:(AVAsset*)asset withCompletionHandler:(void (^)(void))completionHandler;
 - (UIImage *)loadThumbnailWithCompletionHandler:(void (^)(UIImage *))completionHandler;
 

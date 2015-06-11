@@ -509,7 +509,7 @@
     
     for (int i=0; i<_videoClips.count; i++)
     {
-        AVURLAsset *asset = [self.videoClips[i] copy];
+        AVURLAsset *asset = self.videoClips[i];
         NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
         CMTimeRange timeRangeInAsset;
         
@@ -572,6 +572,7 @@
     return self.composition;
 }
 
+// export the assets  that use back-facing camera if a composition is being created where mixed (front-facing with back facing) assets are used as scaled down versions so they are all the same size
 - (void) exportAssetToScaleDown:(AVAsset*)assetToScale
 {
     
@@ -579,9 +580,11 @@
     
     
 }
+
+////***
 // create a new version of this take with the trimmed time range and replace the old take with the new take but keep the same file name so it can be accessed from the same location. Initially it is exported to the temporary directory then this file replaces the take in its original location with the same asset id
 
-- (void) exportTrimmedTake:(Take*)take
+- (void) exportTrimmedTake:(Take*)take withCompletionHandler:(void (^)(void))completionHandler
 {
     AVAsset *asset = [AVURLAsset URLAssetWithURL:take.getFileURL options:nil];
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset1920x1080];
@@ -604,11 +607,19 @@
                                 NSLog(@"take url: %@", take.getFileURL);
                                 NSURL *outputURL = exporter.outputURL;
                                 [[NSFileManager defaultManager] replaceItemAtURL:[take getFileURL] withItemAtURL:outputURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&oldURL error:&error];
+
                                 if (error)
                                 {
                                     NSLog(@"%@", error);
                                 }
-                                NSLog(@"Video has been trimmed and exported?");
+                                else{
+                                    dispatch_async(dispatch_get_main_queue(),^{
+                                        completionHandler();
+                                        NSLog(@"Video has been trimmed and exported?");
+                                    });
+                                    
+                                }
+                                
                                 
                             }
                             

@@ -44,7 +44,9 @@
     self = [super initWithFrame:frame];
     return self;
 }
-
+//init with duration
+// _duration = duration
+//
 - (float)smallestValue
 {
     return _smallestValue;

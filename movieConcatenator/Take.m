@@ -41,23 +41,22 @@
          NSError *error = nil;
          if ([asset statusOfValueForKey:durationKey error:&error] == AVKeyValueStatusLoaded)
          {
-                 
-            // case AVKeyValueStatusLoaded:
-                 // duration is now known, so we can fetch it without blocking
              
                  //CMTime duration = [asset duration];
                  
-                 weakSelf.duration = [asset duration];
+            
+             weakSelf.duration = [asset duration];
              
              
-                 Float64 seconds = weakSelf.duration.value/weakSelf.duration.timescale;
-             
+                 //Float64 seconds = weakSelf.duration.value/weakSelf.duration.timescale;
+             double seconds = CMTimeGetSeconds(weakSelf.duration);
                  
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     NSLog(@"duration of take loaded: time in seconds:%.002f", seconds);
-                     
-                     completionHandler();
-                 });
+            
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 NSLog(@"duration of take loaded: time in seconds:%.002f", seconds);
+                 
+                 completionHandler();
+            });
          }
          else
          {
@@ -129,9 +128,13 @@
     return self;
 }
 
+
+/// NONONONO THIS IS WRONG
 - (NSString*)convertSecondsToString:(CMTime)seconds
 {
     Float64 fseconds = _duration.value/_duration.timescale;
+    
+    CMTimeMakeWithSeconds(fseconds, NSEC_PER_MSEC);
     
     int minutes = 0;
     while (fseconds-60 > 0)
@@ -146,33 +149,110 @@
 }
 
 
+- (void)createTrimmedTakeWithCompletionHandler:(void (^)(NSURL* trimmedTakeURL))completionHandler
+{
+    // 1. create and name a url url in temp directory to put the copied video clip
+//    NSString *filePath = NSTemporaryDirectory();
+//    NSString *extension = @"mov";
+//    NSString *fileNameNoExtension = [NSString stringWithFormat:@"trimmedTake%i", arc4random() % 1000];
+//    filePath = [filePath stringByAppendingPathComponent:fileNameNoExtension];
+//    filePath = [filePath stringByAppendingPathExtension:extension];
+    //      NSURL *trimmedTakeURL = [NSURL fileURLWithPath:filePath];
+    
 
+    NSURL *tempURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"trimmedTake-%i.mov", arc4random() % 1000]]];
 
-//- (BOOL) videoOrientationLandscapeLeft
-//{
-//    if ([self.videoOrientation isEqualToString:@"Landscape Left"])
-//    {
-//        return YES;
-//    }
-//    return NO;
-//}
+  
+    // 2. copy the contents of this take at its url to save in a temp folder
+//    NSError *error = nil;
+//    [[NSFileManager defaultManager] copyItemAtURL:self.getFileURL toURL:trimmedTakeURL error:&error];
 //
-//- (BOOL) videoCameraFacingBack
-//{
-//    if ([self.videoRecordingPosition isEqualToString:@"Back"])
-//    {
-//        return YES;
-//    }
-//    return NO;
-//}
+    // asset that will be a trimmed verson of the takes asset at its url
+    AVAsset *assetToBeTrimmed = [AVURLAsset assetWithURL:self.getFileURL];
+    
+    // 4. export the new trimmed video with completion handler. on successful completion alloc and init a new take with its url set to the temp url
+    
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:assetToBeTrimmed presetName:AVAssetExportPreset1920x1080];
+    exporter.outputURL = tempURL;
+    exporter.timeRange = self.timeRange;
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    
+    __weak __block Take* weakSelf = (Take*)self;
+    __block BOOL success = NO;
+    [exporter exportAsynchronouslyWithCompletionHandler:
+     ^{
+         dispatch_async(dispatch_get_main_queue(),
+                        ^{
+                            //[self exportDidFinish:exporter];
+                            
+                            if (exporter.status ==AVAssetExportSessionStatusCompleted)
+                            {
+                                success = YES;
+                                
+//                                Take *trimmedTake = [[Take alloc] initWithURL:exporter.outputURL];
+//                                trimmedTake.sceneTitle = weakSelf.sceneTitle;
+//                                trimmedTake.sceneNumber = weakSelf.sceneNumber;
+//                                trimmedTake.videoOrientationAndPosition = weakSelf.videoOrientationAndPosition;
+                                
+                                //[[NSNotificationCenter defaultCenter] postNotificationName:@"trimmedVideoAtURL" object:exporter.outputURL];
+                                completionHandler(exporter.outputURL);
+                                
+                                
+                                
+//                                NSError *error = nil;
+//                                NSURL *oldURL = take.getFileURL;
+//                                NSLog(@"take url: %@", take.getFileURL);
+//                                NSURL *outputURL = exporter.outputURL;
+//                                [[NSFileManager defaultManager] replaceItemAtURL:[take getFileURL] withItemAtURL:outputURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&oldURL error:&error];
+                                
+                                
+                            }
+                        });
+                        
+//                                if (error)
+//                                {
+//                                    NSLog(@"%@", error);
+//                                }
+//                            else{
+//                                    dispatch_async(dispatch_get_main_queue(),^{
+//                                        completionHandler();
+//                                        NSLog(@"Video has been trimmed and exported?");
+//                                    });
+                            
+                            
+                                
+                                
+                            
+                            
+                }];
+    
+
+    
+    
+    
+}
+
+
+// set some of its properties that need to be the same as the old one: like videoOrientation&position, scene number, scene title.
+// return the new trimmed copied version of the take!
+// now put the take into the correct scene and into the video library.. it has its scene index set as a property so do maybe do this in some other class
+//
+
+/* ON SUCCESSFUL/COMPLETE EXPORT OF TRIMMED ASSET:
+
+ Take *trimmedTake = [Take alloc] initWithURL:exporter.outputURL
+ 
+ */
+
+
 
 - (AVAsset*) createAssetItem
 {
     if (!self.assetItem)
     {
         self.assetURL = [self getFileURL];
-        self.assetItem = [AVAsset assetWithURL:self.assetURL];
-        
+        NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
+        self.assetItem = [[AVURLAsset alloc] initWithURL:self.assetURL options:options];
     }
     return self.assetItem;
 }

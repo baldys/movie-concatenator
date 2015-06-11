@@ -156,25 +156,6 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
 }
 
-//- (void) setSelectedStarImage
-//{
-//    if (![self.takeToPlay isSelected])
-//    {
-//        [self.starButton setImage:[UIImage imageNamed:@"blue-star-32"]];
-//        [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"blue-star-24"]];
-//        [self.takeToPlay setSelected:YES];
-//    }
-//    
-//}
-//-(void) setDeselectedStarImage
-//{
-//    
-//    [self.starButton setImage:[UIImage imageNamed:@"white-outline-star-32"]];
-//    [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"white-outline-star-24"]];
-//    [self.takeToPlay setSelected:NO];
-//    
-// 
-//}
 
 - (IBAction)play:(id)sender
 {
@@ -204,20 +185,14 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
 - (IBAction)delete:(id)sender
 {
-    BOOL __block didConfirmDelete = NO;
-    NSLog(@"the delete button was pressed?");
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Delete Take" message:@"This action cannot be undone" preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction* deleteAction = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
-        
-        didConfirmDelete = YES;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"shouldDeleteTake" object:self.takeToPlay];
         NSLog(@"should delete take");
         
         [self.navigationController popViewControllerAnimated:YES];
-        
-        
         
     }];
     
@@ -226,10 +201,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [alert addAction:cancelAction];
     
     [self presentViewController:alert animated:YES completion:^{
-        if (didConfirmDelete)
-        {
-            NSLog(@"did confirm delete");
-        }
+        
     }];
     
 }
@@ -304,6 +276,10 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
      {
          [self unhideBars];
          [self.doneTrimmingButton setEnabled:NO];
+         self.navigationItem.rightBarButtonItem = nil;
+         self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
+         
+
      }];
     
 }
@@ -334,16 +310,22 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
     if (!self.slider)
     {
-        //self.slider=[[TimeRangeSlider alloc] initWithFrame:CGRectZero];
-        self.slider = [[TTRangeSlider alloc] init];
+        CMTime playerDuration = [self playerItemDuration];
+        
+        float duration = CMTimeGetSeconds(playerDuration);
+        
+        
+        self.slider=[[TTRangeSlider alloc] initWithDuration:duration];
+        //self.slider = [[TTRangeSlider alloc] init];
+        NSLog(@"RANGE SLIDER CREATED: max selected time value: %f, %f",[self.slider maxSelectedTimeValue], self.slider.maxValue);
         
        
         
-        CMTime playerDuration = [self playerItemDuration];
+//        CMTime playerDuration = [self playerItemDuration];
+//        
+//        double duration = CMTimeGetSeconds(playerDuration);
         
-        double duration = CMTimeGetSeconds(playerDuration);
-        
-        [self.slider setDuration:duration];
+        //[self.slider setDuration:duration];
         
         [self.slider addTarget:self action:@selector(scrub:) forControlEvents:UIControlEventTouchDragInside];
         [self.slider addTarget:self action:@selector(beginScrubbing:) forControlEvents:UIControlEventTouchDown];
@@ -353,46 +335,16 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         self.slider.delegate = self;
     }
     
+    
     self.slider.frame = CGRectMake(40, self.trimmingControlsView.frame.size.height-75, self.trimmingControlsView.frame.size.width-80, 40);
 
     [self.trimmingControlsView addSubview:self.slider];
     [self.trimmingControlsView bringSubviewToFront:self.slider];
-//
-    ///////
-    ////////
-    
-//    if (!self.trimScrubberStartTime && !self.trimScrubberEndTime)
-//    {
-//        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
-//        self.trimScrubberStartTime = [[TimeRangeSlider alloc] initWithFrame:CGRectZero];
-//    }
-//    self.trimScrubberStartTime.delegate = self;
-//    self.trimScrubberEndTime.delegate = self;
-//    //self.trimScrubberStartTime.slider = self.startTrimScrubber;
-//    
-//    ////////
-//    
-//    self.trimScrub    berStartTime.frame = CGRectMake(80, self.trimmingControlsView.frame.size.height-100, self.trimmingControlsView.frame.size.width-140, 20);
-//    self.trimScrubberEndTime.frame = CGRectMake(80, self.trimmingControlsView.bounds.size.height-120, self.trimmingControlsView.frame.size.width-140, 20);
-//    ////////
-//    [self.trimmingControlsView addSubview:self.trimScrubberStartTime];
-//    [self.trimmingControlsView addSubview:self.trimScrubberEndTime];
-//    
-    ////////
-    ////////
-    
-    
-   
-    //slider.delegate = self;
-   
-    //[self.trimmingControlsView addSubview:slider];
-    
+
 
     [UIView animateWithDuration:0.5 animations:^{
         
         [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, -100)];
-        //self.trimmingControlsView.frame = CGRectOffset(self.trimmingControlsView.frame, 0, -200);
-        // self.trimmingControlsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 200);
         
     } completion:
      ^(BOOL finished)
@@ -412,8 +364,9 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     //[self enableTrimmingSliders];
     [self initializeTrimmingControls];
     self.doneTrimmingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(finishTrimmingVideo:)];
-    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(finishTrimmingVideo:)];
     self.navigationItem.rightBarButtonItem = self.doneTrimmingButton;
+    self.navigationItem.leftBarButtonItem = cancelButton;
     [self.doneTrimmingButton setEnabled:YES];
     
     // if this button gets pressed, whatever position the slider is in will correspond to the time in which the video should be cut out when a done button is pressed. set this time to the new time range of the take that is being played.
@@ -429,8 +382,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     //self.trimmingControlsView.frame = self.view.frame.size.height;
     
     
-    [self hideTrimmingControls];
-    [self enableScrubber];
+    
     //[self disableTrimmingSliders];
 
     // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
@@ -440,28 +392,121 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 //    self.trimmingControlsView = nil;
 //    [self.trimmingControlsView removeFromSuperview];
     
+
     if (sender == self.doneTrimmingButton)
     {
-        // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
         
-        self.takeToPlay.timeRange = CMTimeRangeFromTimeToTime(self.trimmedTime_initial, self.trimmedTime_final);
-        //CMTime newDuration = CMTimeMake(self.takeToPlay.timeRange.duration, NSEC_PER_MSEC);
+        UIAlertController* completedTrimmingActionSheet = [UIAlertController alertControllerWithTitle:@" " message:@" " preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        //            UIAlertAction *deleteOriginal = [UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
+        //
+        //            }];
+        
+        UIAlertAction* saveAs = [UIAlertAction actionWithTitle:@"Save as new take" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            
+            self.takeToPlay.timeRange = CMTimeRangeFromTimeToTime(self.trimmedTime_initial, self.trimmedTime_final);
+            
+            [self.takeToPlay createTrimmedTakeWithCompletionHandler:^(NSURL *trimmedTakeURL){
+                NSLog(@"trimmedVideoURL: %@", trimmedTakeURL);
+                [self videoTrimmedAndSavedAtURL:trimmedTakeURL];
+                
+            }];
+        }];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        //[completedTrimmingActionSheet addAction:deleteOriginal];
+        [completedTrimmingActionSheet addAction:saveAs];
+        [completedTrimmingActionSheet addAction:cancelAction];
+        
+        [self presentViewController:completedTrimmingActionSheet animated:YES completion:^{
+            
+        }];
+
+        // now must set the last recorded start and end times represented by the trimming controls to the takes' new time range
+        // Float64 is a double
+        
+        //CMTime newDuration = CMTimeMakeWithSeconds(self.takeToPlay.timeRange.duration, NSEC_PER_MSEC);
         
         //self.takeToPlay.duration = self.takeToPlay.timeRange.duration;
         //AVAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
-        self.videoMerger = [[VideoMerger alloc] init];
-        [self.videoMerger exportTrimmedTake:self.takeToPlay];
         
+        //////////
+        /*
+         self.videoMerger = [[VideoMerger alloc] init];
+         [self.videoMerger exportTrimmedTake:self.takeToPlay withCompletionHandler:
+         ^{
+         }];
+         */
+        /////////
+        
+        
+        
+        
+        // keep original video or overwrite it (if you overwrite, the original will be deleted and replaced by the trimmed video)
+        // would you like to keep your original video or overwrite it? (warning: if you overwrite it it will be permanently deleted)
+        
+        // 1. successfully trimmed and saved video. would you like to keep a copy of the orginial or overwrite it? this action cannot be undone.
+        //ok so by default create the backup copy of the original, put it in temp folder
+        
+        
+    
+        
+                                       
+        
+
         ///NSLog(@"new duration: %d", self.takeToPlay.timeRange.duration);
         
         
     }
+    [self hideTrimmingControls];
+    [self enableScrubber];
     
     // replace the old take with the new trimmed take; load its duration again and set its time ranges back to [0, duration]
     //self.takeToPlay loadDurationOfAsset:<#(AVAsset *)#> withCompletionHandler:<#^(void)completionHandler#>
     //[self prepareToPlayAsset:self.takeToPlay withKeys:<#(NSArray *)#>]
     
 }
+
+- (void)videoTrimmedAndSavedAtURL:(NSURL*)url
+{
+    NSString *videoOrientation = @" ";
+    NSString *videoPosition = @" ";
+    switch ([self.takeToPlay videoOrientationAndPosition])
+    {
+        case LandscapeLeft_Back:
+             NSLog(@"LandscapeLeft_Back");
+            videoOrientation = @"LandscapeLeft";
+            videoPosition = @"Back";
+            break;
+        case LandscapeLeft_Front:
+            NSLog(@"LandscapeLeft_Front");
+            videoOrientation = @"LandscapeLeft";
+            videoPosition = @"Front";
+            break;
+        case LandscapeRight_Back:
+            NSLog(@"LandscapeRight_Back");
+            videoOrientation = @"LandscapeRight";
+            videoPosition = @"Back";
+            break;
+        case LandscapeRight_Front:
+            NSLog(@"LandscapeRight_Front");
+            videoOrientation = @"LandscapeRight";
+            videoPosition = @"Front";
+            break;
+    }
+  
+    NSArray *keys = [NSArray arrayWithObjects:@"videoOrientation", @"videoPosition", nil];
+    
+    NSArray *objects = [NSArray arrayWithObjects:videoOrientation, videoPosition, nil];
+    
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:objects
+                                                           forKeys:keys];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didFinishRecordingVideoToURL" object:url userInfo:dictionary];
+    
+}
+
+
 /* Display AVMetadataCommonKeyTitle and AVMetadataCommonKeyCopyrights metadata. */
 //- (IBAction)showMetadata:(id)sender
 //{
@@ -805,7 +850,10 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [super viewDidLoad];
     [self setPlayer:nil];
     [self creteBarButtonItems];
-    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(videoTrimmedAndSavedAtURL:) name:@"trimmedVideo" object:nil];
+   
     UIView* view  = [self view];
 
     //[self.navigationController setToolbarHidden:NO animated:NO];
@@ -978,7 +1026,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
 @implementation PlaybackViewController (Player)
 
-#pragma mark Player Item
+#pragma mark - Player Item
 
 - (BOOL)isPlaying
 {

@@ -50,9 +50,12 @@ static const CGFloat kLabelsFontSize = 12.0f;
 - (void)initialiseControl {
     //defaults:
     _minValue = 0.0f;
-    _selectedMinimum = 0.1f;
+    _selectedMinimum = 0.0f;
     _maxValue = 1.0f;
-    _selectedMaximum  = 0.9f;
+    _selectedMaximum  = _maxValue;
+    
+    NSLog(@"DURATION: %f", _duration );
+    NSLog(@"##### %f,",[self maxSelectedTimeValue]);
     
     //draw the slider line
     self.sliderLine = [CALayer layer];
@@ -126,20 +129,32 @@ static const CGFloat kLabelsFontSize = 12.0f;
     
     if(self)
     {
-        [self initialiseControl];
+        //[self initialiseControl];
     }
     return self;
 }
 
--  (id)initWithFrame:(CGRect)aRect
+//-  (id)initWithFrame:(CGRect)frame
+//{
+//    
+////    self = [super initWithFrame:frame];
+////    if (self)
+////    {
+////        [self initialiseControl];
+////    }
+//    //return self;
+//    
+//    return [self initWithDuration:[NSNull null]];
+//
+//}
+
+- (instancetype) initWithDuration:(Float64)duration
 {
-    self = [super initWithFrame:aRect];
-    
-    if (self)
+    if (self == [super initWithFrame:CGRectZero])
     {
+        _duration = duration;
         [self initialiseControl];
     }
-    
     return self;
 }
 

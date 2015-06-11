@@ -174,6 +174,8 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     Take *take = self.collectionData.takes[indexPath.item];
+    NSLog(@"Take in scene number: %i", take.sceneNumber);
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemForPlayback" object:take];
 }
 
