@@ -259,7 +259,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     } completion:
      ^(BOOL finished)
      {
-         [self hideBars];
+         //[self hideBars];
      }];
 }
 - (void) hideTrimmingControls
@@ -274,7 +274,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     } completion:
      ^(BOOL finished)
      {
-         [self unhideBars];
+         //[self unhideBars];
          [self.doneTrimmingButton setEnabled:NO];
          self.navigationItem.rightBarButtonItem = nil;
          self.navigationItem.leftBarButtonItem = self.navigationItem.backBarButtonItem;
@@ -300,7 +300,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    [self.trimmingControlsView setBackgroundColor:[UIColor blackColor]];
+    [self.trimmingControlsView setBackgroundColor:[UIColor redColor]];
     [self.trimmingControlsView setOpaque:YES];
     
     [self.view addSubview:self.trimmingControlsView];
@@ -349,7 +349,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     } completion:
      ^(BOOL finished)
      {
-         [self hideBars];
+         //[self hideBars];
      }];
 
     
@@ -830,7 +830,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 - (void) viewWillAppear:(BOOL)animated
 {
 //    [super viewDidAppear:animated];
-//    [self.tabBarController hidesBottomBarWhenPushed];
+    [self.tabBarController.tabBar setHidden:YES];
     [self.navigationController setToolbarHidden:YES animated:NO];
 }
 
@@ -909,7 +909,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:AVPlayerItemDidPlayToEndTimeNotification
                                                   object:self.mPlayerItem];
-    
+    [self.tabBarController.tabBar setHidden:NO];
 
 }
 

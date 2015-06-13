@@ -58,15 +58,12 @@
 TO DO:
 [x] initial right hand slider value should = the duration
 [x] cancel button to get out of trimming mode without saving
-[ ] UIAction sheet for confirming overwriting the video (give options: overwriting video and deleting original | create trimmed video while keeping the original video | cancel)
- -> if original is kept, need to be able to create a backup copy. (bool backupCopy?)
- ->
+[x] UIAction sheet for confirming overwriting the video
  
 [ ] make the slider value labels in this format mm:ss instead of decimal.
 [ ] a label for duration that updates as slider values change.
-[ ] play pause button for previewing the trimmed version
-[ ] after trimming the video is done want to update the current player item with the new trimmed
-version of that video so it doesn’t play parts that were just deleted
-[ ] need some sort of loading indicator ? if necessary….
-[ ] probably want the option to save the original video as backup (which provides a way to separate a video into multiple parts)
+[ ] play pause button for previewing the trimmed version (just use the one in the toolbar while keeping the toolbar showing)
+[ ] remove scrubber
+[ ] swipe gestures for switching between takes in that scene
+
 */

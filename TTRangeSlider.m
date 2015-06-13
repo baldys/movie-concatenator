@@ -30,6 +30,8 @@ const float HANDLE_DIAMETER = 16;
 
 @property (nonatomic, strong) NSNumberFormatter *decimalNumberFormatter; // Used to format values if formatType is YLRangeSliderFormatTypeDecimal
 
+@property (nonatomic) double adjustedDuration;
+
 @end
 
 static const CGFloat kLabelsFontSize = 12.0f;
@@ -57,6 +59,24 @@ static const CGFloat kLabelsFontSize = 12.0f;
     NSLog(@"DURATION: %f", _duration );
     NSLog(@"##### %f,",[self maxSelectedTimeValue]);
     
+    
+    // create duration label.
+    /////////
+    CGFloat barSidePadding = 16.0f;
+    CGRect currentFrame = self.frame;
+    float yMiddle = currentFrame.size.height/2.0;
+    if (!self.durationLabel)
+    {
+        self.durationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, yMiddle, barSidePadding*3, 8.0)];
+        self.durationLabel.textColor = [UIColor whiteColor];
+        self.durationLabel.font = [UIFont systemFontOfSize:12.0f];
+        
+    }
+    //////////
+    
+    
+    
+    [self addSubview:self.durationLabel];
     //draw the slider line
     self.sliderLine = [CALayer layer];
     self.sliderLine.backgroundColor = self.tintColor.CGColor;
@@ -82,7 +102,6 @@ static const CGFloat kLabelsFontSize = 12.0f;
     self.minLabel.alignmentMode = kCAAlignmentCenter;
     self.minLabel.fontSize = kLabelsFontSize;
     self.minLabel.frame = CGRectMake(0, 0, 75, 14);
-    self.minLabel.contentsScale = [UIScreen mainScreen].scale;
     self.minLabel.contentsScale = [UIScreen mainScreen].scale;
     if (self.minLabelColour == nil){
         self.minLabel.foregroundColor = self.tintColor.CGColor;
@@ -115,7 +134,9 @@ static const CGFloat kLabelsFontSize = 12.0f;
     float barSidePadding = 16.0f;
     CGRect currentFrame = self.frame;
     float yMiddle = currentFrame.size.height/2.0;
-    CGPoint lineLeftSide = CGPointMake(barSidePadding, yMiddle);
+    
+
+    CGPoint lineLeftSide = CGPointMake(barSidePadding*3, yMiddle);
     CGPoint lineRightSide = CGPointMake(currentFrame.size.width-barSidePadding, yMiddle);
     self.sliderLine.frame = CGRectMake(lineLeftSide.x, lineLeftSide.y, lineRightSide.x-lineLeftSide.x, 1);
     
@@ -186,6 +207,25 @@ static const CGFloat kLabelsFontSize = 12.0f;
     return CGRectGetMinX(self.sliderLine.frame) + offset;
 }
 
+- (NSString*)timeLabel:(double)timeValue
+{
+    int minutes = 0;
+    double seconds = 0;
+    NSLog(@"time value: %f", timeValue);
+    while (timeValue >= 60.0)
+    {
+        minutes++;
+        timeValue = timeValue-60;
+        NSLog(@"mins counted: %f", timeValue);
+        
+    }
+    
+    seconds = timeValue;
+    NSLog(@"seconds: %f", seconds);
+    NSString *timeString = [NSString stringWithFormat:@"%i:%.2f", minutes, seconds];
+    return timeString;
+}
+
 - (void)updateLabelValues {
     if ([self.numberFormatterOverride isEqual:[NSNull null]]){
         self.minLabel.string = @"";
@@ -193,16 +233,19 @@ static const CGFloat kLabelsFontSize = 12.0f;
         return;
     }
     
-    NSNumberFormatter *formatter = (self.numberFormatterOverride != nil) ? self.numberFormatterOverride : self.decimalNumberFormatter;
+    //NSNumberFormatter *formatter = (self.numberFormatterOverride != nil) ? self.numberFormatterOverride : self.decimalNumberFormatter;
     
-    //self.minLabel.string = [formatter stringFromNumber:@(self.selectedMinimum)];
+    NSLog(@"duration: %f", self.duration);
+    double updatedDuration = [self maxSelectedTimeValue] - [self minSelectedTimeValue];
+    NSLog(@"updated duration: %f", updatedDuration);
     
-    self.minLabel.string = [formatter stringFromNumber:@([self minSelectedTimeValue])];
-    //self.minLabel.string = [NSString stringWithFormat:@"%fs]
-    //self.minLabel.string = self.minTimeLabel.text;
-
-    //self.maxLabel.string = [formatter stringFromNumber:@(self.selectedMaximum)];
-    self.maxLabel.string = [formatter stringFromNumber:@([self maxSelectedTimeValue])];
+    //self.minLabel.string = [formatter stringFromNumber:@([self minSelectedTimeValue])];
+    //self.maxLabel.string = [formatter stringFromNumber:@([self maxSelectedTimeValue])];
+    
+    self.minLabel.string = [self timeLabel:[self minSelectedTimeValue]];
+    self.maxLabel.string = [self timeLabel:[self maxSelectedTimeValue]];
+    self.durationLabel.text = [self timeLabel:updatedDuration];
+    
 }
 
 #pragma mark - Set Positions
@@ -290,6 +333,8 @@ static const CGFloat kLabelsFontSize = 12.0f;
     if (self.selectedMaximum > self.maxValue){
         _selectedMaximum = self.maxValue;
     }
+    
+   
     
     //update the frames in a transaction so that the tracking doesn't continue until the frame has moved.
     [CATransaction begin];
@@ -501,32 +546,34 @@ static const CGFloat kLabelsFontSize = 12.0f;
     {
         self.maxTimeLabel = [[UILabel alloc] init];
     }
+
+    self.minTimeLabel.text = [self timeLabel:[self minSelectedTimeValue]];
+    self.maxTimeLabel.text = [self timeLabel:[self maxSelectedTimeValue]];
     
-    Float64 maxTimeInSeconds = self.minimumSelectedTime;
-    Float64 minTimeInSeconds = self.maximumSelectedTime;
-    
-    if (minTimeInSeconds < 60.0)
-    {
-        //self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fs", self.minimumSelectedTime];
-        self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fs", [self minSelectedTimeValue]];
-        
-        
-        
-    }
-    else {
-        self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fm", minTimeInSeconds/60.0];
-       
-    }
-    
-    if (maxTimeInSeconds < 60.0)
-    {
-        //self.maxTimeLabel.text = [NSString stringWithFormat:@"%.1fs", self.maximumSelectedTime];
-        self.maxTimeLabel.text = [NSString stringWithFormat:@"%.1fs", [self maxSelectedTimeValue]];
-    }
-    else{
-        self.maxTimeLabel.text = [NSString stringWithFormat:@"%.1fs", maxTimeInSeconds/60.0];
-        
-    }
+    // Float64 maxTimeInSeconds = self.minimumSelectedTime;
+    // Float64 minTimeInSeconds = self.maximumSelectedTime;
+//    if (minTimeInSeconds < 60.0)
+//    {
+//        //self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fs", self.minimumSelectedTime];
+//
+//        self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fs", [self minSelectedTimeValue]];
+//        
+//  
+//    }
+//    else {
+//        self.minTimeLabel.text = [NSString stringWithFormat:@"%.1fm", minTimeInSeconds/60.0];
+//       
+//    }
+//    
+//    if (maxTimeInSeconds < 60.0)
+//    {
+//        //self.maxTimeLabel.text = [NSString stringWithFormat:@"%.1fs", self.maximumSelectedTime];
+//        self.maxTimeLabel.text = [NSString stringWithFormat:@"%.1fs", [self maxSelectedTimeValue]];
+//    }
+//    else{
+//        self.maxTimeLabel.text = [NSString stringWithFormat:@"%.1fs", maxTimeInSeconds/60.0];
+//        
+//    }
 }
 
 

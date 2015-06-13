@@ -104,6 +104,7 @@
     //[self.library listScenesAndTakes];
     [self.navigationController setToolbarHidden:YES animated:NO];
     [self._tableView reloadData];
+    [self.tabBarController.tabBar setHidden:NO];
     
     
 }
