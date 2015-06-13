@@ -60,10 +60,10 @@ TO DO:
 [x] cancel button to get out of trimming mode without saving
 [x] UIAction sheet for confirming overwriting the video
  
-[ ] make the slider value labels in this format mm:ss instead of decimal.
-[ ] a label for duration that updates as slider values change.
+[x] make the slider value labels in this format mm:ss instead of decimal.
+[x] a label for duration that updates as slider values change.
 [ ] play pause button for previewing the trimmed version (just use the one in the toolbar while keeping the toolbar showing)
-[ ] remove scrubber
+
 [ ] swipe gestures for switching between takes in that scene
 
 */
