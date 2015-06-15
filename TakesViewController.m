@@ -147,7 +147,7 @@
     Take *take = self.scene.takes[indexPath.row];
     
     
-    cell.textLabel.text = [NSString stringWithFormat:@"Take # %lu", (unsigned long)indexPath.row+1];
+    cell.textLabel.text = [NSString stringWithFormat:@"%@", [take convertSecondsToString:take.duration]];
     
     if (take.thumbnail == nil)
     {

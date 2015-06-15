@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger, TransitionTypes)
 
 //- (NSArray*)assetTracks;
 
-
+- (NSString*)convertSecondsToString:(CMTime)time;
 - (NSURL*)getFileURL;
 //- (NSString*) documentsDirectory;
 - (void)createTrimmedTakeWithCompletionHandler:(void (^)(NSURL*))completionHandler;

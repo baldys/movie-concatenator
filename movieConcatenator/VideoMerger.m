@@ -13,7 +13,12 @@
 @interface VideoMerger ()
 
 @property (nonatomic, getter = isFrontFacingVideoInTakes) BOOL frontFacingVideoInTakes;
+@property (nonatomic, strong) NSMutableArray *tempClips;
+@property (nonatomic, strong) dispatch_queue_t exportQueue;
 
+@property (nonatomic, strong) AVAssetExportSession *scaleAssetExportSession;
+@property (nonatomic) AVAssetExportSessionStatus scaleAssetExportStatus;
+@property (nonatomic) NSInteger clipsToAdd;
 @end
 
 @implementation VideoMerger
@@ -29,7 +34,49 @@
     return self;
 }
 
+- (BOOL) checkForFrontFacingVideos:(NSArray*)takes
+{
+    self.clipsToAdd = takes.count;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(assetsPreparedForComposition:) name:@"assetsPreparedForComposition" object:nil];
+    for (Take *take in takes)
+    {
+        switch (take.videoOrientationAndPosition)
+        {
+            case LandscapeLeft_Back:
+                
+                // scale this current composition video track down to the size of the smallest composition track in the composition
+                
+                break;
+                
+            case LandscapeLeft_Front:
+                
+                // if isFrontFacingVideoInAssets = NO then this is the first asset in the compostion that is front facing, so we must scale all previous videos in the composition down to a size that will fit this one. otherwise there will be black bars on the sides of this video.
+                
+                
+                self.frontFacingVideoInTakes = YES;
+                return YES;
+                
+                
+            case LandscapeRight_Back:
+                
+                break;
+                
+            case LandscapeRight_Front:
+                
+                self.frontFacingVideoInTakes = YES;
+                // front facing video is in list of takes, overwrite previously set widths,heights for the other videos.
+                return YES;
+            
+                
+            default:
+                break;
+                
+        }
 
+    }
+    return NO;
+    
+}
 // get the assets from takes
 - (void)prepareAssetsFromTakes:(NSArray*)takes
 {
@@ -48,84 +95,253 @@
     -   if no front facing videos are in this array, then no scaling needs to be done on the videos and they can all have the samee 1920x1080 resolution
     -   if there is at least one video that is front facing, we must scale all videos (that are back facing) down to 1280x720 otherwise the final composition will contain videos where large parts of the video frame are cropped or the front facing videos contain unsightly black bars on the bottom and right edges of the video.
     */
-    // POSSIBLE SCALING SOLUTION ^__^
-    // to scale down properly you should probably export the videos that are using the back facing camera individually with a preset of 1280x720 and take that result replace it in the array of assets to merge. then do the merging/export of the final composition. if this doesnt work then i dont know...
-    
-    
-    NSMutableArray *clips = [NSMutableArray array];
+    //NSMutableArray *clips = [NSMutableArray array];
    
-    self.frontFacingVideoInTakes = NO;
- 
-    for (Take *take in takes)
-    {
+    self.tempClips = [NSMutableArray arrayWithCapacity:takes.count];
+    
+    
+    self.frontFacingVideoInTakes = [self checkForFrontFacingVideos:takes];
+    
+    for (int i=0; i<takes.count; i++){
+        Take *take = takes[i];
         NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
         // Load the values of AVAsset keys to inspect subsequently
         //NSArray *assetKeysToLoadAndTest = @[@"playable", @"composable", @"tracks", @"duration"];
+        BOOL isTakeRecordedUsingBackFacingCamera = NO;
+        if (([take videoOrientationAndPosition] == LandscapeLeft_Back )||
+            ([take videoOrientationAndPosition] == LandscapeRight_Back))
+        {
+            isTakeRecordedUsingBackFacingCamera = YES;
+        }
         
-        AVURLAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
+        AVAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
         
         CMTime durationOfAsset = urlAsset.duration;
         durationOfAsset = take.duration;
+        
         NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, durationOfAsset)];
         
         [self.clipTimeRanges addObject:timeRange];
-      
-        [clips addObject:urlAsset];
         
-        switch (take.videoOrientationAndPosition)
+        
+        
+        if (self.frontFacingVideoInTakes && isTakeRecordedUsingBackFacingCamera)
         {
-            case LandscapeLeft_Back:
-                // all videos in composition so far are front facing
-                if (self.isFrontFacingVideoInTakes)
-                {
-                  
-                }
-                else{
-                    // scale this current composition video track down to the size of the smallest composition track in the composition
-                }
-                break;
+            //dispatch_block_notify(<#^(void)block#>, <#dispatch_queue_t queue#>, <#^(void)notification_block#>)
+            
+            NSString *pathComponent = [NSString stringWithFormat:@"take-1280x720-%i", arc4random()%1000];
+            
+            NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[pathComponent stringByAppendingPathExtension:@"mov"]];
+            NSURL *scaledAssetURL = [NSURL fileURLWithPath:outputFilePath];
+            
+//            dispatch_async(self.exportQueue, ^{
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 
-            case LandscapeLeft_Front:
-               
-                // if isFrontFacingVideoInAssets = NO then this is the first asset in the compostion that is front facing, so we must scale all previous videos in the composition down to a size that will fit this one. otherwise there will be black bars on the sides of this video.
+                [self exportAssetToScaleDown:urlAsset toURL:scaledAssetURL indexInArray:i];
                 
-                if (self.isFrontFacingVideoInTakes)
-                {
-                    
-                }
-                self.frontFacingVideoInTakes = YES;
-                
-                break;
-                
-            case LandscapeRight_Back:
-              
-                // if we havent seen a video that uses front fcaing camera, the render widtths and heights can be
-                if (self.isFrontFacingVideoInTakes)
-                {
-                    
-                }
-              
-                break;
-                
-            case LandscapeRight_Front:
-                
-                self.frontFacingVideoInTakes = YES;
-                // front facing video is in list of takes, overwrite previously set widths,heights for the other videos.
-               
-                break;
-                
-            default:
-                break;
-                
-        }
-        
+            });
+            
 
+            //AVAssetExportSessionStatus status;
+                
+                
+            //});
+            
+        }
+        else
+        {
+            //dispatch_async(self.exportQueue, ^{
+            //[self.tempClips addObject:urlAsset];
+            
+            [self.tempClips addObject:urlAsset];
+            //});
+            
+            
+        }
+
+        
     }
+//    for (int i=0; i<takes.count; i++)
+//    {
+//        Take *take = takes[i];
+//        NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
+//        // Load the values of AVAsset keys to inspect subsequently
+//        //NSArray *assetKeysToLoadAndTest = @[@"playable", @"composable", @"tracks", @"duration"];
+//        BOOL isTakeRecordedUsingBackFacingCamera = NO;
+//        if (([take videoOrientationAndPosition] == LandscapeLeft_Back )||
+//            ([take videoOrientationAndPosition] == LandscapeRight_Back))
+//        {
+//            isTakeRecordedUsingBackFacingCamera = YES;
+//        }
+//        
+//        AVURLAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
+//        
+//        CMTime durationOfAsset = urlAsset.duration;
+//        durationOfAsset = take.duration;
+//        
+//        NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, durationOfAsset)];
+//        
+//        [self.clipTimeRanges addObject:timeRange];
+//        
+//        
+//        
+//        if (self.frontFacingVideoInTakes && isTakeRecordedUsingBackFacingCamera)
+//        {
+//            //dispatch_block_notify(<#^(void)block#>, <#dispatch_queue_t queue#>, <#^(void)notification_block#>)
+//            
+//            NSString *pathComponent = [NSString stringWithFormat:@"take-1280x720-%i", arc4random()%1000];
+//            
+//            NSString *outputFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:[pathComponent stringByAppendingPathExtension:@"mov"]];
+//            NSURL *scaledAssetURL = [NSURL fileURLWithPath:outputFilePath];
+//            
+//            dispatch_async(self.exportQueue, ^{
+//                [self exportAssetToScaleDown:urlAsset toURL:scaledAssetURL indexInArray:(NSInteger)index];
+//           
+//
+//                
+//            });
+//    
+//        }
+//        else
+//        {
+//            [self.tempClips addObject:urlAsset];
+//            
+//        }
+    
+    
+        
+        
+        
+        //AVURLAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
+        
+       
+        //[clips addObject:urlAsset];
+        //[self.tempClips addObject:urlAsset];
+        
+        
+///
+   // }
+///
+    /*
+     if (self.frontFacingVideoInTakes)
+     {
+     NSLog(@"front facing video is in the group of takes.");
+     for (int i=0; i<takes.count; i++)
+     {
+     // take the videos recorded using the back facing camera and scale them down
+     if ([takes[i] videoOrientationAndPosition] == (LandscapeLeft_Back|LandscapeRight_Back))
+     {
+     NSLog(@"video was recorded using back facing camera, so this video willbe exported smaller?");
+     
+     dispatch_async(self.exportQueue, ^{
+     
+     [self exportAssetToScaleDown:self.tempClips[i]];
+     NSLog(@"temp clip %i: %@", i, self.tempClips[i]);
+     });
+     
+     
+     
+     
+     }
+     }
+     
+     }
+     */
+    
+    
+    
+    
+
+    
+
+    
     //[self videoClipTimeRangesFromAssets:clips];
-    _videoClips =[NSArray arrayWithArray:clips];
+    
+    
+    
     
 }
 
+
+
+- (void)observeValueForKeyPath:(NSString*) path
+                      ofObject:(id)object
+                        change:(NSDictionary*)change
+                       context:(void*)context
+{
+    self.scaleAssetExportStatus = [[change objectForKey:NSKeyValueChangeNewKey] integerValue];
+    if (self.scaleAssetExportStatus == AVAssetExportSessionStatusCompleted)
+    {
+        
+    }
+    
+    
+}
+
+
+
+// export the assets  that use back-facing camera if a composition is being created where mixed (front-facing with back facing) assets are used as scaled down versions so they are all the same size
+- (void)exportAssetToScaleDown:(AVAsset*)assetToScale toURL:(NSURL*)exportURL indexInArray:(NSInteger)index
+{
+//    if (!self.scaleAssetExportSession)
+//    {
+        AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:assetToScale presetName:AVAssetExportPreset1280x720];
+        exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    //}
+    
+    //[exporter addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:NULL];
+    
+    //exporter.outputURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"scaled-down-asset-%i-.mov", arc4random() % 1000]]];
+    
+    exporter.outputURL = exportURL;
+    //__block BOOL success = NO;
+    //__weak __block VideoMerger *weakSelf = (VideoMerger*)self;
+    [exporter exportAsynchronouslyWithCompletionHandler:^{
+        dispatch_async(dispatch_get_main_queue(),
+                       ^{
+                           self.scaleAssetExportStatus = exporter.status;
+                           
+                           if (exporter.status ==AVAssetExportSessionStatusCompleted)
+                           {
+                               
+                               [self.tempClips addObject:[AVURLAsset assetWithURL:exporter.outputURL]];
+                               // replace the current url of the asset with the new scaled down asset.
+                               //                                   [self.tempClips addObject:[AVURLAsset assetWithURL:exporter.outputURL]];
+                              
+                               NSLog(@"successfully scaled down asset %i \n the url for this exported asset is at: %@ \n and added it to the array of temp clips.", index, exporter.outputURL);
+                               
+                               NSLog(@"clips to add(number of takes): %i \n number of temp clips: %i", self.clipsToAdd, self.tempClips.count);
+                               
+                               if (self.tempClips.count == self.clipsToAdd)
+                               {
+                                   self.videoClips = [NSArray arrayWithArray:self.tempClips];
+                                   
+                                   [[NSNotificationCenter defaultCenter] postNotificationName:@"assetsPreparedForComposition" object:self.videoClips];
+                               }
+                           }
+                           else if (exporter.status == AVAssetExportSessionStatusFailed)
+                           {
+                              
+                               [self.tempClips insertObject:assetToScale atIndex:index];
+                               
+                               
+                           }
+                           
+                        
+                           
+                           
+                           
+                       });
+        
+        
+    }];
+    
+    
+    
+    
+    
+}
 //- (void)buildPassThroughVideoComposition:(AVMutableVideoComposition *)videoComposition forComposition:(AVMutableComposition *)composition
 //{
 //
@@ -142,24 +358,9 @@
 
 
 
+
 - (AVAsset*)buildTransitionComposition:(NSArray*)takes
 {
-    if (self.frontFacingVideoInTakes)
-    {
-        NSLog(@"front facing video is in the group of takes.");
-        for (int i=0; i<takes.count; i++)
-        {
-            if ([takes[i] videoOrientationAndPosition] == (LandscapeLeft_Back|LandscapeRight_Back))
-            {
-                NSLog(@"video was recorded using back facing camera, so this video willbe exported smaller?");
-                
-                
-                
-                
-            }
-        }
-    }
-    
         
     self.transitionDuration = CMTimeMakeWithSeconds(1, 1); // default transition time=1second
     
@@ -238,7 +439,7 @@
    
     for (i = 0; i < _videoClips.count; i++ )
     {
-        NSLog(@"videoClips.count: %i", _videoClips.count);
+        NSLog(@"videoClips.count: %lu", (unsigned long)_videoClips.count);
         NSInteger alternatingIndex = i % 2; // alternating targets: 0, 1, 0, 1, ...
         AVURLAsset *asset = [_videoClips objectAtIndex:i];
         
@@ -455,13 +656,19 @@
 
 
 
-- (AVAsset*)buildCompositionObjects:(NSArray*)takes
+- (void)buildCompositionObjects:(NSArray*)takes
 {
+    //self.exportQueue = dispatch_queue_create("export queue", DISPATCH_QUEUE_SERIAL);
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
+    
+
     [self prepareAssetsFromTakes:takes];
+     
+    
     
     //self.transitionType = TransitionTypeCrossFade;
-    
+  
     
     //AVMutableAudioMix *audioMix = nil;
     //CALayer *animatedTitleLayer = nil;
@@ -469,11 +676,39 @@
     
     
     // No transition selected; generates the default composition
-    if (self.transitionType == TransitionTypeNone)
-    {
+    
         // No transitions: place clips into one video track and one audio track in composition.
         
-        return [self spliceAssets:takes];
+        //dispatch_barrier_async(self.exportQueue, ^{
+           // [self spliceAssets:takes];
+           
+            
+            ////
+            /*
+            [self addBlackBackgroundTransitionsWithDuration:CMTimeMakeWithSeconds(3.0,NSEC_PER_SEC) betweenClips:takes];
+             */
+            
+            ////
+       // });
+        
+        //return [self spliceAssets:takes];
+    
+    
+//    dispatch_async(self.exportQueue, ^{
+//        
+//        [self exportVideoComposition:self.composition];
+//    
+//    });
+    
+ 
+}
+
+- (void)assetsPreparedForComposition:(NSNotification*)notification
+{
+    self.scaleAssetExportSession = nil;
+    if (self.transitionType == TransitionTypeNone)
+    {
+        [self spliceAssets:notification.object];
     }
     else
     {
@@ -483,10 +718,12 @@
         // "pass through B", "transition from B to A".
         
         //videoComposition = [AVMutableVideoComposition videoComposition];
-        return [self buildTransitionComposition:takes];
+        [self buildTransitionComposition:notification.object];
     }
-    //return [self spliceAssets:takes];
+    [self.scaleAssetExportSession removeObserver:self forKeyPath:@"status"];
+
 }
+
 // regular composition without trnsitions
 -(AVAsset*)spliceAssets: (NSArray*)takes
 {
@@ -560,7 +797,11 @@
         
         self.videoComposition.frameDuration = CMTimeMake(1, 30);
 
+        CGSize videoSize = assetTrack_video.naturalSize;
+        NSLog(@"VIDEO SIZE: width=%f, height=%f", videoSize.width, videoSize.height);
+        
         self.videoComposition.renderSize = assetTrack_video.naturalSize;
+        
         
         self.videoComposition.renderScale = 1.0;
         
@@ -569,21 +810,108 @@
 
     }
     
+    
+    [self exportVideoComposition:self.composition];
+        
+        
+
+    
     return self.composition;
+    
+    
+    
 }
 
-// export the assets  that use back-facing camera if a composition is being created where mixed (front-facing with back facing) assets are used as scaled down versions so they are all the same size
-- (void) exportAssetToScaleDown:(AVAsset*)assetToScale
+
+
+- (void)addBlackBackgroundTransitionsWithDuration:(CMTime)duration betweenClips:(NSArray*)takes
 {
+    self.composition = [[AVMutableComposition alloc] init];
+    //composition.naturalSize = videoSize;
+    AVMutableCompositionTrack *compositionTrack_video = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_audio = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:assetToScale presetName:AVAssetExportPreset1280x720];
+    self.videoComposition = [AVMutableVideoComposition videoComposition];
+    
+    CMTime insertionTime = duration;
+    
+    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    
+    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+    
+    //so we can adjust the video size according to the smallest video in the sequence, so we dont crop large portions of the large videos or have black bars around the small videos.
+    
+    
+    for (int i=0; i<_videoClips.count; i++)
+    {
+        AVURLAsset *asset = self.videoClips[i];
+        NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
+        CMTimeRange timeRangeInAsset;
+        
+        if (clipTimeRange)
+            timeRangeInAsset = [clipTimeRange CMTimeRangeValue];
+        else
+            timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, [asset duration]);
+        
+        //AVAsset *asset = self.videoClips[i];
+        AVAssetTrack *assetTrack_video = [asset tracksWithMediaType:AVMediaTypeVideo][0];
+        AVAssetTrack *assetTrack_audio = [asset tracksWithMediaType:AVMediaTypeAudio][0];
+        
+        [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_video atTime:insertionTime error:nil];
+        
+        [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero,CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_audio atTime:insertionTime error:nil];
+        
+        
+        [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+        
+        
+        
+        // the video currently being analyzed is larger than the last one, then it must be scaled down so that it does not get cropped when in the final composition
+        
+        
+        
+        
+        //[compositionTrack_video setPreferredTransform:scale];
+        // there is a front facing video, which have smaller dimensions than a video taken with the front facing camera. to prevent cropping the videos taken with the back facing camera to make the sizes equal, or adding black bars to all the videos taken with the front facing camera, we will check if the current video has a width greater than 1280? this may not be correct since other i phones may have different resolutions.
+        // so if the width of the video is 1920 (width if back facing video was taken) then we will scale the size down to the size of the front facing videos
+        // there must be a better solution for this
+        
+        // [layerInstruction setTransform:transform atTime:timer];
+        
+        //[layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
+        
+        
+        [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:insertionTime];
+        
+        
+        insertionTime = CMTimeAdd(insertionTime, asset.duration);
+        insertionTime = CMTimeAdd(insertionTime, duration);
+        //previousVideoSize = currentVideoSize;
+        
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, insertionTime);
+        
+        instruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
+        self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
+        
+        self.videoComposition.frameDuration = CMTimeMake(1, 30);
+        
+        self.videoComposition.renderSize = assetTrack_video.naturalSize;
+        
+        self.videoComposition.renderScale = 1.0;
+        
+        
+        
+        
+    }
+    [self exportVideoComposition:self.composition];
+    //return self.composition;
     
     
 }
 
 ////***
 // create a new version of this take with the trimmed time range and replace the old take with the new take but keep the same file name so it can be accessed from the same location. Initially it is exported to the temporary directory then this file replaces the take in its original location with the same asset id
-
+// now obsolete...
 - (void) exportTrimmedTake:(Take*)take withCompletionHandler:(void (^)(void))completionHandler
 {
     AVAsset *asset = [AVURLAsset URLAssetWithURL:take.getFileURL options:nil];
@@ -633,8 +961,12 @@
 - (void) exportVideoComposition:(AVAsset*)composition
 {
     // 5 - Create exporter
-    
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:composition presetName:AVAssetExportPreset1920x1080];
+    NSString *preset = AVAssetExportPreset1920x1080;
+    if (self.frontFacingVideoInTakes)
+    {
+        preset = AVAssetExportPreset1280x720;
+    }
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:composition presetName:preset];
     
     exporter.outputURL = [self createOutputURLWithFilename:@"videoComposition"];
     exporter.outputFileType = AVFileTypeQuickTimeMovie;

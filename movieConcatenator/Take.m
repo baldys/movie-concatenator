@@ -130,21 +130,38 @@
 
 
 /// NONONONO THIS IS WRONG
-- (NSString*)convertSecondsToString:(CMTime)seconds
+- (NSString*)convertSecondsToString:(CMTime)time
 {
-    Float64 fseconds = _duration.value/_duration.timescale;
+
+//    int minutes = 0;
+//    double seconds = 0;
+//    NSLog(@"time value: %f", timeValue);
+//    while (timeValue >= 60.0)
+//    {
+//        minutes++;
+//        timeValue = timeValue-60;
+//        NSLog(@"mins counted: %f", timeValue);
+//        
+//    }
+//    
+//    seconds = timeValue;
+//    NSLog(@"seconds: %f", seconds);
+//    NSString *timeString = [NSString stringWithFormat:@"%i:%.2f", minutes, seconds];
+//    return timeString;
+
+    double seconds = time.value/time.timescale;
     
-    CMTimeMakeWithSeconds(fseconds, NSEC_PER_MSEC);
+
     
     int minutes = 0;
-    while (fseconds-60 > 0)
+    while (seconds >= 60)
     {
         minutes++;
-        fseconds = fseconds-60;
+        seconds = seconds-60;
     }
     
-    NSLog(@"Minutes:seconds = %i:%f", minutes, fseconds);
-    return [NSString stringWithFormat:@"%i:%.02f",minutes, fseconds];
+    NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
+    return [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
     
 }
 

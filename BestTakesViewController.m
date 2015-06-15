@@ -222,7 +222,9 @@
       //  NSLog(@"Please select more than one video.");
     //}
     
-    [self.videoMerger exportVideoComposition:[self.videoMerger buildCompositionObjects:self.takesToConcatenate]];
+    //[self.videoMerger exportVideoComposition:[self.videoMerger buildCompositionObjects:self.takesToConcatenate]];
+    [self.videoMerger buildCompositionObjects:self.takesToConcatenate];
+    
 }
 
 #pragma mark - NSNotificationCenter

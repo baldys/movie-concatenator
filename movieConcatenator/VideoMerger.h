@@ -40,12 +40,12 @@ typedef NS_ENUM(NSInteger, TransitionType)
 @property (nonatomic, strong) VideoLibrary *videoLibrary;
 
 -(AVAsset*)spliceAssets: (NSArray*)takes;
--(AVAsset*)buildCompositionObjects:(NSArray*)takes;
+-(void)buildCompositionObjects:(NSArray*)takes;
 -(void) exportTrimmedTake:(Take*)take withCompletionHandler:(void (^)(void))completionHandler;
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
-
+- (void)addBlackBackgroundTransitionsWithDuration:(CMTime)duration betweenClips:(NSArray*)takes;
 -(void) exportDidFinish:(AVAssetExportSession*)session;
 
 @end
