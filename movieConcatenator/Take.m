@@ -46,16 +46,17 @@
                  
             
              weakSelf.duration = [asset duration];
-             
-             
-                 //Float64 seconds = weakSelf.duration.value/weakSelf.duration.timescale;
+
+            Float64 fseconds = weakSelf.duration.value/weakSelf.duration.timescale;
              double seconds = CMTimeGetSeconds(weakSelf.duration);
-                 
+            
+             completionHandler();
             
              dispatch_async(dispatch_get_main_queue(), ^{
-                 NSLog(@"duration of take loaded: time in seconds:%.002f", seconds);
+                 NSLog(@"duration of take loaded: time in seconds:%.2f, %f", seconds, fseconds);
+                 NSLog(@"VALUE: %lld, TIMESCALE: %d", weakSelf.duration.value, weakSelf.duration.timescale );
                  
-                 completionHandler();
+                 
             });
          }
          else
@@ -343,7 +344,7 @@
     [aCoder encodeObject:self.sceneTitle forKey:@"sceneTitle"];
     [aCoder encodeObject:self.title forKey:@"title"];
     [aCoder encodeCMTime:self.duration forKey:@"duration"];
-    [aCoder encodeCMTimeRange:self.timeRange forKey:@"timeRange"];
+    //[aCoder encodeCMTimeRange:self.timeRange forKey:@"timeRange"];
     //[aCoder encodeObject:self.timeStamp forKey:@"timeStamp"];
     //[aCoder encodeBool:self.selected forKey:@"selected"];
     //[aCoder encodeObject:UIImagePNGRepresentation(self.thumbnail) forKey:@"thumbnail"];

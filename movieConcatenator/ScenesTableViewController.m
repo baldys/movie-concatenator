@@ -400,7 +400,7 @@
                        }
                        else
                        {
-                           newTake.videoOrientationAndPosition = None;
+                           //newTake.videoOrientationAndPosition = None;
                            NSLog(@"something is wrong wtf!!");
                        }
 

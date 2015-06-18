@@ -34,7 +34,7 @@
 //    {
 //        self.takesToConcatenate = [NSMutableArray array];
 //    }
-    
+    self.titleSlidesEnabled = NO;
 
     [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"blue-star-32.png"]];
 
@@ -76,6 +76,7 @@
 
 - (void) setUpToolbar
 {
+    
     if (loadingIndicator ==nil)
     {
         loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -98,7 +99,7 @@
         return;
     [self.concatenateButton setEnabled:YES];
     UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    NSArray *items = [NSArray arrayWithObjects:flexItem, self.concatenateButton, nil];
+    NSArray *items = [NSArray arrayWithObjects:flexItem, self.concatenateButton, flexItem,nil];
     [self.navigationController.toolbar setItems:items animated:YES];
 }
 
@@ -211,7 +212,7 @@
 {
     
     self.videoMerger.transitionType = _transitionType;
-    NSLog(@"Number of items in array: %lu",(unsigned long)[self.takesToConcatenate count]);
+    NSLog(@"Number of items in array: %lu",(unsigned long)[_takesToConcatenate count]);
     // uncomment later - testing 
     //if (self.takesToConcatenate.count > 1)
     //{
@@ -223,6 +224,7 @@
     //}
     
     //[self.videoMerger exportVideoComposition:[self.videoMerger buildCompositionObjects:self.takesToConcatenate]];
+    self.videoMerger.titleSlidesEnabled = self.titleSlidesEnabled;
     [self.videoMerger buildCompositionObjects:self.takesToConcatenate];
     
 }
@@ -302,6 +304,7 @@
 {
      EditingOptionsViewController *editingOptionsVC = (EditingOptionsViewController*)[segue sourceViewController];
     self.transitionType = editingOptionsVC.transitionType;
+    self.titleSlidesEnabled = editingOptionsVC.titleSlideEnabled;
 }
 
 /*

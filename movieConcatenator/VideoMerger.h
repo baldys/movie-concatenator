@@ -17,7 +17,7 @@
 #import "Scene.h"
 #import "Take.h"
 
-typedef NS_ENUM(NSInteger, TransitionType)
+typedef NS_ENUM(NSInteger, TransitionTypes)
 {
     TransitionTypeNone      = 0,
     TransitionTypeCrossFade = 1,
@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, TransitionType)
 
 @interface VideoMerger : NSObject
 
-@property (nonatomic) NSInteger transitionType;
+@property (nonatomic) TransitionTypes transitionType;
 
 @property (nonatomic, strong) AVMutableComposition *composition;
 
@@ -47,5 +47,8 @@ typedef NS_ENUM(NSInteger, TransitionType)
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
 - (void)addBlackBackgroundTransitionsWithDuration:(CMTime)duration betweenClips:(NSArray*)takes;
 -(void) exportDidFinish:(AVAssetExportSession*)session;
+@property (nonatomic) BOOL titleSlidesEnabled;
+@property (nonatomic) float titleSlideDuration;
+
 
 @end

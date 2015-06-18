@@ -19,12 +19,12 @@ typedef NS_ENUM(NSInteger, VideoOrientationAndPosition)
     LandscapeRight_Back = 2,
     LandscapeRight_Front = 3,
 };
-typedef NS_ENUM(NSInteger, TransitionTypes)
-{
-    None = 0,
-    Fade = 1,
-    Push = 2
-};
+//typedef NS_ENUM(NSInteger, TransitionTypes)
+//{
+//    None = 0,
+//    Fade = 1,
+//    Push = 2
+//};
 
 @interface Take : NSObject <NSCoding>
 

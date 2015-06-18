@@ -89,10 +89,10 @@
      -   also, get the duration of each asset and create a timeRange for each asset (kCMTimeZero to asset.duration) and insert it into the "clipTimeRanges" array.
      -   use avasync key value loading (if not loaded) to get the duration of the asset without blocking the main thread... (which i likely did not do correctly and still need a completion block)
     */
-    /// - CHECK IF FRONT FACING/BACK FACING VIDEOS IN COPOSITION ARE MIXED
+    /// - CHECK IF FRONT FACING/BACK FACING VIDEOS IN COMPOSITION ARE MIXED
     /*
     -   also check if there are any videos in the array are front facing, so that we know whether or not to scale down the video clips that are recorded with the back facing camera (1920x1080 whereas the front facing camera takes videos that are 1280x720)
-    -   if no front facing videos are in this array, then no scaling needs to be done on the videos and they can all have the samee 1920x1080 resolution
+    -   if no front facing videos are in this array, then no scaling needs to be done on the videos and they can all have the same 1920x1080 resolution
     -   if there is at least one video that is front facing, we must scale all videos (that are back facing) down to 1280x720 otherwise the final composition will contain videos where large parts of the video frame are cropped or the front facing videos contain unsightly black bars on the bottom and right edges of the video.
     */
     //NSMutableArray *clips = [NSMutableArray array];
@@ -102,7 +102,8 @@
     
     self.frontFacingVideoInTakes = [self checkForFrontFacingVideos:takes];
     
-    for (int i=0; i<takes.count; i++){
+    for (int i=0; i<takes.count; i++)
+    {
         Take *take = takes[i];
         NSDictionary *options = @{ AVURLAssetPreferPreciseDurationAndTimingKey : @YES };
         // Load the values of AVAsset keys to inspect subsequently
@@ -114,10 +115,20 @@
             isTakeRecordedUsingBackFacingCamera = YES;
         }
         
+        NSLog(@"take duration: %lld, %d, %f", take.duration.value, take.duration.timescale, CMTimeGetSeconds(take.duration));
         AVAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
         
+        
+        [take loadDurationOfAsset:urlAsset withCompletionHandler:^{
+            NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, take.duration)];
+            
+            [self.clipTimeRanges addObject:timeRange];
+        }];
+        
+        
         CMTime durationOfAsset = urlAsset.duration;
-        durationOfAsset = take.duration;
+        NSLog(@"duration of asset: %f", CMTimeGetSeconds(urlAsset.duration));
+        //durationOfAsset = take.duration;
         
         NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, durationOfAsset)];
         
@@ -161,6 +172,14 @@
         }
 
         
+        
+    }
+    
+    if (!self.frontFacingVideoInTakes)
+    {
+        self.videoClips = [NSArray arrayWithArray:self.tempClips];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"assetsPreparedForComposition" object:self.videoClips];
     }
 //    for (int i=0; i<takes.count; i++)
 //    {
@@ -362,7 +381,7 @@
 - (AVAsset*)buildTransitionComposition:(NSArray*)takes
 {
         
-    self.transitionDuration = CMTimeMakeWithSeconds(1, 1); // default transition time=1second
+    self.transitionDuration = CMTimeMakeWithSeconds(1200, 600); // default transition time=1second
     
     self.composition = [AVMutableComposition composition];
     self.videoComposition = [AVMutableVideoComposition videoComposition];
@@ -375,7 +394,7 @@
     
     
     // Make transitionDuration no greater than half the shortest clip duration.
-    CMTime transitionDuration = self.transitionDuration;
+    CMTime transitionDuration = CMTimeMakeWithSeconds(2, 1);
     for (i = 0; i < _videoClips.count; i++ )
     {
         AVURLAsset *asset = _videoClips[i];
@@ -641,7 +660,7 @@
 
     self.videoComposition.frameDuration = CMTimeMake(1,30);
     self.videoComposition.renderScale = 1.0;
-    self.videoComposition.renderSize = CGSizeMake(1920, 1080);
+    self.videoComposition.renderSize = compositionVideoTracks[0].naturalSize;
     
     self.videoComposition.instructions = [NSArray arrayWithArray:instructions];
 //    for (i=0; i<self.videoClips.count;i++)
@@ -651,6 +670,8 @@
 //        [self.composition.tracks objectAtIndex:i];
 //        
 //    }
+    
+    [self exportVideoComposition:self.composition];
     return self.composition;
 }
 
@@ -661,7 +682,8 @@
     //self.exportQueue = dispatch_queue_create("export queue", DISPATCH_QUEUE_SERIAL);
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"videoMergingStartedNotification" object:nil];
-    
+    self.composition = nil;
+    self.videoComposition = nil;
 
     [self prepareAssetsFromTakes:takes];
      
@@ -706,9 +728,16 @@
 - (void)assetsPreparedForComposition:(NSNotification*)notification
 {
     self.scaleAssetExportSession = nil;
-    if (self.transitionType == TransitionTypeNone)
+    if (self.transitionType == TransitionTypeNone && !self.titleSlidesEnabled)
     {
         [self spliceAssets:notification.object];
+        
+        
+    }
+    else if (self.transitionType == TransitionTypeNone && self.titleSlidesEnabled)
+    {
+        [self addBlackBackgroundTransitionsWithDuration:CMTimeMake(3,1) betweenClips:notification.object];
+        
     }
     else
     {
@@ -720,7 +749,8 @@
         //videoComposition = [AVMutableVideoComposition videoComposition];
         [self buildTransitionComposition:notification.object];
     }
-    [self.scaleAssetExportSession removeObserver:self forKeyPath:@"status"];
+    
+    //[self.scaleAssetExportSession removeObserver:self forKeyPath:@"status"];
 
 }
 
@@ -1069,7 +1099,73 @@
         NSLog(@"??????");
     }
 }
+
+// create text overlay.
+- (CALayer *)buildAnimatedTitleLayerForSize:(CGSize)videoSize withDuration:(float)seconds
+{
+    // Create a layer for the overall title animation.
+    CALayer *animatedTitleLayer = [CALayer layer];
     
+    // Create a layer for the text of the title.
+    CATextLayer *titleLayer = [CATextLayer layer];
+    //titleLayer.string = self.titleText;
+    titleLayer.string = @"TEXT OVERLAY TITLE";
+    titleLayer.font = (__bridge CFTypeRef)(@"Helvetica");
+    titleLayer.fontSize = videoSize.height / 6;
+    titleLayer.foregroundColor = [UIColor whiteColor].CGColor;
+    //?? titleLayer.shadowOpacity = 0.5;
+    titleLayer.alignmentMode = kCAAlignmentCenter;
+    titleLayer.bounds = CGRectMake(0, 0, videoSize.width, videoSize.height / 6);
+    
+    // Add it to the overall layer.
+    [animatedTitleLayer addSublayer:titleLayer];
+    
+//    // Create a layer that contains a ring of stars.
+//    CALayer *ringOfStarsLayer = [CALayer layer];
+//    
+//    NSInteger starCount = 9, s;
+//    CGFloat starRadius = videoSize.height / 10;
+//    CGFloat ringRadius = videoSize.height * 0.8 / 2;
+//    CGImageRef starImage = createStarImage(starRadius);
+//    for (s = 0; s < starCount; s++) {
+//        CALayer *starLayer = [CALayer layer];
+//        CGFloat angle = s * 2 * M_PI / starCount;
+//        starLayer.bounds = CGRectMake(0, 0, 2 * starRadius, 2 * starRadius);
+//        starLayer.position = CGPointMake(ringRadius * cos(angle), ringRadius * sin(angle));
+//        starLayer.contents = (id)starImage;
+//        [ringOfStarsLayer addSublayer:starLayer];
+//    }
+//    CGImageRelease(starImage);
+    
+    // Rotate the ring of stars.
+//    CABasicAnimation *rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+//    rotationAnimation.repeatCount = 1e100; // forever
+//    rotationAnimation.fromValue = [NSNumber numberWithFloat:0.0];
+//    rotationAnimation.toValue = [NSNumber numberWithFloat:2 * M_PI];
+//    rotationAnimation.duration = 10.0; // repeat every 10 seconds
+//    rotationAnimation.additive = YES;
+//    rotationAnimation.removedOnCompletion = NO;
+//    rotationAnimation.beginTime = 1e-100; // CoreAnimation automatically replaces zero beginTime with CACurrentMediaTime().  The constant AVCoreAnimationBeginTimeAtZero is also available.
+//    [ringOfStarsLayer addAnimation:rotationAnimation forKey:nil];
+//    
+    // Add the ring of stars to the overall layer.
+    animatedTitleLayer.position = CGPointMake(videoSize.width / 2.0, videoSize.height / 2.0);
+    //[animatedTitleLayer addSublayer:ringOfStarsLayer];
+    
+    // Animate the opacity of the overall layer so that it fades out from 3 sec to 4 sec.
+    CABasicAnimation *fadeAnimation = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeAnimation.fromValue = [NSNumber numberWithFloat:1.0];
+    fadeAnimation.toValue = [NSNumber numberWithFloat:0.0];
+    fadeAnimation.additive = NO;
+    fadeAnimation.removedOnCompletion = NO;
+    fadeAnimation.beginTime = 10.0;
+    fadeAnimation.duration = seconds;
+    fadeAnimation.fillMode = kCAFillModeBoth;
+    [animatedTitleLayer addAnimation:fadeAnimation forKey:nil];
+    
+    return animatedTitleLayer;
+}
+
 
     /*
     for (AVAsset *asset in self.videoClips)

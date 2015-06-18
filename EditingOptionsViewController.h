@@ -30,15 +30,34 @@
     BOOL _titlesEnabled;
     NSString *_titleText;
     
+    BOOL _titleSlideEnabled;
+    float _titleSlideDuration;
+    NSString *_titleSlideText;
+    
     
 }
 
 @property (nonatomic, strong) VideoMerger *videoMerger;
-@property (nonatomic) TransitionTypes transitionType;
+@property (nonatomic) NSInteger transitionType;
 @property (nonatomic, readonly) float projectDuration;
 
+
+@property (nonatomic) BOOL titlesEnabled;
 @property (nonatomic, retain) NSString *titleText;
 
+@property (nonatomic) BOOL transitionsEnabled;
+@property (nonatomic) float transitionDuration;
+@property (nonatomic) CMTime transitionTime;
+@property (nonatomic) BOOL titleSlideEnabled;
+@property (nonatomic) float titleSlideDuration;
+@property (nonatomic, strong) NSString *_titleSlideText;
+
+
+
+
 -(IBAction)toggleTransitionsEnabled:(UISwitch*)sender;
+
+-(IBAction)toggleTitleSlideEnabled:(UISwitch*)sender;
+
 @end
 

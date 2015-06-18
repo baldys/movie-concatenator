@@ -288,10 +288,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 // show trimming controls
 - (void)initializeTrimmingControls
 {
-//    [self.slider observeValueForKeyPath:@"leftHandleSelected"
-//                               ofObject:nil
-//                                 change:nil
-//                                context:nil];
+
     //UIView* view  = [self view];
     
     //self.trimmingControlsView = [[UIView alloc] init];
@@ -300,7 +297,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     //self.trimmingControlsView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    [self.trimmingControlsView setBackgroundColor:[UIColor redColor]];
+    [self.trimmingControlsView setBackgroundColor:[UIColor blackColor]];
     [self.trimmingControlsView setOpaque:YES];
     
     [self.view addSubview:self.trimmingControlsView];

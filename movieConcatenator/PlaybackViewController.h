@@ -11,7 +11,6 @@
 #import "Take.h"
 #import "PlaybackView.h"
 #import "VideoMerger.h"
-#import "TimeRangeSlider.h"
 #import "TTRangeSlider.h"
 
 @class AVPlayer;

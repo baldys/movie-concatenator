@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "BestTakesViewController.h"
+
 //#import "AssetBrowserController.h"
 //#import "SimpleEditor.h"
 
@@ -42,7 +43,8 @@
 
 enum {
     kTransitionsSection,
-    kTitlesSection
+    kTitlesSection,
+    kTitleSlideSection
 };
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -160,34 +162,32 @@ enum {
 //    ///self.editor.clipTimeRanges = [[validClipTimeRanges copy] autorelease];
 //}
 
-//- (void)synchronizeWithEditor
-//{
-//    // Clips
-//    [self synchronizeEditorClipsWithOurClips];
-//    [self synchronizeEditorClipTimeRangesWithOurClipTimeRanges];
-//    
-//    // Commentary
-//    self.editor.commentary = _commentaryEnabled ? self.commentary : nil;
-//    CMTime commentaryStartTime = (_commentaryEnabled && self.commentary) ? CMTimeMakeWithSeconds(_commentaryStartTime, 600) : kCMTimeInvalid;
-//    self.editor.commentaryStartTime = commentaryStartTime;
-    
-    // Transitions
-//    CMTime transitionDuration = _transitionsEnabled ? CMTimeMakeWithSeconds(_transitionDuration, 600) : kCMTimeInvalid;
+- (void)synchronizeWithEditor
+{
+    // Clips
+    //[self synchronizeEditorClipsWithOurClips];
+    //[self synchronizeEditorClipTimeRangesWithOurClipTimeRanges];
 
-    ///self.editor.transitionDuration = transitionDuration;
-    
-    ///self.editor.transitionType = _transitionsEnabled ? _transitionType : SimpleEditorTransitionTypeNone;
+    // Transitions
+    CMTime transitionDuration = _transitionsEnabled ? CMTimeMakeWithSeconds(_transitionDuration, 600) : kCMTimeInvalid;
+
+    self.transitionTime = transitionDuration;
+    //self.transitionDuration = transitionDuration;
+    self.videoMerger.transitionDuration = transitionDuration;
+
+    self.videoMerger.transitionType = _transitionsEnabled ? _transitionType : TransitionTypeNone;
     
     // Titles
-   // self.editor.titleText = _titlesEnabled ? self.titleText : nil;//
-//}
+    
+    //self.videoMerger.titleText = _titlesEnabled ? self.titleText : nil;//
+}
 
 #pragma mark -
 #pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2; // The titles section is the last section.
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -195,10 +195,13 @@ enum {
 
     if ( section == kTransitionsSection )
     {
-        return _transitionsEnabled ? 3 : 1;
+        return _transitionsEnabled ? 4 : 1; // 3
     }
     else if ( section == kTitlesSection ) {
         return _titlesEnabled ? 2 : 1;
+    }
+    else if (section == kTitleSlideSection) {
+        return _titleSlideEnabled ? 2 : 1;
     }
     else {
         return 0;
@@ -285,19 +288,6 @@ enum {
             [toggleSwitch addTarget:self action:@selector(toggleTransitionsEnabled:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = toggleSwitch;
         }
-        
-//        else if (row == 1)
-//        {
-//            TimeSliderCell *timeCell = (TimeSliderCell*)cell;
-//            timeCell.textLabel.text = @"Length";
-//            timeCell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
-//            timeCell.sliderXInset = 72.0;
-//            timeCell.flipSlider = NO;
-//            timeCell.minimumTime = 0.0;
-//            timeCell.duration = 4.0;
-//            timeCell.maximumTime = timeCell.duration;
-//            timeCell.timeValue = _transitionDuration;
-//        }
         else if (row == 1)
         {
             cell.textLabel.text = @"Cross Fade";
@@ -309,6 +299,19 @@ enum {
             cell.textLabel.text = @"Push";
             if (_transitionType == TransitionTypePush)
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        
+        else if (row == 3)
+        {
+            UISlider *durationSlider = [[UISlider alloc] initWithFrame:CGRectMake(12, cell.frame.size.height/2, cell.frame.size.width, 20)];
+            cell.accessoryView = durationSlider;
+            cell.textLabel.text = @"Duration";
+            
+            cell.textLabel.font = [UIFont boldSystemFontOfSize:16.0];
+            durationSlider.minimumValue = 0.0;
+            durationSlider.maximumValue = 3.0;
+            durationSlider.value = _transitionDuration;
+            [durationSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
     }
     else if ( section == kTitlesSection )
@@ -323,12 +326,38 @@ enum {
             [toggleSwitch addTarget:self action:@selector(toggleTitlesEnabled:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = toggleSwitch;
         }
+        
 //        else
 //        {
 ////            TitleEditingCell *editingCell = (TitleEditingCell*)cell;
 ////            editingCell.titleText = self.titleText;
 //        }
     }
+    
+    else if (section == kTitleSlideSection)
+    {
+        if (row == 0)
+        {
+            cell.textLabel.text = @"Scene intro slide";
+            UISwitch *toggleSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+            toggleSwitch.on = _titleSlideEnabled;
+            [toggleSwitch addTarget:self action:@selector(toggleTitleSlideEnabled:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = toggleSwitch;
+        }
+        else if (row == 1)
+        {
+            cell.textLabel.text = @"Default";
+            cell.detailTextLabel.text = @"uses the scene title as text on a black background";
+           
+        }
+    }
+}
+
+-(void) sliderValueChanged:(UISlider*)sender
+{
+    
+    self.transitionDuration = sender.value;
+    
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -339,7 +368,7 @@ enum {
 //    //static NSString *ExportCellIdentifier = @"ExportCell";
 
     static NSString *TitleEditingCellIdentifier = @"TitleCell";
-//    
+    static NSString *TransitionDurationSliderCellIdentifier = @"TransitionDurationCell";
     NSString *cellID = nil;
 //    
 
@@ -354,11 +383,23 @@ enum {
 //    }
     if (section == kTransitionsSection)
     {
-        cellID = NormalCellIdentifier;
+        if (row == 3)
+        {
+            cellID = TransitionDurationSliderCellIdentifier;
+        }
+        else
+        {
+           cellID = NormalCellIdentifier;
+        }
+        
     }
     if ( section == kTitlesSection )
     {
         cellID = TitleEditingCellIdentifier;
+    }
+    if (section == kTitleSlideSection)
+    {
+        cellID = NormalCellIdentifier;
     }
     //else {
 //        cellID = NormalCellIdentifier;
@@ -397,10 +438,10 @@ enum {
     }
     
 //
-    if (cellID == NormalCellIdentifier)
-    {
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-    }
+//    if (cellID == NormalCellIdentifier)
+//    {
+//        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+//    }
     
   [self updateCell:cell forRowAtIndexPath:indexPath];
 //    
@@ -418,7 +459,11 @@ enum {
     }
     if (section == kTitlesSection)
     {
-        title = @"Text";
+        title = @"Text Overlay";
+    }
+    if (section == kTitleSlideSection)
+    {
+        title = @"Scene Intro Slides";
     }
     
 //    else if ( section  == kProjectSection ) {
@@ -477,8 +522,7 @@ enum {
 //            return;
 //        }
         
-        // Synchronize changes with the editor.
-//        [self synchronizeWithEditor];
+    
 //        
 //        if (row == 0) {
 //            [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
@@ -532,6 +576,8 @@ enum {
                 
             }
         }
+    // Synchronize changes with the editor.
+    [self synchronizeWithEditor];
 }
 
 
@@ -688,26 +734,6 @@ enum {
 //    [cell setDetailTextLabelHidden:YES animated:YES];
 //}
 
-//#pragma mark -
-//#pragma mark Commentary
-//
-//- (void)toggleCommentaryEnabled:(UISwitch*)sender
-//{
-//    if (_commentaryEnabled == sender.on)
-//        return;
-//    _commentaryEnabled = sender.on;
-//    
-//    NSRange range = {1, 2};
-//    NSArray *indexPathsToInsertOrDeleted = [self indexPathsForSection:kCommentarySection inRange:range];
-//    
-//    if (_commentaryEnabled) {
-//        [self.tableView insertRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
-//        [self.tableView scrollToRowAtIndexPath:[indexPathsToInsertOrDeleted lastObject] atScrollPosition:UITableViewScrollPositionNone animated:YES];
-//    }
-//    else {
-//        [self.tableView deleteRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
-//    }
-//}
 
 #pragma mark -
 #pragma mark Transitions
@@ -783,16 +809,6 @@ enum {
 //    }
 //}
 
-//- (void)constrainCommentaryStartTimeBasedOnProjectDuration
-//{
-//    // update commentary start time if visible
-//    NSIndexPath *commentaryStartTimeIndexPath = [NSIndexPath indexPathForRow:2 inSection:kCommentarySection];
-//    if ([[self.tableView indexPathsForVisibleRows] containsObject:commentaryStartTimeIndexPath]) {
-//        TimeSliderCell *commentaryStartTimeCell = (TimeSliderCell*)[self.tableView cellForRowAtIndexPath:commentaryStartTimeIndexPath];
-//        [self updateCell:commentaryStartTimeCell forRowAtIndexPath:commentaryStartTimeIndexPath];
-//        _commentaryStartTime = commentaryStartTimeCell.timeValue;
-//    }
-//}
 
 - (void)toggleTransitionsEnabled:(UISwitch*)sender
 {
@@ -805,12 +821,13 @@ enum {
     //NSRange range = {1, 3};
     NSIndexPath *indexPath1 = [NSIndexPath indexPathForRow:1 inSection:kTransitionsSection];
     NSIndexPath *indexPath2 = [NSIndexPath indexPathForRow:2 inSection:kTransitionsSection];
-    
-    NSArray *indexPathsToInsertOrDeleted = [NSArray arrayWithObjects:indexPath1,indexPath2,nil];
+    NSIndexPath *indexPath3 = [NSIndexPath indexPathForRow:3 inSection:kTransitionsSection];
+    NSArray *indexPathsToInsertOrDeleted = [NSArray arrayWithObjects:indexPath1,indexPath2,indexPath3,nil];
     
     if (_transitionsEnabled)
     {
         self.videoMerger.transitionType = TransitionTypeCrossFade;
+        
         [self.tableView insertRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
         //[self.tableView scrollToRowAtIndexPath:[indexPathsToInsertOrDeleted lastObject] atScrollPosition:UITableViewScrollPositionNone animated:YES];
     }
@@ -819,7 +836,7 @@ enum {
         [self.tableView deleteRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
     }
    // [self constrainClipTimeRangesBasedOnTransitionDuration];
-//    [self constrainCommentaryStartTimeBasedOnProjectDuration];
+
 }
 
 
@@ -842,6 +859,25 @@ enum {
     else {
         [self.tableView deleteRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
     }
+}
+
+- (void)toggleTitleSlideEnabled:(UISwitch *)sender
+{
+    if (_titleSlideEnabled == sender.on)
+        return;
+    _titleSlideEnabled = sender.on;
+    
+    NSRange range = {1, 1};
+    NSArray *indexPathsToInsertOrDeleted = [self indexPathsForSection:kTitleSlideSection inRange:range];
+    
+    if (_titleSlideEnabled) {
+        [self.tableView insertRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
+        [self.tableView scrollToRowAtIndexPath:[indexPathsToInsertOrDeleted lastObject] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    }
+    else {
+        [self.tableView deleteRowsAtIndexPaths:indexPathsToInsertOrDeleted withRowAnimation:UITableViewRowAnimationTop];
+    }
+
 }
 
 //#pragma mark -
@@ -1023,11 +1059,7 @@ enum {
 //        timeRangeValue = [NSValue valueWithCMTimeRange:timeRange];
 //        [self.clipTimeRanges replaceObjectAtIndex:section withObject:timeRangeValue];
 //        
-//   
-//    }
-//    else if ((section == kCommentarySection) && (row == 2)) {
-//        _commentaryStartTime = cell.timeValue;
-//    }
+//
 //    else if ((section == kTransitionsSection) && (row == 1)) {
 //        _transitionDuration = cell.timeValue;
 //        [self constrainClipTimeRangesBasedOnTransitionDuration];

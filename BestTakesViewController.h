@@ -17,4 +17,5 @@
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 - (IBAction)concatenateSelectedTakes:(id)sender;
 @property (nonatomic, strong) VideoMerger *videoMerger;
+@property (nonatomic) BOOL titleSlidesEnabled;
 @end
