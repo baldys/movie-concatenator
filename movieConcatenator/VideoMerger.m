@@ -7,7 +7,7 @@
 //
 
 #import "VideoMerger.h"
-
+#import "PlaybackViewController.h"
 
 #define degreesToRadians( degrees ) ( ( degrees ) / 180.0 * M_PI )
 @interface VideoMerger ()
@@ -116,21 +116,22 @@
         }
         
         NSLog(@"take duration: %lld, %d, %f", take.duration.value, take.duration.timescale, CMTimeGetSeconds(take.duration));
+        
         AVAsset *urlAsset = [[AVURLAsset alloc] initWithURL:[take getFileURL] options:options];
         
         
-        [take loadDurationOfAsset:urlAsset withCompletionHandler:^{
-            NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, take.duration)];
-            
-            [self.clipTimeRanges addObject:timeRange];
-        }];
+//        [take loadDurationOfAsset:urlAsset withCompletionHandler:^{
+//            NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, take.duration)];
+//            
+//            [self.clipTimeRanges addObject:timeRange];
+//        }];
         
         
-        CMTime durationOfAsset = urlAsset.duration;
+       // CMTime durationOfAsset = urlAsset.duration;
         NSLog(@"duration of asset: %f", CMTimeGetSeconds(urlAsset.duration));
         //durationOfAsset = take.duration;
         
-        NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, durationOfAsset)];
+        NSValue *timeRange = [NSValue valueWithCMTimeRange:CMTimeRangeMake(kCMTimeZero, urlAsset.duration)];
         
         [self.clipTimeRanges addObject:timeRange];
         
@@ -381,7 +382,7 @@
 - (AVAsset*)buildTransitionComposition:(NSArray*)takes
 {
         
-    self.transitionDuration = CMTimeMakeWithSeconds(1200, 600); // default transition time=1second
+    self.transitionDuration = CMTimeMakeWithSeconds(600, 600); // default transition time=1second
     
     self.composition = [AVMutableComposition composition];
     self.videoComposition = [AVMutableVideoComposition videoComposition];
@@ -458,6 +459,9 @@
    
     for (i = 0; i < _videoClips.count; i++ )
     {
+//        ////////////////////////////////////////////////////////////////////
+//        insertionTime = CMTimeAdd(insertionTime, CMTimeMakeWithSeconds(3, 1));
+//        ///////////////////////////////////////////////////////////////
         NSLog(@"videoClips.count: %lu", (unsigned long)_videoClips.count);
         NSInteger alternatingIndex = i % 2; // alternating targets: 0, 1, 0, 1, ...
         AVURLAsset *asset = [_videoClips objectAtIndex:i];
@@ -465,6 +469,7 @@
         //preferredTransform = asset.preferredTransform;
         
         NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
+        
         CMTimeRange timeRangeInAsset;
         if (clipTimeRange)
         {
@@ -477,20 +482,7 @@
    
         
         AVAssetTrack *assetTrack_video = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-        
-        NSLog(@"assetTrack_video.preferredTransform:");
-        NSLog(@"%f,%f,%f,%f",assetTrack_video.preferredTransform.a, assetTrack_video.preferredTransform.b, assetTrack_video.preferredTransform.c, assetTrack_video.preferredTransform.d);
 
-    
-        if ([[NSNumber numberWithFloat: assetTrack_video.preferredTransform.a] isEqualToNumber:@1])
-        {
-            NSLog(@"assetTrack_video isEqual to @1!!!");
-            //do stuff to orient it properly
-        }
-        else
-        {
-            NSLog(@"assetTrack_video is NOT equal to @1!!!");
-        }
 
         [compositionVideoTracks[alternatingIndex] insertTimeRange:timeRangeInAsset ofTrack:assetTrack_video atTime:insertionTime error:nil];
         
@@ -520,7 +512,7 @@
         // (Note: this arithmetic falls apart if timeRangeInAsset.duration < 2 * transitionDuration.)
 
         insertionTime = CMTimeAdd(insertionTime, timeRangeInAsset.duration);
-        
+        // insertionTime = CMTimeAdd(insertionTime
         insertionTime = CMTimeSubtract(insertionTime, transitionDuration);
         
         // Remember the time range for the transition to the next item.
@@ -551,9 +543,7 @@
         AVMutableVideoCompositionInstruction *passThroughInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
         passThroughInstruction.timeRange = passThroughTimeRanges[i];
         AVMutableVideoCompositionLayerInstruction *passThroughLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionVideoTracks[alternatingIndex]];
-        NSLog(@"assetTrack_video.preferredTransform:");
-        NSLog(@"%f,%f,%f,%f", asset1.preferredTransform.a, asset1.preferredTransform.b, asset1.preferredTransform.c, asset1.preferredTransform.d);
-        
+      
         CGAffineTransform transform = assetTrack_video1.preferredTransform;
         if (transform.a == -1.0f && transform.d == -1.0f)
         {
@@ -736,8 +726,12 @@
     }
     else if (self.transitionType == TransitionTypeNone && self.titleSlidesEnabled)
     {
-        [self addBlackBackgroundTransitionsWithDuration:CMTimeMake(3,1) betweenClips:notification.object];
+        [self addBlackBackgroundTransitionsWithDuration:3.0 betweenClips:notification.object];
         
+    }
+    else if (self.transitionType != TransitionTypeNone && self.titleSlidesEnabled)
+    {
+        [self addBlackBackgroundTransitionsWithDuration:CMTimeMakeWithSeconds(3,1) betweenClips:notification.object withTransitionDuration:CMTimeMakeWithSeconds(2, 1)];
     }
     else
     {
@@ -840,6 +834,11 @@
 
     }
     
+//    AVComposition *copyOfComposition = [self.composition copy];
+//    AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:copyOfComposition];
+    
+    
+    
     
     [self exportVideoComposition:self.composition];
         
@@ -852,26 +851,382 @@
     
 }
 
-
-
-- (void)addBlackBackgroundTransitionsWithDuration:(CMTime)duration betweenClips:(NSArray*)takes
+- (AVAsset*) insertEmptyTimeRangesWithDuration:(float)durationOfEmptyClips betweenClips:(NSArray*)videoClips intoComposition:(AVAsset*)composition
 {
+    CMTime emptyClipStartTime = kCMTimeZero;
+    CMTime emptyClipDuration = CMTimeMakeWithSeconds(durationOfEmptyClips, 600);
+    for (int i=0; i<_videoClips.count;i++)
+    {
+        NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
+        AVURLAsset *asset = _videoClips[i];
+        CMTimeRange timeRangeInAsset;
+        if (clipTimeRange)
+            timeRangeInAsset = [clipTimeRange CMTimeRangeValue];
+        else
+            timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, asset.duration);
+        
+        [self.composition insertEmptyTimeRange:CMTimeRangeMake(emptyClipStartTime, emptyClipDuration)];
+        
+        emptyClipStartTime = CMTimeAdd(emptyClipDuration, timeRangeInAsset.duration);
+    }
+
+    return self.composition;
+    
+}
+
+
+
+- (void)addBlackBackgroundTransitionsWithDuration:(float)intervalBetweenClipsInSeconds betweenClips:(NSArray*)takes
+{
+    CMTime emptyClipDuration = CMTimeMakeWithSeconds(intervalBetweenClipsInSeconds, 600);
+   // [self insertEmptyTimeRangesWithDuration:3 betweenClips:takes intoComposition:[self spliceAssets:takes]];
+    
     self.composition = [[AVMutableComposition alloc] init];
+    
     //composition.naturalSize = videoSize;
-    AVMutableCompositionTrack *compositionTrack_video = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-    AVMutableCompositionTrack *compositionTrack_audio = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *videoTrackA = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *videoTrackB = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
     
+    AVMutableCompositionTrack *audioTrackA= [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *audioTrackB= [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    self.videoComposition = nil;
     self.videoComposition = [AVMutableVideoComposition videoComposition];
+    NSMutableArray *videoInstructions = [[NSMutableArray alloc] init];
+
+    //CMTimeRange *videoTimeRanges = alloca(sizeof(CMTimeRange) * [_videoClips count]);
+
+    CMTimeRange *videoTimeRanges = alloca(sizeof(CMTimeRange) * 2);
+    //CMTimeRange *emptyClipTimeRanges = alloca(sizeof(CMTimeRange) * [_videoClips count]);
+    CMTimeRange *emptyClipTimeRanges = alloca(sizeof(CMTimeRange) * 2);
+    //CMTimeRange *transitionTimeRanges = alloca(sizeof(CMTimeRange) * 2);
+    CMTimeRange *fadeInTransitionTimeRanges = alloca(sizeof(CMTimeRange) * 2);
+    //CMTimeRange *fadeOutTransitionTimeRanges = alloca(sizeof(CMTimeRange) *2);
+    CMTimeRange *passThroughTimeRanges = alloca(sizeof(CMTimeRange) *2);
     
-    CMTime insertionTime = duration;
     
-    AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    CMTime insertionTime = kCMTimeZero;
+    CMTime transitionDuration = CMTimeMakeWithSeconds(2, 600);
+    ///// first try with the firt two assets, extend over all clips if this works.
+   // for (int i=0; i<_videoClips.count;i++)
+   // {
+        // get the asset and its time range: [0, assetsDuration]
+        AVURLAsset *asset1 = self.videoClips[0];
+        NSValue *clipTimeRange1 = _clipTimeRanges[0];
+        CMTimeRange timeRangeInAsset1;
+        if (clipTimeRange1)
+            timeRangeInAsset1 = [clipTimeRange1 CMTimeRangeValue];
+        else
+            timeRangeInAsset1 = CMTimeRangeMake(kCMTimeZero, [asset1 duration]);
+        
+        AVAssetTrack *sourceVideoTrack = [asset1 tracksWithMediaType: AVMediaTypeVideo][0];
+        AVAssetTrack *sourceAudioTrack = [asset1 tracksWithMediaType:AVMediaTypeAudio][0];
+        
+        // prior to the start of the video clip, there will be a blank/empty clip that shows for x seconds (value retreived from method parameter)
+        // save this time range in the array
     
-    AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+        emptyClipTimeRanges[0] = CMTimeRangeMake(insertionTime, emptyClipDuration);
     
-    //so we can adjust the video size according to the smallest video in the sequence, so we dont crop large portions of the large videos or have black bars around the small videos.
+        [videoTrackA insertEmptyTimeRange:emptyClipTimeRanges[0]];
+        [audioTrackA insertEmptyTimeRange:emptyClipTimeRanges[0]];
+        // start time at which the video clip is to be inserted (after the empty clip):
+        insertionTime = CMTimeAdd(insertionTime, emptyClipDuration);
+        
+        // get time range in asset, and add to array of video time ranges
+        videoTimeRanges[0] = CMTimeRangeMake(insertionTime, timeRangeInAsset1.duration);
+    fadeInTransitionTimeRanges[0] = CMTimeRangeMake(insertionTime, transitionDuration);
+    passThroughTimeRanges[0] = CMTimeRangeMake(CMTimeAdd(insertionTime,transitionDuration), CMTimeSubtract(videoTimeRanges[0].duration, transitionDuration));
+    
+    [videoTrackA insertTimeRange:timeRangeInAsset1 ofTrack:sourceVideoTrack atTime:insertionTime error:nil];
+    [audioTrackA insertTimeRange:timeRangeInAsset1 ofTrack:sourceAudioTrack atTime:insertionTime error:nil];
     
     
+    
+    insertionTime = CMTimeAdd(insertionTime, timeRangeInAsset1.duration);
+    
+    
+    AVURLAsset *asset2 = self.videoClips[1];
+    NSValue *clipTimeRange2 = _clipTimeRanges[1];
+    CMTimeRange timeRangeInAsset2;
+    if (clipTimeRange2)
+        timeRangeInAsset2 = [clipTimeRange2 CMTimeRangeValue];
+    else
+        timeRangeInAsset2 = CMTimeRangeMake(kCMTimeZero, [asset2 duration]);
+    
+    AVAssetTrack *sourceVideoTrack2 = [asset2 tracksWithMediaType: AVMediaTypeVideo][0];
+    AVAssetTrack *sourceAudioTrack2 = [asset2 tracksWithMediaType:AVMediaTypeAudio][0];
+    
+    // prior to the start of the video clip, there will be a blank/empty clip that shows for x seconds (value retreived from method parameter)
+    // save this time range in the array
+    
+    emptyClipTimeRanges[1] = CMTimeRangeMake(insertionTime, emptyClipDuration);
+    
+    [videoTrackB insertEmptyTimeRange:emptyClipTimeRanges[1]];
+    [audioTrackB insertEmptyTimeRange:emptyClipTimeRanges[1]];
+    // start time at which the video clip is to be inserted (after the empty clip):
+    insertionTime = CMTimeAdd(insertionTime, emptyClipDuration);
+    
+    // get time range in asset, and add to array of video time ranges
+    videoTimeRanges[1] = CMTimeRangeMake(insertionTime, timeRangeInAsset2.duration
+                                         );
+    fadeInTransitionTimeRanges[1] = CMTimeRangeMake(insertionTime, transitionDuration);
+    passThroughTimeRanges[1] = CMTimeRangeMake(CMTimeRangeGetEnd(fadeInTransitionTimeRanges[1]), CMTimeSubtract(videoTimeRanges[1].duration, transitionDuration));
+    
+    NSLog(@"EMPTY:");
+    CMTimeRangeShow(emptyClipTimeRanges[0]);
+    NSLog(@"TRANSITION:");
+    CMTimeRangeShow(fadeInTransitionTimeRanges[0]);
+    NSLog(@"PASSTHROUGH TIME RANGES:");
+    CMTimeRangeShow(passThroughTimeRanges[0]);
+    NSLog(@"EMPTY:");
+    CMTimeRangeShow(emptyClipTimeRanges[1]);
+    NSLog(@"TRANSITION:");
+    CMTimeRangeShow(fadeInTransitionTimeRanges[1]);
+    NSLog(@"PASSTHROUGH TIME RANGES:");
+    CMTimeRangeShow(passThroughTimeRanges[1]);
+    
+    NSLog(@"VIDEO CLIP TIME RANGES IN COMPOSITION:");
+    CMTimeRangeShow(videoTimeRanges[0]);
+    CMTimeRangeShow(videoTimeRanges[1]);
+    
+    NSLog(@"SOURCE TRACK TIME RANGES");
+    CMTimeRangeShow(timeRangeInAsset1);
+    CMTimeRangeShow(timeRangeInAsset2);
+    
+ 
+    
+    
+    NSError *trackBError = nil;
+    if (![videoTrackB insertTimeRange:timeRangeInAsset2 ofTrack:sourceVideoTrack2 atTime:insertionTime error:&trackBError])
+    {
+        NSLog(@"ERROR: %@", trackBError);
+    }
+    [audioTrackB insertTimeRange:timeRangeInAsset2 ofTrack:sourceAudioTrack2 atTime:insertionTime error:nil];
+    
+    
+    
+    //
+   
+    // }
+    
+    
+    /**-------------------------------**
+     ** BLANK INTRO CLIP INSTRUCTIONS **
+     **-------------------------------**/
+    //AVMutableVideoCompositionInstruction *blankIntroClipInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    ///////////////////////////////////////////
+    /*  _____________________________________
+       |     !                               |
+      A|EEEEE!AAAAAAAAAAA|EEEEE|0000000000000|
+       |-----|xxx********|                   |
+       |     !           |-----|xxx**********|
+      B|EEEEE!00000000000|EEEEE!BBBBBBBBBBBBB|
+       |_____!_______________________________|
+       [<===>]
+     
+    *//////////////////////////////////////////
+    // Time range of interest for this composition:
+    //blankIntroClipInstruction.timeRange = emptyClipTimeRanges[0];
+    
+    /* layer instructions */
+    
+    AVMutableVideoCompositionInstruction *blankIntroClipInstruction1 = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    blankIntroClipInstruction1.timeRange = emptyClipTimeRanges[0];
+    
+    AVMutableVideoCompositionLayerInstruction *emptyLayer1A = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+    AVMutableVideoCompositionLayerInstruction *emptyLayer1B = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+    [emptyLayer1A setOpacity:0.0 atTime:emptyClipTimeRanges[0].start];
+    [emptyLayer1B setOpacity:0.0 atTime:emptyClipTimeRanges[0].start];
+    
+    blankIntroClipInstruction1.layerInstructions = [NSArray arrayWithObjects:emptyLayer1A,emptyLayer1B, nil];
+    [videoInstructions addObject:blankIntroClipInstruction1];
+    
+    /**---------------------------------------**
+     ** FADE-IN TRANSITION CLIP INSTRUCTIONS  **
+     **---------------------------------------**/
+    AVMutableVideoCompositionInstruction *transitionInstructionA = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    
+    ///////////////////////////////////////////
+    /*  _____________________________________
+       |     !   !                           |
+      A|     |AAA!AAAAAAA|                   |
+       |-----|xxx!*******|                   |
+       |     !   !       |-----|xxx**********|
+      B|     !000!       |      BBBBBBBBBBBBB|
+       |_____!___!___________________________|
+             [<->]
+     
+     *//////////////////////////////////////////
+    // Time range of interest for this composition:
+    transitionInstructionA.timeRange = fadeInTransitionTimeRanges[0];
+    
+    /* layer instruction for track A  = xxx */
+    AVMutableVideoCompositionLayerInstruction *aInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+    // apply opacity ramp for fade in
+    [aInstruction setOpacityRampFromStartOpacity:0.0
+                                    toEndOpacity:1.0
+                                       timeRange:fadeInTransitionTimeRanges[0]];
+
+    
+    //[aInstruction setTransformRampFromStartTransform:sourceVideoTrack.preferredTransform toEndTransform:sourceVideoTrack.preferredTransform timeRange:fadeInTransitionTimeRanges[0]];
+    
+    AVMutableVideoCompositionLayerInstruction *bLayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+    
+    [bLayerInstruction setOpacity:0.0 atTime:fadeInTransitionTimeRanges[0].start];
+    
+    transitionInstructionA.layerInstructions = [NSArray arrayWithObjects:aInstruction, bLayerInstruction, nil];
+
+    [videoInstructions addObject:transitionInstructionA];
+    
+    // part of trackA without transitions, held constant at opacity 1.0
+    // spans the duration of the clip that does not include the transition duration at the start of the clip
+    // so the duration = assetDuration - transitionDuration
+    AVMutableVideoCompositionInstruction *passThroughA = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    
+    // ***** = PASS THROUGH INSTRUCTIONS
+    //    _____________________________________
+    //   |        !        !                   |
+    //   |      AAAAAAAAAAA|                   |
+    //A  |-----|xxx********|                   |
+    //   |        !        |-----|xxx**********|
+    //B  |        !        !      BBBBBBBBBBBBB|
+    //   |________!________!___________________|
+    //            [<------>]
+    //
+    passThroughA.timeRange = passThroughTimeRanges[0];
+    /* Pass through layer instructions for track A. */
+    AVMutableVideoCompositionLayerInstruction *passThroughLayerA= [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+    // passThroughLayerB...
+    
+    [passThroughLayerA setOpacity:1.0 atTime:passThroughA.timeRange.start];
+    // set opacity for layer B??
+    
+    //[passThroughLayerA setTransform:sourceVideoTrack.preferredTransform atTime:passThroughTimeRanges[0].start];
+    passThroughA.layerInstructions = @[passThroughLayerA];
+    [videoInstructions addObject:passThroughA];
+
+    //   ______________________________________
+    //   |                 !     !             |
+    //   |     |AAAAAAAAAAA|     !             |
+    //A  |-----|xxx********|     !             |
+    //   |                 |-----|xxx**********|
+    //B  |                 |     |BBBBBBBBBBBBB|
+    //   |_________________!_____!_____________|
+    //                     [<--->]
+    // Blank empty clip 2;
+    // the segment separating the end of clip #1 on track A and the start of clip #2 on trackB by a given duration.
+    
+    AVMutableVideoCompositionInstruction *blankIntroClipInstruction2 = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    blankIntroClipInstruction2.timeRange = emptyClipTimeRanges[1];
+    AVMutableVideoCompositionLayerInstruction *emptyLayer2A = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+    AVMutableVideoCompositionLayerInstruction *emptyLayer2B = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+    //?
+    [emptyLayer2A setOpacity:0.0 atTime:emptyClipTimeRanges[1].start];
+    [emptyLayer2B setOpacity:0.0 atTime:emptyClipTimeRanges[1].start];
+    blankIntroClipInstruction2.layerInstructions = [NSArray arrayWithObjects:emptyLayer2A,emptyLayer2B,nil];
+    [videoInstructions addObject:blankIntroClipInstruction2];
+   
+    
+    AVMutableVideoCompositionInstruction *transitionInstructionB = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    transitionInstructionB.timeRange = fadeInTransitionTimeRanges[1];
+    AVMutableVideoCompositionLayerInstruction *bInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+    [bInstruction setOpacityRampFromStartOpacity:0.0
+                                    toEndOpacity:1.0
+                                       timeRange:fadeInTransitionTimeRanges[1]];
+    //    AVMutableVideoCompositionLayerInstruction *emptyPassThroughA = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+    //    [bInstruction setTransform:sourceVideoTrack2.preferredTransform
+    //                        atTime:fadeInTransitionTimeRanges[1].start];
+    //    [emptyPassThroughA setOpacity:0.0
+    //                           atTime:fadeInTransitionTimeRanges[1].start];
+    //    transitionInstructionB.layerInstructions = [NSArray arrayWithObjects:bInstruction, emptyPassThroughA, nil];
+    //    [videoInstructions addObject:transitionInstructionB];
+    
+    transitionInstructionB.layerInstructions = @[bInstruction];
+    [videoInstructions addObject:transitionInstructionB];
+    
+
+    
+    AVMutableVideoCompositionInstruction *passThroughB = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    passThroughB.timeRange = passThroughTimeRanges[1];
+    /* Pass through layer instructions for track A. */
+    AVMutableVideoCompositionLayerInstruction *passThroughLayerB= [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+    
+    [passThroughLayerB setOpacity:1.0 atTime:passThroughTimeRanges[1].start];
+    //[passThroughLayerB setTransform:sourceVideoTrack2.preferredTransform atTime:passThroughTimeRanges[1].start];
+    passThroughB.layerInstructions = @[passThroughLayerB];
+    [videoInstructions addObject:passThroughB];
+    
+    
+    //may need to have these methods apply to one asset at a time if i want to enable chosiing different effects for each clip
+    // since you added empty time ranges to the tracks themselves, the intro layer instructions may need to be applied to the asset track with that empty time range instead of creating layer instructions that are not intialized to an asset
+    
+    //[aInstruction setOpacity:1.0 atTime:CMTimeAdd(videoTimeRanges[0].start, transitionDuration)];
+    /// layer instructions in a set of video instructions can occur at overlapping time but must be on different tracks?
+    // all time ranges for every  instruction must be mutually exclusive and no overlapping and NO GAPS
+    // |----|=======|
+    // |----|-------|
+    //  empty instructions with layer not initalized with any asset track
+    //  empty time ranges[i]
+    // for no transitions, only need to create one set of instructions
+    
+    
+    /* AVMutableVideoCompositionInstruction *blankIntroClipAInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+     emptyClipInstructions.timeRange = emptyClipTimeRanges[0];
+     AVMutableVideoCompositionLayerInstruction *emptyLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstruction];
+     emptyClipInstructions.layerInstructions = [NSArray arrayWithObject:emptyLayer];
+     [videoInstructions addObject:blankIntroClipAInstruction];
+     
+     // NO TRANSITIONS
+     AVMutableVideoCompositionInstruction *passThroughAInstructions = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+     passThroughInstructions.timeRange = videoTimeRanges[0];
+     
+     AVMutableVideoCompositionLayerInstruction *layerA = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+     //// or try using sourceVideoTrack instead?
+     [layerA setOpacity:1.0 atTime:videoTimeRanges[0].start];
+     [layerA setTransform:sourceVideoTrack.preferredTransform atTime:videoTimeRanges[0].start];
+     
+     
+     /// ?? is this nesessary?
+     AVMutableVideoCompositionLayerInstruction *emptylayerB = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+     [layerB setOpacity:0.0 atTime:videoTimeRanges[0].start];
+     
+     passThroughInstructions.layerInstructions = [NSArray arrayWithObjects:layerA, emptyLayerB, nil];
+     [videoInstructions addObject:passThroughAInstructions];
+     
+     
+     
+     AVMutableVideoCompositionInstruction *passThroughBInstructions = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+     passThroughInstructions.timeRange = videoTimeRanges[1];
+     
+     AVMutableVideoCompositionLayerInstruction *emptylayerA = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+     //// or try using sourceVideoTrack instead?
+     [layerA setOpacity:0.0 atTime:videoTimeRanges[1].start];
+     
+     
+     AVMutableVideoCompositionLayerInstruction *layerB = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackB];
+     [layerB setOpacity:1.0 atTime:videoTimeRanges[0].start];
+     [layerA setTransform:sourceVideoTrack2.preferredTransform atTime:videoTimeRanges[1].start];
+     passThroughInstructions.layerInstructions = [NSArray arrayWithObjects:emptylayerA, layerB, nil];
+     [videoInstructions addObject:passThroughBInstructions];
+     
+*/
+    
+    
+       //AVMutableVideoCompositionInstruction *transitionInstruction2 = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//    transitionInstruction2.timeRange =
+//     AVMutableVideoCompositionLayerInstruction *fadeOutInstruction =[AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:videoTrackA];
+//    
+//     CMTime fadeOutStartTime = CMTimeAdd(videoTimeRanges[0].start, CMTimeSubtract(videoTimeRanges[0].duration, transitionDuration));
+//     CMTimeRange fadeOutTimeRange = CMTimeRangeMake(fadeOutStartTime, transitionDuration);
+//     [fadeOutInstruction setOpacityRampFromStartOpacity:1.0 toEndOpacity:0.0 timeRange:fadeOutTimeRange];
+    
+    
+    // try creating just an empty track with an instruction spanning the composition duration. the layer instructions can just be initialized without an asset track. then set up each asset in the video track as separated by equally spaced intervals. Black empty time ranges space out the assets in equally spaced out intervals.
+    /// try doing this: create instructions for every asset
+    
+    
+    
+    /*
+    //insertionTime = kCMTimeZero;
     for (int i=0; i<_videoClips.count; i++)
     {
         AVURLAsset *asset = self.videoClips[i];
@@ -883,16 +1238,58 @@
         else
             timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, [asset duration]);
         
-        //AVAsset *asset = self.videoClips[i];
         AVAssetTrack *assetTrack_video = [asset tracksWithMediaType:AVMediaTypeVideo][0];
         AVAssetTrack *assetTrack_audio = [asset tracksWithMediaType:AVMediaTypeAudio][0];
         
-        [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_video atTime:insertionTime error:nil];
+        [compositionTrack_video insertTimeRange:timeRangeInAsset ofTrack:assetTrack_video atTime:insertionTime error:nil];
         
-        [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero,CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_audio atTime:insertionTime error:nil];
+        [compositionTrack_audio insertTimeRange:timeRangeInAsset ofTrack:assetTrack_audio atTime:insertionTime error:nil];
+        
+        insertionTime = CMTimeAdd(insertionTime, timeRangeInAsset.duration);
+     
+    
+        // fade in time ranges[i] = CMTimeRangeMake(insertionTime (or videoTimeRanges[i].start), transitionDuration)
+        // pass through time ranges[i].start = CMTimeAdd(insertionTime, transitionDuration)
+        // CMTimeMake *transitionDurationx2 = CMTimeAdd(transitionDuration, transitionDuration)
+        // passThroughTimeRanges[i].duration = CMTimeSubtract(asset.duration, transitionDurationx2)
+        
+        // insertionTime = insertionTime + asset.duration
+        
+        // fade out timeRanges[i].start = CMTimeSubtract(insertionTime, transitionDuration)
+        // fade out timeRanges[i].duration = transitionDuration
+    } */
+    
+
+//    CGAffineTransform preferredTransform;
+//    CGSize naturalSize;
+//    
+//    for (int i=0; i<_videoClips.count; i++)
+//    {
+//        AVURLAsset *asset = self.videoClips[i];
+//        NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
+//        CMTimeRange timeRangeInAsset;
+//        
+//        if (clipTimeRange)
+//            timeRangeInAsset = [clipTimeRange CMTimeRangeValue];
+//        else
+//            timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, [asset duration]);
+//        
+        
+//        AVAssetTrack *assetTrack_video = [asset tracksWithMediaType:AVMediaTypeVideo][0];
+//        AVAssetTrack *assetTrack_audio = [asset tracksWithMediaType:AVMediaTypeAudio][0];
         
         
-        [layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+        
+//        [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_video atTime:insertionTime error:nil];
+//        
+//        [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero,CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_audio atTime:insertionTime error:nil];
+       
+//        AVURLAsset *asset = self.videoClips[i];
+//        AVAssetTrack *assetTrack_video = [asset tracksWithMediaType:AVMediaTypeVideo][0];
+//        preferredTransform = assetTrack_video.preferredTransform;
+//        naturalSize = assetTrack_video.naturalSize;
+        
+        //[layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
         
         
         
@@ -909,82 +1306,191 @@
         // [layerInstruction setTransform:transform atTime:timer];
         
         //[layerInstruction setTransform:assetTrack_video.preferredTransform atTime:timer];
+//        AVMutableVideoCompositionInstruction *instruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+//        instruction.timeRange = CMTimeRangeMake(emptyClipTimeRanges[i].start, CMTimeAdd(videoTimeRanges[i].start, videoTimeRanges[i].duration));
+       //          TRACK A
+       //       |           |
+       //       |--|<======>|
+       //       |           |
+                        ///    TRACK B
+                        /// |           |
+                        /// |--|<======>|
+                        /// |           |
+        
+       /////////////////////////////////////////////////////////////
+//start//0|  td0|           |     |td1=td0+ad0 |     |             | \\
+       // |<   >|<=========>|<   >|<==========>|<   >|<----------->| \\
+//dur  // | td  |      ad0  | td  |   ad1      | td  |     ad2     | \\
+       /////////////////////////////////////////////////////////////
+       // <----------------->
+       // (0)+td+ad0             = it0
+       // (td+ad0)+td+ad1        = it0+td+ad1 = it1
+       // (td+ad0+td+ad1)+td+ad2 =     it1         +td+ad2 = it2
         
         
-        [layerInstruction setTransform:assetTrack_video.preferredTransform atTime:insertionTime];
+        
+//        AVMutableVideoCompositionLayerInstruction *layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+//        
+//        [layerInstruction setTransform:preferredTransform atTime:videoTimeRanges[i].start];
+        // if not try at kCMTimeZero
         
         
-        insertionTime = CMTimeAdd(insertionTime, asset.duration);
-        insertionTime = CMTimeAdd(insertionTime, duration);
-        //previousVideoSize = currentVideoSize;
-        
-        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, insertionTime);
-        
-        instruction.layerInstructions = [NSArray arrayWithObjects:layerInstruction, nil];
-        self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
-        
-        self.videoComposition.frameDuration = CMTimeMake(1, 30);
-        
-        self.videoComposition.renderSize = assetTrack_video.naturalSize;
-        
-        self.videoComposition.renderScale = 1.0;
+//        insertionTime = CMTimeAdd(insertionTime, asset.duration);
+//        insertionTime = CMTimeAdd(insertionTime, duration);
         
         
+        //instruction.timeRange = CMTimeRangeMake(kCMTimeZero, insertionTime);
+        
+//        instruction.timeRange = videoTimeRanges[i];
+//        
+//        instruction.layerInstructions = [NSArray arrayWithObject:layerInstruction];
+//        [videoInstructions addObject:instruction];
+//        self.videoComposition.instructions = [NSArray arrayWithObject:instruction];
+//        
+//        self.videoComposition.frameDuration = CMTimeMake(1, 30);
+//        
+//        self.videoComposition.renderSize = naturalSize;
+//        
+//        self.videoComposition.renderScale = 1.0;
         
         
-    }
+        /// after try adding empty time ranges after creating video composition
+        
+    //}
+    
+    // tell the player about our effects
+    
+    
+    
+    
+
+    self.videoComposition.instructions = [NSArray arrayWithArray:videoInstructions];
+    
+    self.videoComposition.frameDuration = CMTimeMake(1, 30);
+    
+    self.videoComposition.renderSize = sourceVideoTrack.naturalSize;
+    
+    self.videoComposition.renderScale = 1.0;
+
     [self exportVideoComposition:self.composition];
     //return self.composition;
     
     
 }
 
-////***
-// create a new version of this take with the trimmed time range and replace the old take with the new take but keep the same file name so it can be accessed from the same location. Initially it is exported to the temporary directory then this file replaces the take in its original location with the same asset id
-// now obsolete...
-- (void) exportTrimmedTake:(Take*)take withCompletionHandler:(void (^)(void))completionHandler
-{
-    AVAsset *asset = [AVURLAsset URLAssetWithURL:take.getFileURL options:nil];
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset1920x1080];
-    exporter.timeRange = take.timeRange;
-    exporter.outputFileType = AVFileTypeQuickTimeMovie;
-    //
-    exporter.outputURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"temp.mov"]];
-    
-    
-    [exporter exportAsynchronouslyWithCompletionHandler:
-     ^{
-         dispatch_async(dispatch_get_main_queue(),
-                        ^{
-                            //[self exportDidFinish:exporter];
-                            
-                            if (exporter.status ==AVAssetExportSessionStatusCompleted)
-                            {
-                                NSError *error = nil;
-                                NSURL *oldURL = take.getFileURL;
-                                NSLog(@"take url: %@", take.getFileURL);
-                                NSURL *outputURL = exporter.outputURL;
-                                [[NSFileManager defaultManager] replaceItemAtURL:[take getFileURL] withItemAtURL:outputURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&oldURL error:&error];
+/// this is for applying empty black clips between each video in the composition. add text overlay to introduce the next clip or for scene intro. Same as previous method except it adds a transition effect between the black clip and the next/previous clips in the composition.
+/*  duration - length of time the black clip shows (this includes the transition times)
+    transitionDuration - time taken at the end of previoous clip for duration to occur and for trnsition to occur for the next corresponding clip
+*/
 
-                                if (error)
-                                {
-                                    NSLog(@"%@", error);
-                                }
-                                else{
-                                    dispatch_async(dispatch_get_main_queue(),^{
-                                        completionHandler();
-                                        NSLog(@"Video has been trimmed and exported?");
-                                    });
-                                    
-                                }
-                                
-                                
-                            }
-                            
-                        });
-     }];
+- (void)addBlackBackgroundTransitionsWithDuration:(CMTime)duration betweenClips:(NSArray*)takes withTransitionDuration:(CMTime)transitionDuration
+{
+    
+
+    // check the times of the duration and make sure it is 1 second longer than 2x the transition duration so it shows by itself for at least one second before the next clip starts to fade in
+
+    //NSMutableArray *fadeInTransitionTimeRanges = [NSMutableArray array];
+    //NSMutableArray *fadeOuttransitionTimeRanges = [NSMutableArray array];
+
+    NSInteger i;
+    CMTime insertionTime = kCMTimeZero;
+
+ 
+    self.composition = [[AVMutableComposition alloc] init];
+    //composition.naturalSize = videoSize;
+    AVMutableCompositionTrack *compositionTrack_video = [self.composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+    AVMutableCompositionTrack *compositionTrack_audio = [self.composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+    
+    self.videoComposition = [AVMutableVideoComposition videoComposition];
+    
+    
+    AVMutableVideoCompositionInstruction *transitionInstruction = [AVMutableVideoCompositionInstruction videoCompositionInstruction];
+    
+    AVMutableVideoCompositionLayerInstruction *fadeInTransitionLayer = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:compositionTrack_video];
+    
+    NSMutableArray *videoInstructions = [NSMutableArray array];
+    //so we can adjust the video size according to the smallest video in the sequence, so we dont crop large portions of the large videos or have black bars around the small videos.
+    
+    CGSize videoSize;
+    for (int i=0; i<_videoClips.count; i++)
+    {
+        
+        // fade-in transition time range = [insertionTime, transitionDuration]
+        
+        // fade-out                      = [insertionTime,
+        AVURLAsset *asset = self.videoClips[i];
+        NSValue *clipTimeRange = [_clipTimeRanges objectAtIndex:i];
+        CMTimeRange timeRangeInAsset;
+        
+        if (clipTimeRange)
+            timeRangeInAsset = [clipTimeRange CMTimeRangeValue];
+        else
+            timeRangeInAsset = CMTimeRangeMake(kCMTimeZero, [asset duration]);
+        
+        //AVAsset *asset = self.videoClips[i];
+        AVAssetTrack *assetTrack_video = [asset tracksWithMediaType:AVMediaTypeVideo][0];
+        videoSize = assetTrack_video.naturalSize;
+        AVAssetTrack *assetTrack_audio = [asset tracksWithMediaType:AVMediaTypeAudio][0];
+        
+        NSError *videoTrackError = nil;
+        NSError *audioTrackError = nil;
+        
+        [compositionTrack_video insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_video atTime:insertionTime error:&videoTrackError];
+        if (videoTrackError)
+        {
+            NSLog(@"videoTrackError: %@", videoTrackError.description);
+        }
+        
+        [compositionTrack_audio insertTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeAdd(asset.duration, duration)) ofTrack:assetTrack_audio atTime:insertionTime error:&audioTrackError];
+        if (audioTrackError)
+        {
+            NSLog(@"videoTrackError: %@", audioTrackError.description);
+        }
+        
+        NSLog(@"TIME RANGE IN ASSET:%@, INSERTION TIME: %@", CMTimeRangeCopyDescription(kCFAllocatorDefault, CMTimeRangeMake(kCMTimeZero, CMTimeAdd(asset.duration, duration))), CMTimeCopyDescription(kCFAllocatorDefault, insertionTime));
+        
+        
+        
+
+        transitionInstruction.timeRange = CMTimeRangeMake(insertionTime, transitionDuration);
+        //[layerInstruction setOpacity:1.0 atTime:kCMTimeZero];
+        
+
+        [fadeInTransitionLayer setOpacityRampFromStartOpacity:0.0 toEndOpacity:1.0f timeRange:CMTimeRangeMake(insertionTime, transitionDuration)];
+        
+        // add layer instruction to video composition instructions
+   
+        //[layerInstruction setTransform:assetTrack_video.preferredTransform atTime:insertionTime];
+        
+        
+        insertionTime = CMTimeAdd(insertionTime, asset.duration);
+        insertionTime = CMTimeAdd(insertionTime, duration);
+        //previousVideoSize = currentVideoSize;
+        
+        //instruction.timeRange = CMTimeRangeMake(insertionTime, transitionDuration);
+        
+        transitionInstruction.layerInstructions = @[fadeInTransitionLayer];
+
+        [videoInstructions addObject:transitionInstruction];
+        
+    }
+    
+
+    self.videoComposition.instructions = [NSArray arrayWithArray:videoInstructions];
+    
+    self.videoComposition.frameDuration = CMTimeMake(1, 30);
+    
+    self.videoComposition.renderSize = videoSize;
+    
+    self.videoComposition.renderScale = 1.0;
+    
+    
+    [self exportVideoComposition:self.composition];
+    //return self.composition;
+    
     
 }
+
 
 // existing asset -> audio+video asset tracks -> add to  MutableComposition
 // put in some controller class
@@ -1009,7 +1515,7 @@
          dispatch_async(dispatch_get_main_queue(),
                         ^{
                             [self exportDidFinish:exporter];
-                            NSLog(@"exported video");
+                            
                             
                             
                         });
@@ -1041,6 +1547,7 @@
 
 -(void)exportDidFinish:(AVAssetExportSession*)session
 {
+    NSError *error = nil;
     if (session.status == AVAssetExportSessionStatusCompleted)
     {
         NSURL *outputURL = session.outputURL;
@@ -1078,6 +1585,10 @@
     else if (session.status == AVAssetExportSessionStatusFailed)
     {
         NSLog(@"EPIC FAIL");
+        if (session.error)
+        {
+            NSLog(@"%@,%@", session.error,session.error.userInfo);
+        }
         if ([[NSFileManager defaultManager] fileExistsAtPath:session.outputURL.path])
         {
             if (![[NSFileManager defaultManager] removeItemAtURL:session.outputURL error:nil])

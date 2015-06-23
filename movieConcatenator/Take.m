@@ -166,7 +166,7 @@
     
 }
 
-
+// create a new version of this take with the trimmed time range and replace the old take with the new take but keep the same file name so it can be accessed from the same location. Initially it is exported to the temporary directory then this file replaces the take in its original location with the same asset id
 - (void)createTrimmedTakeWithCompletionHandler:(void (^)(NSURL* trimmedTakeURL))completionHandler
 {
     // 1. create and name a url url in temp directory to put the copied video clip
@@ -250,6 +250,49 @@
     
 }
 
+- (void) exportAndReplaceTrimmedTakeWithCompletionHandler:(void (^)(void))completionHandler
+{
+    AVAsset *asset = [AVURLAsset URLAssetWithURL:self.getFileURL options:nil];
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset1920x1080];
+    exporter.timeRange = self.timeRange;
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    //
+    exporter.outputURL = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"temp.mov"]];
+    
+    
+    [exporter exportAsynchronouslyWithCompletionHandler:
+     ^{
+         dispatch_async(dispatch_get_main_queue(),
+                        ^{
+                            //[self exportDidFinish:exporter];
+                            
+                            if (exporter.status ==AVAssetExportSessionStatusCompleted)
+                            {
+                                NSError *error = nil;
+                                NSURL *oldURL = self.getFileURL;
+                                NSLog(@"take url: %@", self.getFileURL);
+                                NSURL *outputURL = exporter.outputURL;
+                                [[NSFileManager defaultManager] replaceItemAtURL:[self getFileURL] withItemAtURL:outputURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:&oldURL error:&error];
+                                
+                                if (error)
+                                {
+                                    NSLog(@"%@", error);
+                                }
+                                else{
+                                    dispatch_async(dispatch_get_main_queue(),^{
+                                        completionHandler();
+                                        NSLog(@"Video has been trimmed and exported?");
+                                    });
+                                    
+                                }
+                                
+                                
+                            }
+                            
+                        });
+     }];
+    
+}
 
 // set some of its properties that need to be the same as the old one: like videoOrientation&position, scene number, scene title.
 // return the new trimmed copied version of the take!

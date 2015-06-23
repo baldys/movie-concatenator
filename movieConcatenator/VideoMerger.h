@@ -45,7 +45,7 @@ typedef NS_ENUM(NSInteger, TransitionTypes)
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
-- (void)addBlackBackgroundTransitionsWithDuration:(CMTime)duration betweenClips:(NSArray*)takes;
+- (void)addBlackBackgroundTransitionsWithDuration:(float)intervalBetweenClipsInSeconds betweenClips:(NSArray*)takes;
 -(void) exportDidFinish:(AVAssetExportSession*)session;
 @property (nonatomic) BOOL titleSlidesEnabled;
 @property (nonatomic) float titleSlideDuration;
