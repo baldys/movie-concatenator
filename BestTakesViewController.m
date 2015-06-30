@@ -99,7 +99,7 @@
         return;
     [self.concatenateButton setEnabled:YES];
     UIBarButtonItem *flexItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    NSArray *items = [NSArray arrayWithObjects:flexItem, self.concatenateButton, flexItem,nil];
+    NSArray *items = [NSArray arrayWithObjects:flexItem, self.concatenateButton, flexItem, nil];
     [self.navigationController.toolbar setItems:items animated:YES];
 }
 
@@ -130,10 +130,16 @@
     
     cell.textLabel.text = take.sceneTitle;
     
-    
-    
-    cell.detailTextLabel.text = take.durationString;
-   
+
+//    AVAsset *asset = [AVURLAsset assetWithURL:take.getFileURL];
+//    [take loadDurationOfAsset:asset withCompletionHandler:(CMTime time)^{
+//        
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            
+//        
+//    });
+//                       }];
+//   
     
     
     if (take.thumbnail == nil)
@@ -273,9 +279,13 @@
     // so disable it
     [self.concatenateButton setEnabled:NO];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:loadingIndicator];
+    
+    //NSMutableArray *toolbarItems = [NSMutableArray arrayWithArray:self.navigationController.toolbar.items];
+    //[toolbarItems replaceObjectAtIndex:0 withObject:item];
+    
     NSArray *items = [NSArray arrayWithObject:item];
     // show activity indicator in the toolbar instead
-    [self.navigationController.toolbar setItems:items animated:YES];
+   [self.navigationController.toolbar setItems:items animated:YES];
     
 }
 
@@ -297,6 +307,8 @@
     [self.takesToConcatenate removeAllObjects];
     //self.takesToConcatenate = nil;
     [self.tableView reloadData];
+    
+    
 }
 
 

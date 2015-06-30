@@ -24,12 +24,12 @@
 
 +(VideoController *)videoController {
     static dispatch_once_t pred;
-    static VideoController *shared = nil;
+    static VideoController *sharedVideos = nil;
     dispatch_once(&pred, ^{
-        shared = [[VideoController alloc] init];
-        shared.videos = [[NSMutableArray alloc]init];
+        sharedVideos = [[VideoController alloc] init];
+        sharedVideos.videos = [[NSMutableArray alloc] init];
     });
-    return shared;
+    return sharedVideos;
 }
 
 -(void)addTake:(Take*)take toSceneAtIndex:(NSInteger)sceneNumber

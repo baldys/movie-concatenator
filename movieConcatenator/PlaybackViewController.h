@@ -47,12 +47,13 @@
 //- (IBAction)showMetadata:(id)sender;
 
 @property (nonatomic, strong) Take *takeToPlay;
-
+@property (nonatomic, strong) NSMutableArray *takeQueue;
 @property (nonatomic) CMTime trimmedTime_initial;
 @property (nonatomic) CMTime trimmedTime_final;
 @property (nonatomic, strong) TTRangeSlider *slider;
 
 @end
+
 /* 
 TO DO:
 [x] initial right hand slider value should = the duration

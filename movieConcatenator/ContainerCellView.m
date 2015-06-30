@@ -31,7 +31,7 @@
     flowLayout.minimumInteritemSpacing = 0.0;
     flowLayout.minimumLineSpacing = 0.0;
     flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
-    flowLayout.itemSize = CGSizeMake(130, 80);
+    flowLayout.itemSize = CGSizeMake(120, 80);
     [self.collectionView setCollectionViewLayout:flowLayout];
     
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
@@ -61,7 +61,7 @@
 -(void)insertItem:(Take*)item
 {
     [_collectionData.takes addObject:item];
-    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:_collectionData.takes.count] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+    [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:_collectionData.takes.count] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     
     [_collectionView reloadItemsAtIndexPaths:[self.collectionData.takes lastObject]];
 }
@@ -120,8 +120,10 @@
         
         [take loadThumbnailWithCompletionHandler:^(UIImage* image)
          {
+             
              dispatch_async(dispatch_get_main_queue(),^{
                 cell.thumbnailImageView.image = image;
+            
                 NSLog(@"loaded thumbnail for collection view cell");
                 });
              

@@ -96,6 +96,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 //{
 //    return mURL;
 //}
+
 - (void)setURLFromTake
 {
     if (!self.takeToPlay)
@@ -855,13 +856,14 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 
     //[self.navigationController setToolbarHidden:NO animated:NO];
 
-    UISwipeGestureRecognizer* swipeUpRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
-    [swipeUpRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
-    [view addGestureRecognizer:swipeUpRecognizer];
+    UISwipeGestureRecognizer* swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    [swipeLeftRecognizer setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [view addGestureRecognizer:swipeLeftRecognizer];
     
-    UISwipeGestureRecognizer* swipeDownRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
-    [swipeDownRecognizer setDirection:UISwipeGestureRecognizerDirectionDown];
-    [view addGestureRecognizer:swipeDownRecognizer];
+    UISwipeGestureRecognizer* swipeRightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+    [swipeRightRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
+    [view addGestureRecognizer:swipeRightRecognizer];
+    
     
     UIBarButtonItem *scrubberItem = [[UIBarButtonItem alloc] initWithCustomView:self.mScrubber];
     
@@ -949,28 +951,61 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     UISwipeGestureRecognizerDirection direction = [gestureRecognizer direction];
     CGPoint location = [gestureRecognizer locationInView:view];
     
-    if (location.y < CGRectGetMidY([view bounds]))
+    if (location.x < CGRectGetMidX([view bounds]))
     {
-        if (direction == UISwipeGestureRecognizerDirectionUp)
+        if (direction == UISwipeGestureRecognizerDirectionLeft)
         {
             [UIView animateWithDuration:0.2f animations:
              ^{
-                 [[self navigationController] setNavigationBarHidden:YES animated:YES];
+                 
+                 //[[self navigationController] setNavigationBarHidden:YES animated:YES];
              } completion:
              ^(BOOL finished)
              {
-                 [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+                 //[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+                 NSInteger currentTakeIndex;
+                 
+                 NSArray *requestedKeys = @[@"playable"];
+                 
+                 for (NSInteger i=0; i<self.takeQueue.count;i++)
+                 {
+                     Take *take = self.takeQueue[i];
+                     if (take.assetID == self.takeToPlay.assetID)
+                     {
+                         currentTakeIndex = i;
+                         AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeQueue[i-1] getFileURL] options:nil];
+                         [self prepareToPlayAsset:asset withKeys:requestedKeys];
+                     }
+                 }
+                 
              }];
         }
-        if (direction == UISwipeGestureRecognizerDirectionDown)
+        if (direction == UISwipeGestureRecognizerDirectionRight)
         {
-            [UIView animateWithDuration:0.2f animations:
+           [UIView animateWithDuration:0.2f animations:
              ^{
-                 [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+            //     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+                 
+                 
              } completion:
              ^(BOOL finished)
              {
-                 [[self navigationController] setNavigationBarHidden:NO animated:YES];
+                 
+                 NSInteger currentTakeIndex;
+                 
+                 NSArray *requestedKeys = @[@"playable"];
+                 
+                 for (NSInteger i=0; i<self.takeQueue.count;i++)
+                 {
+                     Take *take = self.takeQueue[i];
+                     if (take.assetID == self.takeToPlay.assetID)
+                     {
+                         currentTakeIndex = i;
+                         AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeQueue[i+1] getFileURL] options:nil];
+                         [self prepareToPlayAsset:asset withKeys:requestedKeys];
+                     }
+                 }
+                 //[[self navigationController] setNavigationBarHidden:NO animated:YES];
              }];
         }
     }

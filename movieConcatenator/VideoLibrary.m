@@ -27,6 +27,24 @@
 
 @implementation VideoLibrary
 
++ (instancetype)sharedVideoLibrary
+{
+    static dispatch_once_t pred;
+    static VideoLibrary *foo = nil;
+    
+    dispatch_once(&pred, ^{
+        foo = [[self alloc] init];
+    });
+    return foo;
+}
+//+(VideoLibrary *)videoLibrary{
+//    static dispatch_once_t pred;
+//    static VideoLibrary *sharedVideoLibrary = nil;
+//    dispatch_once(&pred, ^{
+//        sharedVideoLibrary = [[self alloc] init];
+//    });
+//    return sharedVideoLibrary;
+//}
 
 
 //+(VideoLibrary *)sharedLibrary {
@@ -151,6 +169,7 @@
     {
         NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
     }
+    
     return directoryContent;
 }
 
@@ -178,6 +197,7 @@
     
     return _takesToConcatenate;
 }
+
 
 - (void) deleteTake:(Take*)take fromSceneAtIndex:(NSInteger)sceneIndex
 {

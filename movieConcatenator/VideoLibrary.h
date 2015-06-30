@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) NSMutableArray *scenes;
 
-//+ (VideoLibrary*)selectedVideos;
++ (instancetype)sharedVideoLibrary;
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 @property (nonatomic, strong) NSMutableArray *editedVideoURLs;
 

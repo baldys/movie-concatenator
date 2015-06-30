@@ -117,16 +117,27 @@
 #pragma mark - TabBarController Delegate
 - (void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
+    NSLog(@" %@, %ld",viewController.tabBarItem.title,(long)viewController.tabBarItem.tag);
+
+    if (viewController.tabBarItem.tag == 1)
+    {
+        UINavigationController *nc = (UINavigationController*)viewController;
+        self.bestTakesVC = [nc.viewControllers firstObject];
+        if (self.bestTakesVC.takesToConcatenate == nil && !self.bestTakesVC.isViewLoaded)
+        {
+            self.bestTakesVC.takesToConcatenate = [[NSMutableArray alloc] initWithArray:self.takesToConcatenate];
+        }
+    }
     
+    
+    
+    
+    //UINavigationController *nc = (UINavigationController*)viewController;
+    //if ([nc.viewControllers[0] isKindOfClass:[self.bestTakesVC class]])
     
     //self.bestTakesVC = (BestTakesViewController*)viewController;
     
-    UINavigationController *nc = (UINavigationController*)viewController;
-    self.bestTakesVC = [nc.viewControllers firstObject];
-    if (self.bestTakesVC.takesToConcatenate == nil && !self.bestTakesVC.isViewLoaded)
-    {
-        self.bestTakesVC.takesToConcatenate = [[NSMutableArray alloc] initWithArray:self.takesToConcatenate];
-    }
+
     
     
 }
@@ -329,12 +340,12 @@
 {
     Take *take = notification.object;
     
-    Scene *sceneContainingTakeForPlayback = self.library.scenes[take.sceneNumber];
+    
     
     self.currentSceneIndex = take.sceneNumber;
     
     NSLog(@"did select item for playback: currentSceneIndex: %i", self.currentSceneIndex);
-    NSLog(@"Why it matters: so you can potientially pass an entire scene with the playback view controller in an AVPlayerQueue?, and implement swipe gestures to move between takes in the scene.");
+  
 
     
     [self performSegueWithIdentifier:@"showPlayback" sender:[notification object]];
@@ -446,6 +457,8 @@
         PlaybackViewController *playbackVC = (PlaybackViewController*)segue.destinationViewController;
         ///// later: set it to play the collection of takes in a scene (array of AVPlayerItems)
         [playbackVC setTakeToPlay:sender];
+        Scene *sceneContainingTakeForPlayback = self.library.scenes[self.currentSceneIndex];
+        [playbackVC setTakeQueue:sceneContainingTakeForPlayback.takes];
         
     }
 }

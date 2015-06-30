@@ -32,7 +32,7 @@
 
 @implementation Take
 
-- (void)loadDurationOfAsset:(AVAsset*)asset withCompletionHandler:(void (^)(void))completionHandler
+- (void)loadDurationOfAsset:(AVAsset*)asset withCompletionHandler:(void (^)(CMTime  time))completionHandler
 {
     NSString *durationKey = @"duration";
     __weak __block Take *weakSelf = (Take *)self;
@@ -50,7 +50,7 @@
             Float64 fseconds = weakSelf.duration.value/weakSelf.duration.timescale;
              double seconds = CMTimeGetSeconds(weakSelf.duration);
             
-             completionHandler();
+             completionHandler(weakSelf.duration);
             
              dispatch_async(dispatch_get_main_queue(), ^{
                  NSLog(@"duration of take loaded: time in seconds:%.2f, %f", seconds, fseconds);
@@ -61,7 +61,7 @@
          }
          else
          {
-             NSLog(@"FAAAAAAIIILLLLLLLLLL");
+             NSLog(@"Failed to load the duration of the asset");
          }
      }];
 }
@@ -150,20 +150,13 @@
 //    NSString *timeString = [NSString stringWithFormat:@"%i:%.2f", minutes, seconds];
 //    return timeString;
 
-    double seconds = time.value/time.timescale;
-    
+   // double seconds = time.value/time.timescale;
+    double seconds = CMTimeGetSeconds(time);
 
-    
-    int minutes = 0;
-    while (seconds >= 60)
-    {
-        minutes++;
-        seconds = seconds-60;
-    }
-    
-    NSLog(@"Minutes:seconds = %i:%f", minutes, seconds);
-    return [NSString stringWithFormat:@"%i:%.02f",minutes, seconds];
-    
+  
+ 
+    self.durationString =  [NSString stringWithFormat:@"%.02f", seconds];
+    return self.durationString;
 }
 
 // create a new version of this take with the trimmed time range and replace the old take with the new take but keep the same file name so it can be accessed from the same location. Initially it is exported to the temporary directory then this file replaces the take in its original location with the same asset id

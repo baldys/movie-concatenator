@@ -17,6 +17,7 @@
 #import "Scene.h"
 #import "Take.h"
 
+
 typedef NS_ENUM(NSInteger, TransitionTypes)
 {
     TransitionTypeNone      = 0,
@@ -25,7 +26,9 @@ typedef NS_ENUM(NSInteger, TransitionTypes)
 };
 
 @interface VideoMerger : NSObject
-
+{
+    CMTimeRange *timeRangesToApplyLayer;
+}
 @property (nonatomic) TransitionTypes transitionType;
 
 @property (nonatomic, strong) AVMutableComposition *composition;
@@ -35,20 +38,34 @@ typedef NS_ENUM(NSInteger, TransitionTypes)
 @property (nonatomic, strong) NSArray *videoClips;
 @property (nonatomic, strong) NSMutableArray *clipTimeRanges; // array of CMTimeRanges stored in NSValues.
 @property (nonatomic, strong) NSMutableArray *compositions;
+@property (nonatomic, strong) NSMutableArray *keyTimesArray;
+
+@property (nonatomic, strong) NSMutableArray *emptyClipTimeRanges;
 
 @property (nonatomic) CMTime transitionDuration;
+
 @property (nonatomic, strong) VideoLibrary *videoLibrary;
 
+@property (nonatomic, strong) CALayer *titleLayer;
+
 -(AVAsset*)spliceAssets: (NSArray*)takes;
+
 -(void)buildCompositionObjects:(NSArray*)takes;
--(void) exportTrimmedTake:(Take*)take withCompletionHandler:(void (^)(void))completionHandler;
+
 -(void) exportVideoComposition:(AVAsset*)composition;
 
 //-(BOOL) startMediaBrowserFromViewController:(UIViewController*)controller usingDelegate:(id)delegate;
+
 - (void)addBlackBackgroundTransitionsWithDuration:(float)intervalBetweenClipsInSeconds betweenClips:(NSArray*)takes;
+
 -(void) exportDidFinish:(AVAssetExportSession*)session;
+
 @property (nonatomic) BOOL titleSlidesEnabled;
 @property (nonatomic) float titleSlideDuration;
 
+@property (nonatomic) float progress;
+@property (nonatomic, strong) CALayer *parentLayer;
+@property (nonatomic, strong) CALayer *videoLayer;
+//@property (nonatomic,strong) NSMutableArray *layerArray;
 
 @end
