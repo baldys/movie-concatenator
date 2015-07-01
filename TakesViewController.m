@@ -132,12 +132,11 @@
 
 #pragma mark - Table View delegate
 
-// each table view cell represents a scene in the video library's scenes array
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *TableViewCellIdentifier = @"TakeTableViewCell";
-    //NSInteger takeNumber = indexPath.row;
+    
     UITableViewCell *cell=
     [tableView dequeueReusableCellWithIdentifier:TableViewCellIdentifier forIndexPath:indexPath];
     if (!cell)

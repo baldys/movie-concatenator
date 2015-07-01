@@ -129,6 +129,8 @@
     Take *take = self.takesToConcatenate[indexPath.row];
     
     cell.textLabel.text = take.sceneTitle;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [take convertSecondsToString:take.duration]];
+    
     
 
 //    AVAsset *asset = [AVURLAsset assetWithURL:take.getFileURL];
@@ -167,7 +169,7 @@
     if (self.tableView.isEditing)
     {
         [self.tableView setEditing:NO animated:YES];
-        [self.navigationItem.leftBarButtonItem setStyle:UIBarButtonItemStyleDone];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Done" style:UIBarButtonItemStyleDone target:nil action:nil];
     }
     else {
         [self.tableView setEditing:YES animated:YES];

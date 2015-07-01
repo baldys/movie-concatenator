@@ -15,9 +15,10 @@
 #import "TakesViewController.h"
 #import "PlaybackViewController.h"
 
-#define kHeaderSectionHeight 32
-#define kTableCellHeight     98
-
+#define kHeaderSectionHeight 48
+#define kTableCellHeight     136
+// cell dimensions: 136x136
+// image in cell dimensions: 128x128
 @interface ScenesTableViewController () <TakeCellDelegate, UITabBarControllerDelegate>
 {
     UIActivityIndicatorView *activityIndicator;
@@ -84,7 +85,7 @@
     [[NSNotificationCenter defaultCenter]
      addObserver:self
         selector:@selector(clearTakesToConcatenate:) name:@"videoMergingCompletedNotification" object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showVideoCamera:) name:@"showVideoCamera" object:nil];
     [library listFileAtPath:[library documentsDirectory]];
 
 }
@@ -168,7 +169,7 @@
     if (!cell)
     {
         cell = [[SceneTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:TableViewCellIdentifier];
-        cell.tag = indexPath.section;
+        
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -176,6 +177,8 @@
                        Scene *scene = self.scenes[indexPath.section];
                        scene.libraryIndex = indexPath.section;
                        dispatch_async(dispatch_get_main_queue(), ^{
+                           //cell.scene = scene;
+                           //cell.tag = indexPath.section;
                            [cell setCollectionData:scene];
                        });
                    });
@@ -189,16 +192,19 @@
 - (UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
 {
 
-    UIImage *buttonImage = [UIImage imageNamed:@"disclosure-white"];
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = CGRectGetWidth(screenRect);
+    
+    //UIImage *buttonImage = [UIImage imageNamed:@"disclosure-white"];
     
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
     
     //headerView.backgroundColor = [UIColor colorWithRed:0.129 green:0.129 blue:0.51 alpha:1.0];
     headerView.backgroundColor = [UIColor blackColor];
-    UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width-40, 0, 40, kHeaderSectionHeight)];
-    [sceneHeaderButton setImage:buttonImage forState:UIControlStateNormal];
-    
+    UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, screenWidth , kHeaderSectionHeight)];
+    //[sceneHeaderButton setImage:buttonImage forState:UIControlStateNormal];
+    sceneHeaderButton.backgroundColor = [UIColor clearColor];
     sceneHeaderButton.tag = section;
     
     [sceneHeaderButton addTarget:self action:@selector(showTakesInScene:) forControlEvents:UIControlEventTouchUpInside];
@@ -315,10 +321,18 @@
     // [sender setSelected:YES];
     [sender setHighlighted:YES];
     
-    self.currentSceneIndex = sender.tag;
+    
     
     [self performSegueWithIdentifier:@"ShowTakesViewController" sender:sender];
     
+}
+
+- (void)showVideoCamera:(NSNotification*)notification
+{
+    Scene *sceneToAddTake = [notification object];
+    self.currentSceneIndex = sceneToAddTake.libraryIndex;
+    NSLog(@"current scene index: %i", self.currentSceneIndex);
+    [self performSegueWithIdentifier:@"showVideoCamera" sender:sceneToAddTake];
 }
 
 
@@ -461,6 +475,10 @@
         [playbackVC setTakeQueue:sceneContainingTakeForPlayback.takes];
         
     }
+    else if ([segue.identifier isEqualToString:@"showVideoCamera"])
+    {
+        [self.tabBarController.tabBar setHidden:YES];
+    }
 }
 
 - (IBAction)unwindToScenesView:(UIStoryboardSegue*)segue
@@ -492,6 +510,11 @@
         
     };
     
+}
+
+- (IBAction)unwindFromVideoCamera:(UIStoryboardSegue*)segue
+{
+    [self.tabBarController.tabBar setHidden:NO];
 }
 
 

@@ -66,6 +66,8 @@
 @property (nonatomic, copy) NSString *titleText;
 @property (nonatomic, weak) id <TitleEditingCellDelegate> delegate;
 @property (nonatomic, strong) UITextField *textField;
+
+
 @end
 
 @protocol TitleEditingCellDelegate <NSObject>

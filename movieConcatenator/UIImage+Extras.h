@@ -11,5 +11,5 @@
 @interface UIImage (Extras)
 
 - (UIImage *)imageByScalingProportionallyToSize:(CGSize)targetSize;
-
+- (UIImage *)imageByCroppingImage:(UIImage *)image toSize:(CGSize)size;
 @end

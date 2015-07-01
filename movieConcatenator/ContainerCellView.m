@@ -10,17 +10,22 @@
 #import "TakeCollectionViewCell.h"
 #import "VideoLibrary.h"
 #import "UIImage+Extras.h"
+#import "AddTakeCell.h"
 
 @interface ContainerCellView ()  <UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (strong, nonatomic) Scene *collectionData;
-//@property (strong, nonatomic) VideoLibrary *library;
+@property (strong, nonatomic) NSMutableArray *dataSource;
 
 @end
 
-#define kCellSpacing 8
+#define kGreen1 0.7
+#define kGreen2 0.8
+#define kGreen3 0.9
 
+#define kCellSpacing 8
+#define kCellSize 128
 @implementation ContainerCellView
 
 - (void)awakeFromNib
@@ -28,18 +33,29 @@
     
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    flowLayout.minimumInteritemSpacing = 0.0;
-    flowLayout.minimumLineSpacing = 0.0;
-    flowLayout.sectionInset = UIEdgeInsetsMake(0,0,0,0);
-    flowLayout.itemSize = CGSizeMake(120, 80);
+    flowLayout.minimumInteritemSpacing = 4.0;
+    flowLayout.minimumLineSpacing = 4.0;
+    flowLayout.sectionInset = UIEdgeInsetsMake(0,4,0,4);
+    flowLayout.itemSize = CGSizeMake(kCellSize,kCellSize);
     [self.collectionView setCollectionViewLayout:flowLayout];
     
     [_collectionView registerNib:[UINib nibWithNibName:@"TakeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CollectionViewCell"];
-    //_collectionView.layer.borderColor = [UIColor whiteColor].CGColor;
-     //_collectionView.layer.cornerRadius = 3.0;
-     //_collectionView.layer.borderWidth = 0.4;
+    [_collectionView registerNib:[UINib nibWithNibName:@"AddTakeCell" bundle:nil] forCellWithReuseIdentifier:@"AddTakeCell"];
+    
+    _collectionView.backgroundColor = [UIColor colorWithRed:0.0 green:0.789 blue:1.0 alpha:1.0];
+
+    //_collectionView.layer.borderColor = [UIColor blackColor].CGColor;
+    //_collectionView.layer.cornerRadius = 3.0;
+    //_collectionView.layer.borderWidth = 0.4;
+    
+    
+    //self.dataSource = [NSMutableArray arrayWithArray:self.collectionData.takes];
+    
+    //Take *addTake = [[Take alloc] init];
+    //[self.dataSource addObject:addTake];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteItem:) name:@"shouldDeleteTake" object:nil];
+    
 
 }
 
@@ -81,104 +97,124 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.collectionData.takes.count;
+    return self.collectionData.takes.count + 1;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     static NSString *CollectionViewCellIdentifier = @"CollectionViewCell";
+    static NSString *AddTakeCellIdentifier = @"AddTakeCell";
+    //NSString *cellID = nil;
     
-    TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
-    
-//    CGRect screenRect = [[UIScreen mainScreen] bounds];
-//    CGFloat screenWidth = CGRectGetWidth(screenRect);
-    
-    
-    if (!cell)
+    if (indexPath.item == self.collectionData.takes.count)
     {
-        cell = [[TakeCollectionViewCell alloc] init];
+        //cellID = AddTakeCellIdentifier;
+        AddTakeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AddTakeCellIdentifier forIndexPath:indexPath];
+        if (!cell)
+        {
+            cell = [[AddTakeCell alloc] init];
+        }
+       // cell.starTake.hidden = YES;
+        return cell;
     }
-
-    cell.starTake.hidden = NO;
-    cell.starTake.tag = indexPath.item;
-    
-    //collectionView.tag = indexPath.item;
-
-    Take *take = self.collectionData.takes[indexPath.item];
-  
-    // set the delegate for the collection view cell:
-    cell.delegate = self;
-    
-    //Take *take = self.scene.takes[indexPath.row];
-    
-    
-   // cell.textLabel.text = [NSString stringWithFormat:@"Take # %lu", (unsigned long)indexPath.row];
-    [cell cellWithTake:take];
-    if (take.thumbnail == nil)
+    else if (indexPath.item < self.collectionData.takes.count)
     {
-        NSLog(@"thumbnail image is nil");
+        NSLog(@"Takes in scene: %i", self.collectionData.takes.count);
+        TakeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CollectionViewCellIdentifier forIndexPath:indexPath];
+        if (!cell)
+        {
+            cell = [[TakeCollectionViewCell alloc] init];
+           
+        }
         
-        [take loadThumbnailWithCompletionHandler:^(UIImage* image)
-         {
-             
-             dispatch_async(dispatch_get_main_queue(),^{
-                cell.thumbnailImageView.image = image;
+        cell.starTake.hidden = NO;
+        cell.starTake.tag = indexPath.item;
+        Take *take = self.collectionData.takes[indexPath.item];
+        cell.delegate = self;
+        [cell cellWithTake:take];
+        
+        if (take.thumbnail == nil)
+        {
+        
+            NSLog(@"thumbnail image is nil");
+
+        
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0),^{
             
-                NSLog(@"loaded thumbnail for collection view cell");
-                });
+
+            
+            
+                [take loadThumbnailWithCompletionHandler:^(UIImage* image)
              
-         }];
-    }
-    else
-    {
-        cell.thumbnailImageView.image= take.thumbnail;
+                {
+                 
+                    CGFloat imageWidth = image.size.width;
+                 
+                    CGFloat imageHeight = image.size.height;
+                 
+                    CGFloat scale = imageHeight/imageWidth;
+                 
+                 
+                    dispatch_async(dispatch_get_main_queue(),^{
+                
+                        cell.thumbnailImageView.image = image;
+                
+                     
+                        NSLog(@"loaded thumbnail for collection view cell");
+                 
+                    });
+             
+                }];
+
         
-    }
+            });
 
+       
+        }
+    
    
-//    take.thumbnail = [take loadThumbnailWithCompletionHandler:^ (UIImage *image){
-//        //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
-//        //take.thumbnail = image;
-//        //cell.thumbnailImageView.image = take.thumbnail;
-//        dispatch_async(dispatch_get_main_queue(),
-//        ^{
-//            
-//            [cell cellWithTake:take];
-//            
-//        });
-//    }];
-
-
-
-     
-  
-        //take.thumbnail = [UIImage imageByScalingProportionallyToSize:CGSizeMake(110, 90)];
-//        [take loadThumbnailWithCompletionHandler:^ (UIImage *image)
-//        {
-//            take.thumbnail = image;
-//            
-//            dispatch_async(dispatch_get_main_queue(),
-//            ^{
-//                [cell cellWithTake:take];
-//                
-//            });
-//            
-//            
-//        }];
-//    
-    //[collectionView reloadData];
-
+        else
+        {
+        
+            cell.thumbnailImageView.image = take.thumbnail;
+        }
+    
     return cell;
-}
 
+    }
+    
+    //}
+
+    //    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    //    CGFloat screenWidth = CGRectGetWidth(screenRect);
+    
+    
+  
+    
+    return nil;
+}
 
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    Take *take = self.collectionData.takes[indexPath.item];
-    NSLog(@"Take in scene number: %i", take.sceneNumber);
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemForPlayback" object:take];
+    // the last item adds a new take, all the others are existing ones
+    if (indexPath.item == self.collectionData.takes.count)
+    {
+        NSLog(@"scene number: %i", self.collectionData.libraryIndex);
+       
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"showVideoCamera" object:self.collectionData];
+    }
+    else
+    {
+        Take *take = self.collectionData.takes[indexPath.item];
+        NSLog(@"Take in scene number: %i", take.sceneNumber);
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectItemForPlayback" object:take];
+        
+   
+    }
+ 
 }
 
 @end

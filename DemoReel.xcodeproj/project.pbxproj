@@ -79,6 +79,16 @@
 		9FE9766D1B40282E008FD141 /* VBTitleItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE9766C1B40282E008FD141 /* VBTitleItem.m */; };
 		9FE976701B4034B1008FD141 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE9766E1B4034B1008FD141 /* CoreGraphics.framework */; };
 		9FE976711B4034B1008FD141 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE9766F1B4034B1008FD141 /* UIKit.framework */; };
+		9FE976751B4253D5008FD141 /* AddTakeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE976731B4253D5008FD141 /* AddTakeCell.m */; };
+		9FE976761B4253D5008FD141 /* AddTakeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9FE976741B4253D5008FD141 /* AddTakeCell.xib */; };
+		9FE976781B4341DB008FD141 /* 1420512706_audio-video-outline-play-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE976771B4341DB008FD141 /* 1420512706_audio-video-outline-play-128.png */; };
+		9FE9767E1B434217008FD141 /* Add-128-4.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE976791B434217008FD141 /* Add-128-4.png */; };
+		9FE9767F1B434217008FD141 /* Add-128-5.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9767A1B434217008FD141 /* Add-128-5.png */; };
+		9FE976801B434217008FD141 /* Cancel-48.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9767B1B434217008FD141 /* Cancel-48.png */; };
+		9FE976811B434217008FD141 /* Cut-128-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9767C1B434217008FD141 /* Cut-128-2.png */; };
+		9FE976821B434217008FD141 /* Cut-128-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE9767D1B434217008FD141 /* Cut-128-3.png */; };
+		9FE976851B434977008FD141 /* Add-128-6.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE976831B434977008FD141 /* Add-128-6.png */; };
+		9FE976861B434977008FD141 /* Add-128.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FE976841B434977008FD141 /* Add-128.png */; };
 		9FEDAF931B07BFEF00301DD3 /* EditingOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */; };
 		9FEDAF991B130E9600301DD3 /* TrimmingControlsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FEDAF981B130E9600301DD3 /* TrimmingControlsView.m */; };
 		9FEDAF9F1B13567F00301DD3 /* scissors-32.png in Resources */ = {isa = PBXBuildFile; fileRef = 9FEDAF9E1B13567F00301DD3 /* scissors-32.png */; };
@@ -197,6 +207,17 @@
 		9FE9766C1B40282E008FD141 /* VBTitleItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VBTitleItem.m; sourceTree = "<group>"; };
 		9FE9766E1B4034B1008FD141 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		9FE9766F1B4034B1008FD141 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		9FE976721B4253D5008FD141 /* AddTakeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddTakeCell.h; sourceTree = "<group>"; };
+		9FE976731B4253D5008FD141 /* AddTakeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddTakeCell.m; sourceTree = "<group>"; };
+		9FE976741B4253D5008FD141 /* AddTakeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddTakeCell.xib; sourceTree = "<group>"; };
+		9FE976771B4341DB008FD141 /* 1420512706_audio-video-outline-play-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1420512706_audio-video-outline-play-128.png"; sourceTree = "<group>"; };
+		9FE976791B434217008FD141 /* Add-128-4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-128-4.png"; sourceTree = "<group>"; };
+		9FE9767A1B434217008FD141 /* Add-128-5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-128-5.png"; sourceTree = "<group>"; };
+		9FE9767B1B434217008FD141 /* Cancel-48.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cancel-48.png"; sourceTree = "<group>"; };
+		9FE9767C1B434217008FD141 /* Cut-128-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cut-128-2.png"; sourceTree = "<group>"; };
+		9FE9767D1B434217008FD141 /* Cut-128-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Cut-128-3.png"; sourceTree = "<group>"; };
+		9FE976831B434977008FD141 /* Add-128-6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-128-6.png"; sourceTree = "<group>"; };
+		9FE976841B434977008FD141 /* Add-128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-128.png"; sourceTree = "<group>"; };
 		9FEDAF911B07BFEF00301DD3 /* EditingOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditingOptionsViewController.h; path = ../EditingOptionsViewController.h; sourceTree = "<group>"; };
 		9FEDAF921B07BFEF00301DD3 /* EditingOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditingOptionsViewController.m; path = ../EditingOptionsViewController.m; sourceTree = "<group>"; };
 		9FEDAF971B130E9600301DD3 /* TrimmingControlsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrimmingControlsView.h; sourceTree = "<group>"; };
@@ -235,6 +256,8 @@
 			children = (
 				9F6D10181AAD32DF00FA7C20 /* SceneTableViewCell.h */,
 				9F6D10191AAD32DF00FA7C20 /* SceneTableViewCell.m */,
+				9FE976831B434977008FD141 /* Add-128-6.png */,
+				9FE976841B434977008FD141 /* Add-128.png */,
 				9F48158D1AB40FE40027F1A0 /* Container/content */,
 			);
 			name = "Table View Cell";
@@ -265,6 +288,15 @@
 				9F6D102A1AAD487E00FA7C20 /* TakeCollectionViewCell.h */,
 				9F6D102B1AAD487E00FA7C20 /* TakeCollectionViewCell.m */,
 				9F48157D1AB304670027F1A0 /* TakeCollectionViewCell.xib */,
+				9FE976771B4341DB008FD141 /* 1420512706_audio-video-outline-play-128.png */,
+				9FE976791B434217008FD141 /* Add-128-4.png */,
+				9FE9767A1B434217008FD141 /* Add-128-5.png */,
+				9FE9767B1B434217008FD141 /* Cancel-48.png */,
+				9FE9767C1B434217008FD141 /* Cut-128-2.png */,
+				9FE9767D1B434217008FD141 /* Cut-128-3.png */,
+				9FE976721B4253D5008FD141 /* AddTakeCell.h */,
+				9FE976731B4253D5008FD141 /* AddTakeCell.m */,
+				9FE976741B4253D5008FD141 /* AddTakeCell.xib */,
 			);
 			name = "Collection View Cell";
 			sourceTree = "<group>";
@@ -539,24 +571,31 @@
 				9F8B80421B1E51660053D63D /* VideoDatalist.plist in Resources */,
 				9FB946EE1AED24AE001C34E3 /* white-outline-star-24.png in Resources */,
 				9F48157E1AB304670027F1A0 /* TakeCollectionViewCell.xib in Resources */,
+				9FE976851B434977008FD141 /* Add-128-6.png in Resources */,
 				9F3B4D501AE4BF9C0056E4C7 /* disclosure-white.png in Resources */,
 				9F3B4D521AE8A72D0056E4C7 /* player_record.png in Resources */,
 				9F740EA61AD3A4F100F3F23D /* play-48.png in Resources */,
+				9FE976761B4253D5008FD141 /* AddTakeCell.xib in Resources */,
 				9F9BC5461AD0F43F00994E9A /* video-camera2c.png in Resources */,
 				9FB946EA1AED1B5A001C34E3 /* blue-star-48.png in Resources */,
 				9FEDAFA11B13568400301DD3 /* scissors-24.png in Resources */,
+				9FE9767F1B434217008FD141 /* Add-128-5.png in Resources */,
 				9F8B80461B1E52E40053D63D /* TimeRangeSlider.xib in Resources */,
 				9F8B65851AA3CBFF0062A3F1 /* 1420512718_audio-video-outline-stop-128.png in Resources */,
 				9F9BC50E1ACE088100994E9A /* ffffff-switch-camera-64.png in Resources */,
 				9FB946F11AED2EE0001C34E3 /* camera-toggle.png in Resources */,
+				9FE976801B434217008FD141 /* Cancel-48.png in Resources */,
 				9F9BC50C1ACDD3A800994E9A /* noun_clapperboard_1650.png in Resources */,
 				9F3B4D541AE8A7530056E4C7 /* flash29-2.png in Resources */,
+				9FE9767E1B434217008FD141 /* Add-128-4.png in Resources */,
 				9F9BC5481AD0F4F600994E9A /* video-camera2b.png in Resources */,
 				9F1802851ACDAA5200CFBCB4 /* noun_vhs-tape_52451.png in Resources */,
 				9FB946EF1AED24AE001C34E3 /* white-outline-star-32.png in Resources */,
 				9FB946F31AED331C001C34E3 /* camera-toggle-pressed.png in Resources */,
+				9FE976811B434217008FD141 /* Cut-128-2.png in Resources */,
 				9F9BC5081ACDD38E00994E9A /* noun_clapperboard_78382.png in Resources */,
 				9F740EA31AD3A48F00F3F23D /* little-vid-icon.png in Resources */,
+				9FE976861B434977008FD141 /* Add-128.png in Resources */,
 				9FEDAF9F1B13567F00301DD3 /* scissors-32.png in Resources */,
 				9F740EA41AD3A48F00F3F23D /* little-vid-icon2.png in Resources */,
 				9F3B4D4E1AE4BD360056E4C7 /* recording.png in Resources */,
@@ -568,6 +607,7 @@
 				9F4815841AB308F10027F1A0 /* ContainerCellView.xib in Resources */,
 				9FAFA7531A98884A00F7396B /* LaunchScreen.xib in Resources */,
 				9FB946E81AED1B5A001C34E3 /* blue-star-24.png in Resources */,
+				9FE976781B4341DB008FD141 /* 1420512706_audio-video-outline-play-128.png in Resources */,
 				9F9BC5361ACE8B2100994E9A /* noun_switch-camera_78816.png in Resources */,
 				9F9BC5041ACDD2D200994E9A /* ffffff-clapperboard-32.png in Resources */,
 				9FAFA7501A98884A00F7396B /* Images.xcassets in Resources */,
@@ -578,6 +618,7 @@
 				9F9BC5141ACE08EF00994E9A /* UITabBarMostViewed_2x.png in Resources */,
 				9F9BC53A1ACFA11A00994E9A /* camera2.png in Resources */,
 				9F9BC5301ACE849A00994E9A /* switch19-2.png in Resources */,
+				9FE976821B434217008FD141 /* Cut-128-3.png in Resources */,
 				9FA5D86C1AABB94400318DF8 /* movie-noPlay-blank.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -620,6 +661,7 @@
 				9FAFA7421A98884A00F7396B /* main.m in Sources */,
 				9F6D10171AAD303A00FA7C20 /* ScenesTableViewController.m in Sources */,
 				9FB854061AEB5E8D00D7F66C /* PlaybackView.m in Sources */,
+				9FE976751B4253D5008FD141 /* AddTakeCell.m in Sources */,
 				9FAFA7791A99845A00F7396B /* RecordVideoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

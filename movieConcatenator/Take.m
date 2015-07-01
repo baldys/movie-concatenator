@@ -113,10 +113,14 @@
         
         [self loadThumbnailWithCompletionHandler:^(UIImage *image)
         {
-            self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
+            //self.thumbnail = [image imageByScalingProportionallyToSize:CGSizeMake(120, 80)];
+
+            //  self.thumbnail = [image imageByCroppingImage:[image imageByScalingProportionallyToSize:CGSizeMake(300,169)] toSize:CGSizeMake(127,127)];
+            
             CGFloat screenScale = [UIScreen mainScreen].scale;
             NSLog(@"scale: %f", screenScale);
             //screenRect.size.
+        
             self.thumbnail = image;
         }];
             
@@ -127,6 +131,19 @@
         }
     }
     return self;
+}
+
+- (UIImage*)scaledAndCroppedThumbnail
+{
+    if (!self.thumbnail)
+    {
+        __weak __block Take *weakSelf = (Take *)self;
+        [self loadThumbnailWithCompletionHandler:^(UIImage* image){
+            weakSelf.thumbnail = image;
+        }];
+    }
+    return [self.thumbnail imageByCroppingImage:[self.thumbnail imageByScalingProportionallyToSize:CGSizeMake(300,169)] toSize:CGSizeMake(127,127)];
+    
 }
 
 

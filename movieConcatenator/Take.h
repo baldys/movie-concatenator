@@ -70,6 +70,7 @@ typedef NS_ENUM(NSInteger, VideoOrientationAndPosition)
 - (instancetype) initWithURL:(NSURL *)url;
 
 //- (NSArray*)assetTracks;
+- (UIImage*)scaledAndCroppedThumbnail;
 
 - (NSString*)convertSecondsToString:(CMTime)time;
 - (NSURL*)getFileURL;
