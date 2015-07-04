@@ -36,7 +36,7 @@
 //    }
     self.titleSlidesEnabled = NO;
 
-    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"blue-star-32.png"]];
+    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"Favourites-48"]];
 
     // Do any additional setup after loading the view.
     [self setUpToolbar];
@@ -64,6 +64,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self.navigationController.toolbar setHidden:NO];
     [self.tableView reloadData];
 }
 

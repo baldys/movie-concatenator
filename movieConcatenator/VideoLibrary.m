@@ -7,6 +7,7 @@
 //
 
 #import "VideoLibrary.h"
+#import "VBComposition.h"
 
 @interface VideoLibrary ()
 
@@ -71,11 +72,18 @@
         {
             self.editedVideoURLs = [NSMutableArray array];
         }
+        if (!self.videoCompositions)
+        {
+            self.videoCompositions = [NSMutableArray array];
+        }
        
         ///
     }
     return self;
 }
+
+
+
 
 // LOAD
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -87,9 +95,9 @@
         if (!self.scenes) {
             self.scenes  = [[NSMutableArray alloc] init];
         }
-        self.editedVideoURLs = [[aDecoder decodeObjectForKey:@"editedVideoURLs"]mutableCopy];
-        
-        
+//       self.editedVideoURLs = [[aDecoder decodeObjectForKey:@"editedVideoURLs"]mutableCopy];
+//        
+        self.videoCompositions = [[aDecoder decodeObjectForKey:@"videoCompositions"] mutableCopy];
         
     }
     return self;
@@ -99,12 +107,44 @@
 - (void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.scenes forKey:@"scenes"];
-    [aCoder encodeObject:self.editedVideoURLs forKey:@"editedVideoURLs"];
+//    [aCoder encodeObject:self.editedVideoURLs forKey:@"editedVideoURLs"];
+    [aCoder encodeObject:self.videoCompositions forKey:@"videoCompositions"];
 }
 
-- (void) addURLToEditedVideos:(NSURL*)url
+- (void) updateCompositionsList
 {
-    [self.editedVideoURLs addObject:url];
+    if (self.videoCompositions == nil)
+    {
+        self.videoCompositions = [NSMutableArray array];
+    }
+    if (self.editedVideoURLs.count > 0)
+    {
+        for (int i=0; i<self.editedVideoURLs.count; i++)
+        {
+            VBComposition *video = [[VBComposition alloc] initWithURL:self.editedVideoURLs[i]];
+            [self.videoCompositions addObject:video];
+            
+            
+        }
+        [self.editedVideoURLs removeAllObjects];
+    }
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
+        [self saveToFilename:@"VideoDatalist.plist"];
+    });
+    
+}
+
+
+- (void) addVideoCompositionWithURL:(NSURL*)url
+{
+    if (self.editedVideoURLs.count != 0)
+    {
+        [self updateCompositionsList];
+    }
+    VBComposition *video = [[VBComposition alloc] initWithURL:url];
+    [self.videoCompositions addObject:video];
+    NSLog(@"%@, %@", video.assetID, video.getFileURL);
     // __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),^{
             [self saveToFilename:@"VideoDatalist.plist"];

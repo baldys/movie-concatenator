@@ -14,6 +14,7 @@
 #import "NewSceneDetailsViewController.h"
 #import "TakesViewController.h"
 #import "PlaybackViewController.h"
+#import "CompositionsViewController.h"
 
 #define kHeaderSectionHeight 48
 #define kTableCellHeight     136
@@ -27,6 +28,7 @@
 @property (nonatomic, strong) NSMutableArray *scenes;
 @property (weak, nonatomic) IBOutlet UITableView *_tableView;
 @property (nonatomic, strong) PlaybackViewController *playbackViewController;
+@property (nonatomic, strong) CompositionsViewController *editedVideosVC;
 @property (nonatomic) NSInteger currentSceneIndex;
 
 @end
@@ -47,6 +49,9 @@
     {
         self.takesToConcatenate = [[NSMutableArray alloc] init];
     }
+    
+    
+    
     
     UIView *tableHeader = [[UIView alloc] initWithFrame:CGRectMake(0,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
     tableHeader.backgroundColor = [UIColor blackColor];
@@ -106,7 +111,7 @@
     [self.navigationController setToolbarHidden:YES animated:NO];
     [self._tableView reloadData];
     [self.tabBarController.tabBar setHidden:NO];
-    
+    [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"Clapper-Board-48-10_white.png"]];
     
 }
 
@@ -120,14 +125,40 @@
 {
     NSLog(@" %@, %ld",viewController.tabBarItem.title,(long)viewController.tabBarItem.tag);
 
-    if (viewController.tabBarItem.tag == 1)
+    if (viewController.tabBarItem.tag == 0)
     {
+        [viewController.tabBarItem setSelectedImage:[UIImage imageNamed:@"Clapper-Board-48-10_white.png"]];
+    }
+    else if (viewController.tabBarItem.tag == 1)
+    {
+        [viewController.tabBarItem setSelectedImage:[UIImage imageNamed:@"Favorites-48.png"]];
+        
         UINavigationController *nc = (UINavigationController*)viewController;
         self.bestTakesVC = [nc.viewControllers firstObject];
         if (self.bestTakesVC.takesToConcatenate == nil && !self.bestTakesVC.isViewLoaded)
         {
             self.bestTakesVC.takesToConcatenate = [[NSMutableArray alloc] initWithArray:self.takesToConcatenate];
         }
+    }
+    else if (viewController.tabBarItem.tag == 2)
+    {
+        [viewController.tabBarItem setSelectedImage:[UIImage imageNamed:@"Film-Reel-01-48-4.png"]];
+        UINavigationController *nc = (UINavigationController*)viewController;
+        self.editedVideosVC = [nc.viewControllers firstObject];
+        
+        //(EditedVideosViewController*)viewController;
+        if (self.editedVideosVC.videoCompositions == nil && !self.editedVideosVC.isViewLoaded)
+        {
+            if (self.library.videoCompositions.count > 0)
+            {
+            
+            self.editedVideosVC.videoCompositions = [[NSMutableArray alloc] initWithArray:self.library.videoCompositions];
+//                [self.editedVideosVC setVideoCompositions:self.library.videoCompositions];
+            //}
+            }
+        }
+        
+    
     }
     
     
@@ -200,22 +231,27 @@
     //Headerview
     UIView *headerView = [[UIView alloc]initWithFrame:CGRectMake(0.0,0.0,tableView.frame.size.width,kHeaderSectionHeight)];
     
-    //headerView.backgroundColor = [UIColor colorWithRed:0.129 green:0.129 blue:0.51 alpha:1.0];
-    headerView.backgroundColor = [UIColor blackColor];
+
+    headerView.backgroundColor = [UIColor clearColor];
+    //[UIColor colorWithRed:0.123 green:0.7583 blue:1.0 alpha:0.4];
+    
+    //headerView.backgroundColor = [UIColor blackColor];
     UIButton *sceneHeaderButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, screenWidth , kHeaderSectionHeight)];
+    
     //[sceneHeaderButton setImage:buttonImage forState:UIControlStateNormal];
     sceneHeaderButton.backgroundColor = [UIColor clearColor];
     sceneHeaderButton.tag = section;
     
     [sceneHeaderButton addTarget:self action:@selector(showTakesInScene:) forControlEvents:UIControlEventTouchUpInside];
     
-    sceneHeaderButton.showsTouchWhenHighlighted = YES;
+    //sceneHeaderButton.showsTouchWhenHighlighted = YES;
+    
     // these compress and stretch the button accordingly:
     [sceneHeaderButton setImageEdgeInsets:UIEdgeInsetsMake(5,12,5,12)];
 
-    //[sceneHeaderButton setImage:[UIImage imageNamed:@"highlighted-white-disclosure-indicator-64"] forState:UIControlStateSelected];
     
-    //sceneHeaderButton.backgroundColor = [UIColor colorWithRed:0 green:0.7583 blue:1.0 alpha:1.0];
+ 
+    //sceneHeaderButton.backgroundColor =
     //UIColor *bg2 = [UIColor colorWithRed:0 green:greenLevel2 blue:1.0 alpha:1.0];
     //headerView.layer.borderColor = [UIColor colorWithRed:0.2510 green:0 blue:1.0 alpha:1.0].CGColor;
     [headerView addSubview:sceneHeaderButton];
@@ -223,7 +259,8 @@
 
     //// borders for section header.
 
-//    headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.7176 blue:1.0 alpha:1.0].CGColor;
+
+    headerView.layer.borderColor = [UIColor colorWithRed:0 green:0.7176 blue:1.0 alpha:1.0].CGColor;
 //  headerView.layer.cornerRadius = 2.0;
 //    headerView.layer.borderWidth = 0.3;
 //   
@@ -248,17 +285,18 @@
     //[headerView addSubview:self.addTakeButton];
     
     // title
-    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(12,0,self.tableView.frame.size.width-40,kHeaderSectionHeight)];
+    UILabel *headerLabel = [[UILabel alloc]initWithFrame:CGRectMake(12,0,self.tableView.frame.size.width,kHeaderSectionHeight)];
     Scene *sectionData = self.library.scenes[section];
 
     
     headerLabel.text = sectionData.title;
     
     headerLabel.font = [UIFont boldSystemFontOfSize:20];
-    headerLabel.textColor = [UIColor colorWithRed:0 green:0.7176 blue:1.0 alpha:1.0];
+    //headerLabel.textColor = [UIColor colorWithRed:0 green:0.7176 blue:1.0 alpha:1.0];
+    headerLabel.textColor = [UIColor colorWithRed:0.0 green:0.827 blue:1.0 alpha:1.0];
     
     [headerView addSubview:headerLabel];
-    
+    //[sceneHeaderButton addSubview:headerLabel];
     return headerView;
 }
 

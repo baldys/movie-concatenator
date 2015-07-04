@@ -12,5 +12,5 @@
 @interface TakesViewController : UIViewController
 
 @property (strong, nonatomic) Scene *scene;
-- (IBAction)unwindFromRecordVideoVC:(UIStoryboardSegue*)sender;
+//- (IBAction)unwindFromRecordVideoVC:(UIStoryboardSegue*)sender;
 @end

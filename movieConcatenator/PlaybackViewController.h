@@ -17,7 +17,7 @@
 @class PlaybackView;
 @class Take;
 
-@interface PlaybackViewController : UIViewController <TTRangeSliderDelegate>
+@interface PlaybackViewController : UIViewController <TTRangeSliderDelegate, UIGestureRecognizerDelegate>
 {
     float mRestoreAfterScrubbingRate;
     BOOL seekToZeroBeforePlay;
@@ -64,6 +64,6 @@ TO DO:
 [x] a label for duration that updates as slider values change.
 [ ] play pause button for previewing the trimmed version (just use the one in the toolbar while keeping the toolbar showing)
 
-[ ] swipe gestures for switching between takes in that scene
+[x] swipe gestures for switching between takes in that scene
 
 */

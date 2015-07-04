@@ -42,7 +42,7 @@
 @property (strong, nonatomic) UIBarButtonItem *doneTrimmingButton;
 
 - (IBAction)delete:(id)sender;
-- (IBAction)star:(id)sender;
+- (void)star:(id)sender;
 - (IBAction)trim:(id)sender;
 
 @end
@@ -108,7 +108,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
      Load the values for the asset key "playable".
      */
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeToPlay getFileURL] options:nil];
-    NSArray *requestedKeys = @[@"playable"];
+    NSArray *requestedKeys = @[@"playable", @"duration"];
     [asset loadValuesAsynchronouslyForKeys:requestedKeys completionHandler:
     ^{
         dispatch_async(dispatch_get_main_queue(),
@@ -206,18 +206,19 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     }];
     
 }
-
-- (IBAction)star:(id)sender
+// changes the selection state of the current item playing
+- (void)star:(id)sender
 {
+    self.starButton.tag = [self getCurrentIndex];
     // if the take has not been selected to be put in the list of videos to concatenate
     //self.takeToPlay.selected = !self.takeToPlay.selected;
-    
     
     if (![self.takeToPlay isSelected])
     {
         [self.starButton setImage:[UIImage imageNamed:@"blue-star-32"]];
         [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"blue-star-24"]];
         [self.takeToPlay setSelected:YES];
+        
     }
     else{
         [self.starButton setImage:[UIImage imageNamed:@"white-outline-star-32"]];
@@ -227,6 +228,22 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"didSelectStarButtonInCell" object:self.takeToPlay];
     
+}
+// make sure the selection state of the take is consistent with the UI (star button)
+- (void) checkSelected:(id)sender
+{
+    if (![self.takeToPlay isSelected])
+    {
+        // make sure there is an unfilled star button if the take has not been selected
+        [self.starButton setImage:[UIImage imageNamed:@"white-outline-star-32"]];
+        [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"white-outline-star-24"]];
+    }
+    else
+    {
+        // is selected - show filled star button.
+        [self.starButton setImage:[UIImage imageNamed:@"blue-star-32"]];
+        [self.starButton setLandscapeImagePhone:[UIImage imageNamed:@"blue-star-24"]];
+    }
 }
 
 #pragma mark - TimeRangeSliderDelegate method
@@ -244,6 +261,8 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.tabBarController.tabBar setHidden:YES];
     
 }
+
+
 /////
 - (void) showTrimmingControls
 {
@@ -256,6 +275,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         [self.trimmingControlsView setTransform:CGAffineTransformMakeTranslation(0.f, CGRectGetHeight([self.trimmingControlsView bounds])) ];
         //self.trimmingControlsView.frame = CGRectOffset(self.trimmingControlsView.frame, 0, -200);
        // self.trimmingControlsView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 200);
+    
 
     } completion:
      ^(BOOL finished)
@@ -359,7 +379,8 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [self.trimmingControlsView setHidden:NO];
     self.trimmingVideo = YES;
     [self disableScrubber];
-    //[self enableTrimmingSliders];
+    
+    // [self enableTrimmingSliders];
     [self initializeTrimmingControls];
     self.doneTrimmingButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(finishTrimmingVideo:)];
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(finishTrimmingVideo:)];
@@ -394,7 +415,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     if (sender == self.doneTrimmingButton)
     {
         
-        UIAlertController* completedTrimmingActionSheet = [UIAlertController alertControllerWithTitle:@" " message:@" " preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertController* completedTrimmingActionSheet = [UIAlertController alertControllerWithTitle:@"The trimmed video was added to the current scene." message:@" " preferredStyle:UIAlertControllerStyleActionSheet];
         
         //            UIAlertAction *deleteOriginal = [UIAlertAction actionWithTitle:@"" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * action) {
         //
@@ -583,6 +604,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
         CGFloat width = CGRectGetWidth([self.mScrubber bounds]);
         interval = 0.5f * duration / width;
     }
+    if (duration == 0) return;
     
     /* Update the scrubber during normal playback. */
     __weak PlaybackViewController *weakSelf = self;
@@ -854,6 +876,7 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
    
     UIView* view  = [self view];
 
+    
     //[self.navigationController setToolbarHidden:NO animated:NO];
 
     UISwipeGestureRecognizer* swipeLeftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
@@ -864,6 +887,8 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
     [swipeRightRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
     [view addGestureRecognizer:swipeRightRecognizer];
     
+    swipeLeftRecognizer.delegate = self;
+    swipeRightRecognizer.delegate = self;
     
     UIBarButtonItem *scrubberItem = [[UIBarButtonItem alloc] initWithCustomView:self.mScrubber];
     
@@ -945,100 +970,118 @@ static void *PlaybackViewControllerCurrentItemObservationContext = &PlaybackView
 //    }
 }
 
+- (NSInteger)getCurrentIndex
+{
+    // find out the index of the current take we are playing
+    // check the current index of the item that was just playing by comparing the asset IDs of each player item in the queue with the current item.
+//    int i = 0;
+//    BOOL matchingAssetID = NO;
+//    while (!matchingAssetID || i < self.takeQueue.count )
+//    {
+//        if ([(Take*)self.takeQueue[i] assetID] == self.takeToPlay.assetID)
+//        {
+//            currentTakeIndex = i;
+//            matchingAssetID = YES;
+//        }
+//        else
+//        {
+//            i++;
+//        }
+//        
+//    }
+//    if (!matchingAssetID)
+//    {
+//        NSLog(@"no matching asset id found in the list");
+//        return;
+//    }
+    
+    for (NSInteger i=0; i<self.takeQueue.count;i++)
+    {
+        Take *take = self.takeQueue[i];
+        if (take.assetID == self.takeToPlay.assetID)
+        {
+            return i;
+        }
+    }
+    
+    return -1;
+}
+
+
 - (void)handleSwipe:(UISwipeGestureRecognizer *)gestureRecognizer
 {
+    if (self.isTrimmingVideo) return;
     UIView* view = [self view];
     UISwipeGestureRecognizerDirection direction = [gestureRecognizer direction];
-    CGPoint location = [gestureRecognizer locationInView:view];
+    //CGPoint location = [gestureRecognizer locationInView:view];
     
-    if (location.x < CGRectGetMidX([view bounds]))
+    NSInteger index = [self getCurrentIndex];
+    if (index < 0)
     {
-        if (direction == UISwipeGestureRecognizerDirectionLeft)
-        {
-            [UIView animateWithDuration:0.2f animations:
-             ^{
-                 
-                 //[[self navigationController] setNavigationBarHidden:YES animated:YES];
-             } completion:
-             ^(BOOL finished)
-             {
-                 //[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
-                 NSInteger currentTakeIndex;
-                 
-                 NSArray *requestedKeys = @[@"playable"];
-                 
-                 for (NSInteger i=0; i<self.takeQueue.count;i++)
-                 {
-                     Take *take = self.takeQueue[i];
-                     if (take.assetID == self.takeToPlay.assetID)
-                     {
-                         currentTakeIndex = i;
-                         AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeQueue[i-1] getFileURL] options:nil];
-                         [self prepareToPlayAsset:asset withKeys:requestedKeys];
-                     }
-                 }
-                 
-             }];
-        }
-        if (direction == UISwipeGestureRecognizerDirectionRight)
-        {
-           [UIView animateWithDuration:0.2f animations:
-             ^{
-            //     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
-                 
-                 
-             } completion:
-             ^(BOOL finished)
-             {
-                 
-                 NSInteger currentTakeIndex;
-                 
-                 NSArray *requestedKeys = @[@"playable"];
-                 
-                 for (NSInteger i=0; i<self.takeQueue.count;i++)
-                 {
-                     Take *take = self.takeQueue[i];
-                     if (take.assetID == self.takeToPlay.assetID)
-                     {
-                         currentTakeIndex = i;
-                         AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[self.takeQueue[i+1] getFileURL] options:nil];
-                         [self prepareToPlayAsset:asset withKeys:requestedKeys];
-                     }
-                 }
-                 //[[self navigationController] setNavigationBarHidden:NO animated:YES];
-             }];
-        }
+        NSLog(@"there was a problem getting the index in the queue");
+        return;
     }
-    else
+    
+    
+    // swiping left goes to next item in the queue
+    // swipe to next take
+    if (direction == UISwipeGestureRecognizerDirectionLeft)
     {
-        if (direction == UISwipeGestureRecognizerDirectionDown)
-        {
-            if (![self.mToolbar isHidden])
-            {
-                [UIView animateWithDuration:0.2f animations:
-                 ^{
-                     [self.mToolbar setTransform:CGAffineTransformMakeTranslation(0.f, CGRectGetHeight([self.mToolbar bounds]))];
-                 } completion:
-                 ^(BOOL finished)
-                 {
-                     [self.mToolbar setHidden:YES];
-                 }];
-            }
-        }
-        else if (direction == UISwipeGestureRecognizerDirectionUp)
-        {
-            if ([self.mToolbar isHidden])
-            {
-                [self.mToolbar setHidden:NO];
-                
-                [UIView animateWithDuration:0.2f animations:
-                 ^{
-                     [self.mToolbar setTransform:CGAffineTransformIdentity];
-                 } completion:^(BOOL finished){}];
-            }
-        }
+        // In this case we have reached the last item of the takes in the takeQueue array. So swipe gesture does nothing here.
+        if (index == self.takeQueue.count-1) return; //prevent accessing out of bounds element
+        Take *nextTakeToPlay = self.takeQueue[index+1];
+        [self setTakeToPlay:nextTakeToPlay];
+        [self setURLFromTake];
+        
+        /// TO DO: animate the swipe gesture by transitioning between one video to the next using a swipe/slide from left transition
+        /*        
+         [UIView animateWithDuration:0.2f animations:
+         ^{
+         //[view setTransform:CGAffineTransformMakeTranslation(0.f, CGRectGetWidth([view bounds]))];
+         
+         } completion:
+         ^(BOOL finished)
+         {
+         }];
+         */
+
+    }
+    // swiping right goes to the previous item in the queue
+    // swipe to previous item !
+    if (direction == UISwipeGestureRecognizerDirectionRight)
+    {
+            // we are at the very first item in the scene so a previous take doesnt exist. swipe right gesture does nothing in this case
+            if (index == 0) return;
+            Take *previousTakeToPlay = self.takeQueue[index-1];
+            [self setTakeToPlay:previousTakeToPlay];
+            [self setURLFromTake];
+        
+        /// TO DO: same as above but with a swipe or slide transition from the
+//            [UIView animateWithDuration:0.2f animations:^{
+//
+//             } completion:
+//             ^(BOOL finished)
+//             {
+//
+//             }];
+        
+        
+        //                [UIView animateWithDuration:0.2f animations:
+        //                 ^{
+        //                     [self.mToolbar setTransform:CGAffineTransformMakeTranslation(0.f, CGRectGetHeight([self.mToolbar bounds]))];
+        //                 } completion:
+        //                 ^(BOOL finished)
+        //                 {
+        //                     [self.mToolbar setHidden:YES];
+        //                 }];
+
     }
 }
+
+
+
+
+
 
 - (void)dealloc
 {

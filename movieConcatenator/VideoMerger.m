@@ -9,9 +9,9 @@
 #import "VideoMerger.h"
 #import "PlaybackViewController.h"
 #import "VBTitleItem.h"
+#import "VBComposition.h"
 
 
-#define degreesToRadians( degrees ) ( ( degrees ) / 180.0 * M_PI )
 @interface VideoMerger ()
 
 @property (nonatomic, getter = isFrontFacingVideoInTakes) BOOL frontFacingVideoInTakes;
@@ -1080,13 +1080,13 @@
                                     else
                                     {
                                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved" message:@"Saved To Photo Album" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                                        [self addURLToMergedVideosArray:outputURL];
-                                        [self.videoLibrary addURLToEditedVideos:outputURL];
-                                        for (NSURL *compositionURL in self.videoLibrary.editedVideoURLs)
+                                        //[self addURLToMergedVideosArray:outputURL];
+                                        [self.videoLibrary addVideoCompositionWithURL:outputURL];
+                                        for (VBComposition *composition in self.videoLibrary.videoCompositions)
                                         {
-                                            NSLog(@"%@", compositionURL);
+                                            NSLog(@"%@", composition.assetURL);
                                         }
-                                            [alert show];
+                                        [alert show];
                                         
                                     }
       

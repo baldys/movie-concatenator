@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSMutableArray *takesToConcatenate;
 @property (nonatomic, strong) NSMutableArray *editedVideoURLs;
 
+@property (nonatomic, strong) NSMutableArray *videoCompositions;
 
 + (instancetype)libraryWithFilename:(NSString*)filename;
 
@@ -28,6 +29,8 @@
 - (NSString*) documentsDirectory;
 
 - (void) addURLToEditedVideos:(NSURL*)url;
+
+- (void) addVideoCompositionWithURL:(NSURL*)url;
 @property (nonatomic, copy) void (^completionBlock)(BOOL);
 
 - (NSMutableArray*)selectedTakes;

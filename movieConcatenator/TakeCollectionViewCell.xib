@@ -15,7 +15,7 @@
                 <subviews>
                     <imageView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="movie-1" translatesAutoresizingMaskIntoConstraints="NO" id="a6L-dG-lwc">
                         <rect key="frame" x="4" y="4" width="120" height="120"/>
-                        <color key="backgroundColor" red="0.0" green="0.074411772730000006" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.70273951480263153" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.018286214950000001" green="0.0" blue="0.97328756309999997" alpha="1" colorSpace="calibratedRGB"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
@@ -40,24 +40,28 @@
                             <action selector="starButtonPressed:" destination="U9f-CN-IhA" eventType="touchUpInside" id="c2N-iW-ThS"/>
                         </connections>
                     </button>
-                    <imageView userInteractionEnabled="NO" alpha="0.84999999999999987" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="1420512706_audio-video-outline-play-128.png" translatesAutoresizingMaskIntoConstraints="NO" id="WYO-BG-LwK">
-                        <rect key="frame" x="36" y="36" width="56" height="56"/>
+                    <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.49999999999999961" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Media-Play-128.png" translatesAutoresizingMaskIntoConstraints="NO" id="WYO-BG-LwK">
+                        <rect key="frame" x="24" y="24" width="80" height="80"/>
                         <color key="tintColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" red="0.0" green="0.82914668749999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.92000000000000004" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="rDL-AX-Xbx" secondAttribute="bottom" constant="12" id="23n-Zf-P68"/>
+                <constraint firstItem="WYO-BG-LwK" firstAttribute="centerY" secondItem="a6L-dG-lwc" secondAttribute="centerY" id="6ne-Yj-VYl"/>
+                <constraint firstAttribute="centerY" secondItem="WYO-BG-LwK" secondAttribute="centerY" id="GNx-Yk-SWT"/>
                 <constraint firstItem="a6L-dG-lwc" firstAttribute="leading" secondItem="rDL-AX-Xbx" secondAttribute="leading" constant="8" id="IjX-MV-Av4"/>
                 <constraint firstItem="a6L-dG-lwc" firstAttribute="leading" secondItem="U9f-CN-IhA" secondAttribute="leading" constant="4" id="Nxp-EL-4on"/>
+                <constraint firstItem="WYO-BG-LwK" firstAttribute="centerX" secondItem="a6L-dG-lwc" secondAttribute="centerX" id="PRn-I0-6B4"/>
                 <constraint firstAttribute="trailing" secondItem="a6L-dG-lwc" secondAttribute="trailing" constant="4" id="RkM-kF-Kcb"/>
                 <constraint firstAttribute="bottom" secondItem="a6L-dG-lwc" secondAttribute="bottom" constant="4" id="bT0-aU-7lI"/>
                 <constraint firstItem="a6L-dG-lwc" firstAttribute="bottom" secondItem="rDL-AX-Xbx" secondAttribute="bottom" constant="8" id="cQR-eX-Q7j"/>
                 <constraint firstAttribute="centerY" secondItem="a6L-dG-lwc" secondAttribute="centerY" id="h8p-E3-b91"/>
                 <constraint firstAttribute="centerX" secondItem="a6L-dG-lwc" secondAttribute="centerX" id="pCB-ib-nBq"/>
                 <constraint firstItem="rDL-AX-Xbx" firstAttribute="leading" secondItem="U9f-CN-IhA" secondAttribute="leading" constant="12" id="ulo-eH-XAY"/>
+                <constraint firstAttribute="centerX" secondItem="WYO-BG-LwK" secondAttribute="centerX" id="zaP-JQ-Nuy"/>
             </constraints>
             <size key="customSize" width="107" height="145"/>
             <connections>
@@ -68,7 +72,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="1420512706_audio-video-outline-play-128.png" width="128" height="128"/>
+        <image name="Media-Play-128.png" width="128" height="128"/>
         <image name="blue-star-32.png" width="32" height="32"/>
         <image name="blue-star-64.png" width="64" height="64"/>
         <image name="movie-1" width="512" height="512"/>
